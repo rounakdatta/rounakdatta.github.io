@@ -1,16 +1,32 @@
+<header>
+	<center><h1><a href="{{ site.baseurl }}">{{ site.title }}</a></h1></center>
+</header>
 <aside>
-	<div class="container">
+	<div class="center">
+	<div class="container">	
 		<nav>
 			<ul>
 				{% for page in site.pages %} {% if page.title %}
 				<li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a></li>
+				{% endif %} {% endfor %}
+				<li><a href="{{ "/resume" | prepend: site.baseurl }}">Resume</a></li> <!-- create a new pagel -->
 			</ul>
 			</li>
 			</ul>
 		</nav>
 	</div>
+	</div>
 </aside>
 
-<header>
-	<h1><a href="{{ site.baseurl }}">{{ site.title }}</a></h1>
-</header>
+<style type="text/css">
+.center{
+    width:200px;
+    margin:0 auto;
+    text-align:left;
+}
+ul{
+    list-style-type: square;
+}
+    
+
+</style>
