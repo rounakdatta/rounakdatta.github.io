@@ -8,8 +8,4 @@ url: "http://yourdomain.com" # the base hostname & protocol for your site
 github_username:  rounakdatta
 
 # Build settings
-sass:
- sass_dir: -sass
-include: ['_pages']
-krmadown:
- input: GFM
+markdown: kramdown
