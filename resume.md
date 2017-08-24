@@ -1,7 +1,7 @@
 ---
 layout: page
-title: About
-permalink: /about
+title: Resume
+permalink: /resume
 ---
 
 Loves to break and build stuff.

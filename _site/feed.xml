@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rounak&#39;s Vitae</title>
-    <description>#!/bin/blog
+    <title>Vitae</title>
+    <description>/home
 </description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Aug 2017 15:04:50 +0530</pubDate>
-    <lastBuildDate>Thu, 24 Aug 2017 15:04:50 +0530</lastBuildDate>
+    <link>https://rounakdatta.github.io/</link>
+    <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 24 Aug 2017 15:29:58 +0530</pubDate>
+    <lastBuildDate>Thu, 24 Aug 2017 15:29:58 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -28,8 +28,8 @@
 
 </description>
         <pubDate>Wed, 23 Aug 2017 19:02:48 +0530</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2017/08/23/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2017/08/23/welcome-to-jekyll.html</guid>
+        <link>https://rounakdatta.github.io/jekyll/update/2017/08/23/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/jekyll/update/2017/08/23/welcome-to-jekyll.html</guid>
         
         
         <category>jekyll</category>
@@ -43,8 +43,8 @@
         <description>&lt;p&gt;Oops, maybe you arrived at the construction site!&lt;/p&gt;
 </description>
         <pubDate>Wed, 23 Aug 2017 00:00:00 +0530</pubDate>
-        <link>http://yourdomain.com/2017/08/23/get-started.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/2017/08/23/get-started.html</guid>
+        <link>https://rounakdatta.github.io/2017/08/23/get-started.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/08/23/get-started.html</guid>
         
         
       </item>

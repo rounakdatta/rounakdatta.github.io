@@ -2,7 +2,7 @@
 title: Vitae
 email: rounakdatta12@gmail.com
 description: > 
- #!/bin/blog
+ /home
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://rounakdatta.github.io" # the base hostname & protocol for your site
 github_username:  rounakdatta

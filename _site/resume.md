@@ -1,9 +1,9 @@
+<center>
 ---
 layout: page
-title: About
-permalink: /about
+title: Resume
+permalink: /resume/
 ---
-
 Loves to break and build stuff.
 Loves to redefine accepted stuff.
 
@@ -15,3 +15,4 @@ Technology + Food = 😄
 
 
 Would love a conversation at <a href="https://www.facebook.com/rounakdatta">FB</a>!
+</center>
