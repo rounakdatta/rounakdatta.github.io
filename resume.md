@@ -3,15 +3,8 @@ layout: page
 title: Resume
 permalink: /resume
 ---
-
-Loves to break and build stuff.
-Loves to redefine accepted stuff.
-
-Less 🔎 on formal academia, more 🔎 on practical projects.
-
-Sophomore, introvert kid at the brim of teenage.
-
-Technology + Food = 😄
-
-
-Would love a conversation at <a href="https://www.facebook.com/rounakdatta">FB</a>!
+rounakdatta12@gmail.com
+<center>
+<strong>ROUNAK DATTA</strong>
+</center>
+rounakdatta.tk
