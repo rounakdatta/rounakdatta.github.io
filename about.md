@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About • Rounak Datta
+title: About
 permalink: /about
 ---
 
