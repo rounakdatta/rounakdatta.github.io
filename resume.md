@@ -1,6 +1,6 @@
 --- 
 layout: page
-title: Resume
+title: Resume • Rounak Datta
 permalink: /resume
 ---
 <center>
