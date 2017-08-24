@@ -9,7 +9,7 @@ Loves to redefine accepted stuff.
 
 Less 🔎 on formal academia, more 🔎 on practical projects.
 
-Sophomore, introvert boy at the brim of teenage.
+Sophomore, introvert kid at the brim of teenage.
 
 Technology + Food = 😄
 
