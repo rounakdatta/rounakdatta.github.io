@@ -1,10 +1,10 @@
 # Site settings
-title: Rounak's Vitae
+title: Vitae
 email: rounakdatta12@gmail.com
 description: > 
  #!/bin/blog
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
+url: "https://rounakdatta.github.io" # the base hostname & protocol for your site
 github_username:  rounakdatta
 
 # Build settings
