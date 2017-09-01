@@ -9,3 +9,4 @@ github_username:  rounakdatta
 
 # Build settings
 markdown: kramdown
+show_drafts: false
