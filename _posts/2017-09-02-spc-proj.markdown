@@ -1,7 +1,19 @@
 ---
 layout: post
-title: "C#"
+title: "Serial Port Communication between μC and PC"
 hidden: true
 visible: 0
 ---
-test just test
+A GUI interface was made using C# which had the following resposibilities :
+
+❇ Collecting the input values from user
+
+❇ Parse the given values into a 32-byte string
+
+❇ Send to the microcontroller through RF
+
+❇ Scan for input from the port continuously
+
+❇ Output string received as a string containing output values
+
+❇ Processing the string to retrieve and display
