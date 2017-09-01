@@ -2,6 +2,7 @@
 layout: post
 title: "Blogger vs Blog(er)"
 categories: coding
+exclude_from_nav: false
 ---
 Once, a less mature version of me started blogging with Google. He just <b>dragged-and dropped</b> things and they worked (of course within bounds). He just kick-started the GUI and things ran. He was blogging effortlessly, yet limitedly.
 
