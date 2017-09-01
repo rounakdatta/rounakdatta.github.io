@@ -1,6 +1,6 @@
 ---
 layout: post
 title: "C#"
-exclude_from_nav: true
+hidden: true
 ---
 blah blah test
