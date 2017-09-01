@@ -2,5 +2,6 @@
 layout: post
 title: "C#"
 hidden: true
+visible: 0
 ---
-blah blah test
+test just test
