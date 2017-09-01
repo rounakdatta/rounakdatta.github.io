@@ -12,7 +12,7 @@ layout: default
 <center>
   <ul class="post-list">
     {% for post in site.posts %}
-      { unless page.exclude_from_nav }
+      {% unless page.exclude_from_nav %}
         <li>
           <font face="courier"><span class="post-meta">{{ post.date | date: "♠ <em>%b %Y</em>" }}</span></font>
 
@@ -20,7 +20,7 @@ layout: default
             <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
           </h2>
         </li>
-        { endunless }
+        {% endunless %}
     {% endfor %}
   </ul>
 </center>
