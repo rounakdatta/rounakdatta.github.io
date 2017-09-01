@@ -1,7 +1,6 @@
 ---
 layout: post
-title: C#
-permalink: /proj1
+title: "C#"
 exclude_from_nav: true
 ---
 blah blah test
