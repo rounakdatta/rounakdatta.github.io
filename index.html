@@ -12,15 +12,15 @@ layout: default
 <center>
   <ul class="post-list">
     {% for post in site.posts %}
-    {% unless page.exclude_from_nav %}
-      <li>
-        <font face="courier"><span class="post-meta">{{ post.date | date: "♠ <em>%b %Y</em>" }}</span></font>
+      { unless page.exclude_from_nav }
+        <li>
+          <font face="courier"><span class="post-meta">{{ post.date | date: "♠ <em>%b %Y</em>" }}</span></font>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-      {% endunless %}
+          <h2>
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </h2>
+        </li>
+        { endunless }
     {% endfor %}
   </ul>
 </center>
