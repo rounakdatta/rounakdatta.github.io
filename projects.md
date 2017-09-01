@@ -2,7 +2,6 @@
 layout: page
 title: Projects
 permalink: /projects
-exclude_from_nav: true
 ---
 Technical (noteworthy) stuff I have been working on since I matured :
 
