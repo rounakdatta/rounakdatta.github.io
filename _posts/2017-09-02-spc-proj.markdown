@@ -17,3 +17,5 @@ A GUI interface was made using C# which had the following resposibilities :
 ❇ Output string received as a string containing output values
 
 ❇ Processing the string to retrieve and display
+
+Find the GitHub repo <a href="https://github.com/rounakdatta/serial-port-comm-gui">here</a>.

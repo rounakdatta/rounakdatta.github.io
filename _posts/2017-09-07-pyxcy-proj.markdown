@@ -17,3 +17,5 @@ Main features :
 • Auto-indentation
 
 • Auto-save
+
+Find the GitHub repo <a href="https://github.com/rounakdatta/pyxcy">here</a>.
