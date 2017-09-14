@@ -7,7 +7,7 @@ visible: 0
 ---
 The TTC Dashboard for BARADX
 
-![BARADX](baradximg.jpeg){:class="img-responsive"}
+![BARADX](/assets/baradximg.jpeg){:class="img-responsive"}
 
 Presently,
 
