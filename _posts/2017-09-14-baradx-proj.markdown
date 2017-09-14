@@ -11,10 +11,10 @@ The TTC Dashboard for BARADX
 
 Presently,
 
-•Get input packets from two Arduinos
+• Get input packets from two Arduinos
 
-•Put the respective parameters in the corresponding fields
+• Put the respective parameters in the corresponding fields
 
-•Plot the latitude-longitude in the Maps API
+• Plot the latitude-longitude in the Maps API
 
-•Display gauges and bars
+• Display gauges and bars
