@@ -7,6 +7,8 @@ visible: 0
 ---
 The TTC Dashboard for BARADX
 
+![BARADX](baradximg.jpeg){:class="img-responsive"}
+
 Presently,
 
 •Get input packets from two Arduinos
