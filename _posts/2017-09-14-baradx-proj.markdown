@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "BARADX"
+title: "BARADX : Track your Satellite"
 image: baradximg.jpeg
 hidden: true
 visible: 0
@@ -15,8 +15,10 @@ Presently,
 
 • Put the respective parameters in the corresponding fields
 
-• Plot the latitude-longitude in the Maps API
+• Plot the latitude-longitude in the Maps API {GMaps, OpenStreetMap, BingMaps}
 
 • Display gauges and bars
+
+• Watch your satellite navigate across the globe
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/baradx">here</a>.
