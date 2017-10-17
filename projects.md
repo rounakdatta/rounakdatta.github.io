@@ -11,4 +11,4 @@ Technical (noteworthy) stuff I have been working on in my undergraduation :
 
 ❥ <a href="https://rounakdatta.github.io/2017/09/14/baradx-proj.html">BARADX Dashboard for TTC</a>
 
-❥ Efficient Image Server in C (not open-source)
+❥ Efficient Image Retrieval Server in C (not open-source)
