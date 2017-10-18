@@ -3,6 +3,7 @@ layout: page
 title: About
 permalink: /about
 ---
+<center>
 while()
 
 {
@@ -33,3 +34,4 @@ t **> today** : *Artificial Intelligence usually beats Natural Stupidity*
 
 
 Would love a conversation at <a href="https://www.facebook.com/rounakdatta">FB</a>!
+</center>

@@ -3,6 +3,7 @@ layout: page
 title: Projects
 permalink: /projects
 ---
+<center>
 Technical (noteworthy) stuff I have been working on in my undergraduation :
 
 ❥ <a href="https://rounakdatta.github.io/2017/09/02/spc-proj.html">Serial Port Communication between μC and PC</a>
@@ -12,3 +13,4 @@ Technical (noteworthy) stuff I have been working on in my undergraduation :
 ❥ <a href="https://rounakdatta.github.io/2017/09/14/baradx-proj.html">BARADX Dashboard for TTC</a>
 
 ❥ Efficient Image Storage / Retrieval Server in C (not open-source)
+</center>
