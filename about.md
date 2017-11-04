@@ -23,7 +23,7 @@ Sophomore undergrad, introvert kid at the brim of teenage.
 
 Electronics + Code + Food = 😄
 
-My fav quotes 🏃
+Lets align ourselves with technology 🏃
 
 t **< today** : *When debugging, novices insert corrective code; experts remove defective code*
 

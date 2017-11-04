@@ -1,257 +1,28 @@
-<!DOCTYPE html>
-
-<html>
-
+---
+layout: default
+---
 <meta charset="UTF-8" />
 <meta name="google" content="notranslate" />
 <meta http-equiv="Content-Language" content="en_US" />
 <div class="home">
+<hr>
+<br>
+<center><font face="Minion Web" size="0.2">QUICK THOUGHTS</font></center>
+<br>
 <center>
+  <ul class="post-list">
+    {% for post in site.posts %}
+        <li>
+            <font face="courier"><span class="post-meta">{{ post.date | date: "♠ <em>%b %Y</em>" }}</span></font>
 
-<head>
-    <title>Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- link to main stylesheet -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/main.css?v=2017.10.12">
-    <!-- Global Site Tag (gtag.js) - Google Analytics -->
-
-
-</head>
-
-<body>
-    <header>
-        <div class='slider-navigation'>
-            <div class='nav-pointer draggable'>
-                0/0
-            </div>
-        </div>
-    </header>
-    <div class='site-container'>
-        <section class='intro'>
-            <div id="particles-js"></div>
-            <div class='wrap'>
-                <div class='content'>
-                    <div class="profile-card">
-                        <header>
-                            <!-- avatar -->
-                            <a target="_blank" href="#">
-                                <img src="img/hd.jpg">
-                            </a>
-                            <!-- name -->
-                            <h1>Rounak Datta</h1>
-                            <!-- role -->
-                            <h2>Computer Science Undergrad</h2>
-                        </header>
-                        <div class="profile-bio">
-                            <p>
-                                Kolkata ✈️ Chennai
-                            </p>
-                        </div>
-                        <!-- social links -->
-                        <ul class="profile-social-links">
-                            <li>
-                                <a target="_blank" href="https://www.linkedin.com/in/rounakdatta/">
-                                    <i class="fa fa-lg fa-linkedin"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://www.github.com/rounakdatta">
-                                    <i class="fa fa-lg fa-github-alt"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://twitter.com/rounakdatta12">
-                                    <i class="fa fa-lg fa-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://www.facebook.com/rounakdatta">
-                                    <i class="fa fa-lg fa-facebook"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>  
-        <section>
-            <div class="about-me">
-                <div class="text-center">
-                </div>
-                <div class="clearfix"></div>
-                <div class="about-me__content" id="terminal-start">
-                    <br><br>
-                    <div class="command">
-                        <!-- email -->
-
-                        <p>whoami</p>
-                        <span class="hideme">Computer Science Engineer</span>
-
-                        <p>whatismyspecialization</p>
-                        <span class="hideme">Backend Development<br>Competitive Programming<br></span>
-
-                        <p>contactme</p>
-                        <span class="hideme"><a href="mailto:rounakdatta12@gmail.com">rounakdatta12@gmail.com</a></span>
-
-                        <p>myedu</p>
-                        <span class="hideme">SRM University, Chennai • 2016 - 2020</span>
-
-                        <!--<p>aboutme</p>
-                        <span class="hideme"><a href="https://rounakdatta.github.io/about">/about</a></span>-->
-
-                        <p>myresume</p>
-                        <span class="hideme"><a href="https://drive.google.com/file/d/0B7hJdfAwnUNzNk9zSndNRFhTR2c/view">/resume</a></span>
-
-                        <p>printwelcomenote</p>
-                        <span class="hideme">hi user#502, a warm welcome from admin#501, thanks for passing by!</span>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-
-        
-        <!-- =================== script =================== -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-        <script src="lib/parallax.js-1.4.2/parallax.min.js"></script>
-        <script>
-        $(document).ready(function() {
-            /*-------------------------------
-                terminal linux style
-            -------------------------------*/
-            var about_me_content_displayed = false;
-            var $lines = $('.command p');
-            $lines.hide();
-            var lineContents = [];
-            var output = [];
-            var terminal = function() {
-              var skip = 0;
-              typeLine = function(idx) {
-                idx == null && (idx = 0);
-                var element = $lines.eq(idx);
-                var content = lineContents[idx];
-                if(typeof content == "undefined") {
-                  $('.skip').hide();
-                  return;
-                }
-                var charIdx = 0;
-                console.log(idx);
-                var typeChar = function() {
-                  var rand = Math.round(Math.random() * 250) + 20;
-                  setTimeout(function() {
-                    var char = content[charIdx++];
-                    element.append(char);
-                    if(typeof char !== "undefined")
-                      typeChar();
-                    else {
-                      element.append('<br/><span class="output">' + output[idx] + '</span>');
-                      element.removeClass('active');
-                      typeLine(++idx);
-                    }
-                  }, skip ? 0 : rand);
-                }
-                element.append('rounak@dell-17:~$ ').addClass('active');
-                typeChar();
-              }
-              $lines.each(function(i) {
-                lineContents[i] = $(this).text();
-                output[i] = $(this).next('span').html();
-                $(this).text('').show();
-              });
-              typeLine();
-            }
-            $(window).scroll(function() {
-               var hT = $('#terminal-start').offset().top,
-                   hH = $('#terminal-start').outerHeight(),
-                   wH = $(window).height(),
-                   wS = $(this).scrollTop() - 250;
-               if (wS > (hT+hH-wH) && !about_me_content_displayed){
-                about_me_content_displayed = true;
-                terminal();
-               }
-            });
-            // end terminal style ------------------------------------
-            $('section').each(function() {
-                $('.slider-navigation').prepend('<div class="tick"></div>');
-            });
-            $('.tick').on('click', function() {
-                var tickIndex = $(this).index();
-                $('body').scrollTop($(window).height() * tickIndex);
-            });
-            updatePos();
-        }); // end document ready
-        var isDragging = false;
-        var sliderTop, pointerPos, currentSection;
-        var bodyHeight = $('body').height();
-        var sliderHeight = $('.slider-navigation').height();
-        var elementHeight = $('section').height();
-        var sectionAmount = $('section').length;
-        var scale = (bodyHeight - (elementHeight)) / (sliderHeight - $('.nav-pointer').outerHeight());
-        var waitForFinalEvent = (function() {
-            var timers = {};
-            return function(callback, ms, uniqueId) {
-                if (!uniqueId) {
-                    uniqueId = "resize";
-                }
-                if (timers[uniqueId]) {
-                    clearTimeout(timers[uniqueId]);
-                }
-                timers[uniqueId] = setTimeout(callback, ms);
-            };
-        })();
-        function updatePos() {
-            currentSection = $(window).scrollTop() / elementHeight;
-            currentSectionNum = Math.ceil(currentSection + 0.01);
-            sliderTop = $(window).scrollTop() / scale;
-            $('.nav-pointer').css('top', sliderTop).text(currentSectionNum + '/' + sectionAmount);
-        }
-        function sliderMove(e) {
-            $('body').scrollTop(parseInt(e) * scale);
-        }
-        $(window).scroll(function() {
-            if (!isDragging) {
-                updatePos();
-            }
-        });
-        $(window).resize(function() {
-            waitForFinalEvent(function() {
-                bodyHeight = $('body').height();
-                sliderHeight = $('.slider-navigation').height();
-                elementHeight = $('section').height();
-                sectionAmount = $('section').length;
-                scale = (bodyHeight - (elementHeight)) / (sliderHeight - $('.nav-pointer').outerHeight());
-                updatePos();
-            }, 500, "resizing");
-        });
-        $(".draggable").draggable({
-            axis: "y",
-            containment: "parent",
-            start: function() {
-                isDragging = true;
-                $('body').addClass('dragging');
-            },
-            drag: function() {
-                pointerPos = $(this).css('top');
-                sliderMove(pointerPos);
-                updatePos();
-            },
-            stop: function() {
-                isDragging = false;
-                $('body').removeClass('dragging');
-            }
-        });
-        </script>
-</body>
-
+            <h2>
+              <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+            </h2>
+        </li>     
+    {% endfor %}
+  </ul>
 </center>
 </div>
-
-</html>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

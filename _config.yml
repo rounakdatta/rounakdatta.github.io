@@ -5,7 +5,7 @@ description: >
  /home
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://rounakdatta.github.io" # the base hostname & protocol for your site
-# github_username:  rounakdatta
+github_username:  rounakdatta
 
 # Build settings
 markdown: kramdown
