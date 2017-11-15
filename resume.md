@@ -9,12 +9,17 @@ permalink: /resume
  style="overflow:hidden;height:480;width:100%" 
  width="100%" height="480"></iframe>
 
- *When debugging, novices insert corrective code; experts remove defective code*
+<br>
+<br>
+<b>When debugging, novices insert corrective code; experts remove defective code</b>
+<br>
 
-*The key to performance is elegance, not battalions of special cases*
+<b>The key to performance is elegance, not battalions of special cases</b>
+<br>
 
-*Artificial Intelligence usually beats Natural Stupidity*
+<b>Artificial Intelligence usually beats Natural Stupidity</b>
+<br>
 
-*All men must swallow the sour with the sweet*
+<b>All men must swallow the sour with the sweet</b>
 
 </center>
