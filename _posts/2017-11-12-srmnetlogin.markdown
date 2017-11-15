@@ -21,4 +21,4 @@ The original script written by @thewisenerd can be found <a href="https://github
 
 _Deps_ : (python, pip-requests, pip-rsa) on Termux, Termux:Task
 
-Find the GitHub repo <a href="https://github.com/rounakdatta/baradx">here</a>.
+Find the GitHub repo <a href="https://github.com/rounakdatta/tasker-ed">here</a>.
