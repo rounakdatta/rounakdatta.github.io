@@ -1,18 +1,25 @@
-<center>
----
+--- 
 layout: page
-title: Resume
-permalink: /resume/
+title: Résumé
+permalink: /resume
 ---
-Loves to break and build stuff.
-Loves to redefine accepted stuff.
+<center>
+<iframe src="https://drive.google.com/file/d/0B7hJdfAwnUNzNk9zSndNRFhTR2c/preview" 
+ frameborder="0"
+ style="overflow:hidden;height:480;width:100%" 
+ width="100%" height="480"></iframe>
 
-Less 🔎 on formal academia, more 🔎 on practical projects.
+<br>
+<br>
+<b>When debugging, novices insert corrective code; experts remove defective code</b>
+<br>
 
-Sophomore, introvert kid at the brim of teenage.
+<b>The key to performance is elegance, not battalions of special cases</b>
+<br>
 
-Technology + Food = 😄
+<b>Artificial Intelligence usually beats Natural Stupidity</b>
+<br>
 
+<b>All men must swallow the sour with the sweet</b>
 
-Would love a conversation at <a href="https://www.facebook.com/rounakdatta">FB</a>!
 </center>

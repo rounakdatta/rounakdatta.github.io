@@ -1,50 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Vitae</title>
+    <title>Home</title>
     <description>/home
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Aug 2017 16:01:09 +0530</pubDate>
-    <lastBuildDate>Thu, 24 Aug 2017 16:01:09 +0530</lastBuildDate>
+    <pubDate>Thu, 16 Nov 2017 16:53:38 +0530</pubDate>
+    <lastBuildDate>Thu, 16 Nov 2017 16:53:38 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+        <title>SRM Network Login</title>
+        <description>&lt;p&gt;SRM University Unofficial Network Login Android Application&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/srmnetlogin.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;This is a lightning fast network login application made using &lt;strong&gt;Tasker&lt;/strong&gt;, ~~not Android Studio~~.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Tom&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;This relies on sending an HTTP request directly rather than through the browser.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The original script written by @thewisenerd can be found &lt;a href=&quot;https://github.com/thewisenerd/check.point.automaton&quot;&gt;here&lt;/a&gt;. This script is packaged and modded into this present application.&lt;/p&gt;
 
+&lt;p&gt;&lt;strong&gt;v1&lt;/strong&gt; : using qPython; and the UI wasn’t intuitive.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;v2&lt;/strong&gt; : using Termux (with silent script execution)&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Deps&lt;/em&gt; : (python, pip-requests, pip-rsa) on Termux, Termux:Task&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/tasker-ed&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
-        <pubDate>Wed, 23 Aug 2017 19:02:48 +0530</pubDate>
-        <link>https://rounakdatta.github.io/jekyll/update/2017/08/23/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/jekyll/update/2017/08/23/welcome-to-jekyll.html</guid>
+        <pubDate>Sun, 12 Nov 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/11/12/srmnetlogin.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/11/12/srmnetlogin.html</guid>
         
         
-        <category>jekyll</category>
+      </item>
+    
+      <item>
+        <title>BARADX : Track your Satellite</title>
+        <description>&lt;p&gt;The TTC Dashboard for BARADX&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/baradximg.jpeg&quot; alt=&quot;BARADX&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presently,&lt;/p&gt;
+
+&lt;p&gt;• Get input packets from two Arduinos&lt;/p&gt;
+
+&lt;p&gt;• Put the respective parameters in the corresponding fields&lt;/p&gt;
+
+&lt;p&gt;• Plot the latitude-longitude in the Maps API {GMaps, OpenStreetMap, BingMaps}&lt;/p&gt;
+
+&lt;p&gt;• Display gauges and bars&lt;/p&gt;
+
+&lt;p&gt;• Watch your satellite navigate across the globe&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/baradx&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 14 Sep 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/09/14/baradx-proj.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/09/14/baradx-proj.html</guid>
         
-        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>pyxcy - The C++ code editor made using Python</title>
+        <description>&lt;p&gt;GUI framework used : Tkinter&lt;/p&gt;
+
+&lt;p&gt;Language support : C / C++&lt;/p&gt;
+
+&lt;p&gt;Main features :&lt;/p&gt;
+
+&lt;p&gt;• Keyword colouration&lt;/p&gt;
+
+&lt;p&gt;• Line numbering&lt;/p&gt;
+
+&lt;p&gt;• Auto-indentation&lt;/p&gt;
+
+&lt;p&gt;• Auto-save&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/pyxcy&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 07 Sep 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/09/07/pyxcy-proj.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/09/07/pyxcy-proj.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Serial Port Communication between μC and PC</title>
+        <description>&lt;p&gt;A GUI interface was made using C# which had the following resposibilities :&lt;/p&gt;
+
+&lt;p&gt;❇ Collecting the input values from user&lt;/p&gt;
+
+&lt;p&gt;❇ Parse the given values into a 32-byte string&lt;/p&gt;
+
+&lt;p&gt;❇ Send to the microcontroller through RF&lt;/p&gt;
+
+&lt;p&gt;❇ Scan for input from the port continuously&lt;/p&gt;
+
+&lt;p&gt;❇ Output string received as a string containing output values&lt;/p&gt;
+
+&lt;p&gt;❇ Processing the string to retrieve and display&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/serial-port-comm-gui&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 Sep 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/09/02/spc-proj.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/09/02/spc-proj.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Blogger vs Blog(er)</title>
+        <description>&lt;p&gt;Once, a less mature version of me started blogging with Google. He just &lt;b&gt;dragged-and dropped&lt;/b&gt; things and they worked (of course within bounds). He just kick-started the GUI and things ran. He was blogging effortlessly, yet limitedly.&lt;/p&gt;
+
+&lt;p&gt;Then he studied web development and started coding a blog on GitHub. The first version of the blog doesn’t have much colours, menus and ads; yet it looks decent (and purposely minimal). Now, the blogging isn’t fully effortless (requires manhours), but the possibilities are now expanded to ∞.&lt;/p&gt;
+
+&lt;p&gt;Find a link to my (once) personal blog &lt;a href=&quot;http://rounakdatta.blogspot.in/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 24 Aug 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/coding/2017/08/24/blogger-vs-bloger.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/coding/2017/08/24/blogger-vs-bloger.html</guid>
+        
+        
+        <category>coding</category>
         
       </item>
     
       <item>
         <title>Hello world!</title>
-        <description>&lt;p&gt;Oops, maybe you arrived at the construction site!&lt;/p&gt;
+        <description>&lt;p&gt;Hello world.&lt;/p&gt;
+
+&lt;p&gt;This blog is running good.&lt;/p&gt;
 </description>
         <pubDate>Wed, 23 Aug 2017 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2017/08/23/get-started.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2017/08/23/get-started.html</guid>
+        <link>https://rounakdatta.github.io/2017/08/23/hello-world.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/08/23/hello-world.html</guid>
         
         
       </item>
