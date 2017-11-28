@@ -72,97 +72,36 @@ ul{
 <hr>
 <br>
 
-<div id="beautiful" class="ui fluid centered card sr">
-                  <div class="content">
-                    <a class="header ui blue top left attached label">Education</a>
-                    <div class="ui hidden divider"></div>
-                    <div class="ui relaxed divided list">
-                      <div class="item">
-                        <div class="content">
-                          <span><strong>Class X (2014)</strong></span>
-                          <div class="description">92.57% in  WBBSE<br>
-                            Studied at <a href="https://www.adityabirlaschools.com/RVB%20Rishra/aboutus.html" target="_blank">Aditya Birla Vani Bharati</a>.</div>
-                        </div>
-                      </div>
-                      <div class="item">
-                        <div class="content">
-                          <span><strong>Class XII (2016)</strong></span>
-                          <div class="description">89% in WBCHSE<br>
-                            Studied at <a href="https://en.wikipedia.org/wiki/Shree_Jain_Vidyalaya" target="_blank">Shree Jain Vidyalaya</a>.</div>
-                        </div>
-                      </div>
-                      <div class="item">
-                        <div class="content">
-                          <span><strong>BTech Computer Science & Engineering (2016-2020)</strong></span>
-                          <div class="description">9.02 CPI till now (2nd semester). <br>
-                            Studying at <a href="https://en.wikipedia.org/wiki/SRM_University" target="_blank">SRM University</a>.</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-</div>
+<center><p id="demo"></p></center>
+
+<center><a href="http://adventofcode.com">Advent of Code 2017 [01.12 - 25.12]</a></center>
+<center><a href="https://www.mygov.in/node/271991">DRDO Cyber Challenge [16.12 - 17.12]</a></center>
+<center><a href="https://innovate.mygov.in/login/?idle=1">Smart India Hackathon</a></center>
 
 <br>
 <hr>
 <br>
 
-<center><a href="https://rounakdatta.github.io/postlist.html">Find my posts</a></center>
-<!--<center><font face="Minion Web" size="0.2">QUICK THOUGHTS</font></center>
-<br>
-<center>
-  <ul class="post-list">
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Nov 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/2017/11/12/srmnetlogin.html">SRM Network Login</a>
-            </h2>
-        </li>     
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Sep 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/2017/09/14/baradx-proj.html">BARADX : Track your Satellite</a>
-            </h2>
-        </li>     
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Sep 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/2017/09/07/pyxcy-proj.html">pyxcy - The C++ code editor made using Python</a>
-            </h2>
-        </li>     
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Sep 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/2017/09/02/spc-proj.html">Serial Port Communication between μC and PC</a>
-            </h2>
-        </li>     
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Aug 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/coding/2017/08/24/blogger-vs-bloger.html">Blogger vs Blog(er)</a>
-            </h2>
-        </li>     
-    
-        <li>
-            <font face="courier"><span class="post-meta">♠ <em>Aug 2017</em></span></font>
-
-            <h2>
-              <a class="post-link" href="/2017/08/23/hello-world.html">Hello world!</a>
-            </h2>
-        </li>     
-    
-  </ul>
-</center>-->
+<center>I've organised my posts <a href="https://rounakdatta.github.io/postlist.html">here</a>.</center>
 </div>
+
+<script>
+var i = 0;
+var txt = 'Hi there! Upcoming events we\'re excited of : ';
+var speed = 70;
+
+function typeWriter() {
+  if (i < txt.length) {
+    document.getElementById("demo").innerHTML += txt.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  }
+}
+</script>
+
+<script>
+window.onload=typeWriter() ;
+</script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
