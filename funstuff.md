@@ -17,4 +17,4 @@ No-so-serious stuff to be busy with in college :
 
 ❥ <a href="https://rounakdatta.github.io/2017/12/06/gmail-attachments.html">Gmail Attachments Fetcher</a>
 
-❥ <a href="https://rounakdatta.github.io/2017/11/12/tic-tac-toe.html">Never-Lose-Tic-Tac-Toe 💪</a>
+❥ <a href="https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html">Never-Lose-Tic-Tac-Toe 💪</a>
