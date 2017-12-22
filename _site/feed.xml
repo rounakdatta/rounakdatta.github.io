@@ -6,9 +6,45 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 28 Nov 2017 10:46:00 +0530</pubDate>
-    <lastBuildDate>Tue, 28 Nov 2017 10:46:00 +0530</lastBuildDate>
+    <pubDate>Fri, 22 Dec 2017 15:23:32 +0530</pubDate>
+    <lastBuildDate>Fri, 22 Dec 2017 15:23:32 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Never-Lose-Tic-Tac-Toe 💪</title>
+        <description>&lt;p&gt;Optimized minimax algorithm in C# to build a Tic-Tac-Toe which never loses to you *wynk*&lt;/p&gt;
+
+&lt;p&gt;This was done for fun as a first attempt at &lt;a href=&quot;https://kwoc.kossiitkgp.in/&quot;&gt;Kharagpur Winter of Code&lt;/a&gt; (KWoC).&lt;/p&gt;
+
+&lt;p&gt;Find pre-requisites of using this application and usage instructions &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE/blob/master/README.md&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 08 Dec 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Gmail Attachments Fetcher</title>
+        <description>&lt;p&gt;Intuitive, useful, complete interface for fetching your Gmail attachments from a particular sender&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gmail-attachments.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This was done for fun as a first attempt at &lt;a href=&quot;https://kwoc.kossiitkgp.in/&quot;&gt;Kharagpur Winter of Code&lt;/a&gt; (KWoC).&lt;/p&gt;
+
+&lt;p&gt;Find pre-requisites of using this application and usage instructions &lt;a href=&quot;https://github.com/rounakdatta/gmail-attachments/blob/master/README.md&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/gmail-attachments&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 06 Dec 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/12/06/gmail-attachments.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/12/06/gmail-attachments.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>SRM Network Login</title>
