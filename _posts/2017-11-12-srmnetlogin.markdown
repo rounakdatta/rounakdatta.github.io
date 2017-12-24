@@ -5,7 +5,7 @@ image: srmnetlogin.png
 hidden: true
 visible: 0
 ---
-SRM University Unofficial Network Login Android Application
+*SRM University Unofficial Network Login Android Application*
 
 ![Screenshot](/assets/srmnetlogin.png){:class="img-responsive"}
 
@@ -22,3 +22,14 @@ The original script written by @thewisenerd can be found <a href="https://github
 _Deps_ : (python, pip-requests, pip-rsa) on Termux, Termux:Task
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/tasker-ed">here</a>.
+
+*SRM University Unofficial Network Login Desktop Application*
+
+![Screenshot](/assets/srmnetloginlinux.png){:class="img-responsive"}
+
+This is another lightning fast network login application made for Desktop OSs (Linux / Ubuntu / MacOS) using QtPython.
+
+Same <a href="https://github.com/thewisenerd/check.point.automaton">login script</a> was used.
+
+Find the GitHub repo <a href="https://github.com/rounakdatta/network-login">here</a>.
+
