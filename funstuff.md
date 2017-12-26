@@ -33,5 +33,9 @@ Not-so-serious stuff to be busy with in college :
 <br>
 
 ❥ <a href="https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html">Never-Lose-Tic-Tac-Toe 💪</a>
+<br>
+<br>
+
+❥ <a href="https://rounakdatta.github.io/2017/12/26/flappybird.html">Flappy Bird</a>
 
 </p>

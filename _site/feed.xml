@@ -6,9 +6,24 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 Dec 2017 01:18:47 +0530</pubDate>
-    <lastBuildDate>Sat, 23 Dec 2017 01:18:47 +0530</lastBuildDate>
+    <pubDate>Tue, 26 Dec 2017 23:32:03 +0530</pubDate>
+    <lastBuildDate>Tue, 26 Dec 2017 23:32:03 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Flappy Bird</title>
+        <description>&lt;p&gt;Minimal version of Flappy Bird implemented using HTML and JavaScript&lt;/p&gt;
+
+&lt;p&gt;Play the game &lt;a href=&quot;http://127.0.0.1:4000/flappy/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 26 Dec 2017 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2017/12/26/flappybird.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2017/12/26/flappybird.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Never-Lose-Tic-Tac-Toe 💪</title>
@@ -48,7 +63,7 @@
     
       <item>
         <title>SRM Network Login</title>
-        <description>&lt;p&gt;SRM University Unofficial Network Login Android Application&lt;/p&gt;
+        <description>&lt;p&gt;&lt;em&gt;SRM University Unofficial Network Login Android Application&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/srmnetlogin.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
@@ -65,6 +80,17 @@
 &lt;p&gt;&lt;em&gt;Deps&lt;/em&gt; : (python, pip-requests, pip-rsa) on Termux, Termux:Task&lt;/p&gt;
 
 &lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/tasker-ed&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;SRM University Unofficial Network Login Desktop Application&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/srmnetloginlinux.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is another lightning fast network login application made for Desktop OSs (Linux / Ubuntu / MacOS) using QtPython.&lt;/p&gt;
+
+&lt;p&gt;Same &lt;a href=&quot;https://github.com/thewisenerd/check.point.automaton&quot;&gt;login script&lt;/a&gt; was used.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/network-login&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
 </description>
         <pubDate>Sun, 12 Nov 2017 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2017/11/12/srmnetlogin.html</link>
