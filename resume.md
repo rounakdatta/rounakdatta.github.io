@@ -9,7 +9,14 @@ permalink: /resume
  style="overflow:hidden;height:480;width:100%" 
  width="100%" height="480"></iframe>
 
-<br>
+<hr>
+
+ <iframe src="https://drive.google.com/file/d/1f0C_LYRfoTgCSEfosI2ItQ4vgzBR_8TX/view" 
+ frameborder="0"
+ style="overflow:hidden;height:480;width:100%" 
+ width="100%" height="480"></iframe>
+
+<!--<br>
 <br>
 <b>When debugging, novices insert corrective code; experts remove defective code</b>
 <br>
@@ -20,6 +27,6 @@ permalink: /resume
 <b>Artificial Intelligence usually beats Natural Stupidity</b>
 <br>
 
-<b>All men must swallow the sour with the sweet</b>
+<b>All men must swallow the sour with the sweet</b>-->
 
 </center>

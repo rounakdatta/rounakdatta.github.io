@@ -6,17 +6,21 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 26 Dec 2017 23:32:03 +0530</pubDate>
-    <lastBuildDate>Tue, 26 Dec 2017 23:32:03 +0530</lastBuildDate>
+    <pubDate>Fri, 29 Dec 2017 16:28:42 +0530</pubDate>
+    <lastBuildDate>Fri, 29 Dec 2017 16:28:42 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
         <title>Flappy Bird</title>
         <description>&lt;p&gt;Minimal version of Flappy Bird implemented using HTML and JavaScript&lt;/p&gt;
 
-&lt;p&gt;Play the game &lt;a href=&quot;http://127.0.0.1:4000/flappy/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To add submodules to a repository,&lt;/p&gt;
 
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;$ &lt;strong&gt;git submodule add &amp;lt;&amp;gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Play the game &lt;a href=&quot;https://rounakdatta.github.io/flappy/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/flappy&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Tue, 26 Dec 2017 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2017/12/26/flappybird.html</link>
