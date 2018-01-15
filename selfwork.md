@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Fun Stuff
-permalink: /funstuff
+title: Self Work
+permalink: /selfwork
 ---
 Not-so-serious stuff to be busy with in college :
 
