@@ -1,12 +1,16 @@
 ---
 layout: post
-title: "SRM IET Hackathon 2018"
+title: "Fake News Detection"
 hidden: true
 visible: 0
 ---
 _Secured second position_
 
-# Team 10 - NightOwls : _Niladri Shekhar Dutt_, _Arko Chatterjee_, _Saurav Saha_, _Rounak Datta_
+Team 10 - NightOwls : _Niladri Shekhar Dutt_, _Arko Chatterjee_, _Saurav Saha_, _Rounak Datta_
+
+27th Jan - 28th Jan 2018
+
+by IET Chapter, India
 
 [Demo video](https://www.youtube.com/watch?v=aZzxZA_KfXY&feature=youtu.be)<br>
 
@@ -14,7 +18,7 @@ _Secured second position_
 
 Often sensational news is created and spread through social media to achieve intended end. On the other hand, it may also involve narration of a true fact however being deliberately exaggerated. This may also affect the affect the importance of serious news media. The problem is to identify the authenticity of the news and online content. Equally important problem is to identify the bots involved in spreading false news.
 
-![Alt Text](https://github.com/rounakdatta/Xcheck/blob/master/src/demo.gif)
+![Demo](/assets/demo.gif){:class="img-responsive"}
 
 ### Approach
 * The problem can be broken down into 3 statements :-
@@ -41,8 +45,6 @@ make
 
 This will start the local server at localhost:8000.
 
-_*Deps*: sklearn, pandas, django, requests, bs4_
-
-![Alt Text](https://github.com/rounakdatta/Xcheck/blob/master/src/logo.png)
+_**Deps**: sklearn, pandas, django, requests, bs4_
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/xcheck">here</a>.
