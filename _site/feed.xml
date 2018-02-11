@@ -6,17 +6,144 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 Jan 2018 00:03:41 +0530</pubDate>
-    <lastBuildDate>Tue, 16 Jan 2018 00:03:41 +0530</lastBuildDate>
+    <pubDate>Mon, 12 Feb 2018 01:58:42 +0530</pubDate>
+    <lastBuildDate>Mon, 12 Feb 2018 01:58:42 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
+        <title>Computer Science Books Download</title>
+        <description>&lt;p&gt;Quickly download all the books from books.goalkicker.com&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Get the books stored into the current directory&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Get the books stored with their original filenames&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The open-source content is written by the beautiful people at StackOverflow and compiled in the form of short, concise, informative e-books. Text content is released under Creative Commons BY-SA. This site isn’t affilated with StackOverflow.&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/books.goalkicker-dl&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 10 Feb 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/02/10/books-goalkeeper-dl.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/10/books-goalkeeper-dl.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>eLab Quick Print</title>
+        <description>&lt;p&gt;Quickly get your eLab record generated&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Doesn’t matter if questions are incomplete in between&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Evaluates only the completed and verified questions&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Collects all the evaluation reports in JPG format, converts them to PDF and concatenates all the PDFs&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Single PDF file shareable with classmates to share progress&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Uses Python requests, BeautifulSoup instead of (resource heavy and difficult-to-use) Selenium.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;This project is ongoing and is expected to be completed by the end of February 2018.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/elab-quick-print&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 08 Feb 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Fake News Detection</title>
+        <description>&lt;p&gt;&lt;em&gt;Secured second position&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Team 10 - NightOwls : &lt;em&gt;Niladri Shekhar Dutt&lt;/em&gt;, &lt;em&gt;Arko Chatterjee&lt;/em&gt;, &lt;em&gt;Saurav Saha&lt;/em&gt;, &lt;em&gt;Rounak Datta&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;27th Jan - 28th Jan 2018&lt;/p&gt;
+
+&lt;p&gt;by IET Chapter, India&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=aZzxZA_KfXY&amp;amp;feature=youtu.be&quot;&gt;Demo video&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;problem-statement&quot;&gt;Problem Statement&lt;/h2&gt;
+
+&lt;p&gt;Often sensational news is created and spread through social media to achieve intended end. On the other hand, it may also involve narration of a true fact however being deliberately exaggerated. This may also affect the affect the importance of serious news media. The problem is to identify the authenticity of the news and online content. Equally important problem is to identify the bots involved in spreading false news.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/demo.gif&quot; alt=&quot;Demo&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;approach&quot;&gt;Approach&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The problem can be broken down into 3 statements :-&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;Use NLP to check the authenticity of a news article.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;If the user has a query about the authenticity of a search query then he/she can directly search on our platform and using our custom algorithm we output a confidence score.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Check the authenticity of a news source.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Articles can be analyzed by feeding them to a machine learning model (Passive Aggressive Classifier) which predicts the genuinity of the content after it’s trained through predefined datasets of classified real vs fake news.&lt;/li&gt;
+  &lt;li&gt;Search terms can be analyzed by doing a Google search (first 100 entries) and and ensuring if the news corresponding to the keywords have been covered by reliable news sources and aggregators. For every search term covered by a reliable news source it recieves a score of +1, while we heavily penalize fake sources. If multiple fake sources cover the news then we penalize the truth score even harder. We also look for keywords like ‘hoax’, ‘fake’, etc in the payload content.&lt;/li&gt;
+  &lt;li&gt;An URL (news source) can be analyzed if it’s authentic by checking it in our database of true news provider and false news provider.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;application&quot;&gt;Application&lt;/h3&gt;
+
+&lt;p&gt;When the fake-news detector is hosted locally / on a cloud platform, it can predict fake news with reasonable accuracy. Since edge cases of fake-news detection are controversial, the tool outputs a probability percentage instead of a rigid label.&lt;/p&gt;
+
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bash
+make
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will start the local server at localhost:8000.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Deps&lt;/strong&gt;: sklearn, pandas, django, requests, bs4&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/xcheck&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 28 Jan 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</guid>
+        
+        
+      </item>
+    
+      <item>
         <title>Flappy Bird</title>
-        <description>&lt;p&gt;Minimal version of Flappy Bird implemented using HTML and JavaScript&lt;/p&gt;
+        <description>&lt;p&gt;Minimal version of Flappy Bird implemented using HTML and JavaScript [Phaser]&lt;/p&gt;
 
 &lt;p&gt;To add submodules to a repository,&lt;/p&gt;
 
 &lt;p&gt;$ &lt;strong&gt;git submodule add &amp;lt;&amp;gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To update the submodules to the latest commit,&lt;/p&gt;
+
+&lt;p&gt;$ &lt;strong&gt;git submodule update –remote –merge&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Play the game &lt;a href=&quot;https://rounakdatta.github.io/flappy/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -171,41 +298,13 @@
 
 &lt;p&gt;❇ Processing the string to retrieve and display&lt;/p&gt;
 
+&lt;p&gt;&lt;img src=&quot;/assets/spcimg.jpg&quot; alt=&quot;SPC&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/serial-port-comm-gui&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sat, 02 Sep 2017 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2017/09/02/spc-proj.html</link>
         <guid isPermaLink="true">https://rounakdatta.github.io/2017/09/02/spc-proj.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Blogger vs Blog(er)</title>
-        <description>&lt;p&gt;Once, a less mature version of me started blogging with Google. He just &lt;b&gt;dragged-and dropped&lt;/b&gt; things and they worked (of course within bounds). He just kick-started the GUI and things ran. He was blogging effortlessly, yet limitedly.&lt;/p&gt;
-
-&lt;p&gt;Then he studied web development and started coding a blog on GitHub. The first version of the blog doesn’t have much colours, menus and ads; yet it looks decent (and purposely minimal). Now, the blogging isn’t fully effortless (requires manhours), but the possibilities are now expanded to ∞.&lt;/p&gt;
-
-&lt;p&gt;Find a link to my (once) personal blog &lt;a href=&quot;http://rounakdatta.blogspot.in/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 24 Aug 2017 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/coding/2017/08/24/blogger-vs-bloger.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/coding/2017/08/24/blogger-vs-bloger.html</guid>
-        
-        
-        <category>coding</category>
-        
-      </item>
-    
-      <item>
-        <title>Hello world!</title>
-        <description>&lt;p&gt;Hello world.&lt;/p&gt;
-
-&lt;p&gt;This blog is running good.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 23 Aug 2017 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2017/08/23/hello-world.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2017/08/23/hello-world.html</guid>
         
         
       </item>

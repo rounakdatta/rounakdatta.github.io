@@ -1,3 +1,19 @@
+window.addEventListener("click",function(event){
+  game.state.start('main');
+  event.stopPropagation();//prevent phaser detection 
+},false);
+
+function show_image(src, width, height, alt) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.alt = alt;
+
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(img);
+}
+
 var mainState = {
 	preload: function() { 
 
@@ -27,6 +43,11 @@ var mainState = {
 		var spacekey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR); //define spacekey as the even of pressing the SPACEBAR
 		spacekey.onDown.add(this.jump, this); //spacekey when buttoned down, bird will jump
 
+		if (game.input.activePointer.isDown)
+    	{
+        	this.jump();
+    	}
+
 		this.pipes = game.add.group();
 
 		this.timer = game.time.events.loop(1500, this.addRowOfPipes, this); 
@@ -41,7 +62,10 @@ var mainState = {
 	update: function() {
  
 		if(this.bird.y < 0 || this.bird.y > 490)
+		{
+			this.hitPipe();
 			this.restartGame(); //why is bird going out of my screen
+		}
 
 		game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this); //losing overlap logic here
 
@@ -80,7 +104,8 @@ var mainState = {
 	}, 
 
 	restartGame: function() {
-		game.state.start('main');
+		init();
+		//game.state.start('main');
 	},
 
 	addOnePipe: function(x, y) {
@@ -110,6 +135,16 @@ var mainState = {
 
 var game = new Phaser.Game(400, 490);
 
-game.state.add('main', mainState); 
+game.state.add('main', mainState);
 
-game.state.start('main'); //start here
+function init() {
+	game.stage.backgroundColor = "#4488AA";
+	game.add.text(100, 200, "Tap to continue", 
+    		{ font: "30px Arial", fill: "#ffffff" });
+}
+
+window.onload = function(){
+	init();
+};
+
+//game.state.start('main'); //start here
