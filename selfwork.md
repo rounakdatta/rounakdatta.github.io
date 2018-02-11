@@ -20,7 +20,7 @@ Not-so-serious stuff to be busy with in college :
 <br>
 <br>
 
-❥ Efficient Server in C (not open-source)
+❥ Efficient Image Server in C (not open-source)
 <br>
 <br>
 
@@ -37,5 +37,15 @@ Not-so-serious stuff to be busy with in college :
 <br>
 
 ❥ <a href="https://rounakdatta.github.io/2017/12/26/flappybird.html">Flappy Bird</a>
+
+<br>
+<br>
+
+❥ <a href="https://rounakdatta.github.io/2018/02/10/books-goalkeeper-dl.html">Computer Science Books Download</a>
+
+<br>
+<br>
+
+❥ <a href="https://rounakdatta.github.io/2018/02/08/elab-quick-print.html">eLab Quick Print</a>
 
 </p>
