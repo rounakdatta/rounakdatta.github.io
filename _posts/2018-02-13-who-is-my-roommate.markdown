@@ -13,6 +13,7 @@ The site is currently live at <a href="http://hostelroo.ml/">hostelroo.ml</a>.
 - Make the hostels database more open
 
 _Made in an evening just for fun and mass convenience_
-_Hosted freely on *PythonAnywhere*_
+
+_Hosted freely on **PythonAnywhere**_
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/who-is-my-roommate">here</a>.
