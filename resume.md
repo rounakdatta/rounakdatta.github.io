@@ -7,14 +7,14 @@ permalink: /resume
 <iframe src="https://drive.google.com/file/d/0B7hJdfAwnUNzNk9zSndNRFhTR2c/preview" 
  frameborder="0"
  style="overflow:hidden;height:480;width:100%" 
- width="100%" height="480"></iframe>
+ width="100%" height="580"></iframe>
 
 <hr>
 
  <iframe src="https://drive.google.com/file/d/1f0C_LYRfoTgCSEfosI2ItQ4vgzBR_8TX/preview" 
  frameborder="0"
  style="overflow:hidden;height:480;width:100%" 
- width="100%" height="480"></iframe>
+ width="100%" height="580"></iframe>
 
 <!--<br>
 <br>
