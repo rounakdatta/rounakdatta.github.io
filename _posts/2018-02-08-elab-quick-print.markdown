@@ -14,10 +14,14 @@ Quickly get your eLab record generated
 
 - Collects all the evaluation reports in PNG format, converts them to PDF and concatenates all the PDFs
 
-- Single PDF file shareable with classmates to share progress / as final eLab submission eport
+- Single PDF file shareable with classmates to share progress / as final eLab submission report
 
 - Uses Python library - _requests_ (for getting the reports) and _img2pdf_ (for converting to PDF) instead of (resource heavy and difficult-to-use) Selenium.
 
-**A web-app is on its way.**
+- Response time : 10s
+
+![Screenshot](/assets/elab-report.png){:class="img-responsive"}
+
+The site is currently live at <a href="http://elabreport.ml/">elabreport.ml</a>.
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/elab-quick-print">here</a>.
