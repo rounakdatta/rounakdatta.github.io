@@ -46,7 +46,7 @@ Not-so-serious stuff to be busy with in college :
 <br>
 <br>
 
-❥ <a href="https://rounakdatta.github.io/2018/02/08/elab-quick-print.html">eLab Quick Print</a>
+❥ <a href="https://rounakdatta.github.io/2018/02/08/elab-quick-print.html">eLab Report Maker</a>
 
 <br>
 <br>
