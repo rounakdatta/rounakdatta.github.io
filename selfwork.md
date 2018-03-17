@@ -20,7 +20,7 @@ Not-so-serious stuff to be busy with in college :
 <br>
 <br>
 
-❥ <a href="https://rounakdatta.github.io/2017/08/30/imgsrvc.html">Efficient Image Server</a>
+❥ <a href="https://rounakdatta.github.io/2017/10/30/imgsrvc.html">Efficient Image Server</a>
 <br>
 <br>
 

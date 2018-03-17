@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "BARADX : Efficient Image Server"
+title: "Efficient Image Server"
 hidden: true
 visible: 0
 ---
