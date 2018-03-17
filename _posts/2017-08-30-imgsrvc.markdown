@@ -1,0 +1,19 @@
+---
+layout: post
+title: "BARADX : Efficient Image Server"
+hidden: true
+visible: 0
+---
+Efficient File-System based Image Server written entirely in C
+
+We as a team of 3 (<a href="https://www.linkedin.com/in/baraneedhara-karthik-gokuldas-02b506b4"> Baranee Sir</a>, Subhadeep, me) built this service. Primary points are :
+ <ul>
+  <li>File-system based rather than standard database system. Also, metrics show that the system works best for XFS, where ideally read-performances are more enhanced; and satisfying our need.</li>
+  <li>On initialization of the service, metadata is collected from a backup and are put into the primary memory. Metadata access time is reduced by a great margin. We actually index the images and thus jumping to the particular image metadata through offset is a huge performance gain.</li>
+  <li>Whenever a new image is added, we don't modify the entire metadata, rather append it. Metadata parameters are wisely chosen to ensure sufficiency as well as performance. We use 39 bytes per-image-metadata which is truely a challenging number.</li>
+  <li>Interruptions, accidental losses of metadata from the primary memory are well handled. The metadata is optimally backed up to the secondary memory to ensure the system doesn't need to recollect it from image files.</li>
+</ul> 
+
+ToDo : Image file deletions aren't well handled as of now. Even if naively implemented, leads to the formation of memory voids. Even though fundamentally scalable, horizontal scalability is something to be worked upon.
+
+Find the GitHub repo <a href="https://github.com/rounakdatta/imgsrvc">here</a>.

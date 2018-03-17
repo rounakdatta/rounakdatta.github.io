@@ -20,7 +20,7 @@ Not-so-serious stuff to be busy with in college :
 <br>
 <br>
 
-❥ Efficient Image Server in C (not open-source)
+❥ <a href="https://rounakdatta.github.io/2017/08/30/imgsrvc.html">Efficient Image Server</a>
 <br>
 <br>
 
@@ -32,7 +32,7 @@ Not-so-serious stuff to be busy with in college :
 <br>
 <br>
 
-❥ <a href="https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html">Never-Lose-Tic-Tac-Toe 💪</a>
+❥ <a href="https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html">Never-Lose-Tic-Tac-Toe</a>
 <br>
 <br>
 
