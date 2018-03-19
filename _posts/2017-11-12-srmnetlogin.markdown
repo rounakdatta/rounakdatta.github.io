@@ -27,7 +27,7 @@ Find the GitHub repo <a href="https://github.com/rounakdatta/tasker-ed">here</a>
 
 ![Screenshot](/assets/srmnetloginlinux.png){:class="img-responsive"}
 
-This is another lightning fast network login application made for Desktop OSs (Linux / Ubuntu / MacOS) using QtPython.
+This is another lightning fast network login application made for Desktop OSs (Linux / macOS / Windows) using QtPython.
 
 Same <a href="https://github.com/thewisenerd/check.point.automaton">login script</a> was used.
 
