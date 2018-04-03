@@ -58,4 +58,9 @@ Not-so-serious stuff to be busy with in college :
 
 ❥ <a href="https://rounakdatta.github.io/2018/03/18/terriblytinytales.html">Terribly Tiny Tales</a>
 
+<br>
+<br>
+
+❥ <a href="https://rounakdatta.github.io/2018/04/02/eth-lottery.html">Decentralized Lottery</a>
+
 </p>
