@@ -24,7 +24,7 @@ A blockhain based e-procurement platform which helps in streamlining the procure
 
 #### Whitepaper
 
-[![Technical Whitepaper](https://lh3.googleusercontent.com/sc0BKtgHkLTjxkI7cYrrXUHWWXeSPqgZOt9t02Ol9xSHXNIWXjxpz7Dlh2dRQJHA3imqKA=s60)](https://drive.google.com/file/d/1wIKR7gG3-esUwT77z3uqp3N6d-HWxqCO/view)
+[![Technical Whitepaper](https://cdn2.iconfinder.com/data/icons/document-21/64/Document-01-128.png)](https://drive.google.com/file/d/1wIKR7gG3-esUwT77z3uqp3N6d-HWxqCO/view)
 
 #### Quick Offline Demo
 
@@ -46,3 +46,5 @@ Head over to [localhost:5000](http://localhost:5000).
 
 
 [![HitCount](http://hits.dwyl.io/936a185caaa266bb9cbe981e9e05cb/936a185caaa266bb9cbe981e9e05cb.github.io.svg)](http://hits.dwyl.io/936a185caaa266bb9cbe981e9e05cb/936a185caaa266bb9cbe981e9e05cb.github.io)
+
+Find the GitHub repo <a href="https://github.com/936a185caaa266bb9cbe981e9e05cb/936a185caaa266bb9cbe981e9e05cb.github.io">here</a>.

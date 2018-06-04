@@ -1,0 +1,32 @@
+---
+layout: post
+title: "Ayuda - Yet another optimised P2P Microfinance system"
+hidden: true
+visible: 0
+---
+# Ayuda - Yet another optimised P2P Microfinance system
+
+## [TechGig CodeGladiator 2018](https://www.techgig.com/codegladiators/blockchain)
+### Team Satoshi
+
+#### What is Ayuda
+
+Ayuda is a not for profit, blockchain based peer-peer money lending platform. Our platform connects lenders and borrowers from all across the globe because we believe that your will to help someone is much greater than the miles supporting you. The platform makes sure that every person using the platform is benefitted. Doing this we are able to sustain a proper give and take a situation where everyone is benefitted. The platform allows a lender to partially pay for a loan request. We use an innovative dynamic-interest rate method to incentivize our lenders.In this way, the lenders will pool as much money as possible to get more incentive. Our state-of-art algorithm decides the interest rate for the lenders dynamically on the basis of the proportion of money paid by a lender for a particular loan while maintaining the fixed interest rate for the borrower.
+
+#### How Ayuda is a problem-solution fit
+
+[Ayuda Solution Chart](https://github.com/souradeep-das/AYUDA/raw/master/Capture7.PNG)
+
+#### How Ayuda works
+
+[Ayuda Working](https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG)
+
+#### Read the Whitepaper
+
+[![Whitepaper](https://cdn2.iconfinder.com/data/icons/document-21/64/Document-01-128.png)](https://drive.google.com/open?id=1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVy)
+
+#### Watch the Prototype Demo video
+
+[![Prototype Demo](https://img.youtube.com/vi/tUHbLQloUxg/0.jpg)](https://www.youtube.com/watch?v=tUHbLQloUxg)
+
+Find the GitHub repo <a href="https://github.com/souradeep-das/AYUDA">here</a>.

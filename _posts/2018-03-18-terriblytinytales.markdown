@@ -46,3 +46,5 @@ PaaS used : **Heroku**, **PythonAnywhere**<br>
 ![Sample](https://github.com/rounakdatta/terriblytinytales/blob/master/demo/demo.gif)
 
 The demo is currently live at [tttales.tk](http://tttales.tk).
+
+Find the GitHub repo <a href="https://github.com/rounakdatta/terriblytinytales">here</a>.
