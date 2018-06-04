@@ -6,7 +6,7 @@ permalink: /selfwork
 Not-so-serious stuff to be busy with in college :
 
 <p>
-<img src="assets/raven.png" alt="Mischievious raven" style="float:right;margin:0 20px 20px 0;"   />
+<img src="assets/raven.png" alt="Mischievious raven" style="float:right;margin:0 20px 20px 0;"/>
 
 ❥ <a href="https://rounakdatta.github.io/2017/09/02/spc-proj.html">Serial Port Communication between μC and PC</a>
 <br>
