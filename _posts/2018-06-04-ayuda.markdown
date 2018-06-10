@@ -5,9 +5,9 @@ hidden: true
 visible: 0
 ---
 
-[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain)   [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
+[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
 
-**_This project won the second prize of ₹1,00,000 at the hackathon_**.
+**_This project won the second prize of ₹1,00,000 at the Blockchain Hackathon_**.
 
 ## What is Ayuda
 
@@ -21,12 +21,16 @@ Ayuda is a not for profit, blockchain based peer-peer money lending platform. Ou
 
 ![Ayuda Working](https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG){:class="img-responsive"}
 
-## Read the Whitepaper (Ethereum and HyperLedger)
+## Read the Whitepaper (HyperLedger and Ethereum)
 
 [![HyperLedger](https://media.licdn.com/dms/image/C510BAQHIPoETQXdY0Q/company-logo_200_200/0?e=2159024400&v=beta&t=zsEfG0DGt_MPTImYAC72wCvDdkTqOBIP7_ChsEAk6Ms)](https://drive.google.com/open?id=1oRTd9xMKOj14l-e2cI-UWKqt3RaGk6CL) [![Ethereum](https://avatars1.githubusercontent.com/u/6250754?s=200&v=4)](https://drive.google.com/open?id=1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVy)
 
 ## Watch the Prototype Demo & Concept video
 
 [![Product Demo](https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg)](https://www.youtube.com/watch?v=qcIV0KIzFwA) [![Concept Demo](https://img.youtube.com/vi/tUHbLQloUxg/0.jpg)](https://www.youtube.com/watch?v=tUHbLQloUxg)
+
+
+
+[![HyperLedger](https://i.imgur.com/YUyaXmf.png)](https://www.hyperledger.org/) [![Node.js](https://i.imgur.com/eVpGHxM.png)](https://nodejs.org/en/)
 
 Find the GitHub repo for Hyperleger <a href="https://github.com/souradeep-das/AYUDA-HL">here</a> and Ethereum <a href="https://github.com/souradeep-das/AYUDA">here</a>.
