@@ -8,7 +8,7 @@ visible: 0
 
 [![Powered by Ethereum](https://image.ibb.co/ftY1fo/ethereum.png)](https://www.ethereum.org/)
 
-[![Topcoder BSIC Incubator 2018](https://i.imgur.com/8focZ4B.jpg)](https://blockchain.topcoder.com/bsic-incubator) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
+[![Topcoder BSIC Incubator 2018](https://i.imgur.com/8focZ4B.jpg)](https://blockchain.topcoder.com/bsic-incubator)   [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
 
 A blockhain based e-procurement platform which helps in streamlining the procurement process by making it more open, transparent and fast. Our main goals are to keep the middlemen out, to make sure the best bidder finds the best dealer, ensure that public data is truly public and common citizen's money isn't fiddled with.
 
