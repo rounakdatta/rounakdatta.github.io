@@ -7,7 +7,7 @@ visible: 0
 
 [![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
 
-**_This project won the second prize of ₹1,00,000 at the Blockchain Hackathon_**.
+**_This project won the second prize of ₹1,00,000 at the Blockchain 1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVyckathon_**.
 
 ## What is Ayuda
 
