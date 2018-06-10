@@ -5,7 +5,7 @@ hidden: true
 visible: 0
 ---
 
-[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain)
+[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab)
 
 **_This project won the second prize of ₹1,00,000 at the hackathon_**.
 
@@ -27,8 +27,6 @@ Ayuda is a not for profit, blockchain based peer-peer money lending platform. Ou
 
 ## Watch the Prototype Demo & Concept video
 
-[![Product Demo](https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg)](https://www.youtube.com/watch?v=qcIV0KIzFwA)
-
-[![Concept Demo](https://img.youtube.com/vi/tUHbLQloUxg/0.jpg)](https://www.youtube.com/watch?v=tUHbLQloUxg)
+[![Product Demo](https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg)](https://www.youtube.com/watch?v=qcIV0KIzFwA) [![Concept Demo](https://img.youtube.com/vi/tUHbLQloUxg/0.jpg)](https://www.youtube.com/watch?v=tUHbLQloUxg)
 
 Find the GitHub repo for Hyperleger <a href="https://github.com/souradeep-das/AYUDA-HL">here</a> and Ethereum <a href="https://github.com/souradeep-das/AYUDA">here</a>.
