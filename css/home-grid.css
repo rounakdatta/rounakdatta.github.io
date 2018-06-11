@@ -27,10 +27,10 @@
 
 .grid figure img {
   position: absolute;
-  left: 50%;
+  left: 100%;
   display: block;
   min-height: 100%;
-  margin-left: -255px;
+  margin-left: -247px;
   opacity: .8;
 }
 
