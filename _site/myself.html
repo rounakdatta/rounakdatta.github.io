@@ -7,11 +7,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Terribly Tiny Tales Internship Assignment | Rounak Datta</title>
-  <meta name="description" content="This is an assignment for the application to Terribly Tiny Tales for their Software Engineering Internship for summer 2018.">
+  <title>Myself | Rounak Datta</title>
+  <meta name="description" content="/home
+">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="https://rounakdatta.github.io/2018/03/18/terriblytinytales.html">
+  <link rel="canonical" href="https://rounakdatta.github.io/myself">
   <link rel="alternate" type="application/rss+xml" title="Home" href="https://rounakdatta.github.io/feed.xml">
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?">
 </head>
@@ -33,7 +34,7 @@
 	</center>
 	<br>
 	<!--<div class="center"><font size="2"><h5><p>/home
-</p></h5></font> </div>-->
+/myself</p></h5></font> </div>-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -96,69 +97,14 @@ ul{
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <link rel="stylesheet" type="text/css" href="css/typing.css">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Terribly Tiny Tales Internship Assignment</h1>
-    <p class="post-meta"><time datetime="2018-03-18T00:00:00+05:30" itemprop="datePublished">Mar 18, 2018</time></p>
-  </header>
-
-  <div class="post-content" itemprop="articleBody">
-    <p>This is an assignment for the application to <strong>Terribly Tiny Tales</strong> for their Software Engineering Internship for summer 2018.</p>
-
-<ul>
-  <li>The text is first web-scraped using requests, cleaned and put into data-structure</li>
-  <li>Uses trie data-structure to store the words (and their breakups)</li>
-  <li>Uses list-of-lists to store the word set (word, frequency)</li>
-  <li>Flask web-sever to render the content to HTML tables</li>
-</ul>
-
-<h3 id="local-usage">Local usage</h3>
-
-<p><code class="highlighter-rouge">git clone https://github.com/rounakdatta/terriblytinytales.git</code></p>
-
-<p><code class="highlighter-rouge">make</code></p>
-
-<h3 id="working">Working</h3>
-
-<ul>
-  <li>First, the script scrapes the text file from <a href="http://terriblytinytales.com/test.txt">here</a> using <em>requests</em> module.
- The entire text is split into words and converted to lower case.</li>
-  <li>Then, the words are put into trie data-structure as well as added to the final_list <em>[ Σ[‘key’, ‘count’] ]</em> with count=0.
- Whenever there is a collision (the word exists), the final_list only is updated (count increased).</li>
-  <li>Apart from this, the trie data-structure implemented here has attributes data (char), list of children, branch_end, count and has functions for addition of data as well as finding if data exists.</li>
-  <li>To render a frontend to it, Flask is used. The API to the above algorithm is <em>give_count(n)</em> which is called from Flask <em>app.py</em> to get the final_list.
- To render it, <em>tables.py</em> converts it into HTML table and creates <em>result.html</em> (of course using <em>os</em> py-module) which is then displayed.</li>
-</ul>
-
-<p>Here’s a quick visualization of the trie data-structure :</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>                   *
-                /     \
-              a         b
-            /   \       |
-          ap     as     ba
-          /\      |     / \
-        app apk   ask  bac  bak
-                        |     |
-                       back  bake
-</code></pre>
-</div>
-
-<p>Scripting and markup languages used : <strong>Python</strong>, <strong>HTML</strong><br />
-Frameworks used : <strong>Flask</strong><br />
-PaaS used : <strong>Heroku</strong>, <strong>PythonAnywhere</strong><br /></p>
-
-<p><img src="https://github.com/rounakdatta/terriblytinytales/blob/master/demo/demo.gif" alt="Sample" /></p>
-
-<p>The demo is currently live at <a href="http://tttales.tk">tttales.tk</a>.</p>
-
-<p>Find the GitHub repo <a href="https://github.com/rounakdatta/terriblytinytales">here</a>.</p>
-
+<div class="conx">
+  <div class="jumbotron text-center">
+    <h1 class="">Hello! 🎅</h1>
+    <p class="element"></p>
   </div>
-
-</article>
-
+</div>
       </div>
     </div>
 
