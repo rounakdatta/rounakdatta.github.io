@@ -6,9 +6,37 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 22 Jun 2018 01:23:56 +0530</pubDate>
-    <lastBuildDate>Fri, 22 Jun 2018 01:23:56 +0530</lastBuildDate>
+    <pubDate>Sun, 24 Jun 2018 01:42:26 +0530</pubDate>
+    <lastBuildDate>Sun, 24 Jun 2018 01:42:26 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>ResXme - The ultimate resume parsing tool</title>
+        <description>&lt;p&gt;ResXme is a resume-parsing tool built to automate the process of resume classification based on required criteria. ResXme tries to utilise the best of open-source softwares available to improve &lt;b&gt;accuracy&lt;/b&gt; and &lt;b&gt;scalability&lt;/b&gt;. The core architecture of ResXme works on techniques of information mining from rich text resources, store them efficienctly and help them to be retrived with speed. The entire model is built as a web-app powered by Flask (Python) backend. Uses open-source NLP libraries like SpaCy, NLTK as well as NoSQL databases to &lt;i&gt;power and scale&lt;/i&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/vr1nYID9xD0&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+</description>
+        <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/06/21/resxme.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/06/21/resxme.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>CorrectLy - The Grammar Engine</title>
+        <description>&lt;p&gt;CorrectLy is a &lt;b&gt;English language and grammar-correction engine&lt;/b&gt;. CorrectLy’s favourite competitor is Grammarly.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/maVkhZotEVM&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+</description>
+        <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/06/21/correctly.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/06/21/correctly.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Ayuda - Yet another optimised P2P Microfinance system</title>
@@ -365,46 +393,6 @@ make
         <pubDate>Sun, 28 Jan 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</link>
         <guid isPermaLink="true">https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Flappy Bird</title>
-        <description>&lt;p&gt;Minimal version of Flappy Bird implemented using HTML and JavaScript [Phaser]&lt;/p&gt;
-
-&lt;p&gt;To add submodules to a repository,&lt;/p&gt;
-
-&lt;p&gt;$ &lt;strong&gt;git submodule add &amp;lt;&amp;gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;To update the submodules to the latest commit,&lt;/p&gt;
-
-&lt;p&gt;$ &lt;strong&gt;git submodule update –remote –merge&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Play the game &lt;a href=&quot;https://rounakdatta.github.io/flappy/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/flappy&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 26 Dec 2017 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2017/12/26/flappybird.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2017/12/26/flappybird.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Never-Lose-Tic-Tac-Toe 💪</title>
-        <description>&lt;p&gt;Optimized minimax algorithm in C# to build a Tic-Tac-Toe which never loses to you *wynk*&lt;/p&gt;
-
-&lt;p&gt;This was done for fun as a first attempt at &lt;a href=&quot;https://kwoc.kossiitkgp.in/&quot;&gt;Kharagpur Winter of Code&lt;/a&gt; (KWoC).&lt;/p&gt;
-
-&lt;p&gt;Find pre-requisites of using this application and usage instructions &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE/blob/master/README.md&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/TIC-TAC-TOE&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Fri, 08 Dec 2017 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2017/12/08/tic-tac-toe.html</guid>
         
         
       </item>

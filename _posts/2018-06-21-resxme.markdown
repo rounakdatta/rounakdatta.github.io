@@ -1,0 +1,11 @@
+---
+layout: post
+title: "ResXme - The ultimate resume parsing tool"
+hidden: true
+visible: 0
+---
+
+ResXme is a resume-parsing tool built to automate the process of resume classification based on required criteria. ResXme tries to utilise the best of open-source softwares available to improve <b>accuracy</b> and <b>scalability</b>. The core architecture of ResXme works on techniques of information mining from rich text resources, store them efficienctly and help them to be retrived with speed. The entire model is built as a web-app powered by Flask (Python) backend. Uses open-source NLP libraries like SpaCy, NLTK as well as NoSQL databases to <i>power and scale</i>.
+
+<br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/vr1nYID9xD0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
