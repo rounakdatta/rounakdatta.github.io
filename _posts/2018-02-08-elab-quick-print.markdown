@@ -22,8 +22,14 @@ Usage instructions are documented <a href="https://github.com/rounakdatta/elab-r
 
 - Response time : 10m (best case)
 
+- Support - 2nd year ```CSE (ADA, Java)```, ```IT (ADA, Java)```, 1st year ```PDD```
+
 ![Screenshot](/assets/elab-report.png){:class="img-responsive"}
 
 A demo version is currently live at <a href="http://elabreport.ml/">elabreport.ml</a>. Recommended to use Google Colab for the purpose. The response time isn't lightning fast because eLab servers are slow!
+
+```
+Status : Contact if you'd like to maintain this project furthur.
+```
 
 Find the GitHub repo <a href="https://github.com/rounakdatta/elab-quick-print">here</a>.

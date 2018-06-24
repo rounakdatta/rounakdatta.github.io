@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ayuda - Yet another optimised P2P Microfinance system"
+title: "Ayuda - The Next-gen P2P Microfinance system"
 hidden: true
 visible: 0
 ---
@@ -21,20 +21,44 @@ Ayuda is a not for profit, blockchain based peer-peer money lending platform. Ou
 
 ![Ayuda Working](https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG){:class="img-responsive"}
 
-## Read the Whitepaper (HyperLedger and Ethereum)
+## Read the Whitepaper
 
-[![HyperLedger](https://media.licdn.com/dms/image/C510BAQHIPoETQXdY0Q/company-logo_200_200/0?e=2159024400&v=beta&t=zsEfG0DGt_MPTImYAC72wCvDdkTqOBIP7_ChsEAk6Ms)](https://drive.google.com/open?id=1oRTd9xMKOj14l-e2cI-UWKqt3RaGk6CL) 
+<iframe src="https://drive.google.com/file/d/1S8jhR4dRpo-DJf9f-rw5RuI7yVvg1Qfq/preview" 
+ frameborder="0"
+ style="overflow:hidden;height:480;width:100%" 
+ width="100%" height="580"></iframe>
 
-[![Ethereum](https://avatars1.githubusercontent.com/u/6250754?s=200&v=4)](https://drive.google.com/open?id=1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVy)
+## Watch the Demo video
 
-## Watch the Prototype Demo & Concept video
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qcIV0KIzFwA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-[![Product Demo](https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg)](https://www.youtube.com/watch?v=qcIV0KIzFwA) [![Concept Demo](https://img.youtube.com/vi/tUHbLQloUxg/0.jpg)](https://www.youtube.com/watch?v=tUHbLQloUxg)
+#### Quick Offline Demo
 
+```
+git clone https://github.com/souradeep-das/AYUDA-HL && cd AYUDA-HL
+```
 
+```
+composer network install --card PeerAdmin@hlfv1 --archiveFile ayuda@.bna
+```
+
+```
+composer network start --networkName ayuda --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+```
+
+```
+composer-rest-server
+```
+
+```
+node ./app/index.js
+```
+<br><br>
+
+Head over to [localhost:3000](http://localhost:3000).
 
 [![HyperLedger](https://i.imgur.com/YUyaXmf.png)](https://www.hyperledger.org/)
 
 [![Node.js](https://i.imgur.com/eVpGHxM.png)](https://nodejs.org/en/)
 
-Find the GitHub repo for Hyperleger <a href="https://github.com/souradeep-das/AYUDA-HL">here</a> and Ethereum <a href="https://github.com/souradeep-das/AYUDA">here</a>.
+Find the GitHub repo <a href="https://github.com/souradeep-das/AYUDA-HL">here</a>.

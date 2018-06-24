@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Ayuda - Yet another optimised P2P Microfinance system | Rounak Datta</title>
+  <title>Ayuda - The Next-gen P2P Microfinance system | Rounak Datta</title>
   <meta name="description" content=" ">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -99,7 +99,7 @@ ul{
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Ayuda - Yet another optimised P2P Microfinance system</h1>
+    <h1 class="post-title" itemprop="name headline">Ayuda - The Next-gen P2P Microfinance system</h1>
     <p class="post-meta"><time datetime="2018-06-04T00:00:00+05:30" itemprop="datePublished">Jun 4, 2018</time></p>
   </header>
 
@@ -120,21 +120,44 @@ ul{
 
 <p><img src="https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG" alt="Ayuda Working" class="img-responsive" /></p>
 
-<h2 id="read-the-whitepaper-hyperledger-and-ethereum">Read the Whitepaper (HyperLedger and Ethereum)</h2>
+<h2 id="read-the-whitepaper">Read the Whitepaper</h2>
 
-<p><a href="https://drive.google.com/open?id=1oRTd9xMKOj14l-e2cI-UWKqt3RaGk6CL"><img src="https://media.licdn.com/dms/image/C510BAQHIPoETQXdY0Q/company-logo_200_200/0?e=2159024400&amp;v=beta&amp;t=zsEfG0DGt_MPTImYAC72wCvDdkTqOBIP7_ChsEAk6Ms" alt="HyperLedger" /></a></p>
+<iframe src="https://drive.google.com/file/d/1S8jhR4dRpo-DJf9f-rw5RuI7yVvg1Qfq/preview" frameborder="0" style="overflow:hidden;height:480;width:100%" width="100%" height="580"></iframe>
 
-<p><a href="https://drive.google.com/open?id=1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVy"><img src="https://avatars1.githubusercontent.com/u/6250754?s=200&amp;v=4" alt="Ethereum" /></a></p>
+<h2 id="watch-the-demo-video">Watch the Demo video</h2>
 
-<h2 id="watch-the-prototype-demo--concept-video">Watch the Prototype Demo &amp; Concept video</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qcIV0KIzFwA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
 
-<p><a href="https://www.youtube.com/watch?v=qcIV0KIzFwA"><img src="https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg" alt="Product Demo" /></a> <a href="https://www.youtube.com/watch?v=tUHbLQloUxg"><img src="https://img.youtube.com/vi/tUHbLQloUxg/0.jpg" alt="Concept Demo" /></a></p>
+<h4 id="quick-offline-demo">Quick Offline Demo</h4>
+
+<p><code class="highlighter-rouge">
+git clone https://github.com/souradeep-das/AYUDA-HL &amp;&amp; cd AYUDA-HL
+</code></p>
+
+<p><code class="highlighter-rouge">
+composer network install --card PeerAdmin@hlfv1 --archiveFile ayuda@.bna
+</code></p>
+
+<p><code class="highlighter-rouge">
+composer network start --networkName ayuda --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+</code></p>
+
+<p><code class="highlighter-rouge">
+composer-rest-server
+</code></p>
+
+<p><code class="highlighter-rouge">
+node ./app/index.js
+</code>
+<br /><br /></p>
+
+<p>Head over to <a href="http://localhost:3000">localhost:3000</a>.</p>
 
 <p><a href="https://www.hyperledger.org/"><img src="https://i.imgur.com/YUyaXmf.png" alt="HyperLedger" /></a></p>
 
 <p><a href="https://nodejs.org/en/"><img src="https://i.imgur.com/eVpGHxM.png" alt="Node.js" /></a></p>
 
-<p>Find the GitHub repo for Hyperleger <a href="https://github.com/souradeep-das/AYUDA-HL">here</a> and Ethereum <a href="https://github.com/souradeep-das/AYUDA">here</a>.</p>
+<p>Find the GitHub repo <a href="https://github.com/souradeep-das/AYUDA-HL">here</a>.</p>
 
   </div>
 

@@ -13,7 +13,7 @@ The site is currently live at <a href="http://hostelroo.ml/">hostelroo.ml</a>.
 - Know your future roommate
 - Quickly reach out to a friend's room
 - Make the hostels database more open
-- Request a roommate swap (coming)
+- Request a roommate swap
 
 _Got over 500 registrations and 15k views in a couple of days_.
 

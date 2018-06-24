@@ -6,8 +6,8 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 24 Jun 2018 01:42:26 +0530</pubDate>
-    <lastBuildDate>Sun, 24 Jun 2018 01:42:26 +0530</lastBuildDate>
+    <pubDate>Sun, 24 Jun 2018 12:11:46 +0530</pubDate>
+    <lastBuildDate>Sun, 24 Jun 2018 12:11:46 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -26,7 +26,7 @@
     
       <item>
         <title>CorrectLy - The Grammar Engine</title>
-        <description>&lt;p&gt;CorrectLy is a &lt;b&gt;English language and grammar-correction engine&lt;/b&gt;. CorrectLy’s favourite competitor is Grammarly.&lt;/p&gt;
+        <description>&lt;p&gt;CorrectLy is a &lt;b&gt;English language and grammar-correction engine&lt;/b&gt;. CorrectLy’s favourite competitor is Grammarly. Uses core NLP as well as deep learning techniques to correct spelling errors, verb-noun agreements, verb-preposition-noun agreements, understand sentence context and help suggest more natural sentences.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/maVkhZotEVM&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
@@ -39,7 +39,7 @@
       </item>
     
       <item>
-        <title>Ayuda - Yet another optimised P2P Microfinance system</title>
+        <title>Ayuda - The Next-gen P2P Microfinance system</title>
         <description>&lt;p&gt;&lt;a href=&quot;https://www.techgig.com/codegladiators/blockchain&quot;&gt;&lt;img src=&quot;https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png&quot; alt=&quot;TechGig CodeGladiator 2018&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;https://github.com/SatoshiNextTechLab&quot;&gt;&lt;img src=&quot;https://avatars3.githubusercontent.com/u/32188729?s=200&amp;amp;v=4&quot; alt=&quot;Satoshi Next Tech Lab&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;This project won the second prize of ₹1,00,000 at the Blockchain Hackathon&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
@@ -56,21 +56,44 @@
 
 &lt;p&gt;&lt;img src=&quot;https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG&quot; alt=&quot;Ayuda Working&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;read-the-whitepaper-hyperledger-and-ethereum&quot;&gt;Read the Whitepaper (HyperLedger and Ethereum)&lt;/h2&gt;
+&lt;h2 id=&quot;read-the-whitepaper&quot;&gt;Read the Whitepaper&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://drive.google.com/open?id=1oRTd9xMKOj14l-e2cI-UWKqt3RaGk6CL&quot;&gt;&lt;img src=&quot;https://media.licdn.com/dms/image/C510BAQHIPoETQXdY0Q/company-logo_200_200/0?e=2159024400&amp;amp;v=beta&amp;amp;t=zsEfG0DGt_MPTImYAC72wCvDdkTqOBIP7_ChsEAk6Ms&quot; alt=&quot;HyperLedger&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;iframe src=&quot;https://drive.google.com/file/d/1S8jhR4dRpo-DJf9f-rw5RuI7yVvg1Qfq/preview&quot; frameborder=&quot;0&quot; style=&quot;overflow:hidden;height:480;width:100%&quot; width=&quot;100%&quot; height=&quot;580&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://drive.google.com/open?id=1sMnH8cYXoqG_3oq-ZfYQnA1liu2BhpVy&quot;&gt;&lt;img src=&quot;https://avatars1.githubusercontent.com/u/6250754?s=200&amp;amp;v=4&quot; alt=&quot;Ethereum&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;watch-the-demo-video&quot;&gt;Watch the Demo video&lt;/h2&gt;
 
-&lt;h2 id=&quot;watch-the-prototype-demo--concept-video&quot;&gt;Watch the Prototype Demo &amp;amp; Concept video&lt;/h2&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/qcIV0KIzFwA&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=qcIV0KIzFwA&quot;&gt;&lt;img src=&quot;https://img.youtube.com/vi/qcIV0KIzFwA/0.jpg&quot; alt=&quot;Product Demo&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;https://www.youtube.com/watch?v=tUHbLQloUxg&quot;&gt;&lt;img src=&quot;https://img.youtube.com/vi/tUHbLQloUxg/0.jpg&quot; alt=&quot;Concept Demo&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;quick-offline-demo&quot;&gt;Quick Offline Demo&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+git clone https://github.com/souradeep-das/AYUDA-HL &amp;amp;&amp;amp; cd AYUDA-HL
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+composer network install --card PeerAdmin@hlfv1 --archiveFile ayuda@.bna
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+composer network start --networkName ayuda --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+composer-rest-server
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+node ./app/index.js
+&lt;/code&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Head over to &lt;a href=&quot;http://localhost:3000&quot;&gt;localhost:3000&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.hyperledger.org/&quot;&gt;&lt;img src=&quot;https://i.imgur.com/YUyaXmf.png&quot; alt=&quot;HyperLedger&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://nodejs.org/en/&quot;&gt;&lt;img src=&quot;https://i.imgur.com/eVpGHxM.png&quot; alt=&quot;Node.js&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Find the GitHub repo for Hyperleger &lt;a href=&quot;https://github.com/souradeep-das/AYUDA-HL&quot;&gt;here&lt;/a&gt; and Ethereum &lt;a href=&quot;https://github.com/souradeep-das/AYUDA&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/souradeep-das/AYUDA-HL&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Jun 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/06/04/ayuda.html</link>
@@ -80,7 +103,7 @@
       </item>
     
       <item>
-        <title>Blockchain based e-Procurement System</title>
+        <title>ProcEUra - Blockchain based e-Procurement System</title>
         <description>&lt;p&gt;&lt;strong&gt;&lt;em&gt;Healthier procurement leads to healthier economies&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.ethereum.org/&quot;&gt;&lt;img src=&quot;https://image.ibb.co/ftY1fo/ethereum.png&quot; alt=&quot;Powered by Ethereum&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
@@ -89,17 +112,17 @@
 
 &lt;p&gt;A blockhain based e-procurement platform which helps in streamlining the procurement process by making it more open, transparent and fast. Our main goals are to keep the middlemen out, to make sure the best bidder finds the best dealer, ensure that public data is truly public and common citizen’s money isn’t fiddled with.&lt;/p&gt;
 
+&lt;p&gt;&lt;b&gt;The product is currently live at : &lt;a href=&quot;http://teamsatoshi.pythonanywhere.com&quot;&gt;teamsatoshi.pythonanywhere.com&lt;/a&gt;&lt;/b&gt;&lt;/p&gt;
+
 &lt;h4 id=&quot;concept-presentation&quot;&gt;Concept Presentation&lt;/h4&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=gsy3hwn_c9c&quot;&gt;&lt;img src=&quot;https://img.youtube.com/vi/gsy3hwn_c9c/0.jpg&quot; alt=&quot;Concept&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/gsy3hwn_c9c&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
-&lt;h4 id=&quot;live-product--herehttpteamsatoshipythonanywherecom&quot;&gt;Live Product : &lt;a href=&quot;http://teamsatoshi.pythonanywhere.com&quot;&gt;HERE&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=wHM7EWjD_iY&quot;&gt;&lt;img src=&quot;https://img.youtube.com/vi/wHM7EWjD_iY/0.jpg&quot; alt=&quot;Live Demo&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/wHM7EWjD_iY&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
 &lt;h4 id=&quot;whitepaper&quot;&gt;Whitepaper&lt;/h4&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://drive.google.com/file/d/1wIKR7gG3-esUwT77z3uqp3N6d-HWxqCO/view&quot;&gt;&lt;img src=&quot;https://cdn2.iconfinder.com/data/icons/document-21/64/Document-01-128.png&quot; alt=&quot;Technical Whitepaper&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;iframe src=&quot;https://drive.google.com/file/d/1wIKR7gG3-esUwT77z3uqp3N6d-HWxqCO/preview&quot; frameborder=&quot;0&quot; style=&quot;overflow:hidden;height:480;width:100%&quot; width=&quot;100%&quot; height=&quot;580&quot;&gt;&lt;/iframe&gt;
 
 &lt;h4 id=&quot;quick-offline-demo&quot;&gt;Quick Offline Demo&lt;/h4&gt;
 
@@ -246,7 +269,7 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
   &lt;li&gt;Know your future roommate&lt;/li&gt;
   &lt;li&gt;Quickly reach out to a friend’s room&lt;/li&gt;
   &lt;li&gt;Make the hostels database more open&lt;/li&gt;
-  &lt;li&gt;Request a roommate swap (coming)&lt;/li&gt;
+  &lt;li&gt;Request a roommate swap&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;em&gt;Got over 500 registrations and 15k views in a couple of days&lt;/em&gt;.&lt;/p&gt;
@@ -316,11 +339,18 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
   &lt;li&gt;
     &lt;p&gt;Response time : 10m (best case)&lt;/p&gt;
   &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Support - 2nd year &lt;code class=&quot;highlighter-rouge&quot;&gt;CSE (ADA, Java)&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;IT (ADA, Java)&lt;/code&gt;, 1st year &lt;code class=&quot;highlighter-rouge&quot;&gt;PDD&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/elab-report.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;A demo version is currently live at &lt;a href=&quot;http://elabreport.ml/&quot;&gt;elabreport.ml&lt;/a&gt;. Recommended to use Google Colab for the purpose. The response time isn’t lightning fast because eLab servers are slow!&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+Status : Contact if you&#39;d like to maintain this project furthur.
+&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/elab-quick-print&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
@@ -333,15 +363,15 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
     
       <item>
         <title>Fake News Detection</title>
-        <description>&lt;p&gt;&lt;em&gt;Secured second position&lt;/em&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;a href=&quot;http://www.theiet.in/&quot;&gt;&lt;img src=&quot;/assets/iet.png&quot; alt=&quot;SRM IET Hackathon 2018&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Team 10 - NightOwls : &lt;em&gt;Niladri Shekhar Dutt&lt;/em&gt;, &lt;em&gt;Arko Chatterjee&lt;/em&gt;, &lt;em&gt;Saurav Saha&lt;/em&gt;, &lt;em&gt;Rounak Datta&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;
+Team NightOwls : &lt;strong&gt;&lt;em&gt;Niladri Shekhar Dutt&lt;/em&gt;, &lt;em&gt;Arko Chatterjee&lt;/em&gt;, &lt;em&gt;Saurav Saha&lt;/em&gt;, &lt;em&gt;Rounak Datta&lt;/em&gt;&lt;/strong&gt;
+&lt;br /&gt;&lt;br /&gt;
+&lt;strong&gt;This project secured the second position in the SRM-IET Hackathon 2018.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;p&gt;27th Jan - 28th Jan 2018&lt;/p&gt;
-
-&lt;p&gt;by IET Chapter, India&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=aZzxZA_KfXY&amp;amp;feature=youtu.be&quot;&gt;Demo video&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/aZzxZA_KfXY&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
 &lt;h2 id=&quot;problem-statement&quot;&gt;Problem Statement&lt;/h2&gt;
 
@@ -380,7 +410,7 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
 
 &lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bash
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
 make
 &lt;/code&gt;&lt;/p&gt;
 

@@ -4,15 +4,15 @@ title: "Fake News Detection"
 hidden: true
 visible: 0
 ---
-_Secured second position_
+[![SRM IET Hackathon 2018](/assets/iet.png)](http://www.theiet.in/)
 
-Team 10 - NightOwls : _Niladri Shekhar Dutt_, _Arko Chatterjee_, _Saurav Saha_, _Rounak Datta_
+<br>
+Team NightOwls : **_Niladri Shekhar Dutt_, _Arko Chatterjee_, _Saurav Saha_, _Rounak Datta_**
+<br><br>
+**This project secured the second position in the SRM-IET Hackathon 2018.**
+<hr>
 
-27th Jan - 28th Jan 2018
-
-by IET Chapter, India
-
-[Demo video](https://www.youtube.com/watch?v=aZzxZA_KfXY&feature=youtu.be)<br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aZzxZA_KfXY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## Problem Statement
 
@@ -39,7 +39,7 @@ When the fake-news detector is hosted locally / on a cloud platform, it can pred
 
 ### Usage
 
-```bash
+```
 make
 ```
 

@@ -18,4 +18,6 @@ Main features :
 
 • Auto-save
 
-Find the GitHub repo <a href="https://github.com/rounakdatta/pyxcy">here</a>.
+```
+This project isn't open-source.
+```

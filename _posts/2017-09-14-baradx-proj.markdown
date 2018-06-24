@@ -5,7 +5,7 @@ image: baradximg.jpeg
 hidden: true
 visible: 0
 ---
-The TTC Dashboard for BARADX
+The TTC Dashboard for BaradX
 
 ![BARADX](/assets/baradximg.jpeg){:class="img-responsive"}
 
@@ -15,7 +15,7 @@ Presently,
 
 • Put the respective parameters in the corresponding fields
 
-• Plot the latitude-longitude in the Maps API {GMaps, OpenStreetMap, BingMaps}
+• Plot the latitude-longitude using the Maps API ```GMaps, OpenStreetMap, BingMaps```
 
 • Display gauges and bars
 
