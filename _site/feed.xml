@@ -6,9 +6,28 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 24 Jun 2018 12:11:46 +0530</pubDate>
-    <lastBuildDate>Sun, 24 Jun 2018 12:11:46 +0530</lastBuildDate>
+    <pubDate>Fri, 03 Aug 2018 00:31:42 +0530</pubDate>
+    <lastBuildDate>Fri, 03 Aug 2018 00:31:42 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Quill Audits - Smart Contract Security Analysis</title>
+        <description>&lt;p&gt;Quill Audits is a smart contract analysis platform provided by QuillHash Technologies. It’s a fully automated platform for getting smart contracts checked for security vulnerabilities as well as efficiency of code. &lt;strong&gt;Oyente&lt;/strong&gt; for Ethereum is currently a trusted automated open-source smart-contract analysis tool. Quill Audits uses tweaked Oyente back-end with other sophistications to analyze contracts under-the-hood and return analysis results. Also, it uses &lt;strong&gt;Solidity-Coverage&lt;/strong&gt; to provide code coverage tools to analyze if there are are redundant lines of code by running unit tests. Often, redundant lines of code are required to be replaced / removed. Quill Audits is powered by Node.js and is an extremely fast and usable tool for smart contract security analysis.&lt;/p&gt;
+
+&lt;p&gt;Quill Audits platform provides for manual auditing as well. The platform also provides an escrow platform to request for expert contract auditing at the least bid.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;img src=&quot;https://cdn-images-1.medium.com/max/1600/1*fVizVy5bQ9j-845RwXjhBg.png&quot; alt=&quot;Quill Audits Architecture&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+I’ve also wrote a Medium article &lt;a href=&quot;https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 21 Jul 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/07/21/quillaudits.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/07/21/quillaudits.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>ResXme - The ultimate resume parsing tool</title>
@@ -40,60 +59,25 @@
     
       <item>
         <title>Ayuda - The Next-gen P2P Microfinance system</title>
-        <description>&lt;p&gt;&lt;a href=&quot;https://www.techgig.com/codegladiators/blockchain&quot;&gt;&lt;img src=&quot;https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png&quot; alt=&quot;TechGig CodeGladiator 2018&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;https://github.com/SatoshiNextTechLab&quot;&gt;&lt;img src=&quot;https://avatars3.githubusercontent.com/u/32188729?s=200&amp;amp;v=4&quot; alt=&quot;Satoshi Next Tech Lab&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;a href=&quot;https://www.techgig.com/codegladiators/blockchain&quot;&gt;&lt;img src=&quot;https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png&quot; alt=&quot;TechGig CodeGladiator 2018&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;https://github.com/SatoshiNextTechLab&quot;&gt;&lt;img src=&quot;https://avatars3.githubusercontent.com/u/32188729?s=200&amp;amp;v=4&quot; alt=&quot;Satoshi Next Tech Lab&quot; /&gt;&lt;/a&gt; &lt;img src=&quot;https://s3.amazonaws.com/divum_test/Muthu/240418_114906.png&quot; alt=&quot;NIPP Blockchain Challenge 2018&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;This project won the second prize of ₹1,00,000 at the Blockchain Hackathon&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;This project won the &lt;strong&gt;second prize of ₹1,00,000 at the TG Blockchain Hackathon&lt;/strong&gt; and the &lt;strong&gt;first prize of ₹1,00,000 at NIPP Blockchain Startup Challenge&lt;/strong&gt;.&lt;/em&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-ayuda&quot;&gt;What is Ayuda&lt;/h2&gt;
 
 &lt;p&gt;Ayuda is a not for profit, blockchain based peer-peer money lending platform. Our platform connects lenders and borrowers from all across the globe because we believe that your will to help someone is much greater than the miles supporting you. The platform makes sure that every person using the platform is benefitted. Doing this we are able to sustain a proper give and take a situation where everyone is benefitted. The platform allows a lender to partially pay for a loan request. We use an innovative dynamic-interest rate method to incentivize our lenders.In this way, the lenders will pool as much money as possible to get more incentive. Our state-of-art algorithm decides the interest rate for the lenders dynamically on the basis of the proportion of money paid by a lender for a particular loan while maintaining the fixed interest rate for the borrower.&lt;/p&gt;
 
-&lt;h2 id=&quot;how-ayuda-is-a-problem-solution-fit&quot;&gt;How Ayuda is a problem-solution fit&lt;/h2&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/souradeep-das/AYUDA/raw/master/Capture7.PNG&quot; alt=&quot;Ayuda Solution Chart&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/If_9i4WQWQ8&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
-&lt;h2 id=&quot;how-ayuda-works&quot;&gt;How Ayuda works&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://github.com/souradeep-das/AYUDA/raw/master/Capture6.PNG&quot; alt=&quot;Ayuda Working&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;read-the-whitepaper&quot;&gt;Read the Whitepaper&lt;/h2&gt;
-
-&lt;iframe src=&quot;https://drive.google.com/file/d/1S8jhR4dRpo-DJf9f-rw5RuI7yVvg1Qfq/preview&quot; frameborder=&quot;0&quot; style=&quot;overflow:hidden;height:480;width:100%&quot; width=&quot;100%&quot; height=&quot;580&quot;&gt;&lt;/iframe&gt;
-
-&lt;h2 id=&quot;watch-the-demo-video&quot;&gt;Watch the Demo video&lt;/h2&gt;
-
-&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/qcIV0KIzFwA&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-
-&lt;h4 id=&quot;quick-offline-demo&quot;&gt;Quick Offline Demo&lt;/h4&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-git clone https://github.com/souradeep-das/AYUDA-HL &amp;amp;&amp;amp; cd AYUDA-HL
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-composer network install --card PeerAdmin@hlfv1 --archiveFile ayuda@.bna
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-composer network start --networkName ayuda --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-composer-rest-server
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-node ./app/index.js
-&lt;/code&gt;
-&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;Head over to &lt;a href=&quot;http://localhost:3000&quot;&gt;localhost:3000&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.hyperledger.org/&quot;&gt;&lt;img src=&quot;https://i.imgur.com/YUyaXmf.png&quot; alt=&quot;HyperLedger&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://nodejs.org/en/&quot;&gt;&lt;img src=&quot;https://i.imgur.com/eVpGHxM.png&quot; alt=&quot;Node.js&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/souradeep-das/AYUDA-HL&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Not an Open-Source project&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Jun 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/06/04/ayuda.html</link>
@@ -357,72 +341,6 @@ Status : Contact if you&#39;d like to maintain this project furthur.
         <pubDate>Thu, 08 Feb 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</link>
         <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Fake News Detection</title>
-        <description>&lt;p&gt;&lt;a href=&quot;http://www.theiet.in/&quot;&gt;&lt;img src=&quot;/assets/iet.png&quot; alt=&quot;SRM IET Hackathon 2018&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-Team NightOwls : &lt;strong&gt;&lt;em&gt;Niladri Shekhar Dutt&lt;/em&gt;, &lt;em&gt;Arko Chatterjee&lt;/em&gt;, &lt;em&gt;Saurav Saha&lt;/em&gt;, &lt;em&gt;Rounak Datta&lt;/em&gt;&lt;/strong&gt;
-&lt;br /&gt;&lt;br /&gt;
-&lt;strong&gt;This project secured the second position in the SRM-IET Hackathon 2018.&lt;/strong&gt;&lt;/p&gt;
-&lt;hr /&gt;
-
-&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/aZzxZA_KfXY&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-
-&lt;h2 id=&quot;problem-statement&quot;&gt;Problem Statement&lt;/h2&gt;
-
-&lt;p&gt;Often sensational news is created and spread through social media to achieve intended end. On the other hand, it may also involve narration of a true fact however being deliberately exaggerated. This may also affect the affect the importance of serious news media. The problem is to identify the authenticity of the news and online content. Equally important problem is to identify the bots involved in spreading false news.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/demo.gif&quot; alt=&quot;Demo&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;approach&quot;&gt;Approach&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;The problem can be broken down into 3 statements :-&lt;/p&gt;
-
-    &lt;ol&gt;
-      &lt;li&gt;
-        &lt;p&gt;Use NLP to check the authenticity of a news article.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;If the user has a query about the authenticity of a search query then he/she can directly search on our platform and using our custom algorithm we output a confidence score.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;Check the authenticity of a news source.&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Articles can be analyzed by feeding them to a machine learning model (Passive Aggressive Classifier) which predicts the genuinity of the content after it’s trained through predefined datasets of classified real vs fake news.&lt;/li&gt;
-  &lt;li&gt;Search terms can be analyzed by doing a Google search (first 100 entries) and and ensuring if the news corresponding to the keywords have been covered by reliable news sources and aggregators. For every search term covered by a reliable news source it recieves a score of +1, while we heavily penalize fake sources. If multiple fake sources cover the news then we penalize the truth score even harder. We also look for keywords like ‘hoax’, ‘fake’, etc in the payload content.&lt;/li&gt;
-  &lt;li&gt;An URL (news source) can be analyzed if it’s authentic by checking it in our database of true news provider and false news provider.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;application&quot;&gt;Application&lt;/h3&gt;
-
-&lt;p&gt;When the fake-news detector is hosted locally / on a cloud platform, it can predict fake news with reasonable accuracy. Since edge cases of fake-news detection are controversial, the tool outputs a probability percentage instead of a rigid label.&lt;/p&gt;
-
-&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-make
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;This will start the local server at localhost:8000.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;Deps&lt;/strong&gt;: sklearn, pandas, django, requests, bs4&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/xcheck&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 28 Jan 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/01/28/srm-iet-hackathon-18.html</guid>
         
         
       </item>
