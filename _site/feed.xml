@@ -6,9 +6,63 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 06 Sep 2018 11:58:58 +0530</pubDate>
-    <lastBuildDate>Thu, 06 Sep 2018 11:58:58 +0530</lastBuildDate>
+    <pubDate>Sat, 22 Sep 2018 18:59:57 +0530</pubDate>
+    <lastBuildDate>Sat, 22 Sep 2018 18:59:57 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Octolab.ML - The Automated Machine Learning Platform</title>
+        <description>&lt;p&gt;Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
+• &lt;b&gt;auto-cleaned&lt;/b&gt; • &lt;b&gt;auto-preprocessed&lt;/b&gt; • &lt;b&gt;predictions generated&lt;/b&gt; • &lt;b&gt;visualizations generated&lt;/b&gt;
+when you supply us with the algorithm and other configurations.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Upload dataset
+&lt;img src=&quot;https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png&quot; alt=&quot;Arrow&quot; class=&quot;img-center&quot; /&gt;
+Select ML Algorithm
+&lt;img src=&quot;https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png&quot; alt=&quot;Arrow&quot; class=&quot;img-center&quot; /&gt;
+Additional configurations&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;Designed and developed keeping in mind a beginner’s difficulty in understanding machine learning frameworks.&lt;/i&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;img src=&quot;/assets/octolab.png&quot; alt=&quot;Octolab Landing Page&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;You should definitely try out &lt;a href=&quot;http://octolab.ml/&quot;&gt;Octolab&lt;/a&gt; right now!&lt;/center&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+And don’t forget to also check out &lt;a href=&quot;https://nimblebox.ai/&quot;&gt;NimbleBox.ai&lt;/a&gt;, a cloud deep learning platform for all your GPU needs.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/09/22/octolab.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/22/octolab.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Digital Assistant - Automation to power E-Commerce</title>
+        <description>&lt;p&gt;How impressive was &lt;a href=&quot;https://ai.googleblog.com/2018/05/duplex-ai-system-for-natural-conversation.html&quot;&gt;Google Duplex&lt;/a&gt;? Google Duplex can help you manage your daily routines by subsituting your monotonous actions with AI. Right from booking appointments to ordering goods, Google Duplex promises to handle them all.&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;What’s this Digital Assistant?&lt;/b&gt;&lt;/p&gt;
+
+&lt;p&gt;Digital Assistant aims to be the replacement for your conventional store managers. Whether its the task of enquiring for avaailable products, natural conversation regarding an item, bargaining for the price of a product, ordering the product, cancellation and grievance addressal or just simply chatting around, Digital Assistant aims to be your ultimate philosopher, friend and guide solution.&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Where is it?&lt;/b&gt;&lt;/p&gt;
+
+&lt;p&gt;Legen-wait-for-it-dary&lt;/p&gt;
+</description>
+        <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/09/22/digitalassistant.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/22/digitalassistant.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Quill Audits - Smart Contract Security Analysis</title>
@@ -267,80 +321,6 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
         <pubDate>Tue, 13 Feb 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/02/13/who-is-my-roommate.html</link>
         <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/13/who-is-my-roommate.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Computer Science Books Download</title>
-        <description>&lt;p&gt;Quickly download all the books from books.goalkicker.com&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Get the books stored into the current directory&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Get the books stored with their original filenames&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The open-source content is written by the beautiful people at StackOverflow and compiled in the form of short, concise, informative e-books. Text content is released under Creative Commons BY-SA. This site isn’t affilated with StackOverflow.&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/books.goalkicker-dl&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 10 Feb 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/02/10/books-goalkeeper-dl.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/10/books-goalkeeper-dl.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>eLab Report Generator</title>
-        <description>&lt;p&gt;Quickly get your eLab record generated&lt;/p&gt;
-
-&lt;p&gt;Usage instructions are documented &lt;a href=&quot;https://github.com/rounakdatta/elab-report-maker/blob/master/README.md&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Doesn’t matter if questions are incomplete in between&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Accepts C, C++, Java, Python as the available options for program evaluation&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Evaluates only the completed and 100% verified questions&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Collects all the evaluation reports in PNG format, converts them to PDF and concatenates all the PDFs&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Single PDF file shareable with classmates to share progress / as final eLab submission report&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Uses Python library - &lt;em&gt;requests&lt;/em&gt; (for getting the reports) and &lt;em&gt;img2pdf&lt;/em&gt; (for converting to PDF) instead of (resource heavy and difficult-to-use) Selenium.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Response time : 10m (best case)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Support - 2nd year &lt;code class=&quot;highlighter-rouge&quot;&gt;CSE (ADA, Java)&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;IT (ADA, Java)&lt;/code&gt;, 1st year &lt;code class=&quot;highlighter-rouge&quot;&gt;PDD&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/elab-report.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A demo version is currently live at &lt;a href=&quot;http://elabreport.ml/&quot;&gt;elabreport.ml&lt;/a&gt;. Recommended to use Google Colab for the purpose. The response time isn’t lightning fast because eLab servers are slow!&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-Status : Contact if you&#39;d like to maintain this project furthur.
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/elab-quick-print&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 08 Feb 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/08/elab-quick-print.html</guid>
         
         
       </item>

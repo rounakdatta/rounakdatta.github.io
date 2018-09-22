@@ -1,0 +1,31 @@
+---
+layout: post
+title: "Octolab.ML - The Automated Machine Learning Platform"
+hidden: true
+visible: 0
+---
+
+Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
+• <b>auto-cleaned</b> • <b>auto-preprocessed</b> • <b>predictions generated</b> • <b>visualizations generated</b>
+when you supply us with the algorithm and other configurations.
+
+<br>
+
+Upload dataset
+![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
+Select ML Algorithm
+![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
+Additional configurations
+
+<br>
+
+<i>Designed and developed keeping in mind a beginner's difficulty in understanding machine learning frameworks.</i>
+
+<br>
+![Octolab Landing Page](/assets/octolab.png){:class="img-responsive"}
+
+<br>
+<center>You should definitely try out <a href="http://octolab.ml/">Octolab</a> right now!</center>
+<br>
+<hr><br>
+And don't forget to also check out <a href="https://nimblebox.ai/">NimbleBox.ai</a>, a cloud deep learning platform for all your GPU needs.
