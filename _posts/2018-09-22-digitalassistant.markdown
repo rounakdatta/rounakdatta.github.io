@@ -14,3 +14,6 @@ Digital Assistant aims to be the replacement for your conventional store manager
 <b>Where is it?</b>
 
 Legen-wait-for-it-dary
+
+<br>
+![Digital Assistant Demo](https://i.imgur.com/ykkW85s.png){:class="img-responsive"}
