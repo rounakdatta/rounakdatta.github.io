@@ -1,0 +1,54 @@
+---
+layout: post
+title: "Flyr - Open-Source Bike-Sharing"
+hidden: true
+visible: 0
+---
+
+![image](https://i.imgur.com/DHJytOc.png)
+
+*Flyr is an open-source attempt to re-implement Lyft, Lime or your favourite bike-sharing platform.*
+
+![NTWOC](https://img.shields.io/badge/NTWoC-2018-blue.svg) ![WTFPL](https://img.shields.io/badge/license-WTFPL-green.svg)
+
+## Tech Stack
+
+### Back-End
+* Microservices
+* Phoenix Framework
+* Apache Kafka
+* Redis
+
+### Front-End
+* Bootstrap
+
+## What will be my commitments for this project?
+
+* Before coming to a conclusion, read the project README thoroughly. The project demands contributors who can be comfortable enough to write efficient server-side code (design); understand the fundamentals of each back-end component and integrate them; design efficient algorithms (shortest / best distance, dynamic pricing); create minimal and modular front-end for testing.
+* This means being fundamentally strong in programming will allow you to quickly pick-up technologies and learn concepts. The process goes as disassemble -> understand -> re-write.
+* Scalability and robustness is important. Building protoypes (MVP) are just 15% of a product. You should be able to realise the importance of your code being time and memory-efficient and non-breaking at edge-cases.
+* Engineering the product involves understanding, designing and then coding. You should be able to realise the importance of logic (algorithm) before the code itself.
+
+## Should I apply for this project?
+
+* If you are willing to take up this project seriously, you are more than welcome to apply.
+* It's not totally essential to be accustomed with the technologies mentioned. If you are willing to spend the winter learning them and implementing them here as a side-project, you are welcome to apply.
+* This project has to be built from scratch, and everyone will be guiding everyone in the design, understanding and coding. If you've done this type of project before and you're willing to mentor / help out contributors, you're most welcome.
+* If you're enthusiastic of this project, apply irrespective of whether you're having the required skillset or not. You'll definitely have a great learning curve.
+* Your contribution to the project will matter even if it's a documentation fix.
+
+```Please note that this project will accept contributors irrespective of their being in 1st or 2nd or 3rd or 4th year.```
+
+## What will be my takeaways from the project?
+
+* You'll **learn** a lot. Whichever responsibility you take up, your time investment will definitely yield a strong conceptual as well as practical understanding of the project components. Particularly, if you'll be taking up 
+    * Back-End Development, you'll learn the core pieces of building a data pipeline, learn how microservices work, understand the importance of concurrency, will be confident regarding the choice of a DB system, experiment with streaming large amounts of data and afterall work will multiple existing open-source tools.
+    * Front-End Development, you'll write dynamically generated webpages with responsive text, maps, graphs, tables. Therefore involves a lot of API handling, XML HTTPRequests and UX magic.
+    * Algorithms Development, you'll be writing efficient algorithms after analyzing how existing systems work. Its fascinating to study and re-implement state-of-the-art algorithms and work them in action in the final product.
+    * Integration & Testing, you'll be responsible for connecting the pieces together - find out bottlenecks and scalability issues in the pipeline; also audit the product for breaking cases or security flaws.
+* You'll **work as a team**, closely experience the building of software from scratch as multiple modules and integrating them together.
+* A **superb open-source project** - This is a promise from my side.
+
+## Discussions?
+
+We'll have all conversations on Telegram. Join the group [here](https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w).

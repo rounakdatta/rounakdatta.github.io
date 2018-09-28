@@ -6,9 +6,79 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Sep 2018 10:32:26 +0530</pubDate>
-    <lastBuildDate>Tue, 25 Sep 2018 10:32:26 +0530</lastBuildDate>
+    <pubDate>Fri, 28 Sep 2018 14:39:44 +0530</pubDate>
+    <lastBuildDate>Fri, 28 Sep 2018 14:39:44 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Flyr - Open-Source Bike-Sharing</title>
+        <description>&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/DHJytOc.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Flyr is an open-source attempt to re-implement Lyft, Lime or your favourite bike-sharing platform.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://img.shields.io/badge/NTWoC-2018-blue.svg&quot; alt=&quot;NTWOC&quot; /&gt; &lt;img src=&quot;https://img.shields.io/badge/license-WTFPL-green.svg&quot; alt=&quot;WTFPL&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;tech-stack&quot;&gt;Tech Stack&lt;/h2&gt;
+
+&lt;h3 id=&quot;back-end&quot;&gt;Back-End&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Microservices&lt;/li&gt;
+  &lt;li&gt;Phoenix Framework&lt;/li&gt;
+  &lt;li&gt;Apache Kafka&lt;/li&gt;
+  &lt;li&gt;Redis&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;front-end&quot;&gt;Front-End&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Bootstrap&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;what-will-be-my-commitments-for-this-project&quot;&gt;What will be my commitments for this project?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Before coming to a conclusion, read the project README thoroughly. The project demands contributors who can be comfortable enough to write efficient server-side code (design); understand the fundamentals of each back-end component and integrate them; design efficient algorithms (shortest / best distance, dynamic pricing); create minimal and modular front-end for testing.&lt;/li&gt;
+  &lt;li&gt;This means being fundamentally strong in programming will allow you to quickly pick-up technologies and learn concepts. The process goes as disassemble -&amp;gt; understand -&amp;gt; re-write.&lt;/li&gt;
+  &lt;li&gt;Scalability and robustness is important. Building protoypes (MVP) are just 15% of a product. You should be able to realise the importance of your code being time and memory-efficient and non-breaking at edge-cases.&lt;/li&gt;
+  &lt;li&gt;Engineering the product involves understanding, designing and then coding. You should be able to realise the importance of logic (algorithm) before the code itself.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;should-i-apply-for-this-project&quot;&gt;Should I apply for this project?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If you are willing to take up this project seriously, you are more than welcome to apply.&lt;/li&gt;
+  &lt;li&gt;It’s not totally essential to be accustomed with the technologies mentioned. If you are willing to spend the winter learning them and implementing them here as a side-project, you are welcome to apply.&lt;/li&gt;
+  &lt;li&gt;This project has to be built from scratch, and everyone will be guiding everyone in the design, understanding and coding. If you’ve done this type of project before and you’re willing to mentor / help out contributors, you’re most welcome.&lt;/li&gt;
+  &lt;li&gt;If you’re enthusiastic of this project, apply irrespective of whether you’re having the required skillset or not. You’ll definitely have a great learning curve.&lt;/li&gt;
+  &lt;li&gt;Your contribution to the project will matter even if it’s a documentation fix.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Please note that this project will accept contributors irrespective of their being in 1st or 2nd or 3rd or 4th year.&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;what-will-be-my-takeaways-from-the-project&quot;&gt;What will be my takeaways from the project?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You’ll &lt;strong&gt;learn&lt;/strong&gt; a lot. Whichever responsibility you take up, your time investment will definitely yield a strong conceptual as well as practical understanding of the project components. Particularly, if you’ll be taking up
+    &lt;ul&gt;
+      &lt;li&gt;Back-End Development, you’ll learn the core pieces of building a data pipeline, learn how microservices work, understand the importance of concurrency, will be confident regarding the choice of a DB system, experiment with streaming large amounts of data and afterall work will multiple existing open-source tools.&lt;/li&gt;
+      &lt;li&gt;Front-End Development, you’ll write dynamically generated webpages with responsive text, maps, graphs, tables. Therefore involves a lot of API handling, XML HTTPRequests and UX magic.&lt;/li&gt;
+      &lt;li&gt;Algorithms Development, you’ll be writing efficient algorithms after analyzing how existing systems work. Its fascinating to study and re-implement state-of-the-art algorithms and work them in action in the final product.&lt;/li&gt;
+      &lt;li&gt;Integration &amp;amp; Testing, you’ll be responsible for connecting the pieces together - find out bottlenecks and scalability issues in the pipeline; also audit the product for breaking cases or security flaws.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;You’ll &lt;strong&gt;work as a team&lt;/strong&gt;, closely experience the building of software from scratch as multiple modules and integrating them together.&lt;/li&gt;
+  &lt;li&gt;A &lt;strong&gt;superb open-source project&lt;/strong&gt; - This is a promise from my side.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;discussions&quot;&gt;Discussions?&lt;/h2&gt;
+
+&lt;p&gt;We’ll have all conversations on Telegram. Join the group &lt;a href=&quot;https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 28 Sep 2018 00:00:00 +0530</pubDate>
+        <link>https://rounakdatta.github.io/2018/09/28/flyr.html</link>
+        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/28/flyr.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Octolab.ML - The Automated Machine Learning Platform</title>
@@ -294,36 +364,6 @@ PaaS used : &lt;strong&gt;Heroku&lt;/strong&gt;, &lt;strong&gt;PythonAnywhere&lt
         <pubDate>Sun, 18 Mar 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/03/18/terriblytinytales.html</link>
         <guid isPermaLink="true">https://rounakdatta.github.io/2018/03/18/terriblytinytales.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Who is my Roommate</title>
-        <description>&lt;p&gt;Our University admits a large troop of students for undergraduation. And so the hostel booking process becomes difficult (when lame servers add to the crowd problem). But that’s totally out of our hands. What this tiny tool could do is host the entire student hostel database when the correct data is inputted by the crowd &lt;em&gt;after hostel booking is over&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/who-roommate.png&quot; alt=&quot;Screenshot&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The site is currently live at &lt;a href=&quot;http://hostelroo.ml/&quot;&gt;hostelroo.ml&lt;/a&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Know your future roommate&lt;/li&gt;
-  &lt;li&gt;Quickly reach out to a friend’s room&lt;/li&gt;
-  &lt;li&gt;Make the hostels database more open&lt;/li&gt;
-  &lt;li&gt;Request a roommate swap&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;Got over 500 registrations and 15k views in a couple of days&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Made in an evening just for fun and mass convenience&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Hosted freely on &lt;strong&gt;PythonAnywhere&lt;/strong&gt;&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Find the GitHub repo &lt;a href=&quot;https://github.com/rounakdatta/who-is-my-roommate&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 13 Feb 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/02/13/who-is-my-roommate.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/02/13/who-is-my-roommate.html</guid>
         
         
       </item>
