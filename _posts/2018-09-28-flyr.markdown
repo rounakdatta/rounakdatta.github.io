@@ -7,7 +7,7 @@ visible: 0
 
 ![image](https://i.imgur.com/DHJytOc.png)
 
-*Flyr is an open-source attempt to re-implement Lyft, Lime or your favourite bike-sharing platform.*
+*Flyr is an open-source attempt to re-implement Lime, Bird or your favourite bike-sharing platform.*
 
 ![NTWOC](https://img.shields.io/badge/NTWoC-2018-blue.svg) ![WTFPL](https://img.shields.io/badge/license-WTFPL-green.svg)
 
