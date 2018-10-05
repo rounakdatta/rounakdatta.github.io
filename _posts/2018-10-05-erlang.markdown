@@ -1,0 +1,6 @@
+---
+layout: post
+title: "Erlang - Making the best of Concurrency"
+hidden: true
+visible: 0
+---

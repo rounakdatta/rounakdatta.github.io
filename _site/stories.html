@@ -58,11 +58,15 @@
 				        
 				<li><a href="/myself">Myself</a></li>
 				        
+				<li><a href="/posts">Posts & Writings</a></li>
+				  
 				<li><a href="/projects">Projects</a></li>
 				    
 				<li><a href="/selfwork">Self Work</a></li>
 				  
 				<li><a href="/stories">Stories</a></li>
+				  
+				<li><a href="/tech">Technical Articles</a></li>
 				 
 			</ul>
 			</li>
@@ -110,18 +114,6 @@ ul{
       <div class="wrapper">
         <style type="text/css">
 
-
-/*
-.fonts {
-  font-family: 'Josefin Slab', serif;
-}
-*/
-
-a,
-a:visited {
-
-}
-
 .clear {
   clear: both;
 }
@@ -155,9 +147,6 @@ a:visited {
 .container {}
 
 a.button {
-  display: block;
-  position: relative;
-  float: left;
   padding: 0;
   margin: 10px 20px 10px 0;
   font-weight: 600;
@@ -283,7 +272,7 @@ a.button {
   display: block;
   position: absolute;
   top: 0;
-  left: 0;
+  left: 35%;
   width: 120px;
   height: 50px;
   border-radius: 5px;
@@ -326,9 +315,10 @@ a.button {
 }
 
 .btnSlide .top {
+  display: block;
   position: absolute;
-  top: 0px;
-  left: 0;
+  top: 0;
+  left: 35%;
   width: 120px;
   height: 50px;
   background: #00AE68;
@@ -355,8 +345,9 @@ a.button {
 
 .btnSlide .bottom {
   position: absolute;
+  display: block;
   top: 0;
-  left: 0;
+  left: 35%;
   width: 120px;
   height: 50px;
   color: #000;
@@ -373,20 +364,22 @@ a.button {
 <center>
  
 <div class="row">
-    <div class="col-md-9">
-    	<center>
-	<a href="" class="button btnFloat btnBlueGreen">REAL Stories</a>
-	</center>
+
+    <div class="col-md-12">
+	<a href="/posts" class="button btnFloat btnBlueGreen">REAL Stories</a>
 	</div>
+</div>
 
-	<div class="col-md-3">
+<br><br>
 
-	<a href="" class="button btnSlide btnPurple">
-	  <span class="top" data-content="Slide">Tech</span>
-	  <span class="bottom" data-content="Slide">Inside</span>
-	</a>
-
-	</div>
+<div class="row">
+<div class="col-md-12">
+<a href="/tech" class="button btnSlide btnPurple">
+<span class="top" data-content="Slide">Tech</span>
+<span class="bottom" data-content="Slide">Inside</span>
+</a>
+</div>
+</div>
 
 </div>
 
