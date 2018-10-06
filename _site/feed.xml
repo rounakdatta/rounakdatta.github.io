@@ -6,8 +6,8 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 05 Oct 2018 20:06:49 +0530</pubDate>
-    <lastBuildDate>Fri, 05 Oct 2018 20:06:49 +0530</lastBuildDate>
+    <pubDate>Sat, 06 Oct 2018 13:49:18 +0530</pubDate>
+    <lastBuildDate>Sat, 06 Oct 2018 13:49:18 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -45,7 +45,111 @@
     
       <item>
         <title>Why CS Fundamentals matter</title>
-        <description>
+        <description>&lt;p&gt;Computer Science fundamentals typically involves the basics of how electronics work in tandem and make the software abstraction happen. Its always important to be sure enough of the internal processing of any system before diving deep into optimization research or even building industry-grade products based on the same. Of course it’s not practical to keep re-inventing wheels in the process of learning science, however its pretty advisable to be confident enough of the little things and their first steps at least. All complex systems can be re-engineered from scratch provided we start with the first principles of it. The key to be better at engineering is to know the inside-out of things while being capable enough to use and debug it. This post tries to stress the importance of fundamental Computer Science courses that are often slipped out of interest probably due to their complexity of understanding amalgamated with their functionality being perfect in their respective domain.&lt;/p&gt;
+
+&lt;h2 id=&quot;computer-architecture&quot;&gt;Computer Architecture&lt;/h2&gt;
+
+&lt;p&gt;Computer Architecture would talk of why computers work the way they are, they give raw explanation of how CPUs exactly work, why primary memory matters, the fundamentals of data transfer between two devices. Computer System Architecture takes you to the motherboard level where you are taught to explain how CPU manages to execute series of instructions by fetching them one by one with the help of Program Counter and Instruction Register; how a single-core CPU really manages multiple threads, how processes are snapped and un-snapped by CPU using interrupts; how computers see addition and multiplication; and how external devices get their work done. These core concepts are crucial to be well-understood to build the fundamentals of microprocessing over it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://techcrunch.com/wp-content/uploads/2017/04/2017-04-05_1013.png?w=1390&amp;amp;crop=1&quot; alt=&quot;Architecture&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;microprocessors--microcontrollers&quot;&gt;Microprocessors &amp;amp; Microcontrollers&lt;/h2&gt;
+
+&lt;p&gt;Microprocessors are so underrated - the fundamental piece of hardware managing the entire system effectively without downtime. The key ideas of how microprocessors store raw data quickly beside them (in registers), how each register is assigned a responsibility, how they communicate with them to perform operations, its just CPU at the finest level. Its so important for a computer science researcher to be aware of the down-lying code every single programming language is compiled/translated into. Apart from this, its mind-blowing to read about hardware and software revolutions that took us the roller-coaster ride from 8086 to Pentium to i-series to GPUs to TPUs. The transistor has been doing its task since ages, so its unwise to be confused of how a transistor works.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://beta.techcrunch.com/wp-content/uploads/2017/05/tpu_cityscape_forwebonly_final.jpg?w=680&quot; alt=&quot;Micro&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;operating-systems&quot;&gt;Operating Systems&lt;/h2&gt;
+
+&lt;p&gt;Operating System is not only the performance-deciding factor of a system, rather it’s the entire layer of software that’s entitled to exploit the hardware capabilities. Its absolutely a must for Computer Science engineers to understand the internals of OS and explain how things work together in harmony. The importance of the OS on a system and being proficient enough to use it effectively is one of the must-needed skills of a CS grad. Well, one should be able to disasssemble an OS and able to reconstruct it part-by-part making no functionality broken. Reason number one why everyone should be learning and using UNIX-based OS (preferably Linux) in their learning days. Being proficient on the command line helps you being a better programmer. Not only do you understand the ins-and-outs of the existence of different files, but you do have the power to tweak performance to your requirements. Afterall, performing tasks through the command line is like using the first principles of any software development or usage. Here are some resources to get you intrigued :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/suvratapte/Maurice-Bach-Notes&quot;&gt;The Design of the UNIX OS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://linuxjourney.com/&quot;&gt;Linux Course 1&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-1.html&quot;&gt;Linux Course 2&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/&quot;&gt;Low Level Bit Hacks&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://techcrunch.com/wp-content/uploads/2015/04/screenshot-2015-04-21-at-11-13-31.png?w=1390&amp;amp;crop=1&quot; alt=&quot;OS&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;computer-networks&quot;&gt;Computer Networks&lt;/h2&gt;
+
+&lt;p&gt;Its just fascinating to realize the current progress Computer Networks has achieved. &lt;a href=&quot;https://github.com/alex/what-happens-when&quot;&gt;At the tip of a micro-second electrical signals are being transmitted from one pole of the Earth to another&lt;/a&gt;. As a Computer Science Engineer, its important to know of the fundamentals of the Internet, how devices connect with each other, &lt;a href=&quot;https://www.quora.com/How-do-you-explain-to-a-ten-year-old-how-information-is-passed-through-thin-air-WiFi-data-networks-3G-et-cetera&quot;&gt;how exactly does the data fly through air&lt;/a&gt;, how to establish connections securely. Nevertheless, one should not miss out the concepts of how routing works effectively, who is maintaining the internet, what’s the decentralized side of the internet, and how data flows through under-ocean cables. Its the research in Computer Networks (and Telecommunication) that has brought about revolutionary technologies like LTE, Fiber Broadband services to mankind. If it matters for the data to be passed on responsibly by middle-men, its important to be thorough with the concepts governing it. Here are some resources to get you intrigued :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://intronetworks.cs.luc.edu/current/html/intro.html&quot;&gt;Computer Networks Full Course&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.cse.iitk.ac.in/users/dheeraj/cs425/&quot;&gt;CN Couse by IITK&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.harshillodhi.co.in/http-proxy-musings-2/&quot;&gt;HTTP Proxy and VPN musings at college&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Learn how &lt;a href=&quot;https://howhttps.works/&quot;&gt;HTTPS&lt;/a&gt; and &lt;a href=&quot;https://howdns.works/&quot;&gt;DNS&lt;/a&gt; works&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.sitepoint.com/really-good-introduction-xml/&quot;&gt;Really good introduction to XML&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/&quot;&gt;Animated explanation of DNS over HTTPS&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://techcrunch.com/wp-content/uploads/2018/10/GettyImages-10138254182.jpg?w=1390&amp;amp;crop=1&quot; alt=&quot;Networks&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are more fantastic blogs, posts and writings you should definitely read if you truly aspire to be a Computer Science Engineer :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://shekhargulati.com/&quot;&gt;Shekhar Gulati’s Blog&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/sdmg15/Best-websites-a-programmer-should-visit&quot;&gt;Curated Reading List&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.plover.com/math/infinity-for-kids.html&quot;&gt;Explaining Infinity to Kids&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://okigiveup.net/&quot;&gt;Ok I Give Up Blog&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://matt.might.net/articles/what-cs-majors-should-know/&quot;&gt;What every CS Major should know&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://sijinjoseph.com/programmer-competency-matrix/&quot;&gt;Programmer Competency Matrix&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.cs.cornell.edu/courses/cs2112/2015fa/lectures/index.html&quot;&gt;Be better at DSA&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://cs.yale.edu/homes/aspnes/classes/223/notes.html&quot;&gt;Notes on DS and Programming&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://goalkicker.com/&quot;&gt;Superb collection of Technology Books&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Learn a new Programming Language &lt;a href=&quot;https://learnxinyminutes.com/&quot;&gt;here&lt;/a&gt; or &lt;a href=&quot;http://hyperpolyglot.org/&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/10/05/cs-fundamentals.html</link>

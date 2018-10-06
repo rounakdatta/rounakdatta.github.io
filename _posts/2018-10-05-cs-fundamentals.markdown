@@ -12,14 +12,70 @@ Computer Architecture would talk of why computers work the way they are, they gi
 
 ![Architecture](https://techcrunch.com/wp-content/uploads/2017/04/2017-04-05_1013.png?w=1390&crop=1)
 
+<hr>
+
 ## Microprocessors & Microcontrollers
 
 Microprocessors are so underrated - the fundamental piece of hardware managing the entire system effectively without downtime. The key ideas of how microprocessors store raw data quickly beside them (in registers), how each register is assigned a responsibility, how they communicate with them to perform operations, its just CPU at the finest level. Its so important for a computer science researcher to be aware of the down-lying code every single programming language is compiled/translated into. Apart from this, its mind-blowing to read about hardware and software revolutions that took us the roller-coaster ride from 8086 to Pentium to i-series to GPUs to TPUs. The transistor has been doing its task since ages, so its unwise to be confused of how a transistor works.
 
 ![Micro](https://beta.techcrunch.com/wp-content/uploads/2017/05/tpu_cityscape_forwebonly_final.jpg?w=680)
 
+<hr>
+
+## Operating Systems
+
+Operating System is not only the performance-deciding factor of a system, rather it's the entire layer of software that's entitled to exploit the hardware capabilities. Its absolutely a must for Computer Science engineers to understand the internals of OS and explain how things work together in harmony. The importance of the OS on a system and being proficient enough to use it effectively is one of the must-needed skills of a CS grad. Well, one should be able to disasssemble an OS and able to reconstruct it part-by-part making no functionality broken. Reason number one why everyone should be learning and using UNIX-based OS (preferably Linux) in their learning days. Being proficient on the command line helps you being a better programmer. Not only do you understand the ins-and-outs of the existence of different files, but you do have the power to tweak performance to your requirements. Afterall, performing tasks through the command line is like using the first principles of any software development or usage. Here are some resources to get you intrigued :
+
+* [The Design of the UNIX OS](https://github.com/suvratapte/Maurice-Bach-Notes)
+
+* [Linux Course 1](https://linuxjourney.com/)
+
+* [Linux Course 2](https://0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-1.html)
+
+* [Low Level Bit Hacks](http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/)
+
+![OS](https://techcrunch.com/wp-content/uploads/2015/04/screenshot-2015-04-21-at-11-13-31.png?w=1390&crop=1)
+
+<hr>
+
 ## Computer Networks
 
-Its just fascinating to realize the current progress Computer Networks has achieved. At the tip of a micro-second electrical signals are being transmitted from one pole of the Earth to another. As a Computer Science Engineer, its important to know of the fundamentals of the Internet, how devices connect with each other, [how exactly does the data fly through air](https://www.quora.com/How-do-you-explain-to-a-ten-year-old-how-information-is-passed-through-thin-air-WiFi-data-networks-3G-et-cetera), how to establish connections securely. Nevertheless, one should not miss out the concepts of how routing works effectively, who is maintaining the internet, what's the decentralized side of the internet, and how data flows through under-ocean cables. Its the research in Computer Networks (and Telecommunication) that has brought about revolutionary technologies like LTE, Fiber Broadband services to mankind. If it matters for the data to be passed on responsibly by middle-men, its important to be thorough with the concepts governing it.
+Its just fascinating to realize the current progress Computer Networks has achieved. [At the tip of a micro-second electrical signals are being transmitted from one pole of the Earth to another](https://github.com/alex/what-happens-when). As a Computer Science Engineer, its important to know of the fundamentals of the Internet, how devices connect with each other, [how exactly does the data fly through air](https://www.quora.com/How-do-you-explain-to-a-ten-year-old-how-information-is-passed-through-thin-air-WiFi-data-networks-3G-et-cetera), how to establish connections securely. Nevertheless, one should not miss out the concepts of how routing works effectively, who is maintaining the internet, what's the decentralized side of the internet, and how data flows through under-ocean cables. Its the research in Computer Networks (and Telecommunication) that has brought about revolutionary technologies like LTE, Fiber Broadband services to mankind. If it matters for the data to be passed on responsibly by middle-men, its important to be thorough with the concepts governing it. Here are some resources to get you intrigued :
 
-![Networks](https://techcrunch.com/wp-content/uploads/2015/09/google-servers-datacenter.png?w=1390&crop=1)
+* [Computer Networks Full Course](http://intronetworks.cs.luc.edu/current/html/intro.html)
+
+* [CN Couse by IITK](https://www.cse.iitk.ac.in/users/dheeraj/cs425/)
+
+* [HTTP Proxy and VPN musings at college](https://blog.harshillodhi.co.in/http-proxy-musings-2/)
+
+* Learn how [HTTPS](https://howhttps.works/) and [DNS](https://howdns.works/) works
+
+* [Really good introduction to XML](https://www.sitepoint.com/really-good-introduction-xml/)
+
+* [Animated explanation of DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/)
+
+![Networks](https://techcrunch.com/wp-content/uploads/2018/10/GettyImages-10138254182.jpg?w=1390&crop=1)
+
+Here are more fantastic blogs, posts and writings you should definitely read if you truly aspire to be a Computer Science Engineer :
+
+* [Shekhar Gulati's Blog](https://shekhargulati.com/)
+
+* [Curated Reading List](https://github.com/sdmg15/Best-websites-a-programmer-should-visit)
+
+* [Explaining Infinity to Kids](https://blog.plover.com/math/infinity-for-kids.html)
+
+* [Ok I Give Up Blog](http://okigiveup.net/)
+
+* [What every CS Major should know](http://matt.might.net/articles/what-cs-majors-should-know/)
+
+* [Programmer Competency Matrix](http://sijinjoseph.com/programmer-competency-matrix/)
+
+* [Be better at DSA](http://www.cs.cornell.edu/courses/cs2112/2015fa/lectures/index.html)
+
+* [Notes on DS and Programming](http://cs.yale.edu/homes/aspnes/classes/223/notes.html)
+
+* [Superb collection of Technology Books](https://goalkicker.com/)
+
+* Learn a new Programming Language [here](https://learnxinyminutes.com/) or [here](http://hyperpolyglot.org/)
+
+<hr>
