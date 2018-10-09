@@ -6,8 +6,8 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 06 Oct 2018 13:49:18 +0530</pubDate>
-    <lastBuildDate>Sat, 06 Oct 2018 13:49:18 +0530</lastBuildDate>
+    <pubDate>Wed, 10 Oct 2018 02:29:41 +0530</pubDate>
+    <lastBuildDate>Wed, 10 Oct 2018 02:29:41 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -150,6 +150,97 @@
 
 &lt;hr /&gt;
 
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;cs-fundamentals&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/10/05/cs-fundamentals.html</link>
@@ -220,6 +311,98 @@
 &lt;h2 id=&quot;discussions&quot;&gt;Discussions?&lt;/h2&gt;
 
 &lt;p&gt;We’ll have all conversations on Telegram. Join the group &lt;a href=&quot;https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;flyr&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Fri, 28 Sep 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/09/28/flyr.html</link>
@@ -255,6 +438,98 @@ Additional configurations&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
 And don’t forget to also check out &lt;a href=&quot;https://nimblebox.ai/&quot;&gt;NimbleBox.ai&lt;/a&gt;, a cloud deep learning platform for all your GPU needs.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;octolab&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/09/22/octolab.html</link>
@@ -277,6 +552,98 @@ And don’t forget to also check out &lt;a href=&quot;https://nimblebox.ai/&quot
 
 &lt;p&gt;&lt;br /&gt;
 &lt;img src=&quot;https://i.imgur.com/ykkW85s.png&quot; alt=&quot;Digital Assistant Demo&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;digital-assistant&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/09/22/digitalassistant.html</link>
@@ -296,6 +663,98 @@ And don’t forget to also check out &lt;a href=&quot;https://nimblebox.ai/&quot
 
 &lt;p&gt;&lt;br /&gt;
 I’ve also wrote a Medium article &lt;a href=&quot;https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;quill-audits&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Sat, 21 Jul 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/07/21/quillaudits.html</link>
@@ -310,6 +769,98 @@ I’ve also wrote a Medium article &lt;a href=&quot;https://medium.com/quillhash
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/vr1nYID9xD0&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;resxme&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/06/21/resxme.html</link>
@@ -324,6 +875,98 @@ I’ve also wrote a Medium article &lt;a href=&quot;https://medium.com/quillhash
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/maVkhZotEVM&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;correctly&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    myLocation = this.responseText;
+	    console.log(&#39;--&#39;)
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
+	
+	xhr.send(data);
+}
+
+function likeItem() {
+	getLocationDetails();
+	var data = myLocation;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    showLikes();
+	  }
+	});
+	
+	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+	
+	xhr.send(data);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
 </description>
         <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/06/21/correctly.html</link>
