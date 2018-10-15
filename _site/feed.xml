@@ -6,8 +6,8 @@
 </description>
     <link>https://rounakdatta.github.io/</link>
     <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 10 Oct 2018 02:29:41 +0530</pubDate>
-    <lastBuildDate>Wed, 10 Oct 2018 02:29:41 +0530</lastBuildDate>
+    <pubDate>Tue, 16 Oct 2018 03:13:50 +0530</pubDate>
+    <lastBuildDate>Tue, 16 Oct 2018 03:13:50 +0530</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -163,49 +163,37 @@ let postTitle = &quot;cs-fundamentals&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -325,49 +313,37 @@ let postTitle = &quot;flyr&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -401,8 +377,8 @@ function showLikes() {
 $( document ).ready(function() {
     showLikes();
 });
+&lt;/flyr
 &lt;/script&gt;
-
 </description>
         <pubDate>Fri, 28 Sep 2018 00:00:00 +0530</pubDate>
         <link>https://rounakdatta.github.io/2018/09/28/flyr.html</link>
@@ -452,49 +428,37 @@ let postTitle = &quot;octolab&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -566,49 +530,37 @@ let postTitle = &quot;digital-assistant&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -677,49 +629,37 @@ let postTitle = &quot;quill-audits&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -783,49 +723,37 @@ let postTitle = &quot;resxme&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
@@ -889,49 +817,37 @@ let postTitle = &quot;correctly&quot;
 let myLocation = &quot;&quot;;
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log(&#39;--&#39;)
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://json.geoiplookup.io/&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;e18cbd49-69f0-f0cb-297d-721bf3b97d78&quot;);
-	
-	xhr.send(data);
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {

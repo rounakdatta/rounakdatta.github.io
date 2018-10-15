@@ -27,49 +27,37 @@ let postTitle = "gmailattachments"
 let myLocation = "";
 
 function getLocationDetails() {
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener("readystatechange", function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    myLocation = this.responseText;
-	    console.log('--')
-	  }
-	});
-	
-	xhr.open("GET", "https://json.geoiplookup.io/");
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
-	xhr.setRequestHeader("cache-control", "no-cache");
-	xhr.setRequestHeader("postman-token", "e18cbd49-69f0-f0cb-297d-721bf3b97d78");
-	
-	xhr.send(data);
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
 }
 
 function likeItem() {
-	getLocationDetails();
-	var data = myLocation;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener("readystatechange", function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    showLikes();
-	  }
-	});
-	
-	xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
-	xhr.setRequestHeader("cache-control", "no-cache");
-	xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
-	
-	xhr.send(data);
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
 }
 
 function showLikes() {
