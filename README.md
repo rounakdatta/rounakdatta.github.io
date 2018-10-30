@@ -1,4 +1,4 @@
-Goto my [https://rounakdatta.github.io](portfolio)
+Goto my [portfolio](https://rounakdatta.github.io)
 
 ```Personal Serverless Portfolio built from scratch starting from Jekyll```
 
