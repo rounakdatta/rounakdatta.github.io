@@ -1,3 +1,7 @@
-# rounakdatta.github.io
+Goto my [https://rounakdatta.github.io](portfolio)
 
-Live at [rounakdatta.github.io](https://rounakdatta.github.io/) (impersonate it as **[rounakdatta.tk](http://rounakdatta.tk)**)
+```Personal Serverless Portfolio built from scratch starting from Jekyll```
+
+```Computation Server``` : [https://rounakdatta.pythonanywhere.com](https://rounakdatta.pythonanywhere.com)
+
+```Portfolio``` : [https://rounakdatta.github.io](https://rounakdatta.github.io)

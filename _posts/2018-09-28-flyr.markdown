@@ -11,16 +11,9 @@ visible: 0
 
 ![NTWOC](https://img.shields.io/badge/NTWoC-2018-blue.svg) ![WTFPL](https://img.shields.io/badge/license-WTFPL-green.svg)
 
-## Tech Stack
+## About
 
-### Back-End
-* Microservices
-* Phoenix Framework
-* Apache Kafka
-* Redis
-
-### Front-End
-* Bootstrap
+Flyr is yet another bike-sharing platform, built for profit learning, understanding and re-implementing the robust engineering of such highly available systems. 'Flyr' stupidly means an open-source commute project. The project team aims to write the microservices from scratch, implement bike-sharing algorithms, do a lot of scalability and security engineering. The final product will 'at least' be able to demonstrate bike-booking, bike-pricing and time-and-route-estimations.
 
 ## What will be my commitments for this project?
 
@@ -51,7 +44,7 @@ visible: 0
 
 ## Discussions?
 
-We'll have all conversations on Telegram. Join the group [here](https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w).
+The official page for NTWoC is [this](http://next-tech-woc.herokuapp.com/). We'll have all conversations on the official [NTWoC Slack channel](https://nexttech-woc.slack.com/). You can also find us at this [Telegram group](https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w).
 
 <br>
 <center>
@@ -130,4 +123,4 @@ function showLikes() {
 $( document ).ready(function() {
     showLikes();
 });
-</flyr
+</script>
