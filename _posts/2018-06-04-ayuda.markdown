@@ -5,14 +5,18 @@ hidden: true
 visible: 0
 ---
 
-[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab) ![NIPP Blockchain Challenge 2018](https://s3.amazonaws.com/divum_test/Muthu/240418_114906.png)
+[![TechGig CodeGladiator 2018](https://static.techgig.com/Themes/Release/images/cg2018_images/cg2018-logo.png)](https://www.techgig.com/codegladiators/blockchain) [![Satoshi Next Tech Lab](https://avatars3.githubusercontent.com/u/32188729?s=200&v=4)](https://github.com/SatoshiNextTechLab) ![NIPP Blockchain Challenge 2018](https://i.imgur.com/uPvbZpg.png)
 
-_This project won the **second prize of ₹1,00,000 at the TG Blockchain Hackathon** and the **first prize of ₹1,00,000 at NIPP Blockchain Startup Challenge**._.
+_This project won the **second prize of ₹1,00,000 at the TG Blockchain Hackathon** and the **first prize of ₹1,00,000 at NIPP Blockchain Startup Challenge**_.
 
 
 ## What is Ayuda
 
 Ayuda is a not for profit, blockchain based peer-peer money lending platform. Our platform connects lenders and borrowers from all across the globe because we believe that your will to help someone is much greater than the miles supporting you. The platform makes sure that every person using the platform is benefitted. Doing this we are able to sustain a proper give and take a situation where everyone is benefitted. The platform allows a lender to partially pay for a loan request. We use an innovative dynamic-interest rate method to incentivize our lenders.In this way, the lenders will pool as much money as possible to get more incentive. Our state-of-art algorithm decides the interest rate for the lenders dynamically on the basis of the proportion of money paid by a lender for a particular loan while maintaining the fixed interest rate for the borrower.
+
+<br>
+
+#### There's a prototype version live at [ayuda.surge.sh](http://ayuda.surge.sh)!
 
 <br>
 

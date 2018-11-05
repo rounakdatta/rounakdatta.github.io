@@ -25,7 +25,11 @@ Additional configurations
 ![Octolab Landing Page](/assets/octolab.png){:class="img-responsive"}
 
 <br>
-<center>You should definitely try out <a href="http://octolab.ml/">Octolab</a> right now!</center>
+![YC Startup School](https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png){:class="img-responsive"}
+
+<br>
+<center>You should definitely try out <a href="http://octolab.ml/">Octolab</a> right now!<br>
+<i>Team Octolab.ML - <a href="https://www.linkedin.com/in/rounakdatta/">Rounak Datta</a>, <a href="https://www.linkedin.com/in/niladri-shekhar-dutt/">Niladri Shekhar Dutt</a>, <a href="https://www.linkedin.com/in/subhadeepkundu/">Subhadeep Kundu</a></i></center>
 <br>
 <hr><br>
 And don't forget to also check out <a href="https://nimblebox.ai/">NimbleBox.ai</a>, a cloud deep learning platform for all your GPU needs.

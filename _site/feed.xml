@@ -4,30 +4,30 @@
     <title>Home</title>
     <description>/home
 </description>
-    <link>https://rounakdatta.github.io/</link>
-    <atom:link href="https://rounakdatta.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 Oct 2018 03:13:50 +0530</pubDate>
-    <lastBuildDate>Tue, 16 Oct 2018 03:13:50 +0530</lastBuildDate>
-    <generator>Jekyll v3.0.1</generator>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 06 Nov 2018 02:59:05 +0530</pubDate>
+    <lastBuildDate>Tue, 06 Nov 2018 02:59:05 +0530</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
     
       <item>
         <title>Unleashing the best of IPFS</title>
         <description>
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/10/05/ipfs.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/10/05/ipfs.html</guid>
+        <link>http://localhost:4000/2018/10/05/ipfs.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/05/ipfs.html</guid>
         
         
       </item>
     
       <item>
-        <title>What&#39;s behind an Ethereum TestNet?</title>
+        <title>What's behind an Ethereum TestNet?</title>
         <description>
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/10/05/ethereum-testnet.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/10/05/ethereum-testnet.html</guid>
+        <link>http://localhost:4000/2018/10/05/ethereum-testnet.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/05/ethereum-testnet.html</guid>
         
         
       </item>
@@ -37,8 +37,8 @@
         <description>
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/10/05/erlang.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/10/05/erlang.html</guid>
+        <link>http://localhost:4000/2018/10/05/erlang.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/05/erlang.html</guid>
         
         
       </item>
@@ -185,7 +185,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -207,13 +207,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -231,8 +231,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Fri, 05 Oct 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/10/05/cs-fundamentals.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/10/05/cs-fundamentals.html</guid>
+        <link>http://localhost:4000/2018/10/05/cs-fundamentals.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/05/cs-fundamentals.html</guid>
         
         
       </item>
@@ -245,20 +245,9 @@ $( document ).ready(function() {
 
 &lt;p&gt;&lt;img src=&quot;https://img.shields.io/badge/NTWoC-2018-blue.svg&quot; alt=&quot;NTWOC&quot; /&gt; &lt;img src=&quot;https://img.shields.io/badge/license-WTFPL-green.svg&quot; alt=&quot;WTFPL&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;tech-stack&quot;&gt;Tech Stack&lt;/h2&gt;
+&lt;h2 id=&quot;about&quot;&gt;About&lt;/h2&gt;
 
-&lt;h3 id=&quot;back-end&quot;&gt;Back-End&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;Microservices&lt;/li&gt;
-  &lt;li&gt;Phoenix Framework&lt;/li&gt;
-  &lt;li&gt;Apache Kafka&lt;/li&gt;
-  &lt;li&gt;Redis&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;front-end&quot;&gt;Front-End&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;Bootstrap&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Flyr is yet another bike-sharing platform, built for profit learning, understanding and re-implementing the robust engineering of such highly available systems. ‘Flyr’ stupidly means an open-source commute project. The project team aims to write the microservices from scratch, implement bike-sharing algorithms, do a lot of scalability and security engineering. The final product will ‘at least’ be able to demonstrate bike-booking, bike-pricing and time-and-route-estimations.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-will-be-my-commitments-for-this-project&quot;&gt;What will be my commitments for this project?&lt;/h2&gt;
 
@@ -298,7 +287,7 @@ $( document ).ready(function() {
 
 &lt;h2 id=&quot;discussions&quot;&gt;Discussions?&lt;/h2&gt;
 
-&lt;p&gt;We’ll have all conversations on Telegram. Join the group &lt;a href=&quot;https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The official page for NTWoC is &lt;a href=&quot;http://next-tech-woc.herokuapp.com/&quot;&gt;this&lt;/a&gt;. We’ll have all conversations on the official &lt;a href=&quot;https://nexttech-woc.slack.com/&quot;&gt;NTWoC Slack channel&lt;/a&gt;. You can also find us at this &lt;a href=&quot;https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w&quot;&gt;Telegram group&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;center&gt;
@@ -335,7 +324,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -357,13 +346,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -377,12 +366,12 @@ function showLikes() {
 $( document ).ready(function() {
     showLikes();
 });
-&lt;/flyr
 &lt;/script&gt;
+
 </description>
         <pubDate>Fri, 28 Sep 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/09/28/flyr.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/28/flyr.html</guid>
+        <link>http://localhost:4000/2018/09/28/flyr.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/09/28/flyr.html</guid>
         
         
       </item>
@@ -408,8 +397,12 @@ Additional configurations&lt;/p&gt;
 &lt;p&gt;&lt;br /&gt;
 &lt;img src=&quot;/assets/octolab.png&quot; alt=&quot;Octolab Landing Page&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
+&lt;p&gt;&lt;br /&gt;
+&lt;img src=&quot;https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png&quot; alt=&quot;YC Startup School&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;You should definitely try out &lt;a href=&quot;http://octolab.ml/&quot;&gt;Octolab&lt;/a&gt; right now!&lt;/center&gt;
+&lt;center&gt;You should definitely try out &lt;a href=&quot;http://octolab.ml/&quot;&gt;Octolab&lt;/a&gt; right now!&lt;br /&gt;
+&lt;i&gt;Team Octolab.ML - &lt;a href=&quot;https://www.linkedin.com/in/rounakdatta/&quot;&gt;Rounak Datta&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/niladri-shekhar-dutt/&quot;&gt;Niladri Shekhar Dutt&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/subhadeepkundu/&quot;&gt;Subhadeep Kundu&lt;/a&gt;&lt;/i&gt;&lt;/center&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
@@ -450,7 +443,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -472,13 +465,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -496,8 +489,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/09/22/octolab.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/22/octolab.html</guid>
+        <link>http://localhost:4000/2018/09/22/octolab.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/09/22/octolab.html</guid>
         
         
       </item>
@@ -552,7 +545,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -574,13 +567,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -598,8 +591,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/09/22/digitalassistant.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/09/22/digitalassistant.html</guid>
+        <link>http://localhost:4000/2018/09/22/digitalassistant.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/09/22/digitalassistant.html</guid>
         
         
       </item>
@@ -614,7 +607,7 @@ $( document ).ready(function() {
 &lt;img src=&quot;https://cdn-images-1.medium.com/max/1600/1*fVizVy5bQ9j-845RwXjhBg.png&quot; alt=&quot;Quill Audits Architecture&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
-I’ve also wrote a Medium article &lt;a href=&quot;https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+The platform is live at &lt;a href=&quot;https://audits.quillhash.com/smart-contract-audit&quot;&gt;audits.quillhash.com&lt;/a&gt;. Or go ahead and read the &lt;a href=&quot;https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;center&gt;
@@ -651,7 +644,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -673,13 +666,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -697,8 +690,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Sat, 21 Jul 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/07/21/quillaudits.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/07/21/quillaudits.html</guid>
+        <link>http://localhost:4000/2018/07/21/quillaudits.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/07/21/quillaudits.html</guid>
         
         
       </item>
@@ -745,7 +738,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -767,13 +760,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -791,8 +784,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/06/21/resxme.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/06/21/resxme.html</guid>
+        <link>http://localhost:4000/2018/06/21/resxme.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/21/resxme.html</guid>
         
         
       </item>
@@ -839,7 +832,7 @@ function likeItem() {
   
   xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
   xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
   xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
   xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
   xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
@@ -861,13 +854,13 @@ function showLikes() {
 	  if (this.readyState === 4) {
 	    console.log(this.responseText);
 	    //alert(this.responseText);
-	    document.getElementById(&#39;likeCount&#39;).innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
 	  }
 	});
 	
 	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
 	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader(&#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;)
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
 	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
 	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
 	
@@ -885,8 +878,8 @@ $( document ).ready(function() {
 
 </description>
         <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
-        <link>https://rounakdatta.github.io/2018/06/21/correctly.html</link>
-        <guid isPermaLink="true">https://rounakdatta.github.io/2018/06/21/correctly.html</guid>
+        <link>http://localhost:4000/2018/06/21/correctly.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/21/correctly.html</guid>
         
         
       </item>

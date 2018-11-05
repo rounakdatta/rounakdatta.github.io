@@ -13,7 +13,7 @@ Quill Audits platform provides for manual auditing as well. The platform also pr
 ![Quill Audits Architecture](https://cdn-images-1.medium.com/max/1600/1*fVizVy5bQ9j-845RwXjhBg.png){:class="img-responsive"}
 
 <br>
-I've also wrote a Medium article <a href="https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e">here</a>.
+The platform is live at <a href="https://audits.quillhash.com/smart-contract-audit">audits.quillhash.com</a>. Or go ahead and read the <a href="https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e">Medium article</a>.
 
 <br>
 <center>

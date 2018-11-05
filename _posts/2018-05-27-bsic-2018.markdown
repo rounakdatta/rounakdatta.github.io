@@ -12,7 +12,9 @@ visible: 0
 
 A blockhain based e-procurement platform which helps in streamlining the procurement process by making it more open, transparent and fast. Our main goals are to keep the middlemen out, to make sure the best bidder finds the best dealer, ensure that public data is truly public and common citizen's money isn't fiddled with.
 
-<b>The product is currently live at : [teamsatoshi.pythonanywhere.com](http://teamsatoshi.pythonanywhere.com)</b>
+#### There's a prototype version hosted on : [PythonAnywhere](http://teamsatoshi.pythonanywhere.com)
+
+<br>
 
 #### Concept Presentation
 
