@@ -1,41 +1,16 @@
 ---
 layout: post
-title: "Octolab.ML - The Automated Machine Learning Platform"
+title: "Goalkicker-DL"
 hidden: true
 visible: 0
 ---
+This is a scripting attempt to automate the process of downloading all the Computer Science books from <a href="https://goalkicker.com/">Goalkicker.com</a>. Goalkicker has really a very good collection of books on various topics with the accumulated wealth of knowledge from StackOverflow and other CS forums.
+<br>
+Run the script and wait for all the books to be loaded on your system.
 
-Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
-• <b>auto-cleaned</b> • <b>auto-preprocessed</b> • <b>predictions generated</b> • <b>visualizations generated</b>
-when you supply us with the algorithm and other configurations.
+Find the Github repo <a href="https://github.com/rounakdatta/books.goalkicker-dl">here</a>.
 
 <br>
-
-Upload dataset
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Select ML Algorithm
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Additional configurations
-
-<br>
-
-<i>Designed and developed keeping in mind a beginner's difficulty in understanding machine learning frameworks.</i>
-
-<br>
-![Octolab Landing Page](/assets/octolab.png){:class="img-responsive"}
-
-<br>
-<a href="https://www.startupschool.org/companies/QE7fuq5bjrjlw">
-![YC Startup School](https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png){:class="img-responsive"}
-</a>
-
-<br>
-<center>You should definitely try out <a href="http://13.232.106.64:8001/ml/">Octolab</a> right now!<br>
-<a href="http://octolab.tk/">Here</a> is the old Flask-based app and the <a href="http://13.232.106.64:8001/ml/">currently maintained one</a> has been re-written on Django.<br><br>
-<i>Team Octolab.ML - <a href="https://www.linkedin.com/in/rounakdatta/">Rounak Datta</a>, <a href="https://www.linkedin.com/in/niladri-shekhar-dutt/">Niladri Shekhar Dutt</a>, <a href="https://www.linkedin.com/in/subhadeepkundu/">Subhadeep Kundu</a></i>
-<br>
-<br>
-</center>
 <center>
 <button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png"></button>
 <div id="likeCount"></div>
@@ -43,7 +18,7 @@ Additional configurations
 
 <script type="text/javascript">
 
-let postTitle = "octolab"
+let postTitle = "goalkicker"
 
 let myLocation = "";
 

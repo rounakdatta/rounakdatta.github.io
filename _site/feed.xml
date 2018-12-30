@@ -6,9 +6,112 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 06 Nov 2018 02:59:05 +0530</pubDate>
-    <lastBuildDate>Tue, 06 Nov 2018 02:59:05 +0530</lastBuildDate>
+    <pubDate>Mon, 31 Dec 2018 01:24:18 +0530</pubDate>
+    <lastBuildDate>Mon, 31 Dec 2018 01:24:18 +0530</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>CreÐApp.ai - Decentralized AI-powered Banking-CRA</title>
+        <description>&lt;p&gt;&lt;i&gt;CRA stands for Credit Rating Agency. You should read more about CRAs &lt;a href=&quot;https://en.wikipedia.org/wiki/Credit_rating_agency&quot;&gt;here&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
+
+&lt;p&gt;CreÐApp.ai is an AI-driven credit rating agency that attempts to crowdsource the process by decentralizing it. The CRA market is mostly dominated and the should-be-public data is actually private and consumed for analytics. This subtly puts the credit rating process in the hands of Artifical Intelligence, afterall it’s statistical measures that help estimate the lending risks. However, its essential that the machine learning model keeps learning keeping the analytics data public as well as encrypted. To achieve this, we use &lt;a href=&quot;https://www.ethereum.org/&quot;&gt;Ethereum&lt;/a&gt; as the decentralization network which uses a server ONLY for computation. It must be noted that the pravalent model is also stored on &lt;a href=&quot;https://ipfs.io/&quot;&gt;IPFS&lt;/a&gt; and isn’t localized.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://camo.githubusercontent.com/b7c584b0eb06143e09a61032bcdd890d03e1cb5c/68747470733a2f2f692e696d6775722e636f6d2f4e6d67495473522e706e67&quot; alt=&quot;credapp_describe&quot; class=&quot;img-center&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can understand the project through the &lt;a href=&quot;https://github.com/tanmay7270/CreDapp.ai/blob/master/Pitch.pdf&quot;&gt;Pitch Presentation&lt;/a&gt; or the &lt;a href=&quot;https://github.com/tanmay7270/CreDapp.ai&quot;&gt;repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is a ready-to-be-deployed solution made at &lt;a href=&quot;https://innerve2k18.com/&quot;&gt;Innerve 2k18 Hackathon&lt;/a&gt; by &lt;a href=&quot;https://github.com/tanmay7270&quot;&gt;Tanmay Agrawal&lt;/a&gt;, &lt;a href=&quot;https://github.com/itsron717&quot;&gt;Rounak Vyas&lt;/a&gt;, &lt;a href=&quot;https://github.com/rounakdatta&quot;&gt;Rounak Datta&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;credapp&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
+</description>
+        <pubDate>Mon, 31 Dec 2018 00:00:00 +0530</pubDate>
+        <link>http://localhost:4000/2018/12/31/credapp.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/12/31/credapp.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Unleashing the best of IPFS</title>
@@ -398,17 +501,17 @@ Additional configurations&lt;/p&gt;
 &lt;img src=&quot;/assets/octolab.png&quot; alt=&quot;Octolab Landing Page&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
-&lt;img src=&quot;https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png&quot; alt=&quot;YC Startup School&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
+&lt;a href=&quot;https://www.startupschool.org/companies/QE7fuq5bjrjlw&quot;&gt;
+&lt;img src=&quot;https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png&quot; alt=&quot;YC Startup School&quot; class=&quot;img-responsive&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;You should definitely try out &lt;a href=&quot;http://octolab.ml/&quot;&gt;Octolab&lt;/a&gt; right now!&lt;br /&gt;
-&lt;i&gt;Team Octolab.ML - &lt;a href=&quot;https://www.linkedin.com/in/rounakdatta/&quot;&gt;Rounak Datta&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/niladri-shekhar-dutt/&quot;&gt;Niladri Shekhar Dutt&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/subhadeepkundu/&quot;&gt;Subhadeep Kundu&lt;/a&gt;&lt;/i&gt;&lt;/center&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;
-And don’t forget to also check out &lt;a href=&quot;https://nimblebox.ai/&quot;&gt;NimbleBox.ai&lt;/a&gt;, a cloud deep learning platform for all your GPU needs.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;You should definitely try out &lt;a href=&quot;http://13.232.106.64:8001/ml/&quot;&gt;Octolab&lt;/a&gt; right now!&lt;br /&gt;
+&lt;a href=&quot;http://octolab.tk/&quot;&gt;Here&lt;/a&gt; is the old Flask-based app and the &lt;a href=&quot;http://13.232.106.64:8001/ml/&quot;&gt;currently maintained one&lt;/a&gt; has been re-written on Django.&lt;br /&gt;&lt;br /&gt;
+&lt;i&gt;Team Octolab.ML - &lt;a href=&quot;https://www.linkedin.com/in/rounakdatta/&quot;&gt;Rounak Datta&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/niladri-shekhar-dutt/&quot;&gt;Niladri Shekhar Dutt&lt;/a&gt;, &lt;a href=&quot;https://www.linkedin.com/in/subhadeepkundu/&quot;&gt;Subhadeep Kundu&lt;/a&gt;&lt;/i&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;/center&gt;
 &lt;center&gt;
 &lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
 &lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
@@ -786,100 +889,6 @@ $( document ).ready(function() {
         <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
         <link>http://localhost:4000/2018/06/21/resxme.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/06/21/resxme.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>CorrectLy - The Grammar Engine</title>
-        <description>&lt;p&gt;CorrectLy is a &lt;b&gt;English language and grammar-correction engine&lt;/b&gt;. CorrectLy’s favourite competitor is Grammarly. Uses core NLP as well as deep learning techniques to correct spelling errors, verb-noun agreements, verb-preposition-noun agreements, understand sentence context and help suggest more natural sentences.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/maVkhZotEVM&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;
-&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
-&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
-&lt;/center&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-
-let postTitle = &quot;correctly&quot;
-
-let myLocation = &quot;&quot;;
-
-function getLocationDetails() {
-$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
-    myLocation = response;
-});
-}
-
-function likeItem() {
-  getLocationDetails();
-
-  setTimeout(function(){
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = false;
-  
-  xhr.addEventListener(&quot;readystatechange&quot;, function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-      showLikes();
-    }
-  });
-  
-  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-  
-  console.log(JSON.stringify(myLocation));
-  xhr.send(JSON.stringify(myLocation));
-
-  }, 1000);
-}
-
-function showLikes() {
-
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    //alert(this.responseText);
-	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
-	
-	xhr.send(data);
-
-}
-
-&lt;/script&gt;
-
-&lt;script&gt;
-$( document ).ready(function() {
-    showLikes();
-});
-&lt;/script&gt;
-
-</description>
-        <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
-        <link>http://localhost:4000/2018/06/21/correctly.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/06/21/correctly.html</guid>
         
         
       </item>
