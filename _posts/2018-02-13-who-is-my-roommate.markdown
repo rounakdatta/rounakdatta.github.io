@@ -8,7 +8,7 @@ Our University admits a large troop of students for undergraduation. And so the 
 
 The site is currently live at <a href="http://hostelroo.ml/">hostelroo.ml</a>.
 
-<center><h3>--- 2018 Edition ---</h3>
+<center><button class="btn btn-outline-success btn-lg">2018</button><br><br>
 <i>Built on Flask and powered by MySQL database</i>
 </center>
 <br>
@@ -24,47 +24,25 @@ _Got over 500 registrations and 15k views in a couple of days_.
 
 _Made in an evening just for fun and mass convenience_.
 
-_Hosted freely on **PythonAnywhere**_.
+_Hosted freely on **<a href="https://www.pythonanywhere.com/">PythonAnywhere</a>**_.
 
 Find the source code for the 2018 edition <a href="https://github.com/rounakdatta/who-is-my-roommate/tree/flask-mysql">here</a>.
 
 <br><br>
 
-<center><h3>--- 2019 Edition ---</h3>
+<center><button class="btn btn-outline-success btn-lg">2019</button><br><br>
 <i>Built on Node.js and powered by Firebase Realtime Database</i>
 </center>
 <br>
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#myCarousel" data-slide-to="1"></li>
-    <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>
+![Screenshot](/assets/wimr.png){:class="img-responsive"}
 
-  <div class="carousel-inner">
-    <div class="item active">
-      <img src="/assets/hostelroo_main.png" alt="Home Page">
-    </div>
+- Know your future roommate
+- Search for a friend (using any parameters!)
+- Request a roommate swap
+- Better control over your data
 
-    <div class="item">
-      <img src="/assets/hostelroo_search.png" alt="Search Results">
-    </div>
-
-    <div class="item">
-      <img src="/assets/hostelroo_details.png" alt="Student Details">
-    </div>
-  </div>
-
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
+_Hosted freely on **<a href="https://repl.it">repl.it</a>**_.
 
 <br>
 Find the source code for the 2019 edition <a href="https://github.com/rounakdatta/who-is-my-roommate/">here</a>.
