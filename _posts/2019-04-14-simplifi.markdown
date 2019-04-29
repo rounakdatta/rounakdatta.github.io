@@ -1,41 +1,23 @@
 ---
 layout: post
-title: "Octolab.ML - The Automated Machine Learning Platform"
+title: "Simplifi - Axing distractions for acing productivity"
 hidden: true
 visible: 0
 ---
 
-Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
-• <b>auto-cleaned</b> • <b>auto-preprocessed</b> • <b>predictions generated</b> • <b>visualizations generated</b>
-when you supply us with the algorithm and other configurations.
+<img src="https://cdn.skillenza.com/files/763b02d4-c2da-48b1-acd9-9e07eed158a9/byb_campaign.png">
+
+Simplifi empowers the potential of developers with AI. With AI leaving no stone unturned, we wanted to ensure developers to be productive enough within their IDE. We provide a complete suite of IDE (powered by open-source Monaco Text Editor) connected with an Assistant capable enough to query doubts on stackoverflow, fetch the latest Git commits, converse with the developer as a friend. Not only this, we also help the developer take timely breaks helping her/him being at top of her/his health.
+
+The IDE is powered by <b>VueJS</b> and the assistant is <b>Python</b>-based. Also, the modules are <b>Dockerized</b> and deployed on <b>RedHat OpenShift</b>.
+
+The project is open-source on [GitHub](https://github.com/rounakdatta/simplifi).
+
+Also, find an intuitive presentation [here](https://docs.google.com/presentation/d/1OEF5k8kxdds6vloRXjbEo19RZNNXsgQQ0h7U4VgybjY/edit#slide=id.gc6fa3c898_0_0)!
 
 <br>
-
-Upload dataset
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Select ML Algorithm
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Additional configurations
-
 <br>
 
-<i>Designed and developed keeping in mind a beginner's difficulty in understanding machine learning frameworks.</i>
-
-<br>
-![Octolab Landing Page](/assets/octolab.png){:class="img-responsive"}
-
-<br>
-<a href="https://www.startupschool.org/companies/QE7fuq5bjrjlw">
-![YC Startup School](http://cdn.holistics.io/blog/startup_school_01.png){:class="img-responsive"}
-</a>
-
-<br>
-<center>You should definitely try out <a href="http://13.232.106.64:8001/ml/">Octolab</a> right now!<br>
-<a href="http://octolab.tk/">Here</a> is the old Flask-based app and the <a href="http://13.232.106.64:8001/ml/">currently maintained one</a> has been re-written on Django.<br><br>
-<i>Team Octolab.ML - <a href="https://www.linkedin.com/in/rounakdatta/">Rounak Datta</a>, <a href="https://www.linkedin.com/in/niladri-shekhar-dutt/">Niladri Shekhar Dutt</a>, <a href="https://www.linkedin.com/in/subhadeepkundu/">Subhadeep Kundu</a></i>
-<br>
-<br>
-</center>
 <center>
 <button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png"></button>
 <div id="likeCount"></div>
@@ -43,7 +25,7 @@ Additional configurations
 
 <script type="text/javascript">
 
-let postTitle = "octolab"
+let postTitle = "simplifi"
 
 let myLocation = "";
 

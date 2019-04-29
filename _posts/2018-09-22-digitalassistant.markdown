@@ -13,10 +13,14 @@ Digital Assistant aims to be the replacement for your conventional store manager
 
 <b>Where is it?</b>
 
-Legen-wait-for-it-dary
+Digital Assistant is now open-source, view it at [GitHub](https://github.com/rounakdatta/digital-assistant)!
 
 <br>
 ![Digital Assistant Demo](https://i.imgur.com/ykkW85s.png){:class="img-responsive"}
+
+<b>What next?</b>
+
+Something big
 
 <br>
 <center>

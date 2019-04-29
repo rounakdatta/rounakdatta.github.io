@@ -6,9 +6,138 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Jan 2019 22:06:36 +0530</pubDate>
-    <lastBuildDate>Thu, 24 Jan 2019 22:06:36 +0530</lastBuildDate>
+    <pubDate>Tue, 30 Apr 2019 01:31:17 +0530</pubDate>
+    <lastBuildDate>Tue, 30 Apr 2019 01:31:17 +0530</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Simplifi - Axing distractions for acing productivity</title>
+        <description>&lt;p&gt;&lt;img src=&quot;https://cdn.skillenza.com/files/763b02d4-c2da-48b1-acd9-9e07eed158a9/byb_campaign.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Simplifi empowers the potential of developers with AI. With AI leaving no stone unturned, we wanted to ensure developers to be productive enough within their IDE. We provide a complete suite of IDE (powered by open-source Monaco Text Editor) connected with an Assistant capable enough to query doubts on stackoverflow, fetch the latest Git commits, converse with the developer as a friend. Not only this, we also help the developer take timely breaks helping her/him being at top of her/his health.&lt;/p&gt;
+
+&lt;p&gt;The IDE is powered by &lt;b&gt;VueJS&lt;/b&gt; and the assistant is &lt;b&gt;Python&lt;/b&gt;-based. Also, the modules are &lt;b&gt;Dockerized&lt;/b&gt; and deployed on &lt;b&gt;RedHat OpenShift&lt;/b&gt;.&lt;/p&gt;
+
+&lt;p&gt;The project is open-source on &lt;a href=&quot;https://github.com/rounakdatta/simplifi&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also, find an intuitive presentation &lt;a href=&quot;https://docs.google.com/presentation/d/1OEF5k8kxdds6vloRXjbEo19RZNNXsgQQ0h7U4VgybjY/edit#slide=id.gc6fa3c898_0_0&quot;&gt;here&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;simplifi&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
+</description>
+        <pubDate>Sun, 14 Apr 2019 00:00:00 +0530</pubDate>
+        <link>http://localhost:4000/2019/04/14/simplifi.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/04/14/simplifi.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Product engineering over free infrastructure</title>
+        <description>&lt;p&gt;Well, lets first thank the internet to be generous enough 🙏!&lt;/p&gt;
+
+&lt;p&gt;With so many services around the internet providing with free tier of their products, credit cards are no more a hurdle. You could get started with your Node.js, Python, Go, Ruby, PHP, Elixir or any other programming language-based web-server practically free for testing as well as small-scale purposes. However, it must be noted that you must limit yourself with the server-side security-testing and other activities since containers, self-hosted programs might not be well-supported in this approach. So diving deep into the cloud providers, let introduce them one-by-one:&lt;/p&gt;
+
+&lt;h1&gt;&lt;a href=&quot;https://repl.it&quot;&gt;repl.it&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;We are starting with the most generous cloud services provider of the internet. REPL was built initially to provide a uniquely convenient online IDE which had good support for programming languages to file management. Eventually, supports for web-servers, multi-person sharing etc were added and this platform easily became the favourite of thousands of developers. REPL provides free users with free hosting for Express (Node.js), Django, Flask (Python), Go, Ruby, PHP at a breeze. Installing dependencies (packages, or whatever you call it) are a cakewalk by the press of a button. REPL is so generous that it doesn’t even have a limit on the number of web-servers you can spin up. Literally each web-server is a dedicated container with enough-for-free scalability. You can connect databases, service APIs and get your product from localhost to production in an hour. However, repls sleep when they are inactive (no incoming requests) for over 30 mins. There are tiny hacks implemented to get around these.&lt;/p&gt;
+
+&lt;h1&gt;&lt;a href=&quot;https://pythonanywhere.com&quot;&gt;PythonAnywhere&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;PythonAnywhere is my second favourite when it comes to hosting Python-based (Flask / Django) applications. And servers hosted on PythonAnywhere literally power multiple of my public services (including the Like button you see at the bottom). Unlike REPL, PythonAnywhere servers do not die out (or sleep) frequently and are quite reliable. However, the owner must duly re-charge (of course free) it every 3 months.&lt;/p&gt;
+
+&lt;h1&gt;&lt;a href=&quot;https://gigalixir.com/&quot;&gt;GigaElixir&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;GigaElixir is another service built to help Elixir developers get their Phoenix applications to the cloud. Phoenix applications are quite fast, responsive and scalable, and could be well hosted for free on GigaElixir. To note, GigaElixir uses GCP / AWS / Heroku as the back-end.&lt;/p&gt;
+
+&lt;h1&gt;&lt;a href=&quot;https://firebase.google.com&quot;&gt;Firebase&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Firebase is the database of the internet powering thousands of mobile and web applications. Firebase is easy-to-learn, easy-to-set-up and easy-to-insert-something. Google allows creating unlimited Firebase projects and the limits of free quota for read and write operations are quite generous. Also, its very convenient to browse data from the Firebase console.&lt;/p&gt;
+
+&lt;h1&gt;&lt;a href=&quot;https://www.google.com/script/start&quot;&gt;Google Apps Script&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;GAS comes from the crawlers of the internet. These are super-cool schedulers and hooks that could be attached to any service, end-point and it just &lt;em&gt;works&lt;/em&gt;. We’ve used Apps Script to set up hourly schedulers to remind our REPLs that they need to be less sleepy.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 Feb 2019 00:00:00 +0530</pubDate>
+        <link>http://localhost:4000/2019/02/02/free-infra.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/02/02/free-infra.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>CreÐApp.ai - Decentralized AI-powered Banking-CRA</title>
@@ -22,9 +151,13 @@
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can understand the project through the &lt;a href=&quot;https://github.com/tanmay7270/CreDapp.ai/blob/master/Pitch.pdf&quot;&gt;Pitch Presentation&lt;/a&gt; or the &lt;a href=&quot;https://github.com/tanmay7270/CreDapp.ai&quot;&gt;repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can understand the project through the &lt;a href=&quot;https://github.com/tanmay7270/CreDapp.ai/blob/master/Pitch.pdf&quot;&gt;Pitch Presentation&lt;/a&gt; or the &lt;a href=&quot;https://github.com/mozohack/creDapp.ai&quot;&gt;repository&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;This is a ready-to-be-deployed solution made at &lt;a href=&quot;https://innerve2k18.com/&quot;&gt;Innerve 2k18 Hackathon&lt;/a&gt; by &lt;a href=&quot;https://github.com/tanmay7270&quot;&gt;Tanmay Agrawal&lt;/a&gt;, &lt;a href=&quot;https://github.com/itsron717&quot;&gt;Rounak Vyas&lt;/a&gt;, &lt;a href=&quot;https://github.com/rounakdatta&quot;&gt;Rounak Datta&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is a solution made at &lt;a href=&quot;https://innerve2k18.com/&quot;&gt;Innerve 2k18 Hackathon&lt;/a&gt; by &lt;a href=&quot;https://github.com/tanmay7270&quot;&gt;Tanmay Agrawal&lt;/a&gt;, &lt;a href=&quot;https://github.com/itsron717&quot;&gt;Rounak Vyas&lt;/a&gt;, &lt;a href=&quot;https://github.com/rounakdatta&quot;&gt;Rounak Datta&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Improved and featurized at Mozofest Hackathon by Arko Chatterjee, Rohan Banerjee, Rounak Vyas and Rounak Datta.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;center&gt;
@@ -109,6 +242,104 @@ $( document ).ready(function() {
         <pubDate>Mon, 31 Dec 2018 00:00:00 +0530</pubDate>
         <link>http://localhost:4000/2018/12/31/credapp.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/12/31/credapp.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>For every b64encode, there's a b64decode</title>
+        <description>&lt;p&gt;&lt;i&gt;&lt;b&gt;Hoichoi&lt;/b&gt; is quite a popular On-Demand Bengali TV with it’s video infrastructure powered by VideoLift&lt;/i&gt;. A little security inspection on the platform reveals that the video protection engineering is not quite right. While Base64 encryption of the video CDN APIs works, it might not be as secure it seems. And it can go as far as getting paths to access each file within the video server.&lt;/p&gt;
+
+&lt;p&gt;This has now been quite been improved by the strong Hoichoi team, I believe adversary is always the path to self-development. We tried out how we could programmatically dig out the movie paths, and even get them stored on your &lt;b&gt;Google Drive&lt;/b&gt;. Well that’s an entire pipeline! A small round of claps for me, for just gifting you a movie drive 👏&lt;/p&gt;
+
+&lt;p&gt;❤ Remember to always support Hoichoi for the hard+good work they are doing, they helped us revive nostalgia with some of the oldest and most-loved childhood Bengali movies ❤&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/rounakdatta/get-my-movies-fast&quot;&gt;Here&lt;/a&gt; you go!&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
+&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
+&lt;/center&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+let postTitle = &quot;hoichoi&quot;
+
+let myLocation = &quot;&quot;;
+
+function getLocationDetails() {
+$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener(&quot;readystatechange&quot;, function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener(&quot;readystatechange&quot;, function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
+	  }
+	});
+	
+	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
+	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
+	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
+	
+	xhr.send(data);
+
+}
+
+&lt;/script&gt;
+
+&lt;script&gt;
+$( document ).ready(function() {
+    showLikes();
+});
+&lt;/script&gt;
+
+</description>
+        <pubDate>Thu, 08 Nov 2018 00:00:00 +0530</pubDate>
+        <link>http://localhost:4000/2018/11/08/hoichoi.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/11/08/hoichoi.html</guid>
         
         
       </item>
@@ -502,7 +733,7 @@ Additional configurations&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;a href=&quot;https://www.startupschool.org/companies/QE7fuq5bjrjlw&quot;&gt;
-&lt;img src=&quot;https://www.startupschool.org/assets/logo-e53cd2cb71abaa517fb2f3dff77f4ed932e2439b1f3b6965dc7991ee07fe61ab.png&quot; alt=&quot;YC Startup School&quot; class=&quot;img-responsive&quot; /&gt;
+&lt;img src=&quot;http://cdn.holistics.io/blog/startup_school_01.png&quot; alt=&quot;YC Startup School&quot; class=&quot;img-responsive&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -594,301 +825,6 @@ $( document ).ready(function() {
         <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
         <link>http://localhost:4000/2018/09/22/octolab.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/09/22/octolab.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Digital Assistant - Automation to power E-Commerce</title>
-        <description>&lt;p&gt;How impressive was &lt;a href=&quot;https://ai.googleblog.com/2018/05/duplex-ai-system-for-natural-conversation.html&quot;&gt;Google Duplex&lt;/a&gt;? Google Duplex can help you manage your daily routines by subsituting your monotonous actions with AI. Right from booking appointments to ordering goods, Google Duplex promises to handle them all.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;What’s this Digital Assistant?&lt;/b&gt;&lt;/p&gt;
-
-&lt;p&gt;Digital Assistant aims to be the replacement for your conventional store managers. Whether its the task of enquiring for avaailable products, natural conversation regarding an item, bargaining for the price of a product, ordering the product, cancellation and grievance addressal or just simply chatting around, Digital Assistant aims to be your ultimate philosopher, friend and guide solution.&lt;/p&gt;
-
-&lt;p&gt;&lt;b&gt;Where is it?&lt;/b&gt;&lt;/p&gt;
-
-&lt;p&gt;Legen-wait-for-it-dary&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-&lt;img src=&quot;https://i.imgur.com/ykkW85s.png&quot; alt=&quot;Digital Assistant Demo&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;
-&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
-&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
-&lt;/center&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-
-let postTitle = &quot;digital-assistant&quot;
-
-let myLocation = &quot;&quot;;
-
-function getLocationDetails() {
-$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
-    myLocation = response;
-});
-}
-
-function likeItem() {
-  getLocationDetails();
-
-  setTimeout(function(){
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = false;
-  
-  xhr.addEventListener(&quot;readystatechange&quot;, function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-      showLikes();
-    }
-  });
-  
-  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-  
-  console.log(JSON.stringify(myLocation));
-  xhr.send(JSON.stringify(myLocation));
-
-  }, 1000);
-}
-
-function showLikes() {
-
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    //alert(this.responseText);
-	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
-	
-	xhr.send(data);
-
-}
-
-&lt;/script&gt;
-
-&lt;script&gt;
-$( document ).ready(function() {
-    showLikes();
-});
-&lt;/script&gt;
-
-</description>
-        <pubDate>Sat, 22 Sep 2018 00:00:00 +0530</pubDate>
-        <link>http://localhost:4000/2018/09/22/digitalassistant.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/09/22/digitalassistant.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Quill Audits - Smart Contract Security Analysis</title>
-        <description>&lt;p&gt;Quill Audits is a smart contract analysis platform provided by QuillHash Technologies. It’s a fully automated platform for getting smart contracts checked for security vulnerabilities as well as efficiency of code. &lt;strong&gt;Oyente&lt;/strong&gt; for Ethereum is currently a trusted automated open-source smart-contract analysis tool. Quill Audits uses tweaked Oyente back-end with other sophistications to analyze contracts under-the-hood and return analysis results. Also, it uses &lt;strong&gt;Solidity-Coverage&lt;/strong&gt; to provide code coverage tools to analyze if there are are redundant lines of code by running unit tests. Often, redundant lines of code are required to be replaced / removed. Quill Audits is powered by Node.js and is an extremely fast and usable tool for smart contract security analysis.&lt;/p&gt;
-
-&lt;p&gt;Quill Audits platform provides for manual auditing as well. The platform also provides an escrow platform to request for expert contract auditing at the least bid.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-&lt;img src=&quot;https://cdn-images-1.medium.com/max/1600/1*fVizVy5bQ9j-845RwXjhBg.png&quot; alt=&quot;Quill Audits Architecture&quot; class=&quot;img-responsive&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-The platform is live at &lt;a href=&quot;https://audits.quillhash.com/smart-contract-audit&quot;&gt;audits.quillhash.com&lt;/a&gt;. Or go ahead and read the &lt;a href=&quot;https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;
-&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
-&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
-&lt;/center&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-
-let postTitle = &quot;quill-audits&quot;
-
-let myLocation = &quot;&quot;;
-
-function getLocationDetails() {
-$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
-    myLocation = response;
-});
-}
-
-function likeItem() {
-  getLocationDetails();
-
-  setTimeout(function(){
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = false;
-  
-  xhr.addEventListener(&quot;readystatechange&quot;, function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-      showLikes();
-    }
-  });
-  
-  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-  
-  console.log(JSON.stringify(myLocation));
-  xhr.send(JSON.stringify(myLocation));
-
-  }, 1000);
-}
-
-function showLikes() {
-
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    //alert(this.responseText);
-	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
-	
-	xhr.send(data);
-
-}
-
-&lt;/script&gt;
-
-&lt;script&gt;
-$( document ).ready(function() {
-    showLikes();
-});
-&lt;/script&gt;
-
-</description>
-        <pubDate>Sat, 21 Jul 2018 00:00:00 +0530</pubDate>
-        <link>http://localhost:4000/2018/07/21/quillaudits.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/07/21/quillaudits.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>ResXme - The ultimate resume parsing tool</title>
-        <description>&lt;p&gt;ResXme is a resume-parsing tool built to automate the process of resume classification based on required criteria. ResXme tries to utilise the best of open-source softwares available to improve &lt;b&gt;accuracy&lt;/b&gt; and &lt;b&gt;scalability&lt;/b&gt;. The core architecture of ResXme works on techniques of information mining from rich text resources, store them efficienctly and help them to be retrived with speed. The entire model is built as a web-app powered by Flask (Python) backend. Uses open-source NLP libraries like SpaCy, NLTK as well as NoSQL databases to &lt;i&gt;power and scale&lt;/i&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/vr1nYID9xD0&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;center&gt;
-&lt;button id=&quot;likeButton&quot; onclick=&quot;likeItem()&quot;&gt;&lt;img src=&quot;https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png&quot; /&gt;&lt;/button&gt;
-&lt;div id=&quot;likeCount&quot;&gt;&lt;/div&gt;
-&lt;/center&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-
-let postTitle = &quot;resxme&quot;
-
-let myLocation = &quot;&quot;;
-
-function getLocationDetails() {
-$.get(&quot;https://json.geoiplookup.io/&quot;, function (response) {
-    myLocation = response;
-});
-}
-
-function likeItem() {
-  getLocationDetails();
-
-  setTimeout(function(){
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = false;
-  
-  xhr.addEventListener(&quot;readystatechange&quot;, function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-      showLikes();
-    }
-  });
-  
-  xhr.open(&quot;POST&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-  xhr.setRequestHeader(&quot;content-type&quot;, &quot;application/json&quot;);
-  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-  xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-  xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-  xhr.setRequestHeader(&quot;postman-token&quot;, &quot;6b90fa48-bca5-8464-df36-a229e6b15f2a&quot;);
-  
-  console.log(JSON.stringify(myLocation));
-  xhr.send(JSON.stringify(myLocation));
-
-  }, 1000);
-}
-
-function showLikes() {
-
-	var data = null;
-	
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = false;
-	
-	xhr.addEventListener(&quot;readystatechange&quot;, function () {
-	  if (this.readyState === 4) {
-	    console.log(this.responseText);
-	    //alert(this.responseText);
-	    document.getElementById('likeCount').innerHTML = &quot;&lt;h4&gt;&quot; + String(this.responseText) + &quot;&lt;/h4&gt;&quot;;
-	  }
-	});
-	
-	xhr.open(&quot;GET&quot;, &quot;https://rounakdatta.pythonanywhere.com/like/post/&quot; + postTitle);
-	xhr.setRequestHeader(&quot;cache-control&quot;, &quot;no-cache&quot;);
-	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-	xhr.setRequestHeader(&quot;Access-Control-Allow-Credentials&quot;, true);
-	xhr.setRequestHeader(&quot;postman-token&quot;, &quot;5e82f0d5-65e0-a89a-729b-10c6f90fffb9&quot;);
-	
-	xhr.send(data);
-
-}
-
-&lt;/script&gt;
-
-&lt;script&gt;
-$( document ).ready(function() {
-    showLikes();
-});
-&lt;/script&gt;
-
-</description>
-        <pubDate>Thu, 21 Jun 2018 00:00:00 +0530</pubDate>
-        <link>http://localhost:4000/2018/06/21/resxme.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/06/21/resxme.html</guid>
         
         
       </item>

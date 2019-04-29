@@ -1,41 +1,20 @@
 ---
 layout: post
-title: "Octolab.ML - The Automated Machine Learning Platform"
+title: "For every b64encode, there's a b64decode"
 hidden: true
 visible: 0
 ---
 
-Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
-• <b>auto-cleaned</b> • <b>auto-preprocessed</b> • <b>predictions generated</b> • <b>visualizations generated</b>
-when you supply us with the algorithm and other configurations.
+<i><b>Hoichoi</b> is quite a popular On-Demand Bengali TV with it's video infrastructure powered by VideoLift</i>. A little security inspection on the platform reveals that the video protection engineering is not quite right. While Base64 encryption of the video CDN APIs works, it might not be as secure it seems. And it can go as far as getting paths to access each file within the video server.
+
+This has now been quite been improved by the strong Hoichoi team, I believe adversary is always the path to self-development. We tried out how we could programmatically dig out the movie paths, and even get them stored on your <b>Google Drive</b>. Well that's an entire pipeline! A small round of claps for me, for just gifting you a movie drive 👏
+
+❤ Remember to always support Hoichoi for the hard+good work they are doing, they helped us revive nostalgia with some of the oldest and most-loved childhood Bengali movies ❤
+
+<a href="https://github.com/rounakdatta/get-my-movies-fast">Here</a> you go!
 
 <br>
-
-Upload dataset
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Select ML Algorithm
-![Arrow](https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png){:class="img-center"}
-Additional configurations
-
 <br>
-
-<i>Designed and developed keeping in mind a beginner's difficulty in understanding machine learning frameworks.</i>
-
-<br>
-![Octolab Landing Page](/assets/octolab.png){:class="img-responsive"}
-
-<br>
-<a href="https://www.startupschool.org/companies/QE7fuq5bjrjlw">
-![YC Startup School](http://cdn.holistics.io/blog/startup_school_01.png){:class="img-responsive"}
-</a>
-
-<br>
-<center>You should definitely try out <a href="http://13.232.106.64:8001/ml/">Octolab</a> right now!<br>
-<a href="http://octolab.tk/">Here</a> is the old Flask-based app and the <a href="http://13.232.106.64:8001/ml/">currently maintained one</a> has been re-written on Django.<br><br>
-<i>Team Octolab.ML - <a href="https://www.linkedin.com/in/rounakdatta/">Rounak Datta</a>, <a href="https://www.linkedin.com/in/niladri-shekhar-dutt/">Niladri Shekhar Dutt</a>, <a href="https://www.linkedin.com/in/subhadeepkundu/">Subhadeep Kundu</a></i>
-<br>
-<br>
-</center>
 <center>
 <button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png"></button>
 <div id="likeCount"></div>
@@ -43,7 +22,7 @@ Additional configurations
 
 <script type="text/javascript">
 
-let postTitle = "octolab"
+let postTitle = "hoichoi"
 
 let myLocation = "";
 

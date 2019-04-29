@@ -16,7 +16,7 @@ Ayuda is a not for profit, blockchain based peer-peer money lending platform. Ou
 
 <br>
 
-#### There's a prototype version live at [ayuda.surge.sh](http://ayuda.surge.sh)!
+#### There's a prototype version live at [ayuda.surge.sh](https://ayuda.surge.sh)!
 
 <br>
 
@@ -28,7 +28,7 @@ Ayuda is a not for profit, blockchain based peer-peer money lending platform. Ou
 
 [![Node.js](https://i.imgur.com/eVpGHxM.png)](https://nodejs.org/en/)
 
-```Not an Open-Source project```
+### Ayuda is now open-source! View it at [GitHub](https://github.com/souradeep-das/AYUDA-HL)!
 
 <br>
 <center>
