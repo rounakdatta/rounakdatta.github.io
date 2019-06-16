@@ -1,0 +1,84 @@
+<html>
+  <head>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131728408-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131728408-7');
+</script>
+
+  </head>
+  <body>
+      Redirecting ...
+  </body>
+</html>
+
+<script>
+
+  function goto(webpage) {
+    window.location.replace(webpage);
+  }
+
+  var fullUrl = window.location;
+  let payload = fullUrl['pathname'].replace("/", "@").replace("/", "@").split("@")[2];
+
+  console.log(payload);
+  var redirectionDone = false;
+
+  if (payload.startsWith("https://") || payload.startsWith("http://") || payload.startsWith("www.")) {
+    goto(payload);
+    redirectionDone = true;
+  }
+
+  switch(payload) {
+    case "home":
+      goto("/");
+      redirectionDone = true;
+      break;
+    case "resume":
+      goto("https://drive.google.com/file/d/1eKY7J-FW9OYoc6IYyk_esggXHB2Hizln/view");
+      redirectionDone = true;
+      break;
+    case "github":
+      goto("https://github.com/rounakdatta");
+      redirectionDone = true;
+      break;
+    case "twitter":
+      goto("https://twitter.com/rounakdatta12");
+      redirectionDone = true;
+      break;
+    case "linkedin":
+      goto("https://www.linkedin.com/in/rounakdatta/");
+      redirectionDone = true;
+      break;
+    case "manresume":
+      goto("/manresume.html");
+      redirectionDone = true;
+      break;
+    case "experience":
+      goto("/experience");
+      redirectionDone = true;
+      break;
+    case "projects":
+      goto("/projects");
+      redirectionDone = true;
+      break;
+    case "blog":
+      goto("/blog");
+      redirectionDone = true;
+      break;
+    case "selfwork":
+      goto("/selfwork");
+      redirectionDone = true;
+      break;
+  }
+
+  if (!redirectionDone) {
+    goto("http://" + payload);
+  }
+
+</script>
