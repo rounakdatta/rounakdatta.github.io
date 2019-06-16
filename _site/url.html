@@ -24,7 +24,8 @@
   }
 
   var fullUrl = window.location;
-  let payload = fullUrl['pathname'].replace("/", "@").replace("/", "@").split("@")[2];
+  let payload = fullUrl['search'].substr(3);
+  // let payload = fullUrl['pathname'].replace("/", "@").replace("/", "@").split("@")[2];
 
   console.log(payload);
   var redirectionDone = false;
