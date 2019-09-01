@@ -1,0 +1,130 @@
+I"�<p><img src="https://i.imgur.com/DHJytOc.png" alt="image" /></p>
+
+<p><em>Flyr is an open-source attempt to re-implement Lime, Bird or your favourite bike-sharing platform.</em></p>
+
+<p><img src="https://img.shields.io/badge/NTWoC-2018-blue.svg" alt="NTWOC" /> <img src="https://img.shields.io/badge/license-WTFPL-green.svg" alt="WTFPL" /></p>
+
+<h2 id="about">About</h2>
+
+<p>Flyr is yet another bike-sharing platform, built for profit learning, understanding and re-implementing the robust engineering of such highly available systems. ‘Flyr’ stupidly means an open-source commute project. The project team aims to write the microservices from scratch, implement bike-sharing algorithms, do a lot of scalability and security engineering. The final product will ‘at least’ be able to demonstrate bike-booking, bike-pricing and time-and-route-estimations.</p>
+
+<h2 id="what-will-be-my-commitments-for-this-project">What will be my commitments for this project?</h2>
+
+<ul>
+  <li>Before coming to a conclusion, read the project README thoroughly. The project demands contributors who can be comfortable enough to write efficient server-side code (design); understand the fundamentals of each back-end component and integrate them; design efficient algorithms (shortest / best distance, dynamic pricing); create minimal and modular front-end for testing.</li>
+  <li>This means being fundamentally strong in programming will allow you to quickly pick-up technologies and learn concepts. The process goes as disassemble -&gt; understand -&gt; re-write.</li>
+  <li>Scalability and robustness is important. Building protoypes (MVP) are just 15% of a product. You should be able to realise the importance of your code being time and memory-efficient and non-breaking at edge-cases.</li>
+  <li>Engineering the product involves understanding, designing and then coding. You should be able to realise the importance of logic (algorithm) before the code itself.</li>
+</ul>
+
+<h2 id="should-i-apply-for-this-project">Should I apply for this project?</h2>
+
+<ul>
+  <li>If you are willing to take up this project seriously, you are more than welcome to apply.</li>
+  <li>It’s not totally essential to be accustomed with the technologies mentioned. If you are willing to spend the winter learning them and implementing them here as a side-project, you are welcome to apply.</li>
+  <li>This project has to be built from scratch, and everyone will be guiding everyone in the design, understanding and coding. If you’ve done this type of project before and you’re willing to mentor / help out contributors, you’re most welcome.</li>
+  <li>If you’re enthusiastic of this project, apply irrespective of whether you’re having the required skillset or not. You’ll definitely have a great learning curve.</li>
+  <li>Your contribution to the project will matter even if it’s a documentation fix.</li>
+</ul>
+
+<p><code class="highlighter-rouge">Please note that this project will accept contributors irrespective of their being in 1st or 2nd or 3rd or 4th year.</code></p>
+
+<h2 id="what-will-be-my-takeaways-from-the-project">What will be my takeaways from the project?</h2>
+
+<ul>
+  <li>You’ll <strong>learn</strong> a lot. Whichever responsibility you take up, your time investment will definitely yield a strong conceptual as well as practical understanding of the project components. Particularly, if you’ll be taking up
+    <ul>
+      <li>Back-End Development, you’ll learn the core pieces of building a data pipeline, learn how microservices work, understand the importance of concurrency, will be confident regarding the choice of a DB system, experiment with streaming large amounts of data and afterall work will multiple existing open-source tools.</li>
+      <li>Front-End Development, you’ll write dynamically generated webpages with responsive text, maps, graphs, tables. Therefore involves a lot of API handling, XML HTTPRequests and UX magic.</li>
+      <li>Algorithms Development, you’ll be writing efficient algorithms after analyzing how existing systems work. Its fascinating to study and re-implement state-of-the-art algorithms and work them in action in the final product.</li>
+      <li>Integration &amp; Testing, you’ll be responsible for connecting the pieces together - find out bottlenecks and scalability issues in the pipeline; also audit the product for breaking cases or security flaws.</li>
+    </ul>
+  </li>
+  <li>You’ll <strong>work as a team</strong>, closely experience the building of software from scratch as multiple modules and integrating them together.</li>
+  <li>A <strong>superb open-source project</strong> - This is a promise from my side.</li>
+</ul>
+
+<h2 id="discussions">Discussions?</h2>
+
+<p>The official page for NTWoC is <a href="http://next-tech-woc.herokuapp.com/">this</a>. We’ll have all conversations on the official <a href="https://nexttech-woc.slack.com/">NTWoC Slack channel</a>. You can also find us at this <a href="https://t.me/joinchat/GGDDgg_EY8MgItxe7jLV7w">Telegram group</a>.</p>
+
+<p><br /></p>
+<center>
+<button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png" /></button>
+<div id="likeCount"></div>
+</center>
+
+<script type="text/javascript">
+
+let postTitle = "flyr"
+
+let myLocation = "";
+
+function getLocationDetails() {
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = "<h4>" + String(this.responseText) + "</h4>";
+	  }
+	});
+	
+	xhr.open("GET", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+	xhr.setRequestHeader("postman-token", "5e82f0d5-65e0-a89a-729b-10c6f90fffb9");
+	
+	xhr.send(data);
+
+}
+
+</script>
+
+<script>
+$( document ).ready(function() {
+    showLikes();
+});
+</script>
+
+:ET

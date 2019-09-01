@@ -1,0 +1,110 @@
+I"�<p>Octolab.ML is an automated machine learning platform to meet your daily statistical prediction needs. Free tier of the application allows your dataset to be
+• <b>auto-cleaned</b> • <b>auto-preprocessed</b> • <b>predictions generated</b> • <b>visualizations generated</b>
+when you supply us with the algorithm and other configurations.</p>
+
+<p><br /></p>
+
+<p>Upload dataset
+<img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png" alt="Arrow" class="img-center" />
+Select ML Algorithm
+<img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png" alt="Arrow" class="img-center" />
+Additional configurations</p>
+
+<p><br /></p>
+
+<p><i>Designed and developed keeping in mind a beginner’s difficulty in understanding machine learning frameworks.</i></p>
+
+<p><br />
+<img src="/assets/octolab.png" alt="Octolab Landing Page" class="img-responsive" /></p>
+
+<p><br />
+<a href="https://www.startupschool.org/companies/QE7fuq5bjrjlw">
+<img src="http://cdn.holistics.io/blog/startup_school_01.png" alt="YC Startup School" class="img-responsive" />
+</a></p>
+
+<p><br /></p>
+<center>You should definitely try out <a href="http://13.232.106.64:8001/ml/">Octolab</a> right now!<br />
+<a href="http://octolab.tk/">Here</a> is the old Flask-based app and the <a href="http://13.232.106.64:8001/ml/">currently maintained one</a> has been re-written on Django.<br /><br />
+<i>Team Octolab.ML - <a href="https://www.linkedin.com/in/rounakdatta/">Rounak Datta</a>, <a href="https://www.linkedin.com/in/niladri-shekhar-dutt/">Niladri Shekhar Dutt</a>, <a href="https://www.linkedin.com/in/subhadeepkundu/">Subhadeep Kundu</a></i>
+<br />
+<br />
+</center>
+<center>
+<button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png" /></button>
+<div id="likeCount"></div>
+</center>
+
+<script type="text/javascript">
+
+let postTitle = "octolab"
+
+let myLocation = "";
+
+function getLocationDetails() {
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = "<h4>" + String(this.responseText) + "</h4>";
+	  }
+	});
+	
+	xhr.open("GET", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+	xhr.setRequestHeader("postman-token", "5e82f0d5-65e0-a89a-729b-10c6f90fffb9");
+	
+	xhr.send(data);
+
+}
+
+</script>
+
+<script>
+$( document ).ready(function() {
+    showLikes();
+});
+</script>
+
+:ET

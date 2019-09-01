@@ -1,0 +1,86 @@
+I"ó
+<p>ResXme is a resume-parsing tool built to automate the process of resume classification based on required criteria. ResXme tries to utilise the best of open-source softwares available to improve <b>accuracy</b> and <b>scalability</b>. The core architecture of ResXme works on techniques of information mining from rich text resources, store them efficienctly and help them to be retrived with speed. The entire model is built as a web-app powered by Flask (Python) backend. Uses open-source NLP libraries like SpaCy, NLTK as well as NoSQL databases to <i>power and scale</i>.</p>
+
+<p><br /></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/vr1nYID9xD0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+
+<p><br /></p>
+<center>
+<button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png" /></button>
+<div id="likeCount"></div>
+</center>
+
+<script type="text/javascript">
+
+let postTitle = "resxme"
+
+let myLocation = "";
+
+function getLocationDetails() {
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = "<h4>" + String(this.responseText) + "</h4>";
+	  }
+	});
+	
+	xhr.open("GET", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+	xhr.setRequestHeader("postman-token", "5e82f0d5-65e0-a89a-729b-10c6f90fffb9");
+	
+	xhr.send(data);
+
+}
+
+</script>
+
+<script>
+$( document ).ready(function() {
+    showLikes();
+});
+</script>
+
+:ET

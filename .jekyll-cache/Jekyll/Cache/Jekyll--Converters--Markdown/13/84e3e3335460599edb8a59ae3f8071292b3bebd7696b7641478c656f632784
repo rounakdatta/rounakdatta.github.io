@@ -1,0 +1,94 @@
+I"<p>Efficient File-System based Image Server written entirely in C</p>
+
+<p>We as a team of 3 (<a href="https://www.linkedin.com/in/baraneedhara-karthik-gokuldas-02b506b4"> Baranee Sir</a>, Subhadeep, me) built this service. Primary points are :</p>
+<ul>
+  <li>File-system based rather than standard database system. Also, metrics show that the system works best for XFS, where ideally read-performances are more enhanced; and satisfying our need.</li>
+  <li>On initialization of the service, metadata is collected from a backup and are put into the primary memory. Metadata access time is reduced by a great margin. We actually index the images and thus jumping to the particular image metadata through offset is a huge performance gain.</li>
+  <li>Whenever a new image is added, we don't modify the entire metadata, rather append it. Metadata parameters are wisely chosen to ensure sufficiency as well as performance. We use 39 bytes per-image-metadata which is truely a challenging number.</li>
+  <li>Interruptions, accidental losses of metadata from the primary memory are well handled. The metadata is optimally backed up to the secondary memory to ensure the system doesn't need to recollect it from image files.</li>
+</ul>
+
+<p>ToDo : Image file deletions aren’t well handled as of now. Even if naively implemented, leads to the formation of memory voids. Even though fundamentally scalable, horizontal scalability is something to be worked upon.</p>
+
+<p>Find the GitHub repo <a href="https://github.com/rounakdatta/imgsrvc">here</a>.</p>
+
+<p><br /></p>
+<center>
+<button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png" /></button>
+<div id="likeCount"></div>
+</center>
+
+<script type="text/javascript">
+
+let postTitle = "imgsrvc"
+
+let myLocation = "";
+
+function getLocationDetails() {
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = "<h4>" + String(this.responseText) + "</h4>";
+	  }
+	});
+	
+	xhr.open("GET", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+	xhr.setRequestHeader("postman-token", "5e82f0d5-65e0-a89a-729b-10c6f90fffb9");
+	
+	xhr.send(data);
+
+}
+
+</script>
+
+<script>
+$( document ).ready(function() {
+    showLikes();
+});
+</script>
+
+:ET

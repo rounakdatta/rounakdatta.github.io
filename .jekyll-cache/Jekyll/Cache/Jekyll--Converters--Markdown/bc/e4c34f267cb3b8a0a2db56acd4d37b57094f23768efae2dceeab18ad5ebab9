@@ -1,0 +1,98 @@
+I"<p><i>CRA stands for Credit Rating Agency. You should read more about CRAs <a href="https://en.wikipedia.org/wiki/Credit_rating_agency">here</a>.</i></p>
+
+<p>CreÐApp.ai is an AI-driven credit rating agency that attempts to crowdsource the process by decentralizing it. The CRA market is mostly dominated and the should-be-public data is actually private and consumed for analytics. This subtly puts the credit rating process in the hands of Artifical Intelligence, afterall it’s statistical measures that help estimate the lending risks. However, its essential that the machine learning model keeps learning keeping the analytics data public as well as encrypted. To achieve this, we use <a href="https://www.ethereum.org/">Ethereum</a> as the decentralization network which uses a server ONLY for computation. It must be noted that the pravalent model is also stored on <a href="https://ipfs.io/">IPFS</a> and isn’t localized.</p>
+
+<p><br /></p>
+
+<p><img src="https://camo.githubusercontent.com/b7c584b0eb06143e09a61032bcdd890d03e1cb5c/68747470733a2f2f692e696d6775722e636f6d2f4e6d67495473522e706e67" alt="credapp_describe" class="img-center" /></p>
+
+<p><br /></p>
+
+<p>You can understand the project through the <a href="https://github.com/tanmay7270/CreDapp.ai/blob/master/Pitch.pdf">Pitch Presentation</a> or the <a href="https://github.com/mozohack/creDapp.ai">repository</a>.</p>
+
+<p>This is a solution made at <a href="https://innerve2k18.com/">Innerve 2k18 Hackathon</a> by <a href="https://github.com/tanmay7270">Tanmay Agrawal</a>, <a href="https://github.com/itsron717">Rounak Vyas</a>, <a href="https://github.com/rounakdatta">Rounak Datta</a>.</p>
+
+<p><br /></p>
+
+<p>Improved and featurized at Mozofest Hackathon by Arko Chatterjee, Rohan Banerjee, Rounak Vyas and Rounak Datta.</p>
+
+<p><br /></p>
+<center>
+<button id="likeButton" onclick="likeItem()"><img src="https://cdn3.iconfinder.com/data/icons/jolly-icons-free/64/thumb-up_64.png" /></button>
+<div id="likeCount"></div>
+</center>
+
+<script type="text/javascript">
+
+let postTitle = "credapp"
+
+let myLocation = "";
+
+function getLocationDetails() {
+$.get("https://json.geoiplookup.io/", function (response) {
+    myLocation = response;
+});
+}
+
+function likeItem() {
+  getLocationDetails();
+
+  setTimeout(function(){
+
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+      showLikes();
+    }
+  });
+  
+  xhr.open("POST", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+  xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+  xhr.setRequestHeader("cache-control", "no-cache");
+  xhr.setRequestHeader("postman-token", "6b90fa48-bca5-8464-df36-a229e6b15f2a");
+  
+  console.log(JSON.stringify(myLocation));
+  xhr.send(JSON.stringify(myLocation));
+
+  }, 1000);
+}
+
+function showLikes() {
+
+	var data = null;
+	
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = false;
+	
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	    //alert(this.responseText);
+	    document.getElementById('likeCount').innerHTML = "<h4>" + String(this.responseText) + "</h4>";
+	  }
+	});
+	
+	xhr.open("GET", "https://rounakdatta.pythonanywhere.com/like/post/" + postTitle);
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+	xhr.setRequestHeader("Access-Control-Allow-Credentials", true);
+	xhr.setRequestHeader("postman-token", "5e82f0d5-65e0-a89a-729b-10c6f90fffb9");
+	
+	xhr.send(data);
+
+}
+
+</script>
+
+<script>
+$( document ).ready(function() {
+    showLikes();
+});
+</script>
+
+:ET
