@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Chrome, Firefox OS and Opera Status Bar Color -->
+  <meta name="theme-color" content="#FFFFFF">
+  <meta property="og:title" content="Android Studio">
+    <meta property="og:type" content="blog">
+  <title>Android Studio</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+  <link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+  <link rel="stylesheet" type="text/css" href="css/notablog.css">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  <style>
+    :root {
+      font-size: 18px;
+    }
+
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+    <a href="index.html">
+      <div class="Navbar__Btn"><span>✍</span> <span>Home</span></div>
+    </a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </nav>
+  <header class="Header">
+          <div class="Header__Spacer Header__Spacer--NoCover">
+    </div>
+        <div class="Header__Icon"><span><img class="inline-img-icon" src="https://static.techspot.com/images2/downloads/topdownload/2018/06/2018-06-12-ts3_thumbs-c90.png"></span></div>
+        <h1 class="Header__Title">Android Studio</h1>
+            <div class="DateTagBar">
+                          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--gray">
+            <a href="tag/Android.html">Android</a>
+          </span>
+                <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--purple">
+            <a href="tag/Development.html">Development</a>
+          </span>
+                <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--blue">
+            <a href="tag/UNIX.html">UNIX</a>
+          </span>
+                  </div>
+          </header>
+      <article id="https://www.notion.so/712f09a419ec4e6e8ee8a495682d06c4" class="PageRoot"><h2 id="https://www.notion.so/f04e77eb1c524e08a3f8d952af396a20" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/f04e77eb1c524e08a3f8d952af396a20"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Debugging common errors</span></span></h2><h3 id="https://www.notion.so/d2d6c8d25bec4c568c87eb7d218cc849" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/d2d6c8d25bec4c568c87eb7d218cc849"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">java.lang.RuntimeException</code></span><span class="SemanticString">: You have not accepted the license agreements of the following SDK components</span></span></h3><pre id="https://www.notion.so/21540511006e4d35a95d77d6eabf88cc" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span><span class="token builtin class-name">echo</span> <span class="token variable">$ANDROID_HOME</span>
+<span class="token builtin class-name">cd</span> <span class="token variable">${ANDROID_HOME}</span>/tools/bin
+./sdkmanager --licenses</span></span></span></code></pre><div id="https://www.notion.so/00635b3ef080448faf6c71f06342126c" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">😅</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">If </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">$ANDROID_HOME</code></span><span class="SemanticString"> is not working for you, you can check the directory </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">/home/&lt;username&gt;/Android/Sdk</code></span></span></p></div><div id="https://www.notion.so/638f7182ef114477b638223c991d5e3a" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://stackoverflow.com/questions/39760172/you-have-not-accepted-the-license-agreements-of-the-following-sdk-components">https://stackoverflow.com/questions/39760172/you-have-not-accepted-the-license-agreements-of-the-following-sdk-components</a></span></span></p></div><h3 id="https://www.notion.so/689bc1eb3e614667a7709823ec8e5150" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/689bc1eb3e614667a7709823ec8e5150"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Insufficient permissions for device in Android Studio</span></span></h3><div id="https://www.notion.so/a5a6d69851d145c3982eeba68c8ed709" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">To solve this problem, make sure that </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Debugging mode</em></span><span class="SemanticString"> in Android is ON. Also, try switching to </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">USB File Transfer</em></span><span class="SemanticString"> from </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Charging Only</em></span><span class="SemanticString">.</span></span></p></div><div id="https://www.notion.so/648331e94d004bb8b5de1fac892a3dc2" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://stackoverflow.com/questions/28704636/insufficient-permissions-for-device-in-android-studio-workspace-running-in-opens">https://stackoverflow.com/questions/28704636/insufficient-permissions-for-device-in-android-studio-workspace-running-in-opens</a></span></span></p></div><h3 id="https://www.notion.so/629bb4d47d8f4a6d8dbf4170c4a1f763" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/629bb4d47d8f4a6d8dbf4170c4a1f763"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Device not properly recognized - showing as [null]</span></span></h3><div id="https://www.notion.so/3c03ed5a4af24b2dacf287c38bd0550b" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">adb-server kill-server</code></span><span class="SemanticString">
+Retry with selecting the debug device</span></span></p></div><div id="https://www.notion.so/9a4c16c4ecdb4aeb8dd26bffbeef0d87" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Now, device name should be properly displayed</span></span></p></div><h3 id="https://www.notion.so/0ae2e04740744346a7f093b2faf21b16" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/0ae2e04740744346a7f093b2faf21b16"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Cleartext HTTP not permitted</span></span></h3><div id="https://www.notion.so/72b3abc37f1448ed9473a229d1e581a5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">This happens mostly when you&#x27;re trying to connect to a server directly through the IP address (instead of a domain name). With Android 9, this is no longer permitted, and must be enabled within </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">AndroidManifest.xml</em></span><span class="SemanticString">. You need to include </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">android:usesCleartextTraffic=&quot;true&quot;</code></span><span class="SemanticString"> within the </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">&lt;application&gt;</code></span><span class="SemanticString"> tag.</span></span></p></div></article>  <footer class="Footer">
+        <div>&copy; Rounak's Blog 2019</div>
+        <div>&centerdot;</div>
+        <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+            rel="noopener noreferrer">Notablog</a>.
+        </div>
+    </footer>
+</body>
+
+</html>

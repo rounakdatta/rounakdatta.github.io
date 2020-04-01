@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Chrome, Firefox OS and Opera Status Bar Color -->
+  <meta name="theme-color" content="#FFFFFF">
+  <meta property="og:title" content="libinput-gestures">
+    <meta property="og:type" content="blog">
+  <title>libinput-gestures</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+  <link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+  <link rel="stylesheet" type="text/css" href="css/notablog.css">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  <style>
+    :root {
+      font-size: 18px;
+    }
+
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+    <a href="index.html">
+      <div class="Navbar__Btn"><span>✍</span> <span>Home</span></div>
+    </a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </nav>
+  <header class="Header">
+          <div class="Header__Spacer Header__Spacer--NoCover">
+    </div>
+        <h1 class="Header__Title">libinput-gestures</h1>
+            <div class="DateTagBar">
+                          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--blue">
+            <a href="tag/UNIX.html">UNIX</a>
+          </span>
+                  </div>
+          </header>
+      <article id="https://www.notion.so/69536a720b814931b8c235b8332f2ea8" class="PageRoot"><h3 id="https://www.notion.so/4d0b87de79344c8fbfadaea752f56ee2" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/4d0b87de79344c8fbfadaea752f56ee2"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Why</span></span></h3><div id="https://www.notion.so/49028339fd33436cb30c43740118907a" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Using macOS like gestures on Linux</span></span></p></div><div id="https://www.notion.so/dc6beeac52cc4d5eb9c5fd7fdba474ef" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Main repository: </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://github.com/bulletmark/libinput-gestures">https://github.com/bulletmark/libinput-gestures</a></span></span></p></div><div id="https://www.notion.so/9fd61ca5843a4d7c801a06eae7015f47" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Enable libinput-gestures to be starting everytime on startup</span></span></p></div><pre id="https://www.notion.so/3e58ba5b94be4edba976637ad0538e89" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>
+libinput-gestures-setup autostart</span></span></span></code></pre><div id="https://www.notion.so/366c627785d644a897170717976822dd" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Start libinput-gestures on demand</span></span></p></div><pre id="https://www.notion.so/2562e066f63c4879920f58c0808ee6bf" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>libinput-gestures-setup start</span></span></span></code></pre><div id="https://www.notion.so/efa38ef8b46c40a6a15e8a7de2c91f5c" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Stop libinput-gestures forcefully</span></span></p></div><pre id="https://www.notion.so/f4453c9ba9b546a6a4e8d5fdcf4ddf17" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>libinput-gestures-setup stop</span></span></span></code></pre><div id="https://www.notion.so/3a8dcca4cd7048d1b6f2cfdc8bb0003f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Restart libinput-gestures forcefully</span></span></p></div><pre id="https://www.notion.so/7fecf350462242ada9fe492cf19bb11e" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>libinput-gestures-setup restart</span></span></span></code></pre><div id="https://www.notion.so/7214dda32cc740789001ffa280cd3d04" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Configurations file location: </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">.config/libinput-gestures.conf</code></span></span></p></div></article>  <footer class="Footer">
+        <div>&copy; Rounak's Blog 2019</div>
+        <div>&centerdot;</div>
+        <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+            rel="noopener noreferrer">Notablog</a>.
+        </div>
+    </footer>
+</body>
+
+</html>
