@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Chrome, Firefox OS and Opera Status Bar Color -->
+  <meta name="theme-color" content="#FFFFFF">
+  <meta property="og:title" content="Some random sbt musings">
+    <meta property="og:type" content="blog">
+  <title>Some random sbt musings</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+  <link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+  <link rel="stylesheet" type="text/css" href="css/notablog.css">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  <style>
+    :root {
+      font-size: 18px;
+    }
+
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+    <a href="index.html">
+      <div class="Navbar__Btn"><span><img class="inline-img-icon" src="https://i.imgur.com/lKXYUKS.png"></span> <span>Home</span></div>
+    </a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="Navbar__Delim">&centerdot;</span>
+    <a href="about.html">
+      <div class="Navbar__Btn"><span>👤</span> <span>About</span></div>
+    </a>
+                <span class="Navbar__Delim">&centerdot;</span>
+    <a href="library.html">
+      <div class="Navbar__Btn"><span>📓</span> <span>Library</span></div>
+    </a>
+          </nav>
+  <header class="Header">
+          <div class="Header__Spacer Header__Spacer--NoCover">
+    </div>
+        <div class="Header__Icon"><span><img class="inline-img-icon" src="https://raw.githubusercontent.com/OlegIlyenko/scala-icon/master/scala-icon.png"></span></div>
+        <h1 class="Header__Title">Some random sbt musings</h1>
+            <div class="DateTagBar">
+                <span class="DateTagBar__Item DateTagBar__Date">Posted on Fri, Jul 19, 2019</span>
+                          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--pink">
+            <a href="tag/Scala.html">Scala</a>
+          </span>
+                  </div>
+          </header>
+      <article id="https://www.notion.so/8264e4f20fec418aa3c437643de487a0" class="PageRoot"><h2 id="https://www.notion.so/0662035916e44005876769687e2e509f" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/0662035916e44005876769687e2e509f"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Common sbt problems and their solutions</span></span></h2><h3 id="https://www.notion.so/315fce6dbcf846748514042d836cab88" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/315fce6dbcf846748514042d836cab88"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">How to compile the Scala classes into a JAR?</span></span></h3><div id="https://www.notion.so/e534516a0cbf47a2823498e189666ccc" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">sbt package</code></span><span class="SemanticString"> is the command to compile the Scala classes in </span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">/src/main/scala-x.xx/ClassName.class</strong></span><span class="SemanticString">. This should produce the JAR at </span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">/target/scala-x.xx/ClassName.jar.</strong></span></span></p></div><h3 id="https://www.notion.so/a6d2257ef72d47f29011738e230042a5" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/a6d2257ef72d47f29011738e230042a5"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">What is a fat (Uber) JAR and how to build one?</span></span></h3><div id="https://www.notion.so/f6450cc6bc024da797e7e42054d3960d" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Fat JAR packages ALL dependencies into a single JAR (which makes it highly versatile) and can run anywhere without any dependency installs. To create a fat JAR, w must use the command </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">sbt assembly</code></span><span class="SemanticString">. Read more: </span></span></p></div><div id="https://www.notion.so/fc0a13176c9d4f94ae1512c2d1c9f4ff" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">To create fat JAR in sbt, we need to add the following plugin information to </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">assembly.sbt</code></span><span class="SemanticString">:</span></span></p></div><pre id="https://www.notion.so/12741f43e0824a6481514be269a3a756" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>addSbtPlugin<span class="token punctuation">(</span><span class="token string">"com.eed3si9n"</span> % <span class="token string">"sbt-assembly"</span> % <span class="token string">"0.14.5"</span><span class="token punctuation">)</span></span></span></span></code></pre><div id="https://www.notion.so/031f467418144a2a95eda9d2bfeedac7" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Also, we need to take care of the deduplication problem by using a </span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">MergeStrategy</strong></span><span class="SemanticString">. The following code needs to be appended to </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">build.sbt</code></span><span class="SemanticString">:</span></span></p></div><pre id="https://www.notion.so/2a4b612b6ba047c9b411c2d1a88e91be" class="Code"><code><span class="SemanticStringArray"><span class="SemanticString"><span>val meta <span class="token operator">=</span> <span class="token string">""</span><span class="token string">"META.INF(.)*"</span><span class="token string">""</span>.r
+assemblyMergeStrategy <span class="token keyword">in</span> assembly :<span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> PathList<span class="token punctuation">(</span><span class="token string">"javax"</span>, <span class="token string">"servlet"</span>, xs @ _*<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.first
+  <span class="token keyword">case</span> PathList<span class="token punctuation">(</span>ps @ _*<span class="token punctuation">)</span> <span class="token keyword">if</span> ps.last endsWith <span class="token string">".html"</span> <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.first
+  <span class="token keyword">case</span> n <span class="token keyword">if</span> n.startsWith<span class="token punctuation">(</span><span class="token string">"reference.conf"</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.concat
+  <span class="token keyword">case</span> n <span class="token keyword">if</span> n.endsWith<span class="token punctuation">(</span><span class="token string">".conf"</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.concat
+  <span class="token keyword">case</span> meta<span class="token punctuation">(</span>_<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.discard
+  <span class="token keyword">case</span> x <span class="token operator">=</span><span class="token operator">></span> MergeStrategy.first
+<span class="token punctuation">}</span></span></span></span></code></pre><h3 id="https://www.notion.so/ba751318a99f4698810a01a5290a0e21" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/ba751318a99f4698810a01a5290a0e21"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Where do you put in all the dependencies?</span></span></h3><div id="https://www.notion.so/497413490e6f4338a7eda200182e247b" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">In </span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">build.sbt</strong></span><span class="SemanticString">, the syntax is </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">libraryDependencies += &quot;com.paulgoldbaum&quot; %% &quot;scala-influxdb-client&quot; % &quot;0.6.1&quot;</code></span></span></p></div><h3 id="https://www.notion.so/0f5f7562e27940e18812a8f4f8afeee5" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/0f5f7562e27940e18812a8f4f8afeee5"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">Using an external dependency using the REPL?</span></span></h3><div id="https://www.notion.so/15201ac94b8d4b66aa986ca7f165b41b" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">sbt console</code></span><span class="SemanticString"> within the main directory where </span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">build.sbt</strong></span><span class="SemanticString"> is located.</span></span></p></div><div id="https://www.notion.so/38da7de45323495dbea5e166bc4d103c" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>  <footer class="Footer">
+        <div>&copy; Rounak's μBlog 2019</div>
+        <div>&centerdot;</div>
+        <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+            rel="noopener noreferrer">Notablog</a>.
+        </div>
+    </footer>
+</body>
+
+</html>
