@@ -1,4 +1,7 @@
-#+HUGO_BASE_DIR: ~/personal/rounakdatta.github.io/public
+:PROPERTIES:
+:EXPORT_FILE_NAME: godfs
+:END:
+#+HUGO_BASE_DIR: ./public
 
 #+title: GoDFS - a simple distributed filesystem
 
@@ -17,7 +20,7 @@ This post is about a simple distributed file system I built in Go. Also, my firs
 Proven systems like [[https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf][Google FileSystem (GFS)]] and [[https://hadoop.apache.org/docs/r1.2.1/hdfs_design.pdf][Hadoop Distributed FileSystem]] have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready.
 
 #+CAPTION: [[https://www.jeremydaly.com/takeaways-from-dynamodb-deep-dive-advanced-design-patterns-dat403/][Source]]
-[[./resources/dynamodb_rant.png]]
+[[file:./resources/dynamodb_rant.png]]
 
 ** The pieces
 To build a distributed system which stores and serves files on-demand typically needs to have a set of persistent data stores, a coordinating unit and an user-facing dumb client.

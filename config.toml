@@ -1,0 +1,52 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "Blog | Rounak Datta"
+theme = "hugo-bare-min-theme"
+
+# Mon Dec 18 17:41:00 EST 2017 - kmodi
+# Need the canonifyURLs to be true as the test site is
+# served in a subdir of https://ox-hugo.scripter.co/ ->
+# https://ox-hugo.scripter.co/test/ So links like /images/foo.png
+# won't work.. as /images/foo.png would be tried to be searched
+# directly under https://ox-hugo.scripter.co/ instead of under
+# https://ox-hugo.scripter.co/test/
+canonifyURLs = true
+
+enableEmoji = true
+enableGitInfo = true
+
+disableFastRender = true        # Hugo 0.30
+
+pygmentsCodeFences = true       # This applies to Chroma too.
+pygmentsUseClasses = true       # This applies to Chroma too.
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true # This is *necessary* for ox-hugo to work well with Hugo 0.60.0+
+
+[Taxonomies]
+  category = "categories" # SINGULAR = "PLURAL"
+  tag = "tags"
+
+[Author]
+  name = "Rounak Datta"
+
+[Social]
+  github = "rounakdatta"
+
+[Params]
+  description = "Rounak's Blog on Org-Mode"
+  intro = """
+This is built using <a href="https://github.com/kaushalmodi/ox-hugo">
+<code>ox-hugo</code></a> package for Emacs/Org-mode.
+"""
+  footer = """
+<div style="text-align: center;">
+  [<a href="/">Rounak's Blog</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
+</div>
+"""
+  [Params.source]
+    url = "https://github.com/rounakdatta/rounakdatta.github.io" # Mandatory, used in hugo-bare-min-theme single.html, baseof.html
+    org_dir = ""
+    md_dir = "public"
