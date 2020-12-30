@@ -1,17 +1,11 @@
 baseURL = ""
 languageCode = "en-us"
-title = "Blog | Rounak Datta"
-theme = "hugo-bare-min-theme"
+title = "Rounak's Blog"
+theme = "er"
 
-# Mon Dec 18 17:41:00 EST 2017 - kmodi
-# Need the canonifyURLs to be true as the test site is
-# served in a subdir of https://ox-hugo.scripter.co/ ->
-# https://ox-hugo.scripter.co/test/ So links like /images/foo.png
-# won't work.. as /images/foo.png would be tried to be searched
-# directly under https://ox-hugo.scripter.co/ instead of under
-# https://ox-hugo.scripter.co/test/
 canonifyURLs = true
 
+RemovePathAccents = true
 enableEmoji = true
 enableGitInfo = true
 
@@ -35,18 +29,8 @@ pygmentsUseClasses = true       # This applies to Chroma too.
 [Social]
   github = "rounakdatta"
 
-[Params]
-  description = "Rounak's Blog on Org-Mode"
-  intro = """
-This is built using <a href="https://github.com/kaushalmodi/ox-hugo">
-<code>ox-hugo</code></a> package for Emacs/Org-mode.
-"""
-  footer = """
-<div style="text-align: center;">
-  [<a href="/">Rounak's Blog</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
-</div>
-"""
-  [Params.source]
-    url = "https://github.com/rounakdatta/rounakdatta.github.io" # Mandatory, used in hugo-bare-min-theme single.html, baseof.html
-    org_dir = ""
-    md_dir = "public"
+[[menu.main]]
+  weight = 1
+  identifier = "about"
+  name = "About"
+  url = "/about"

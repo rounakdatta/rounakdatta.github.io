@@ -1,19 +1,12 @@
 +++
-title = "GoDFS - a simple distributed filesystem"
+title = "GoDFS - a simple Distributed FileSystem written in Go"
 author = ["Rounak Datta"]
+date = 2020-12-30T00:00:00+05:30
+tags = ["golang", "distributed-systems"]
 draft = false
 +++
 
-This post is about a simple distributed file system I built in Go. Also, my first **org-mode**-written, _org-roam_-published article.
-
-<style>.org-center { margin-left: auto; margin-right: auto; text-align: center; }</style>
-
-<div class="org-center">
-  <div></div>
-
-Redundancy is the key in software engineering ~Paul Klint
-
-</div>
+> Redundancy is the key in software engineering ~Paul Klint
 
 I've been midway through [Designing Data-Intensive Applications](https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications) and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 
@@ -25,7 +18,7 @@ The source for this project is [rounakdatta/GoDFS](https://github.com/rounakdatt
 
 ### Abstracting away the odds {#abstracting-away-the-odds}
 
-Proven systems like [Google FileSystem (GFS)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf) and [Hadoop Distributed FileSystem](https://hadoop.apache.org/docs/r1.2.1/hdfs%5Fdesign.pdf) have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready.
+Proven systems like [Google FileSystem (GFS)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf) and [Hadoop Distributed FileSystem](https://hadoop.apache.org/docs/r1.2.1/hdfs%5Fdesign.pdf) have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready 😉
 
 {{< figure src="/ox-hugo/dynamodb_rant.png" caption="Figure 1: [Source](https://www.jeremydaly.com/takeaways-from-dynamodb-deep-dive-advanced-design-patterns-dat403/)" >}}
 

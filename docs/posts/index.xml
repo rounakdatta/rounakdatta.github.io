@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Blog | Rounak Datta</title>
+    <title>Posts on Rounak&#39;s Blog</title>
     <link>/posts/</link>
-    <description>Recent content in Posts on Blog | Rounak Datta</description>
+    <description>Recent content in Posts on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0530</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>GoDFS - a simple distributed filesystem</title>
-      <link>/posts/20201229224404-godfs_a_simple_distributed_filesystem/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>GoDFS - a simple Distributed FileSystem written in Go</title>
+      <link>/posts/godfs/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0530</pubDate>
       
-      <guid>/posts/20201229224404-godfs_a_simple_distributed_filesystem/</guid>
-      <description>This post is about a simple distributed file system I built in Go. Also, my first org-mode-written, org-roam-published article.
-.org-center { margin-left: auto; margin-right: auto; text-align: center; }  Redundancy is the key in software engineering ~Paul Klint
- I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.</description>
+      <guid>/posts/godfs/</guid>
+      <description>Redundancy is the key in software engineering ~Paul Klint
+ I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+The source for this project is rounakdatta/GoDFS.
+Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
     </item>
     
   </channel>

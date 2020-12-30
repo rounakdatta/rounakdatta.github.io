@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rounak&#39;s Blog</title>
-    <link>/</link>
-    <description>Recent content on Rounak&#39;s Blog</description>
+    <title>distributed-systems on Rounak&#39;s Blog</title>
+    <link>/tags/distributed-systems/</link>
+    <description>Recent content in distributed-systems on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>About</title>
-      <link>/about/</link>
-      <pubDate>Wed, 30 Dec 2020 00:00:00 +0530</pubDate>
-      
-      <guid>/about/</guid>
-      <description>Rounak Datta Today I&amp;rsquo;m hustling with the amazing team at Disney+ Hotstar to build a kickass Data Platform in the day.
-And when it&amp;rsquo;s not the day, I love tinkering with either classic projects or unconventional ideas. I&amp;rsquo;m an avid reader (mostly technology and history), regular cyclist, music curator and an aspiring mathematician.
-I invest a lot into understanding and researching about large-scale systems, the beauty of mathematics behind the gears of artificially intelligent systems.</description>
-    </item>
-    
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0530</lastBuildDate><atom:link href="/tags/distributed-systems/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>GoDFS - a simple Distributed FileSystem written in Go</title>
       <link>/posts/godfs/</link>

@@ -1,0 +1,36 @@
+#+HUGO_BASE_DIR: ./src
+#+HUGO_SECTION: /
+#+HUGO_TAGS: about
+#+EXPORT_FILE_NAME: about
+#+TITLE: About
+#+AUTHOR: Rounak Datta
+#+DATE: <2020-12-30 Wed>
+
+* Rounak Datta
+
+** Today
+I'm hustling with the amazing team at [[https://tech.hotstar.com/][Disney+ Hotstar]] to build a kickass Data Platform in the day.
+
+And when it's not the day, I love tinkering with either classic projects or unconventional ideas. I'm an avid [[https://www.goodreads.com/user/show/23254685-rounak-datta][reader]] (mostly technology and history), regular cyclist, music curator and an aspiring mathematician.
+
+I invest a lot into understanding and researching about *large-scale systems*, the beauty of *mathematics* behind the gears of *artificially intelligent systems*.
+
+Also, I attempt to write [[https://github.com/rounakdatta][open-source software]]. Sometimes [[https://twitter.com/rounakdatta12][tweets]]. And [[https://stackoverflow.com/users/8303407/rounak-datta][answers]]. [[https://www.instagram.com/rounakdatta/][Artworks]] are my favourite pastime.
+
+#+BEGIN_EXPORT HTML
+<hr>
+#+END_EXPORT
+
+** Also
+- Engineering Intern (F19) with [[https://gaiusnetworks.com/][Gaius Networks]]; designed and developed some of the core services like Community, Classrooms, Content Curation.
+- Engineering Intern (W18), NLP Intern (S18) with [[https://www.guvi.in/][Guvi Geek Networks]]; helped craft some impactful projects like personalised learning platform, scalable resume parser and a grammar-correction tool (open source! 😉).
+- Blockchain Research Intern (S18) with [[https://quillhash.com/][QuillHash Technologies]]; put on security research hats, and got to fiddle with smart contract security tooling, Security Tokens and Inter-Blockchain Communication.
+- Student researcher at [[https://nextech.io/][Next Tech Lab]]; experimented with cutting-edge technology with special focus on InfoSec, Blockchain & AI algorithms. Also conquered a couple of national hackathons.
+
+#+BEGIN_EXPORT HTML
+<hr>
+#+END_EXPORT
+
+You may take peek at my resume [[https://latexonline.cc/compile?git=https://github.com/rounakdatta/resume&target=resume.tex&command=xelatex&force=true][here]].
+
+Collaboration welcome, rounakdatta12 AT gmail DOT com 💛
