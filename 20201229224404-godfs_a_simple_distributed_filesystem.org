@@ -12,7 +12,7 @@ This post is about a simple distributed file system I built in Go. Also, my firs
  Redundancy is the key in software engineering ~Paul Klint
  #+END_CENTER
 
- I've been midway through [[https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications][Designing Data-Intensive Applications]] and implementing such a distributed system was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+ I've been midway through [[https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications][Designing Data-Intensive Applications]] and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 
  The source for this project is [[https://github.com/rounakdatta/GoDFS][rounakdatta/GoDFS]].
 

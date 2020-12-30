@@ -15,7 +15,7 @@ Redundancy is the key in software engineering ~Paul Klint
 
 </div>
 
-I've been midway through [Designing Data-Intensive Applications](https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications) and implementing such a distributed system was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+I've been midway through [Designing Data-Intensive Applications](https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications) and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 
 The source for this project is [rounakdatta/GoDFS](https://github.com/rounakdatta/GoDFS).
 
