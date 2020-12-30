@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+    <head>
+	<meta name="generator" content="Hugo 0.79.1" />
+        <link href="https://gmpg.org/xfn/11" rel="profile">
+        <meta charset="utf-8">
+        
+        
+        
+
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+        
+        <meta name="referrer" content="no-referrer">
+
+        <title>
+            
+                Blog | Rounak Datta
+            
+        </title>
+        
+        
+        <style>
+         body {
+             margin: 40px auto;
+             max-width: 650px;
+             line-height: 1.6;
+             font-size: 18px;
+             color: #444;
+             padding: 0 10px;
+         }
+         h1, h2, h3 {
+             line-height: 1.2;
+         }
+         .masthead-title {
+             font-size: 40px;
+             font-weight: bold;
+         }
+         .masthead-title a {
+             text-decoration: none;
+         }
+         .masthead-body {
+             font-size: 0.8em;
+         }
+         
+             /* CSS for Pretty Print for Debug (debugprint.html) */
+/* https://github.com/kaushalmodi/hugo-debugprint/blob/master/layouts/partials/debugprint.html */
+/* https://github.com/kaushalmodi/hugo-debugprint/blob/master/layouts/partials/debugprint.css */
+.debugprint_wrap {
+    padding: 20px;
+    display: inline-block;
+    margin: 10px auto;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+}
+.debugprint td, .debugprint th {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.debugprint th {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.debugprint tr {
+    padding: 5px 10px;
+}
+.debugprint .key {
+    font-weight: bold;
+}
+.debugprint .type {
+    /* Hide Type columns in debugprint */
+    /* display: none; */
+    font-size: 0.9em;
+    font-family: monospace;
+    font-style: italic;
+}
+.debugprint .value {
+    font-family: monospace;
+}
+.debugprint .true {
+    color: green;
+}
+.debugprint .false {
+    color: red;
+}
+/* Don't touch the table headers */
+.debugprint th.key,
+.debugprint th.type,
+.debugprint th.value {
+    font-family: helvetica, arial, san-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1em;
+    font-style: normal;
+}
+
+         
+          
+         figcaption,
+         .src-block-caption,
+         .table-caption {
+             font-style: italic;
+             text-align: center;
+         }
+         dt {
+             font-weight: bold;
+         }
+         dd {
+             margin-bottom: .5rem;
+         }
+          
+         ul.task-list {
+             list-style-type: none;
+         }
+        </style>
+
+        
+        
+ 
+<meta property="og:title" content="Blog | Rounak Datta" />
+<meta property="og:description"
+      content="Rounak&amp;rsquo;s Blog on Org-Mode" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+         <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Blog | Rounak Datta"/>
+<meta name="twitter:description" content="Rounak&amp;rsquo;s Blog on Org-Mode"/>
+
+
+        
+        
+    </head>
+
+    <body lang="en">
+
+        
+
+        <div style="float: left;">
+            <small>
+                <span style="font-variant: small-caps;">.Kind</span> (<strong>home</strong>):
+                <span style="font-variant: small-caps;">.Type</span> (<strong>page</strong>) /
+                <span style="font-variant: small-caps;">.Layout</span> (<strong></strong>)
+
+                <br />
+                
+                
+                <span style="font-variant: small-caps;">Bundle</span>: <strong>n/a</strong>
+            </small>
+        </div>
+
+        
+            <div style="float: right;">
+                [
+                
+                
+                    
+                         <a href="/categories/">categories</a>
+                        
+                    
+                
+                    
+                        | <a href="/tags/">tags</a>
+                        
+                    
+                
+                
+                ]
+            </div>
+            <div style="clear: both;"></div> 
+        
+
+        <div class="masthead-title"><a href="/">Blog | Rounak Datta</a></div>
+        <div class="masthead-body">
+            
+                <p>This is built using <a href="https://github.com/kaushalmodi/ox-hugo">
+<code>ox-hugo</code></a> package for Emacs/Org-mode.
+</p>
+            
+            
+                <p>It is <b>updated automatically after each commit</b> to the <a href="https://github.com/rounakdatta/rounakdatta.github.io">
+                    <code>rounakdatta.github.io</code> repo</a>.
+                    It was last updated on <i>Dec 30, 2020 12:54 IST</i>.
+                </p>
+                <ul>
+                    
+                    
+                        <li><a href="https://github.com/rounakdatta/rounakdatta.github.io/tree/master/public">Markdown source dir</a></li>
+                    
+                </ul>
+            
+            <hr>
+        </div>
+
+        
+
+        
+
+                       
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="posts">
+    
+    
+        <article class="summary">
+    <header>
+        <h1 class="post-title"><a href='/posts/20201229224404-godfs_a_simple_distributed_filesystem/'> GoDFS - a simple distributed filesystem</a> </h1>
+        
+        <i>(Last modified on Mon Jan 1, 0001)</i>
+    </header>
+
+    <div class="post" >
+        <p>This post is about a simple distributed file system I built in Go. Also, my first org-mode-written, org-roam-published article.
+.org-center { margin-left: auto; margin-right: auto; text-align: center; }  Redundancy is the key in software engineering ~Paul Klint
+ I&rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.</p>
+    </div>
+
+    
+    
+    
+        <div class="readmore">
+            <a href='/posts/20201229224404-godfs_a_simple_distributed_filesystem/'>Read more<span class="screen-readers-only" > about GoDFS - a simple distributed filesystem</span></a>
+        </div>
+    
+</article>
+
+    
+</div>
+
+<p>
+    <div class="pagination">
+        
+        
+        
+        
+
+        [
+        
+        
+        ]
+    </div>
+</p>
+
+
+    
+        <hr />
+        <h3 id="debug">SiteInfo (Debug)</h3>
+        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    <div class="debugprint_wrap">
+         
+            
+            
+            <table class="debugprint">
+                <tr><th class="key">SiteInfo Variable</th><th class="value">Value</th></tr>
+                
+                    <tr><td class="key">Title</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;Blog | Rounak Datta&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">Author</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        <div class="debugprint_wrap">
+            <table class="debugprint">
+                <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+                
+                    
+                    
+                    
+                        <tr><td class="key">name</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;Rounak Datta&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+            </table>
+        </div>
+    
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">Social</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        <div class="debugprint_wrap">
+            <table class="debugprint">
+                <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+                
+                    
+                    
+                    
+                        <tr><td class="key">github</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;rounakdatta&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+            </table>
+        </div>
+    
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">LastChange</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    0001-01-01 00:00:00 +0000 UTC
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">DisqusShortname</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">GoogleAnalytics</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">Copyright</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">RSSLink</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;/index.xml&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">LanguageCode</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;en-us&#34;
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">BuildDrafts</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    <span class="debugprint"><span class="false">false</span></span>
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+                    <tr><td class="key">Params</td><td class="value">
+                    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        <div class="debugprint_wrap">
+            <table class="debugprint">
+                <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+                
+                    
+                    
+                    
+                        <tr><td class="key">description</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;Rounak&#39;s Blog on Org-Mode&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">footer</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;&lt;div style=\&#34;text-align: center;\&#34;&gt;\n  [&lt;a href=\&#34;/\&#34;&gt;Rounak&#39;s Blog&lt;/a&gt; | &lt;a href=\&#34;https://ox-hugo.scripter.co/\&#34;&gt;&lt;code&gt;ox-hugo&lt;/code&gt; home&lt;/a&gt;]\n&lt;/div&gt;\n&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">intro</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;This is built using &lt;a href=\&#34;https://github.com/kaushalmodi/ox-hugo\&#34;&gt;\n&lt;code&gt;ox-hugo&lt;/code&gt;&lt;/a&gt; package for Emacs/Org-mode.\n&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">mainSections</td><td class="type">[]string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;posts&#34;
+
+
+
+
+
+
+
+
+ 
+    
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">mainsections</td><td class="type">[]string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;posts&#34;
+
+
+
+
+
+
+
+
+ 
+    
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">source</td><td class="type">maps.Params</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+        <div class="debugprint_wrap">
+            <table class="debugprint">
+                <tr><th class="key">Key</th><th class="type">Type</th><th class="value">Value</th></tr>
+                
+                    
+                    
+                    
+                        <tr><td class="key">md_dir</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;public&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">org_dir</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+                    
+                    
+                    
+                        <tr><td class="key">url</td><td class="type">string</td><td class="value">
+                        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+    &#34;https://github.com/rounakdatta/rounakdatta.github.io&#34;
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+            </table>
+        </div>
+    
+
+
+
+
+
+
+
+
+ 
+                        </td></tr>
+                    
+                
+            </table>
+        </div>
+    
+
+
+
+
+
+
+
+
+ 
+                    </td></tr>
+                
+            </table>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+        <hr />
+        <h3 id="file-debug">File Object (Debug)</h3>
+        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+     <div class="debugprint_wrap">
+        <table class="debugprint">
+            <tr><td>page.zeroFile{log:(*helpers.DistinctLogger)(0xc00098b6b0)} (<i>type:page.zeroFile</i>)</td></tr>
+        </table>
+    </div>
+
+
+
+
+
+
+
+
+
+        <hr />
+        <h3 id="debug-menu">Menu (Debug)</h3>
+        
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+        <hr>
+        <small>This site is generated using the
+            
+            <a href="https://github.com/kaushalmodi/hugo-bare-min-theme"><code>hugo-bare-min-theme</code></a> + Hugo <b>0.79.1</b>
+            .
+        </small>
+        <div style="text-align: center;">
+  [<a href="/">Rounak's Blog</a> | <a href="https://ox-hugo.scripter.co/"><code>ox-hugo</code> home</a>]
+</div>
+
+        
+    </body>
+</html>
+
+

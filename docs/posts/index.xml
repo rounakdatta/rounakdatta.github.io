@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Blog | Rounak Datta</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Blog | Rounak Datta</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GoDFS - a simple distributed filesystem</title>
+      <link>/posts/20201229224404-godfs_a_simple_distributed_filesystem/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/20201229224404-godfs_a_simple_distributed_filesystem/</guid>
+      <description>This post is about a simple distributed file system I built in Go. Also, my first org-mode-written, org-roam-published article.
+.org-center { margin-left: auto; margin-right: auto; text-align: center; }  Redundancy is the key in software engineering ~Paul Klint
+ I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.</description>
+    </item>
+    
+  </channel>
+</rss>

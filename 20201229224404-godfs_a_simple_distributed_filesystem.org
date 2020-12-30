@@ -1,7 +1,7 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: godfs
 :END:
-#+HUGO_BASE_DIR: ./docs
+#+HUGO_BASE_DIR: ./src
 # #+startup: inlineimages
 
 #+title: GoDFS - a simple distributed filesystem
