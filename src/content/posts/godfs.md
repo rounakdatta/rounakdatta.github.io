@@ -1,7 +1,7 @@
 +++
 title = "GoDFS - a simple Distributed FileSystem written in Go"
 author = ["Rounak Datta"]
-date = 2020-12-30T00:00:00+05:30
+date = 2020-08-09T00:00:00+05:30
 tags = ["golang", "distributed-systems"]
 draft = false
 +++

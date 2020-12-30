@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content='text/html; charset=utf-8' http-equiv='content-type' />
+
+  <title>PagerDuty for Things - An interesting IoT project - Rounak&#39;s Blog</title>
+  <meta content='PagerDuty for Things - An interesting IoT project - Rounak&#39;s Blog' property='title' />
+  <meta content='PagerDuty for Things - An interesting IoT project - Rounak&#39;s Blog' property='og:title' />
+
+
+<meta property="og:description" content="An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&#39; state. And the implementation of choice was liquid level.
+What&rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/pagerduty-for-iot/" />
+
+
+<meta property="article:published_time" content="2019-10-13T00:00:00&#43;05:30"/>
+
+<meta property="article:modified_time" content="2019-10-13T00:00:00&#43;05:30"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.79.1" />
+
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet">
+<style type="text/css">/*https://coolors.co/afd5aa-f0f2ef-a69f98-3d3d3d-8c6057*/
+:root {
+  --main-color: #8C6056; 
+  --secondary-color: #AFD5AA;
+  --logo-text-color: #fff;
+  --body-text-color: #3d3d3d;
+  --heading-text-color: #383838;
+  --background-color: #fff;
+}</style>
+<link href='/css/tachyons.min.css' rel="stylesheet">
+<link href='/css/styles.css' rel="stylesheet">
+
+
+<link rel="icon" 
+ 
+  href='/favicon.ico'
+
+type="image/x-icon"/>
+
+<link href='/feed.xml' rel="alternate" type="application/atom+xml" title="Rounak&#39;s Blog" />
+</head>
+<body class="global-font">
+  <nav class=" flex  justify-between border-box pa3 pl3-l pr2-l mt1 mt0-ns" id="navbar">
+  <div class="flex">
+    <a class="f4 fw6 ttu no-underline dim bg-main-color pv1 ph2 br2" id="site-title" href='/' title="Home">Rounak&#39;s Blog</a>
+  </div>
+  
+  <div class=" flex-grow  pv1">
+    
+      <a class="link dim dark-gray f6 dib mr2 mr3-l ttu tracked" href='/about' title="About">About</a>
+    
+  </div>
+  
+</nav>
+  
+<main class="center mv4 content-width ph3">
+  <div class="f3 fw6 heading-color heading-font post-title">PagerDuty for Things - An interesting IoT project</div>
+  <p class="silver f6 mt1 mb4 post-meta">
+    <time>13 Oct 2019</time> 
+     | 
+    
+    
+    tags: [ <a href='/tags/iot' class="link silver">iot</a> <a href='/tags/esp32' class="link silver">esp32</a> <a href='/tags/golang' class="link silver">golang</a> <a href='/tags/arduino' class="link silver">arduino</a> <a href='/tags/ionic' class="link silver">ionic</a>  ]
+    
+  </p>
+  <div class="lh-copy post-content"><p>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things' state. And the implementation of choice was <strong>liquid level</strong>.</p>
+<h2 id="what-s-up">What&rsquo;s up</h2>
+<p>The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</p>
+<p>The project consists of 3 independent network-connected modules:</p>
+<ul>
+<li><strong>ESP32 Module</strong>: Consists of a weight measurement component (HX711); thereby collects the weight information at regular intervals and publishes them to the remote server through an API.</li>
+<li><strong>Server and Data Module</strong>: Responsible for persisting data in a database and processing them upon CRUD requests. Exposes an API to which the ESP32 and the application connect.</li>
+<li><strong>Application Modules</strong>: Essentially a client application (Android, iOS, web or whatever) which allows for user input, monitoring and alerting. Provides interfaces for initializing tracking of a new fuel container, setting a custom condition-based alert, displays level information, receives push notifications upon condition being satisfied.</li>
+</ul>
+<h2 id="digging-deep-into-the-hardware-architecture">Digging deep into the hardware architecture</h2>
+<h3 id="how-do-we-measure-the-weight">How do we measure the weight</h3>
+<p>A <strong>load cell</strong> is a simple piezo-electric device which is designed to measure pressure (or more precisely changes in pressure) through it&rsquo;s <em>bend ratio</em>. Upon change of weight of the payload, the bend change is captured in terms of changes in the electrical signal proportionally. Therefore once we calibrate the load cell to find its &ldquo;factor&rdquo; against a standard weight, any weight within the manufacture range can be quite precisely measured applying simple ratios. Now, <strong>HX711</strong> is a simple amplifier magnifying this electrical input from this load cell thereby making it available to boards to interpret and process it furthur. We experimented with collecting the results on both Arduino Uno and ESP32.</p>
+<figure>
+    <img src="/ox-hugo/loadcell_hx711_arduino.png"
+         alt="Figure 1: Connection of load cell -&amp;gt; HX711 -&amp;gt; Arduino"/> <figcaption>
+            <p>Figure 1: Connection of load cell -&gt; HX711 -&gt; Arduino</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="/ox-hugo/loadcell_hx711_esp32.png"
+         alt="Figure 2: Connection of load cell -&amp;gt; HX711 -&amp;gt; ESP32"/> <figcaption>
+            <p>Figure 2: Connection of load cell -&gt; HX711 -&gt; ESP32</p>
+        </figcaption>
+</figure>
+
+<p><a id="code-snippet--hx711 pin configuration"></a></p>
+<pre><code class="language-nil" data-lang="nil">HX711 - input:
+- Upper left load cell signal (red wire) =&gt; HX711 E- pin
+- Lower left load cell signal (red wire) =&gt; HX711 A+ pin
+- Upper right load cell signal (red wire) =&gt; HX711 A- pin
+- Lower right load cell signal (red wire) =&gt; HX711 E- pin
+
+HX711 - output:
+- HX711 Vcc pin =&gt; ESP32 3.3V pin
+- HX711 GND pin =&gt; ESP32 GND pin
+- HX711 SCK pin =&gt; ESP32 GPIO 2 (pin D9)
+- HX711 DT pin =&gt; ESP32 GPIO 5 (pin D8)
+</code></pre><h2 id="pinning-the-hardware-setup-all-together">Pinning the hardware setup all together</h2>
+<h3 id="load-cell-assembly">Load cell assembly</h3>
+<p>The load call would support a weight plate on one of its ends perpendicular to its length; while other end would be fixed to a base.
+<img src="/ox-hugo/loadcell_assembly.png" alt=""></p>
+<h3 id="using-arduino-uno-as-the-driver">Using Arduino Uno as the driver</h3>
+<figure>
+    <img src="/ox-hugo/complete_setup_arduino.jpg"
+         alt="Figure 3: First try, when connected to PC, the healthy Arduino didn&amp;rsquo;t respond correctly :("/> <figcaption>
+            <p>Figure 3: First try, when connected to PC, the healthy Arduino didn&rsquo;t respond correctly :(</p>
+        </figcaption>
+</figure>
+
+<h3 id="using-esp32-as-the-driver">Using ESP32 as the driver</h3>
+<figure>
+    <img src="/ox-hugo/complete_setup_esp32.jpg"
+         alt="Figure 4: My working setup"/> <figcaption>
+            <p>Figure 4: My working setup</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="/ox-hugo/hx711_esp32_connection.png"
+         alt="Figure 5: HX711 -&amp;gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)"/> <figcaption>
+            <p>Figure 5: HX711 -&gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)</p>
+        </figcaption>
+</figure>
+
+<h2 id="programming-the-esp32">Programming the ESP32</h2>
+<p>We write good old C to design the logic of how and what the ESP32 wants to do. Our ESP32 needs individual modules - for obtaining and parsing wireless networks available, sending and receiving data over BLE (Bluetooh Low Energy) to the client, connecting to a wireless network when commanded with credentials, utilizing EEPROM to remember actions even in sleep and finally making <code>GET</code> and <code>POST</code> requests to the remote service. And extra care has to be taken to prevent the low-key machine from getting overwhelmed (maintaining wireless and Bluetooth connections at the same time is not less CPU intensive!).</p>
+<h2 id="setting-up-the-remote-service-database-and-the-data">Setting up the remote service, database and the data</h2>
+<p>The remote data-keeper-and-processor is a tiny, light Golang service which organizes all the data for registered devices, scheduled notifications, liquid levels etc and is responsible for pushing the notifications down to the clients, thus completing the chain. There is also small share of intelligence built into the system to predict device downtimes (poor network), regressing upon the time-vs-level curve to detect accidental scenarios.</p>
+<h2 id="the-app-in-user-s-hand">The app in user&rsquo;s hand</h2>
+<p>The application was built as hybrid-platform Ionic framework-based. With TypeScript magic, we are able to seamlessly allow the user find and connect to a new ESP32 device nearby, help the ESP32 get connected to the internet through BLE-talking and finally peace-of-mind monitoring remotely. Users are allowed to set multiple custom notifications based on levels.</p>
+<figure>
+    <img src="/ox-hugo/application_mock.png"
+         alt="Figure 6: Mock screens for the application"/> <figcaption>
+            <p>Figure 6: Mock screens for the application</p>
+        </figcaption>
+</figure>
+
+<h2 id="furthur-discussions">Furthur discussions</h2>
+<h3 id="how-do-you-set-up-a-new-gas-cylinder-device">How do you set up a new gas cylinder device?</h3>
+<p>To start monitoring the newly fitted ESP32-connected gas cylinder, we need to help that ESP32 connect the network (obviously through WiFi). To help it connect to WiFi, we have one obvious option:</p>
+<ul>
+<li><del>Hardcode the WiFi SSID and password into the ESP32 source code (stupid)</del></li>
+<li>Send it over some medium from the client to the ESP32</li>
+</ul>
+<p>And, to accomplish this, we use Bluetooth Low Energy (BLE) to establish the connectivity between the client (say the phone here) and ESP32. So we come quite closer to the ESP32 (maximum range of BLE is 100m). This is a beautiful part in itself as the ESP32 then helps us see which all wireless networks it can see. And then we choose the network and send the SSID and password serially to the ESP32 which should next remember them in its flash memory (some boilerplate code <a href="https://gist.github.com/rounakdatta/345964a13fe3b3b77fab2a11eaaaa5ab">here</a>). So, the ESP32 now can connect the network 🙂.</p>
+<h3 id="what-s-the-logic-of-level-based-alerting">What&rsquo;s the logic of level-based alerting?</h3>
+<p>The app provides the interface to input a custom level at which the user wants to be alerted - could be say 75% or 33% or 1%. We need to address multiple challenges here:</p>
+<ul>
+<li>A user might have set up multiple gas cylinders against a single account, and we&rsquo;d have to send the notification of each of the owned devices to the same phone</li>
+<li>How frequently should the modules poll amongst each other? How closely should the ESP32 update the remote server about the weight measured? How soon should the app check back from the server whether it has crossed the threshold or not?</li>
+<li>Based on this frequency of polling, how do we ensure that the level doesn&rsquo;t get missed from being recorded (say the level falls too rapidly), also how do we maintain a state of whether a custom alert notification has been successfully delivered or not?</li>
+</ul>
+<h3 id="what-are-some-possibilities-and-optimizations-to-look-at">What are some possibilities and optimizations to look at?</h3>
+<ul>
+<li>Potentially building a logic to make sure the server and ESP32 <em>learns</em> how frequently to poll for data. This helps optimize scale to a judicious API callout.</li>
+<li>How do we handle reads (load cell or HX711 misbehaving) or stale data (ESP32 offline)?</li>
+<li>Building a marketplace around the concept, what if the app could automatically book a refill from a local vendor!</li>
+</ul>
+</div>
+</main>
+ 
+
+
+
+
+
+
+<div class="tl fixed list-pages lh-copy" id="contents-list"></div>
+
+
+
+<div class="pagination tc tr-l db fixed-l bottom-2-l right-2-l mb3 mb0-l">
+  
+<a id="scroll-to-top" class="f6 o-0 link br2 ph2 pv1 mb1 bg-main-color pointer" onclick="topFunction()" style="color: #fff; visibility: hidden; display: none; transition: opacity .5s, visibility .5s;" title="back to top">back to top</a>
+<br>
+  <p class="mb0 mt2">
+  
+  <a href="/posts/firefly/">next post</a>
+  </p>
+</div>
+
+  <footer class="content-width mt0 mt5-l mb4 f6 center ph3 gray tc tl-l">
+  <hr class="dn db-l ml0-l gray w3"><br>
+  Powered by <a href="https://gohugo.io/" target="_blank" class="link gray dim">Hugo</a>, based on the <a href="https://github.com/lingxz/er" target="_blank" class="link gray dim">Er</a> theme. <br>
+  
+</footer>
+  
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<style>.is-active-link::before { background-color: var(--secondary-color); }</style>
+
+
+
+
+<script type="text/javascript">
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+
+  
+  if (document.getElementById("tag-cloud") !== null) { 
+    if (prevScrollpos > currentScrollPos) { 
+      document.getElementById("tag-cloud").style.visibility = "visible";
+      document.getElementById("tag-cloud").style.opacity = "1";
+    } else {
+      document.getElementById("tag-cloud").style.visibility = "hidden";
+      document.getElementById("tag-cloud").style.opacity = "0";
+    }
+  }
+  
+
+  
+  if (document.body.scrollTop > 1000 || document.documentElement.scrollTop > 1000) {
+      document.getElementById("scroll-to-top").style.display = "inline";
+      document.getElementById("scroll-to-top").style.visibility = "visible";
+      document.getElementById("scroll-to-top").style.opacity = "1";
+  } else {
+      document.getElementById("scroll-to-top").style.visibility = "hidden";
+      document.getElementById("scroll-to-top").style.opacity = "0";
+  }
+  
+  prevScrollpos = currentScrollPos;
+}
+
+
+function topFunction() {
+  document.body.scrollTop = 0; 
+  document.documentElement.scrollTop = 0; 
+}
+
+
+
+
+
+
+if (document.getElementById("contents-list") !== null && document.getElementsByClassName("post-content").length !== 0) { 
+  tocbot.init({
+    
+    tocSelector: '#contents-list',
+    
+    contentSelector: '.post-content',
+    
+    headingSelector: 'h1, h2, h3',
+  });
+}
+
+
+</script>
+
+
+
+
+</body>
+</html>

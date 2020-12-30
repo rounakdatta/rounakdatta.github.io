@@ -1,7 +1,6 @@
 +++
 title = "About"
 author = ["Rounak Datta"]
-date = 2020-12-30T00:00:00+05:30
 tags = ["about"]
 draft = false
 +++

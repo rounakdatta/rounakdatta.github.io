@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>self-hosted on Rounak&#39;s Blog</title>
+    <link>/tags/self-hosted/</link>
+    <description>Recent content in self-hosted on Rounak&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 May 2020 00:00:00 +0530</lastBuildDate><atom:link href="/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Better managing self-finance with Firefly</title>
+      <link>/posts/firefly/</link>
+      <pubDate>Mon, 25 May 2020 00:00:00 +0530</pubDate>
+      
+      <guid>/posts/firefly/</guid>
+      <description>To what extent do we track our money? Sites and apps are constantly tracking us so closely, with the only intention of knowing us better and presenting us with more self-relatable content (and potentially ads) and engage us even more into the product. We track our shipments, food, health, habits and reasonably quite everything that costs us time. Yeah, of course we do try to keep a sense of our spendings and definitely give a appreciating / regretting thought at the month-end.</description>
+    </item>
+    
+  </channel>
+</rss>

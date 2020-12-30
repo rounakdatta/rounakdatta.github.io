@@ -4,7 +4,6 @@
 #+EXPORT_FILE_NAME: about
 #+TITLE: About
 #+AUTHOR: Rounak Datta
-#+DATE: <2020-12-30 Wed>
 
 * Rounak Datta
 
