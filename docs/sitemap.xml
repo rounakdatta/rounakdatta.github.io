@@ -3,83 +3,103 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/tags/distributed-systems/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <loc>/tags/emacs/</loc>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>/posts/godfs/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <loc>/posts/open-source-tools-everyday/</loc>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>/tags/golang/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <loc>/tags/open-source/</loc>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
   </url>
   
   <url>
     <loc>/posts/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/setup/</loc>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <lastmod>2021-01-03T00:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/distributed-systems/</loc>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/godfs/</loc>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/golang/</loc>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/posts/firefly/</loc>
-    <lastmod>2020-05-25T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/finance/</loc>
-    <lastmod>2020-05-25T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/self-hosted/</loc>
-    <lastmod>2020-05-25T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/arduino/</loc>
-    <lastmod>2019-10-13T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/esp32/</loc>
-    <lastmod>2019-10-13T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/ionic/</loc>
-    <lastmod>2019-10-13T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/iot/</loc>
-    <lastmod>2019-10-13T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/posts/pagerduty-for-iot/</loc>
-    <lastmod>2019-10-13T00:00:00+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/about/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>
     <loc>/tags/about/</loc>
-    <lastmod>2020-12-30T19:45:13+05:30</lastmod>
+    <lastmod>2020-12-30T23:23:23+05:30</lastmod>
   </url>
   
   <url>

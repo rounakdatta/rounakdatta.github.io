@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Aug 2020 00:00:00 +0530</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Written and published right from Emacs Org-mode.</copyright>
+    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0530</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My everyday tooling around OSS</title>
+      <link>/posts/open-source-tools-everyday/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
+      
+      <guid>/posts/open-source-tools-everyday/</guid>
+      <description>Speed and efficiency are two different things. ~Rasheed Ogunlaru
+ We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In an utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
+    </item>
+    
     <item>
       <title>GoDFS - a simple Distributed FileSystem written in Go</title>
       <link>/posts/godfs/</link>

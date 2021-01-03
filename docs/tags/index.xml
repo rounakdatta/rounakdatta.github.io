@@ -6,7 +6,35 @@
     <description>Recent content in Tags on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Aug 2020 00:00:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Written and published right from Emacs Org-mode.</copyright>
+    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>emacs</title>
+      <link>/tags/emacs/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/emacs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>open-source</title>
+      <link>/tags/open-source/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/open-source/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>setup</title>
+      <link>/tags/setup/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/setup/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>distributed-systems</title>
       <link>/tags/distributed-systems/</link>

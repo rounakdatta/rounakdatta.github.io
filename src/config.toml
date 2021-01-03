@@ -2,6 +2,7 @@ baseURL = ""
 languageCode = "en-us"
 title = "Rounak's Blog"
 theme = "er"
+copyright = "Written and published right from Emacs Org-mode."
 
 canonifyURLs = true
 
