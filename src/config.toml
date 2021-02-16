@@ -12,13 +12,24 @@ enableGitInfo = true
 
 disableFastRender = true        # Hugo 0.30
 
-pygmentsCodeFences = true       # This applies to Chroma too.
-pygmentsUseClasses = true       # This applies to Chroma too.
+pygmentsStyle = "pygments"
 
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true # This is *necessary* for ox-hugo to work well with Hugo 0.60.0+
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4
 
 [Taxonomies]
   category = "categories" # SINGULAR = "PLURAL"
