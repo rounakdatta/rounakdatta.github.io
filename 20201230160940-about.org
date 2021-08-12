@@ -7,6 +7,8 @@
 
 * Rounak Datta
 
+[[file:resources/souptik_and_rounak.jpeg]]
+
 ** Today
 I'm hustling with the amazing team at [[https://tech.hotstar.com/][Disney+ Hotstar]] to build a kickass Data Platform in the day.
 
@@ -14,7 +16,7 @@ And when it's not the day, I love tinkering with either classic projects or unco
 
 I invest a lot into understanding and researching about *large-scale systems*, the beauty of *mathematics* behind the gears of *artificially intelligent systems*.
 
-Also, I attempt to write [[https://github.com/rounakdatta][open-source software]]. Sometimes [[https://twitter.com/rounakdatta12][tweets]]. And [[https://stackoverflow.com/users/8303407/rounak-datta][answers]]. [[https://www.instagram.com/rounakdatta/][Artworks]] are my favourite pastime.
+Also, I attempt to write [[https://github.com/rounakdatta][open-source software]]. Sometimes [[https://twitter.com/rounakdatta12][tweets]]. And [[https://stackoverflow.com/users/8303407/rounak-datta][answers]].
 
 #+BEGIN_EXPORT HTML
 <hr>

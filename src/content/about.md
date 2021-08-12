@@ -7,6 +7,8 @@ draft = false
 
 ## Rounak Datta {#rounak-datta}
 
+{{< figure src="/ox-hugo/souptik_and_rounak.jpeg" >}}
+
 
 ### Today {#today}
 
@@ -16,7 +18,7 @@ And when it's not the day, I love tinkering with either classic projects or unco
 
 I invest a lot into understanding and researching about **large-scale systems**, the beauty of **mathematics** behind the gears of **artificially intelligent systems**.
 
-Also, I attempt to write [open-source software](https://github.com/rounakdatta). Sometimes [tweets](https://twitter.com/rounakdatta12). And [answers](https://stackoverflow.com/users/8303407/rounak-datta). [Artworks](https://www.instagram.com/rounakdatta/) are my favourite pastime.
+Also, I attempt to write [open-source software](https://github.com/rounakdatta). Sometimes [tweets](https://twitter.com/rounakdatta12). And [answers](https://stackoverflow.com/users/8303407/rounak-datta).
 
 <hr>
 
