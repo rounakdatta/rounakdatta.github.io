@@ -14,7 +14,7 @@ draft = false
 
 I'm hustling with the amazing team at [Disney+ Hotstar](https://tech.hotstar.com/) to build a kickass Data Platform in the day.
 
-And when it's not the day, I love tinkering with either classic projects or unconventional ideas. I'm an avid [reader](https://www.goodreads.com/user/show/23254685-rounak-datta) (mostly technology and history), regular cyclist, music curator and an aspiring mathematician.
+And when it's not the day, I love tinkering with either classic projects or unconventional ideas. I'm an avid [reader](https://www.goodreads.com/user/show/23254685-rounak-datta) (mostly technology and history), [regular cyclist](https://www.strava.com/athletes/70322649), music curator and an aspiring mathematician.
 
 I invest a lot into understanding and researching about **large-scale systems**, the beauty of **mathematics** behind the gears of **artificially intelligent systems**.
 
