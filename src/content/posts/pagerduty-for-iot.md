@@ -27,9 +27,9 @@ The project consists of 3 independent network-connected modules:
 
 A **load cell** is a simple piezo-electric device which is designed to measure pressure (or more precisely changes in pressure) through it's _bend ratio_. Upon change of weight of the payload, the bend change is captured in terms of changes in the electrical signal proportionally. Therefore once we calibrate the load cell to find its "factor" against a standard weight, any weight within the manufacture range can be quite precisely measured applying simple ratios. Now, **HX711** is a simple amplifier magnifying this electrical input from this load cell thereby making it available to boards to interpret and process it furthur. We experimented with collecting the results on both Arduino Uno and ESP32.
 
-{{< figure src="/ox-hugo/loadcell_hx711_arduino.png" caption="Figure 1: Connection of load cell -> HX711 -> Arduino" >}}
+{{< figure src="/ox-hugo/loadcell_hx711_arduino.png" caption="<span class=\"figure-number\">Figure 1: </span>Connection of load cell -&gt; HX711 -&gt; Arduino" >}}
 
-{{< figure src="/ox-hugo/loadcell_hx711_esp32.png" caption="Figure 2: Connection of load cell -> HX711 -> ESP32" >}}
+{{< figure src="/ox-hugo/loadcell_hx711_esp32.png" caption="<span class=\"figure-number\">Figure 2: </span>Connection of load cell -&gt; HX711 -&gt; ESP32" >}}
 
 <a id="code-snippet--hx711 pin configuration"></a>
 ```nil
@@ -58,14 +58,14 @@ The load call would support a weight plate on one of its ends perpendicular to i
 
 ### Using Arduino Uno as the driver {#using-arduino-uno-as-the-driver}
 
-{{< figure src="/ox-hugo/complete_setup_arduino.jpg" caption="Figure 3: First try, when connected to PC, the healthy Arduino didn't respond correctly :(" >}}
+{{< figure src="/ox-hugo/complete_setup_arduino.jpg" caption="<span class=\"figure-number\">Figure 3: </span>First try, when connected to PC, the healthy Arduino didn't respond correctly :(" >}}
 
 
 ### Using ESP32 as the driver {#using-esp32-as-the-driver}
 
-{{< figure src="/ox-hugo/complete_setup_esp32.jpg" caption="Figure 4: My working setup" >}}
+{{< figure src="/ox-hugo/complete_setup_esp32.jpg" caption="<span class=\"figure-number\">Figure 4: </span>My working setup" >}}
 
-{{< figure src="/ox-hugo/hx711_esp32_connection.png" caption="Figure 5: HX711 -> ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)" >}}
+{{< figure src="/ox-hugo/hx711_esp32_connection.png" caption="<span class=\"figure-number\">Figure 5: </span>HX711 -&gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)" >}}
 
 
 ## Programming the ESP32 {#programming-the-esp32}
@@ -82,7 +82,7 @@ The remote data-keeper-and-processor is a tiny, light Golang service which organ
 
 The application was built as hybrid-platform Ionic framework-based. With TypeScript magic, we are able to seamlessly allow the user find and connect to a new ESP32 device nearby, help the ESP32 get connected to the internet through BLE-talking and finally peace-of-mind monitoring remotely. Users are allowed to set multiple custom notifications based on levels.
 
-{{< figure src="/ox-hugo/application_mock.png" caption="Figure 6: Mock screens for the application" >}}
+{{< figure src="/ox-hugo/application_mock.png" caption="<span class=\"figure-number\">Figure 6: </span>Mock screens for the application" >}}
 
 
 ## Furthur discussions {#furthur-discussions}

@@ -7,7 +7,43 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Sep 2022 00:00:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>friends</title>
+      <link>/tags/friends/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/friends/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>travel</title>
+      <link>/tags/travel/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/travel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>trekking</title>
+      <link>/tags/trekking/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/trekking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vacation</title>
+      <link>/tags/vacation/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      
+      <guid>/tags/vacation/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>emacs</title>
       <link>/tags/emacs/</link>

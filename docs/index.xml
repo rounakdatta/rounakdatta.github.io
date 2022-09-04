@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Sep 2022 00:00:00 +0530</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dayara Bugyal Himalayan trek with school friends</title>
+      <link>/posts/20220904235848-dayara_bugyal_himalayan_trek_with_school_friends/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      
+      <guid>/posts/20220904235848-dayara_bugyal_himalayan_trek_with_school_friends/</guid>
+      <description>My favourite kind of trips are the ones which involve less extravaganza, but are highly memorable and with positive ROI (in any respect). Our 2021 December-end trek was an initialization of that model after a very very long pandemic break. Also this marked as a vacation I took almost 1.5 years of working from home due to COVID-19. We, a team of 6 school friends trekked a Himalayan peak; and followed by the same I spent a few days at Delhi to meet new and old friends.</description>
+    </item>
+    
     <item>
       <title>My everyday tooling around OSS</title>
       <link>/posts/open-source-tools-everyday/</link>
@@ -15,7 +24,7 @@
       
       <guid>/posts/open-source-tools-everyday/</guid>
       <description>Speed and efficiency are two different things. ~Rasheed Ogunlaru
- We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
+We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
     </item>
     
     <item>
@@ -25,7 +34,7 @@
       
       <guid>/posts/godfs/</guid>
       <description>Redundancy is the key in software engineering ~Paul Klint
- I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 The source for this project is rounakdatta/GoDFS.
 Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
     </item>
@@ -45,7 +54,7 @@ Building Go Distributed File System Abstracting away the odds Proven systems lik
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
       
       <guid>/posts/pagerduty-for-iot/</guid>
-      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&#39; state. And the implementation of choice was liquid level.
+      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&amp;rsquo; state. And the implementation of choice was liquid level.
 What&amp;rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&amp;rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</description>
     </item>
     
@@ -55,7 +64,7 @@ What&amp;rsquo;s up The project is all about an integration effort of an ESP32-c
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>Rounak Datta   Today I&amp;rsquo;m hustling with the amazing team at Disney+ Hotstar to build a kickass Data Platform in the day.
+      <description>Rounak Datta Today I&amp;rsquo;m hustling with the amazing team at Disney+ Hotstar to build a kickass Data Platform in the day.
 And when it&amp;rsquo;s not the day, I love tinkering with either classic projects or unconventional ideas. I&amp;rsquo;m an avid reader (mostly technology and history), regular cyclist, music curator and an aspiring mathematician.
 I invest a lot into understanding and researching about large-scale systems, the beauty of mathematics behind the gears of artificially intelligent systems.</description>
     </item>

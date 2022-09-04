@@ -9,7 +9,7 @@
   <meta content='PagerDuty for Things - An interesting IoT project - Rounak&#39;s Blog' property='og:title' />
 
 
-<meta property="og:description" content="An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&#39; state. And the implementation of choice was liquid level.
+<meta property="og:description" content="An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&rsquo; state. And the implementation of choice was liquid level.
 What&rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/pagerduty-for-iot/" />
@@ -26,7 +26,7 @@ What&rsquo;s up The project is all about an integration effort of an ESP32-conne
 
 
 
-<meta name="generator" content="Hugo 0.82.1" />
+<meta name="generator" content="Hugo 0.101.0" />
 
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet">
 <style type="text/css">/*https://coolors.co/afd5aa-f0f2ef-a69f98-3d3d3d-8c6057*/
@@ -74,7 +74,7 @@ type="image/x-icon"/>
     tags: [ <a href='/tags/iot' class="link silver">iot</a> <a href='/tags/esp32' class="link silver">esp32</a> <a href='/tags/golang' class="link silver">golang</a> <a href='/tags/arduino' class="link silver">arduino</a> <a href='/tags/ionic' class="link silver">ionic</a>  ]
     
   </p>
-  <div class="lh-copy post-content"><p>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things' state. And the implementation of choice was <strong>liquid level</strong>.</p>
+  <div class="lh-copy post-content"><p>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&rsquo; state. And the implementation of choice was <strong>liquid level</strong>.</p>
 <h2 id="what-s-up">What&rsquo;s up</h2>
 <p>The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</p>
 <p>The project consists of 3 independent network-connected modules:</p>
@@ -86,22 +86,20 @@ type="image/x-icon"/>
 <h2 id="digging-deep-into-the-hardware-architecture">Digging deep into the hardware architecture</h2>
 <h3 id="how-do-we-measure-the-weight">How do we measure the weight</h3>
 <p>A <strong>load cell</strong> is a simple piezo-electric device which is designed to measure pressure (or more precisely changes in pressure) through it&rsquo;s <em>bend ratio</em>. Upon change of weight of the payload, the bend change is captured in terms of changes in the electrical signal proportionally. Therefore once we calibrate the load cell to find its &ldquo;factor&rdquo; against a standard weight, any weight within the manufacture range can be quite precisely measured applying simple ratios. Now, <strong>HX711</strong> is a simple amplifier magnifying this electrical input from this load cell thereby making it available to boards to interpret and process it furthur. We experimented with collecting the results on both Arduino Uno and ESP32.</p>
-<figure>
-    <img src="/ox-hugo/loadcell_hx711_arduino.png"
-         alt="Figure 1: Connection of load cell -&amp;gt; HX711 -&amp;gt; Arduino"/> <figcaption>
-            <p>Figure 1: Connection of load cell -&gt; HX711 -&gt; Arduino</p>
+<figure><img src="/ox-hugo/loadcell_hx711_arduino.png"
+         alt="Figure 1: Connection of load cell -&amp;gt; HX711 -&amp;gt; Arduino"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Connection of load cell -&gt; HX711 -&gt; Arduino</p>
         </figcaption>
 </figure>
 
-<figure>
-    <img src="/ox-hugo/loadcell_hx711_esp32.png"
-         alt="Figure 2: Connection of load cell -&amp;gt; HX711 -&amp;gt; ESP32"/> <figcaption>
-            <p>Figure 2: Connection of load cell -&gt; HX711 -&gt; ESP32</p>
+<figure><img src="/ox-hugo/loadcell_hx711_esp32.png"
+         alt="Figure 2: Connection of load cell -&amp;gt; HX711 -&amp;gt; ESP32"/><figcaption>
+            <p><span class="figure-number">Figure 2: </span>Connection of load cell -&gt; HX711 -&gt; ESP32</p>
         </figcaption>
 </figure>
 
 <p><a id="code-snippet--hx711 pin configuration"></a></p>
-<pre><code class="language-nil" data-lang="nil">HX711 - input:
+<pre tabindex="0"><code class="language-nil" data-lang="nil">HX711 - input:
 - Upper left load cell signal (red wire) =&gt; HX711 E- pin
 - Lower left load cell signal (red wire) =&gt; HX711 A+ pin
 - Upper right load cell signal (red wire) =&gt; HX711 A- pin
@@ -117,25 +115,22 @@ HX711 - output:
 <p>The load call would support a weight plate on one of its ends perpendicular to its length; while other end would be fixed to a base.
 <img src="/ox-hugo/loadcell_assembly.png" alt=""></p>
 <h3 id="using-arduino-uno-as-the-driver">Using Arduino Uno as the driver</h3>
-<figure>
-    <img src="/ox-hugo/complete_setup_arduino.jpg"
-         alt="Figure 3: First try, when connected to PC, the healthy Arduino didn&amp;rsquo;t respond correctly :("/> <figcaption>
-            <p>Figure 3: First try, when connected to PC, the healthy Arduino didn&rsquo;t respond correctly :(</p>
+<figure><img src="/ox-hugo/complete_setup_arduino.jpg"
+         alt="Figure 3: First try, when connected to PC, the healthy Arduino didn&amp;rsquo;t respond correctly :("/><figcaption>
+            <p><span class="figure-number">Figure 3: </span>First try, when connected to PC, the healthy Arduino didn&rsquo;t respond correctly :(</p>
         </figcaption>
 </figure>
 
 <h3 id="using-esp32-as-the-driver">Using ESP32 as the driver</h3>
-<figure>
-    <img src="/ox-hugo/complete_setup_esp32.jpg"
-         alt="Figure 4: My working setup"/> <figcaption>
-            <p>Figure 4: My working setup</p>
+<figure><img src="/ox-hugo/complete_setup_esp32.jpg"
+         alt="Figure 4: My working setup"/><figcaption>
+            <p><span class="figure-number">Figure 4: </span>My working setup</p>
         </figcaption>
 </figure>
 
-<figure>
-    <img src="/ox-hugo/hx711_esp32_connection.png"
-         alt="Figure 5: HX711 -&amp;gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)"/> <figcaption>
-            <p>Figure 5: HX711 -&gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)</p>
+<figure><img src="/ox-hugo/hx711_esp32_connection.png"
+         alt="Figure 5: HX711 -&amp;gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)"/><figcaption>
+            <p><span class="figure-number">Figure 5: </span>HX711 -&gt; ESP32 connection diagram (WARNING! Please ensure that the 3.3V and GND are connected correctly, they are WRONGLY swapped in the image)</p>
         </figcaption>
 </figure>
 
@@ -145,10 +140,9 @@ HX711 - output:
 <p>The remote data-keeper-and-processor is a tiny, light Golang service which organizes all the data for registered devices, scheduled notifications, liquid levels etc and is responsible for pushing the notifications down to the clients, thus completing the chain. There is also small share of intelligence built into the system to predict device downtimes (poor network), regressing upon the time-vs-level curve to detect accidental scenarios.</p>
 <h2 id="the-app-in-user-s-hand">The app in user&rsquo;s hand</h2>
 <p>The application was built as hybrid-platform Ionic framework-based. With TypeScript magic, we are able to seamlessly allow the user find and connect to a new ESP32 device nearby, help the ESP32 get connected to the internet through BLE-talking and finally peace-of-mind monitoring remotely. Users are allowed to set multiple custom notifications based on levels.</p>
-<figure>
-    <img src="/ox-hugo/application_mock.png"
-         alt="Figure 6: Mock screens for the application"/> <figcaption>
-            <p>Figure 6: Mock screens for the application</p>
+<figure><img src="/ox-hugo/application_mock.png"
+         alt="Figure 6: Mock screens for the application"/><figcaption>
+            <p><span class="figure-number">Figure 6: </span>Mock screens for the application</p>
         </figcaption>
 </figure>
 

@@ -18,9 +18,9 @@ The source for this project is [rounakdatta/GoDFS](https://github.com/rounakdatt
 
 ### Abstracting away the odds {#abstracting-away-the-odds}
 
-Proven systems like [Google FileSystem (GFS)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf) and [Hadoop Distributed FileSystem](https://hadoop.apache.org/docs/r1.2.1/hdfs%5Fdesign.pdf) have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready 😉
+Proven systems like [Google FileSystem (GFS)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf) and [Hadoop Distributed FileSystem](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.pdf) have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready 😉
 
-{{< figure src="/ox-hugo/dynamodb_rant.png" caption="Figure 1: [Source](https://www.jeremydaly.com/takeaways-from-dynamodb-deep-dive-advanced-design-patterns-dat403/)" >}}
+{{< figure src="/ox-hugo/dynamodb_rant.png" caption="<span class=\"figure-number\">Figure 1: </span>[Source](https://www.jeremydaly.com/takeaways-from-dynamodb-deep-dive-advanced-design-patterns-dat403/)" >}}
 
 
 ### The pieces {#the-pieces}
@@ -35,7 +35,7 @@ DataNodes in this system are just holding the data and when provided with an add
 
 #### NameNode {#namenode}
 
-The NameNode is ideally a singular central coordinating unit of the entire system. It's responsibilities start from record-keeping of which all data nodes are available/healthy and helping the client decide with where all to put the chunks for an incoming file & where all to fetch the chunks from for a requested file. The name node also knows what is the chunk size (termed BlockSize later) and how many copies of data to keep (ReplicationFactor). The name node is the know-it-all guy of the system and therefore making it's death fatal for the system. Therefore we must have a backup name node (called Secondary NameNode) to which the NameNode is flushing all its meta periodically.
+The NameNode is ideally a singular central coordinating unit of the entire system. It's responsibilities start from record-keeping of which all data nodes are available/healthy and helping the client decide with where all to put the chunks for an incoming file &amp; where all to fetch the chunks from for a requested file. The name node also knows what is the chunk size (termed BlockSize later) and how many copies of data to keep (ReplicationFactor). The name node is the know-it-all guy of the system and therefore making it's death fatal for the system. Therefore we must have a backup name node (called Secondary NameNode) to which the NameNode is flushing all its meta periodically.
 
 
 #### Client {#client}

@@ -10,7 +10,7 @@
 
 
 <meta property="og:description" content="Speed and efficiency are two different things. ~Rasheed Ogunlaru
- We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline." />
+We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/open-source-tools-everyday/" />
 
@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.82.1" />
+<meta name="generator" content="Hugo 0.101.0" />
 
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet">
 <style type="text/css">/*https://coolors.co/afd5aa-f0f2ef-a69f98-3d3d3d-8c6057*/
@@ -77,18 +77,17 @@ type="image/x-icon"/>
   <div class="lh-copy post-content"><blockquote>
 <p>Speed and efficiency are two different things. ~Rasheed Ogunlaru</p>
 </blockquote>
-<p>We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of <a href="https://en.wikipedia.org/wiki/Decentralized%5Fautonomous%5Forganization">DAOs</a> is the same way we think of our workflows in the real world. The term workflows I&rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline. The task themselves might sound trivial, but the point here is how idempotent or how scalable the workflow is. Asking questions like &ldquo;What if I have to manage cleaning a few hundred inboxes tomorrow?&rdquo; should clarify the problem in hand more.</p>
+<p>We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of <a href="https://en.wikipedia.org/wiki/Decentralized_autonomous_organization">DAOs</a> is the same way we think of our workflows in the real world. The term workflows I&rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline. The task themselves might sound trivial, but the point here is how idempotent or how scalable the workflow is. Asking questions like &ldquo;What if I have to manage cleaning a few hundred inboxes tomorrow?&rdquo; should clarify the problem in hand more.</p>
 <p>And therefore, this writeup talks on tools and mindsets around setting up such workflows through computer programs.</p>
 <h2 id="what-s-in-a-text-editor">What&rsquo;s in a text editor?</h2>
 <p>I used a handful of text editors so far, and honestly, Emacs was the first editor which encouraged (read <em>required</em>) me to read one full <a href="https://www.goodreads.com/book/show/25587882-mastering-emacs">book</a> while getting started with it! Text editing had never been such fun and personalized before. And within weeks I found myself to be using Emacs on window mode (minimalist me who runs stuff right in the terminal -_-), ditching JetBrains for lsp-mode, plaintext notetaking in org-roam, trading in Chromemacs for vimium and daringly writing simple elisp functions.</p>
 <p>I&rsquo;m no text ninja yet, but my overall productivity on the keyboard has increased by folds and maintaing such an extensible editor by creating workflows of my choice has been a blessing in 2020. I now launch projectiles, ripgrep instead of grep, magit instead of git, org-roam instead of notion, ox-hugo instead of notablog and of course it&rsquo;s aM-xing! I thought you&rsquo;d ask, but now I also <a href="http://www.vimgolf.com/">vimgolf</a> in emacs for fun 😉.</p>
 <p>My trajectory in Emacs has just started, and to make the start smooth I went ahead with <a href="https://github.com/hlissner/doom-emacs">doom</a> with no 😈 (no pun intended, the original Emacs keybindings got me right in the feels). To reverbate with the community, I truly found Emacs to be <em>thermonuclear word processor</em>.</p>
 <h3 id="what-i-type-is-what-you-see">What I type is what you see</h3>
-<p>It is now 2021 and I have decided to be a full-time Emacsian. This means that the &ldquo;texts&rdquo; I edit furthur would most probably be written in Emacs itself. In the past, I have experimented with blogg-struggl-ing with raw html-css based blogs with manually maintained indexing and navigation, Notion-as-CMS with notablog (quite an impressive project, check it out). For me, private notetaking and public blogging had never converged before I came across <a href="https://roamresearch.com/">Roam Research</a>. And with its pricing, came a slew of open-source alternatives of which <a href="https://github.com/org-roam/org-roam">org-roam</a> fit my bill finally. The community has left no stone unturned, and thus with org-roam, we have <a href="https://github.com/kaushalmodi/ox-hugo">ox-hugo</a> as the transport protocol to web publishing. I chose the <a href="https://github.com/lingxz/er">Er</a> theme thinking it&rsquo;d be pleasing to my readers' eyes (is it?). The figure below would help you figure out how much I literally mean the phrase &ldquo;Written and published right from Emacs Org-mode.&quot;:</p>
-<figure>
-    <img src="/ox-hugo/blog_publish_flow.png"
-         alt="Figure 1: Seamless, isn&amp;rsquo;t it?"/> <figcaption>
-            <p>Figure 1: Seamless, isn&rsquo;t it?</p>
+<p>It is now 2021 and I have decided to be a full-time Emacsian. This means that the &ldquo;texts&rdquo; I edit furthur would most probably be written in Emacs itself. In the past, I have experimented with blogg-struggl-ing with raw html-css based blogs with manually maintained indexing and navigation, Notion-as-CMS with notablog (quite an impressive project, check it out). For me, private notetaking and public blogging had never converged before I came across <a href="https://roamresearch.com/">Roam Research</a>. And with its pricing, came a slew of open-source alternatives of which <a href="https://github.com/org-roam/org-roam">org-roam</a> fit my bill finally. The community has left no stone unturned, and thus with org-roam, we have <a href="https://github.com/kaushalmodi/ox-hugo">ox-hugo</a> as the transport protocol to web publishing. I chose the <a href="https://github.com/lingxz/er">Er</a> theme thinking it&rsquo;d be pleasing to my readers&rsquo; eyes (is it?). The figure below would help you figure out how much I literally mean the phrase &ldquo;Written and published right from Emacs Org-mode.&rdquo;:</p>
+<figure><img src="/ox-hugo/blog_publish_flow.png"
+         alt="Figure 1: Seamless, isn&amp;rsquo;t it?"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Seamless, isn&rsquo;t it?</p>
         </figcaption>
 </figure>
 
@@ -132,7 +131,7 @@ type="image/x-icon"/>
 <br>
   <p class="mb0 mt2">
   <a href="/posts/godfs/">prev post</a>
-  
+  <a href="/posts/20220904235848-dayara_bugyal_himalayan_trek_with_school_friends/">next post</a>
   </p>
 </div>
 

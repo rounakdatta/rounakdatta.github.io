@@ -8,14 +8,14 @@ draft = false
 
 > Speed and efficiency are two different things. ~Rasheed Ogunlaru
 
-We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of [DAOs](https://en.wikipedia.org/wiki/Decentralized%5Fautonomous%5Forganization) is the same way we think of our workflows in the real world. The term workflows I'm using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline. The task themselves might sound trivial, but the point here is how idempotent or how scalable the workflow is. Asking questions like "What if I have to manage cleaning a few hundred inboxes tomorrow?" should clarify the problem in hand more.
+We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of [DAOs](https://en.wikipedia.org/wiki/Decentralized_autonomous_organization) is the same way we think of our workflows in the real world. The term workflows I'm using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline. The task themselves might sound trivial, but the point here is how idempotent or how scalable the workflow is. Asking questions like "What if I have to manage cleaning a few hundred inboxes tomorrow?" should clarify the problem in hand more.
 
 And therefore, this writeup talks on tools and mindsets around setting up such workflows through computer programs.
 
 
 ## What's in a text editor? {#what-s-in-a-text-editor}
 
-I used a handful of text editors so far, and honestly, Emacs was the first editor which encouraged (read _required_) me to read one full [book](https://www.goodreads.com/book/show/25587882-mastering-emacs) while getting started with it! Text editing had never been such fun and personalized before. And within weeks I found myself to be using Emacs on window mode (minimalist me who runs stuff right in the terminal -\_-), ditching JetBrains for lsp-mode, plaintext notetaking in org-roam, trading in Chromemacs for vimium and daringly writing simple elisp functions.
+I used a handful of text editors so far, and honestly, Emacs was the first editor which encouraged (read _required_) me to read one full [book](https://www.goodreads.com/book/show/25587882-mastering-emacs) while getting started with it! Text editing had never been such fun and personalized before. And within weeks I found myself to be using Emacs on window mode (minimalist me who runs stuff right in the terminal -_-), ditching JetBrains for lsp-mode, plaintext notetaking in org-roam, trading in Chromemacs for vimium and daringly writing simple elisp functions.
 
 I'm no text ninja yet, but my overall productivity on the keyboard has increased by folds and maintaing such an extensible editor by creating workflows of my choice has been a blessing in 2020. I now launch projectiles, ripgrep instead of grep, magit instead of git, org-roam instead of notion, ox-hugo instead of notablog and of course it's aM-xing! I thought you'd ask, but now I also [vimgolf](http://www.vimgolf.com/) in emacs for fun 😉.
 
@@ -26,7 +26,7 @@ My trajectory in Emacs has just started, and to make the start smooth I went ahe
 
 It is now 2021 and I have decided to be a full-time Emacsian. This means that the "texts" I edit furthur would most probably be written in Emacs itself. In the past, I have experimented with blogg-struggl-ing with raw html-css based blogs with manually maintained indexing and navigation, Notion-as-CMS with notablog (quite an impressive project, check it out). For me, private notetaking and public blogging had never converged before I came across [Roam Research](https://roamresearch.com/). And with its pricing, came a slew of open-source alternatives of which [org-roam](https://github.com/org-roam/org-roam) fit my bill finally. The community has left no stone unturned, and thus with org-roam, we have [ox-hugo](https://github.com/kaushalmodi/ox-hugo) as the transport protocol to web publishing. I chose the [Er](https://github.com/lingxz/er) theme thinking it'd be pleasing to my readers' eyes (is it?). The figure below would help you figure out how much I literally mean the phrase "Written and published right from Emacs Org-mode.":
 
-{{< figure src="/ox-hugo/blog_publish_flow.png" caption="Figure 1: Seamless, isn't it?" >}}
+{{< figure src="/ox-hugo/blog_publish_flow.png" caption="<span class=\"figure-number\">Figure 1: </span>Seamless, isn't it?" >}}
 
 
 ## First we shape our tools, thereafter they shape us {#first-we-shape-our-tools-thereafter-they-shape-us}

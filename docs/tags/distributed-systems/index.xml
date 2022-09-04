@@ -15,7 +15,7 @@
       
       <guid>/posts/godfs/</guid>
       <description>Redundancy is the key in software engineering ~Paul Klint
- I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 The source for this project is rounakdatta/GoDFS.
 Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
     </item>

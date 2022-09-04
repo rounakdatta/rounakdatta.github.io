@@ -15,7 +15,7 @@
       
       <guid>/posts/godfs/</guid>
       <description>Redundancy is the key in software engineering ~Paul Klint
- I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
+I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
 The source for this project is rounakdatta/GoDFS.
 Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
     </item>
@@ -26,7 +26,7 @@ Building Go Distributed File System Abstracting away the odds Proven systems lik
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
       
       <guid>/posts/pagerduty-for-iot/</guid>
-      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&#39; state. And the implementation of choice was liquid level.
+      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&amp;rsquo; state. And the implementation of choice was liquid level.
 What&amp;rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&amp;rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</description>
     </item>
     

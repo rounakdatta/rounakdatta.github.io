@@ -28,7 +28,7 @@ Also, I attempt to write [open-source software](https://github.com/rounakdatta).
 -   Engineering Intern (F19) with [Gaius Networks](https://gaiusnetworks.com/); designed and developed some of the core services like Community, Classrooms, Content Curation.
 -   Engineering Intern (W18), NLP Intern (S18) with [Guvi Geek Networks](https://www.guvi.in/); helped craft some impactful projects like personalised learning platform, scalable resume parser and a grammar-correction tool (open source! 😉).
 -   Blockchain Research Intern (S18) with [QuillHash Technologies](https://quillhash.com/); put on security research hats, and got to fiddle with smart contract security tooling, Security Tokens and Inter-Blockchain Communication.
--   Student researcher at [Next Tech Lab](https://nextech.io/); experimented with cutting-edge technology with special focus on InfoSec, Blockchain & AI algorithms. Also conquered a couple of national hackathons.
+-   Student researcher at [Next Tech Lab](https://nextech.io/); experimented with cutting-edge technology with special focus on InfoSec, Blockchain &amp; AI algorithms. Also conquered a couple of national hackathons.
 
 <hr>
 
