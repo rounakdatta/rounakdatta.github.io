@@ -16,7 +16,7 @@
 
 <meta property="article:published_time" content="2023-02-18T00:00:00&#43;05:30"/>
 
-<meta property="article:modified_time" content="2023-02-18T00:00:00&#43;05:30"/>
+<meta property="article:modified_time" content="2023-02-18T19:49:38&#43;05:30"/>
 
 
 
@@ -133,9 +133,9 @@ type="image/x-icon"/>
 <li>Measuring effort-to-value ratio before an action. It is easy to get carried away by all the fancy enterprise-grade hardware and complex networking setup (we do a lot of that in <a href="https://www.reddit.com/r/homelab/">r/homelab</a>). But I&rsquo;ve always been conscious of whether at all a technical improvement will bring about a real value addition. Afterall, it isn&rsquo;t production software, it&rsquo;s a homelab with a personal touch.</li>
 <li>Taking security seriously. With tools like Tailscale in the ecosystem, it is definitely easy to <em>have your private garden over VPN</em>. But still, even if we are exposing applications publicly, we must be aware of the risks of it. For example, if exposing publicly via Cloudflare Tunnels, Zero Trust Access is something to consider. Most importantly, if you&rsquo;re storing confidential/sensitive/objectional data in your homelab, prioritize security over convenience!</li>
 <li>Introduce monitoring, but be careful about overdoing it. Not all self-hosted applications come with telemetry built in, however it is moderately important to have some kind of host monitoring set up. Afterall, you wouldn&rsquo;t want your system to go up in flames because of a DDOS.</li>
-<li>I definitely wanted to build a distributed cluster - a fleet of machines which load-balance the compute. And a Ceph/SeaweedFS like distributed POSIX filesystem for all persistent storage requirements. While it increases reliability, it of course brings in a lot of operational complexity. Hence at the moment, it&rsquo;s a nice-to-hance instead of a must-have.</li>
+<li>I definitely wanted to build a distributed cluster - a fleet of machines which load-balance the compute. And a Ceph/SeaweedFS like distributed POSIX filesystem for all persistent storage requirements. While it increases reliability, it of course brings in a lot of operational complexity. Hence at the moment, it&rsquo;s a nice-to-have instead of a must-have.</li>
 <li>Running a hardware machine 24x7 isn&rsquo;t trivial if your residence is prone to frequent power cuts or poor broadband internet connection. In those cases, it&rsquo;s justified to rent out the cloud. In the long term, cost of owning hardware will balance out cost of renting equivalent hardware. Needless to say, cloud&rsquo;s reliability is unmatched.</li>
-<li>While Ansible does work good, it doesn&rsquo;t honour the spirits of functional programming. I have a long term plan to re-write my IaC in something like Nix. That doesn&rsquo;t give me anny performance / quality improvements, but improves reproducibility and confidence to experiment without fear.</li>
+<li>While Ansible does work good, it doesn&rsquo;t honour the spirits of functional programming. I have a long term plan to re-write my IaC in something like Nix. That doesn&rsquo;t give me any performance / quality improvements, but improves reproducibility and confidence to experiment without fear.</li>
 </ul>
 <p>That&rsquo;s all for the writeup!</p>
 </div>

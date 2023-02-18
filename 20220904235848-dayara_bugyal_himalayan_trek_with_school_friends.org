@@ -145,6 +145,3 @@ We got ourselves some food from the local stores (yes, stores are back) and got 
 
 #+CAPTION: Dayara Bugyal trek map (Source: Google Images)
 [[file:resources/2021_trek_trip/dayara_bugyal_map.jpeg]]
-
-* +HUGO_BASE_DIR: ./src
-

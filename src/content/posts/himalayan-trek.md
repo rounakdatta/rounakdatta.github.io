@@ -124,9 +124,6 @@ We got ourselves some food from the local stores (yes, stores are back) and got 
 
 {{< figure src="/ox-hugo/dayara_bugyal_map.jpeg" caption="<span class=\"figure-number\">Figure 25: </span>Dayara Bugyal trek map (Source: Google Images)" >}}
 
-
-## +HUGO_BASE_DIR: ./src {#plus-hugo-base-dir-dot-src}
-
 [^fn:1]: Our trek plan actually changed due to heavy snowfall. It was initially Har ki dun, but it got diverted to Dayara Bugyal. We had confirmed a shoe rent at Sankri (a stop on the way to Har ki dun) but that plan went haywire at the last moment due to itinerary change. So, we had to figure out a plan B here.
 [^fn:2]: Chandramohan ji is the son of a legendary trekking guide Sulak Ram Rana.
 [^fn:3]: It is generally prohibited by the Forest Department to set up campfires on the mountains. It is a step taken with the surge in number of trekkers in the recent years. When dry woods are burnt at a particular spot, the soil beneath gets burnt (upto few feet) and vegetation can't ever grow on that patch. Hence it is a vigilant and responsible step to avoid campfires.
