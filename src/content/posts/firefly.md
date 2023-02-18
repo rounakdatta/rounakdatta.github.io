@@ -67,3 +67,6 @@ Firefly is a very lightweight PHP-based application and has been hosted by me on
 ## What automations could we possibly do? {#what-automations-could-we-possibly-do}
 
 Well, we could do a lot of automations like making a POST request to Firefly when a Bank SMS is received so that the entire chain of making a transaction → recording it on Firefly is complete. This part gets more exciting, and a new post awaits that. Until next time! 👋
+
+
+## +HUGO_BASE_DIR: ./src {#plus-hugo-base-dir-dot-src}
