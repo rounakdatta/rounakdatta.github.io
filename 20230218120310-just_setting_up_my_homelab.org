@@ -1,5 +1,5 @@
 #+HUGO_BASE_DIR: ./src
-#+HUGO_TAGS: self-hosting hobby productivity
+#+HUGO_TAGS: self-hosted hobby productivity
 #+EXPORT_FILE_NAME: just-setting-up-my-homelab
 #+TITLE: Just setting up my homelab
 #+AUTHOR: Rounak Datta

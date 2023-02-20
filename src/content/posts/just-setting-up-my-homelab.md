@@ -2,7 +2,7 @@
 title = "Just setting up my homelab"
 author = ["Rounak Datta"]
 date = 2023-02-18T00:00:00+05:30
-tags = ["self-hosting", "hobby", "productivity"]
+tags = ["self-hosted", "hobby", "productivity"]
 draft = false
 +++
 

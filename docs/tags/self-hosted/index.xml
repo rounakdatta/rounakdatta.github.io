@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Mon, 25 May 2020 00:00:00 +0530</lastBuildDate><atom:link href="/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Feb 2023 00:00:00 +0530</lastBuildDate><atom:link href="/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Just setting up my homelab</title>
+      <link>/posts/just-setting-up-my-homelab/</link>
+      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
+      
+      <guid>/posts/just-setting-up-my-homelab/</guid>
+      <description>Over the last few years, I&amp;rsquo;ve been obsessively reading on responsible technology and information warfare. The absolute favourites in this space have been Permanent Record and Mindf*ck. The hobby of homelabbing and having control over my own data originates somewhere around that. I had earlier written about why I think Firefly-III helped me achieve the &amp;ldquo;personal&amp;rdquo; in personal finance. The joy of running a server 24x7 in your living room is mostly about cultivating dopamine and value from custom-built software.</description>
+    </item>
+    
     <item>
       <title>Better managing self-finance with Firefly</title>
       <link>/posts/firefly/</link>
