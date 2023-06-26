@@ -7,13 +7,13 @@
 
 * Rounak Datta
 
-#+CAPTION: My [[https://souptik.dev/][brother]] (left) and me
+#+CAPTION: My [[https://souptik.dev/][brother]] (on the left) and me
 [[file:resources/souptik_and_rounak.jpeg]]
 
 ** Today
-Our small, new team at [[https://commandk.dev][CommandK]] is attempting to solve a niche problem of *streamlining secrets delivery* to microservices at fast-growing companies. Previously I had an amazing stint with the Data Platform and Growth Engineering teams at [[https://tech.hotstar.com/][Disney+ Hotstar]].
+Our small, new team at [[https://commandk.dev][CommandK]] is attempting to solve a niche problem of *streamlining secrets delivery* to microservices at fast-growing companies. Before that, I had an amazing stint with the Data Platform and Growth Engineering teams at [[https://tech.hotstar.com/][Disney+ Hotstar]]. I like to call myself a *polymath engineer*, but ain't an "expert" in any particular area.
 
-I'm an avid [[https://www.goodreads.com/user/show/23254685-rounak-datta][reader]] (mostly technology and history), [[https://www.strava.com/athletes/70322649][regular cyclist]], music curator (Soundcloud soon) and an aspiring mathematician. Large-scale systems which /just work/ (think financial markets, democracy, submarine cables, city logistics) always fascinate me, and an unconditional hobby of mine is to quantitatively deconstruct these systems.
+Besides, I'm an avid [[https://www.goodreads.com/user/show/23254685-rounak-datta][reader]] (mostly technology and history), [[https://www.strava.com/athletes/70322649][regular cyclist]], obsessive writer and a wannabe musician. Large-scale systems which /just work/ (think financial markets, democracy, submarine cables, city logistics) always fascinate me, and an unconditional hobby of mine is to quantitatively deconstruct these systems.
 
 Also, I attempt to write [[https://github.com/rounakdatta][open-source software]]. Sometimes [[https://twitter.com/rounakdatta12][tweets]]. And [[https://stackoverflow.com/users/8303407/rounak-datta][answers]].
 
@@ -22,12 +22,12 @@ Also, I attempt to write [[https://github.com/rounakdatta][open-source software]
 #+END_EXPORT
 
 ** Journey up until
-- I did my first internship with [[https://www.guvi.in/][Guvi Geek Networks]] (back when it was a ten-person startup), where we had our first tinkering with AI (albeit classical NLTK stuff) - built scrappy prototypes of a [[https://github.com/rounakdatta/resxme][scalable resume parser]] and a [[https://github.com/rounakdatta/CorrectLy][grammar-correction tool]].
-- At our undergrad University, I was a student researcher at [[https://nextech.io/][Next Tech Lab]]; we thought /cutting-edge is cool/ and played superficially with Ethereum smart contract programming and neural networks. Conquered a couple of national hackathons, developed some intuitions, but produced no serious research at all. As comical as it sounds, we were in it for the blockchain technology and not for the /lure of crypto/.
+- I did my first internship with [[https://www.guvi.in/][Guvi Geek Networks]] back when it was a ten-person startup, where we had our first tinkering with AI (albeit classical NLTK stuff) - built scrappy prototypes of a [[https://github.com/rounakdatta/resxme][scalable resume parser]] and a [[https://github.com/rounakdatta/CorrectLy][grammar-correction tool]].
+- At University, I was a student researcher at [[https://nextech.io/][Next Tech Lab]]; we thought /cutting-edge is cool/ and played superficially with Ethereum smart contract programming and neural networks. Conquered a couple of national hackathons, developed some valuable intuitions, but produced no serious research at all. As comical as it sounds, we were in it for the blockchain technology and not for the /lure of crypto/.
 - The curiosity with smart contract programming landed me a freelance with  [[https://quillhash.com/][QuillHash Technologies]]; put on security research hats, and got to fiddle with smart contract security tooling and "Tokens" (way before NFTs were cool). Well, if you come to hear about [[https://www.quillaudits.com/][QuillAudits]], the naive, first version was shipped by [[https://medium.com/quillhash/quill-audits-the-smart-contract-security-audit-platform-9ea1950ad6e][me]]! :)
-- I've always loved working with hardware, and had also picked up a gig which involved programming the ESP32 and STM32. While /no chips were fried in the making/, the work was cross-disciplinary (bootloaders to [[https://micropython.org/][MicroPython]] to [[https://en.wikipedia.org/wiki/Bluetooth_Low_Energy][BLE]] to [[https://ionicframework.com/][Ionic]] and what not!). Some extension of this work has been talked about [[/posts/pagerduty-for-iot][here]].
+- I've always loved working with hardware, and had also picked up a gig which involved programming the ESP32 and STM32. While /no chips were fried in the making/, the work was cross-disciplinary and fun (bootloaders to [[https://micropython.org/][MicroPython]] to [[https://en.wikipedia.org/wiki/Bluetooth_Low_Energy][BLE]] to [[https://ionicframework.com/][Ionic]] and what not!). Some extension of this work has been talked about [[/posts/pagerduty-for-iot][here]].
 
-While most of the former were small-scale experimental projects, my first exposure to how a complex software beast /runs and is being run/ was at [[https://www.hotstar.com/][Disney+ Hotstar]]. There  was(is?) a vibrant self-engineering culture - the team rolled their own HDFS, Kafka, Kubernetes and had little reliance on SaaS. Dealing with the *unknowns of the higher scale* helped me mature my perspectives on to how we design systems and manage trade-offs. A sweet outcome of this has been, it helped me develop a knack for writing "[[https://github.com/rounakdatta/computer.setup][personal]]-[[https://github.com/rounakdatta/homelab.setup][scale]]" software.
+While most of the former were small-scale experimental projects, my first exposure to how a complex software beast /runs and is being run/, was at [[https://www.hotstar.com/][Disney+ Hotstar]]. There  was(is?) a vibrant self-engineering culture - the team rolled their own HDFS, Kafka, Kubernetes and had little reliance on SaaS. Dealing with the *unknowns of the higher scale* helped me mature my perspectives on to how we design systems and manage trade-offs. A sweet outcome of this has been, it helped me develop a knack for writing "[[https://github.com/rounakdatta/computer.setup][personal]]-[[https://github.com/rounakdatta/homelab.setup][scale]]" software.
 
 #+BEGIN_EXPORT HTML
 <hr>
