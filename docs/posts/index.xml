@@ -7,65 +7,56 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Sat, 18 Feb 2023 00:00:00 +0530</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 19 Apr 2024 19:05:42 +0530</lastBuildDate>
+    <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alexander Nixinton</title>
+      <link>/posts/20240419122151-alexander_nixinton/</link>
+      <pubDate>Fri, 19 Apr 2024 00:00:00 +0530</pubDate>
+      <guid>/posts/20240419122151-alexander_nixinton/</guid>
+      <description>The following is an article about Nix and an attempt is to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you&amp;rsquo;re building and maintaining software for a long-ish term, then you&amp;rsquo;d like to minimize surprises and keep some old gears rotating as if for ever.</description>
+    </item>
     <item>
       <title>Just setting up my homelab</title>
       <link>/posts/just-setting-up-my-homelab/</link>
       <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
-      
       <guid>/posts/just-setting-up-my-homelab/</guid>
       <description>Over the last few years, I&amp;rsquo;ve been obsessively reading on responsible technology and information warfare. The absolute favourites in this space have been Permanent Record and Mindf*ck. The hobby of homelabbing and having control over my own data originates somewhere around that. I had earlier written about why I think Firefly-III helped me achieve the &amp;ldquo;personal&amp;rdquo; in personal finance. The joy of running a server 24x7 in your living room is mostly about cultivating dopamine and value from custom-built software.</description>
     </item>
-    
     <item>
       <title>Dayara Bugyal Himalayan trek with school friends</title>
       <link>/posts/himalayan-trek/</link>
       <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
-      
       <guid>/posts/himalayan-trek/</guid>
       <description>My favourite kind of trips are the ones which involve less extravaganza, but are highly memorable and with positive ROI (in any respect). Our 2021 December-end trek was an initialization of that model after a very very long pandemic break. Also this marked as a true travel vacation I took almost 1.5 years of working from home due to COVID-19. We, a team of 6 school friends trekked a Himalayan peak; and followed by the same I spent a few days at Delhi to meet new and old friends.</description>
     </item>
-    
     <item>
       <title>My everyday tooling around OSS</title>
       <link>/posts/open-source-tools-everyday/</link>
       <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
-      
       <guid>/posts/open-source-tools-everyday/</guid>
-      <description>Speed and efficiency are two different things. ~Rasheed Ogunlaru
-We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
+      <description>Speed and efficiency are two different things. ~Rasheed Ogunlaru&#xA;We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
     </item>
-    
     <item>
       <title>GoDFS - a simple Distributed FileSystem written in Go</title>
       <link>/posts/godfs/</link>
       <pubDate>Sun, 09 Aug 2020 00:00:00 +0530</pubDate>
-      
       <guid>/posts/godfs/</guid>
-      <description>Redundancy is the key in software engineering ~Paul Klint
-I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.
-The source for this project is rounakdatta/GoDFS.
-Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
+      <description>Redundancy is the key in software engineering ~Paul Klint&#xA;I&amp;rsquo;ve been midway through Designing Data-Intensive Applications and implementing such a distributed system and its algorithms was always on my stack. This implementation tries to cover most of the important aspects, yet largely simplified.&#xA;The source for this project is rounakdatta/GoDFS.&#xA;Building Go Distributed File System Abstracting away the odds Proven systems like Google FileSystem (GFS) and Hadoop Distributed FileSystem have almost made developers take distributed architectures for granted.</description>
     </item>
-    
     <item>
       <title>Better managing self-finance with Firefly</title>
       <link>/posts/firefly/</link>
       <pubDate>Mon, 25 May 2020 00:00:00 +0530</pubDate>
-      
       <guid>/posts/firefly/</guid>
       <description>To what extent do we track our money? Sites and apps are constantly tracking us so closely, with the only intention of knowing us better and presenting us with more self-relatable content (and potentially ads) and engage us even more into the product. We track our shipments, food, health, habits and reasonably quite everything that costs us time. Yeah, of course we do try to keep a sense of our spendings and definitely give a appreciating / regretting thought at the month-end.</description>
     </item>
-    
     <item>
       <title>PagerDuty for Things - An interesting IoT project</title>
       <link>/posts/pagerduty-for-iot/</link>
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
-      
       <guid>/posts/pagerduty-for-iot/</guid>
-      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&amp;rsquo; state. And the implementation of choice was liquid level.
-What&amp;rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&amp;rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</description>
+      <description>An interesting project we worked on being at college was building a PagerDuty-like watchdog for monitoring physical things&amp;rsquo; state. And the implementation of choice was liquid level.&#xA;What&amp;rsquo;s up The project is all about an integration effort of an ESP32-connected weight detection machinery to an online service to unlock possibilities like remote monitoring and alerting. To elucidate, think of remotely monitoring your gas cylinder&amp;rsquo;s fuel level and getting alerted whenever the level drops below a custom-defined threshold.</description>
     </item>
-    
   </channel>
 </rss>

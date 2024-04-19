@@ -7,168 +7,140 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Sat, 18 Feb 2023 00:00:00 +0530</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 19 Apr 2024 19:05:42 +0530</lastBuildDate>
+    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>hobby</title>
-      <link>/tags/hobby/</link>
-      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/hobby/</guid>
+      <title>Nix</title>
+      <link>/tags/nix/</link>
+      <pubDate>Fri, 19 Apr 2024 00:00:00 +0530</pubDate>
+      <guid>/tags/nix/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>productivity</title>
-      <link>/tags/productivity/</link>
-      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/productivity/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>self-hosted</title>
-      <link>/tags/self-hosted/</link>
-      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/self-hosted/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>friends</title>
-      <link>/tags/friends/</link>
-      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/friends/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>travel</title>
-      <link>/tags/travel/</link>
-      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/travel/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>trekking</title>
-      <link>/tags/trekking/</link>
-      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/trekking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>vacation</title>
-      <link>/tags/vacation/</link>
-      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/vacation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>emacs</title>
-      <link>/tags/emacs/</link>
-      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
-      
-      <guid>/tags/emacs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>open-source</title>
+      <title>Open-Source</title>
       <link>/tags/open-source/</link>
-      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
-      
+      <pubDate>Fri, 19 Apr 2024 00:00:00 +0530</pubDate>
       <guid>/tags/open-source/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>setup</title>
+      <title>Setup</title>
       <link>/tags/setup/</link>
-      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
-      
+      <pubDate>Fri, 19 Apr 2024 00:00:00 +0530</pubDate>
       <guid>/tags/setup/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>distributed-systems</title>
+      <title>Hobby</title>
+      <link>/tags/hobby/</link>
+      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
+      <guid>/tags/hobby/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Productivity</title>
+      <link>/tags/productivity/</link>
+      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
+      <guid>/tags/productivity/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Self-Hosted</title>
+      <link>/tags/self-hosted/</link>
+      <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
+      <guid>/tags/self-hosted/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Friends</title>
+      <link>/tags/friends/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      <guid>/tags/friends/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Travel</title>
+      <link>/tags/travel/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      <guid>/tags/travel/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Trekking</title>
+      <link>/tags/trekking/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      <guid>/tags/trekking/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vacation</title>
+      <link>/tags/vacation/</link>
+      <pubDate>Sun, 04 Sep 2022 00:00:00 +0530</pubDate>
+      <guid>/tags/vacation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Emacs</title>
+      <link>/tags/emacs/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
+      <guid>/tags/emacs/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Distributed-Systems</title>
       <link>/tags/distributed-systems/</link>
       <pubDate>Sun, 09 Aug 2020 00:00:00 +0530</pubDate>
-      
       <guid>/tags/distributed-systems/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>golang</title>
+      <title>Golang</title>
       <link>/tags/golang/</link>
       <pubDate>Sun, 09 Aug 2020 00:00:00 +0530</pubDate>
-      
       <guid>/tags/golang/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>finance</title>
+      <title>Finance</title>
       <link>/tags/finance/</link>
       <pubDate>Mon, 25 May 2020 00:00:00 +0530</pubDate>
-      
       <guid>/tags/finance/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>arduino</title>
+      <title>Arduino</title>
       <link>/tags/arduino/</link>
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
-      
       <guid>/tags/arduino/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>esp32</title>
+      <title>Esp32</title>
       <link>/tags/esp32/</link>
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
-      
       <guid>/tags/esp32/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>ionic</title>
+      <title>Ionic</title>
       <link>/tags/ionic/</link>
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
-      
       <guid>/tags/ionic/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>iot</title>
+      <title>Iot</title>
       <link>/tags/iot/</link>
       <pubDate>Sun, 13 Oct 2019 00:00:00 +0530</pubDate>
-      
       <guid>/tags/iot/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>about</title>
+      <title>About</title>
       <link>/tags/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>/tags/about/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

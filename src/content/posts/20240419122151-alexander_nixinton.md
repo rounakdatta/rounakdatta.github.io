@@ -2,7 +2,7 @@
 title = "Alexander Nixinton"
 author = ["Rounak Datta"]
 date = 2024-04-19T00:00:00+05:30
-tags = ["setup", "open-source"]
+tags = ["setup", "open-source", "nix"]
 draft = false
 +++
 
@@ -10,7 +10,7 @@ The following is an article about [Nix](https://nixos.org/) and an attempt is to
 
 _The article is neither about Alexander Hamilton, nor about Alexander Nix. Any correlation to their greatness or sophistications are purely coincidental._
 
-As a long-time lurker on Nix-related blogposts on HN, I decided to give it a roller-coaster try last year by installing NixOS on my personal laptop. Well, one can install Nix on an existing Linux/MacOS operating system as an application layer, however that path can be deceptive to shortcuts. I wanted to be true to the declarative and immutability properties of Nix, and therefore chose the hard way.
+As a long-time lurker on Nix-related blogposts on HN, I decided to give it a roller-coaster try last year by installing NixOS on my personal laptop. Well, while one can install Nix on an existing Linux/MacOS operating system as an application layer, however that path can be deceptive to shortcuts. I wanted to be true to the declarative and immutability properties of Nix, and therefore chose the hard way.
 
 
 ## The first leap into the valley of despair {#the-first-leap-into-the-valley-of-despair}
@@ -31,7 +31,7 @@ home = {
       settings.color_scheme = 6;
     };
 
-    password-store = {
+    Password-store = {
       enable = true;
     };
   };
@@ -41,9 +41,15 @@ home = {
 It must be wholeheartedly acknowledged that ChatGPT as well has Phind came very useful throughout the journey - not just helping me in getting familiar with the concepts, but also writing and composing small snippets of Nix programs into however I needed. My current dotfiles repository is essentially an opinionated tapestry of many other repositories handpicked via GitHub Search and the [Nix Discourse](https://discourse.nixos.org/).
 
 
-### Expressing all your logic into Nix {#expressing-all-your-logic-into-nix}
+### Expressing all your logic and state via Nix {#expressing-all-your-logic-and-state-via-nix}
 
-The promise of Nix just like other infrastructure-as-code frameworks is that you declaratively define what all your need. The framework then takes care of generating the dependency graph, and chalks its way through to creating / modifying the required components as missing. One also should take a moment to appreciate how vast and wholesome the [Nixpkgs](https://search.nixos.org/packages) repository is - often you'd be mildly surprised at how the rarest of rare packages has landed up on Nixpkgs (and very often with first-class support for `aarch64-darwin` i.e. Apple Silicon) - all community contributed!
+The promise of Nix just like other infrastructure-as-code frameworks is that you declaratively define what all your need. The framework then takes care of generating the dependency graph, and chalks its way through to creating / modifying the required components as missing. The fact that in NixOS you can rollback to _any_ past state (including the Linux kernel) is mindblowing! One also should take a moment to appreciate how vast and wholesome the [Nixpkgs](https://search.nixos.org/packages) repository is - often you'd be mildly surprised at how the rarest of rare packages has landed up on Nixpkgs (and very often with first-class support for `aarch64-darwin` i.e. Apple Silicon) - all community contributed!
+
+<a id="code-snippet--art of Nix on NixOS"></a>
+```shell
+# this is how you apply your configuration to a NixOS system
+nixos-rebuild switch --flake .
+```
 
 The standard pattern of managing dotfiles is to have a repository consisting of them, and then a bootstrapping program like GNU Stow or Ansible bakes them onto the system. This approach invites duplicacy when there are more than one flavours of the underlying system - one can't possibly embed an if/else logic (across say x86_64 and aarch64) into that innocent dotfile. And this is an area where Nix shines! The configuration (dotfile) and the bootstrapping framework (Nix) are fused into one, so defining logic is very straightforward. A snippet follows to bring the point home:
 
@@ -64,13 +70,13 @@ in
     +
     (if isDarwin then
       ''
-        # darwin-specific setting
-        tm_battery="#[fg=$base0F,bg=$base00] ♥ #(pmset -g batt | grep InternalBattery | awk '{print $3}' | sed 's/;$//')"
+        # darwin-specific command to figure out battery details
+        tm_battery="♥ #(pmset -g batt)"
       ''
     else
       ''
-        # linux-specific setting
-        tm_battery="#[fg=$base0F,bg=$base00] ♥ #(acpi --battery | awk \'{gsub(\",\", \"\"); print \$4}\')"
+        # linux-specific command to figure out battery details
+        tm_battery="♥ #(acpi --battery)"
       ''
     );
   }
@@ -78,11 +84,11 @@ in
 ```
 
 
-### The real world isn't so declarative and always deterministic {#the-real-world-isn-t-so-declarative-and-always-deterministic}
+### The real world isn't so declarative and not always deterministic {#the-real-world-isn-t-so-declarative-and-not-always-deterministic}
 
 While most software configurations are happy to work in a declarative way, you might occasionally come across odd-shaped pieces. Non-declarative patterns are considered _dirty_ in Nix, nevertheless it is supported as a concept called `activations`. One should however keep in mind that operating systems are not declarative inherently, so Nix is doing all the hard work of doing the sequential step and providing a neat declarative abstraction of that to us.
 
-Here's a small example of what the neat abstraction allows us:
+Here's a small example of what the neat declarative abstraction allows us:
 
 ```nix
 programs.gpg = {
@@ -119,4 +125,45 @@ While if you peek into the [internals](https://github.com/nix-community/home-man
         anyTrust = any (k: k.trust != null) cfg.publicKeys;
 
         importKeys = concatStringsSep "\n" (concatMap importKey cfg.publicKeys);
+```
+
+Having said that, if your requirement is to have sequential steps, you generally achieve that via activations for specific portions something like the following snippet. Make sure to take enough care that the code block is idempotent as it would be run every time yourr configuration gets re-built.
+
+<a id="code-snippet--the art of defining activations"></a>
+```nix
+  home.activation = {
+    doomEmacs = ''
+      DOOM="$HOME/.emacs.d"
+
+      if [ ! -d "$DOOM" ]; then
+          mkdir -p "$DOOM"
+      fi
+      cd $DOOM
+
+      # the following PATH addition is to make sure that binaries like `git`, `emacs` are available for use
+      export PATH="${config.home.path}/bin:$PATH"
+
+      git init
+      if git remote | grep -q origin; then
+          git remote set-url origin https://github.com/doomemacs/doomemacs.git
+      else
+          git remote add origin https://github.com/doomemacs/doomemacs.git
+      fi
+
+      git fetch origin
+      git pull origin master
+      ...
+    '';
+  };
+```
+
+
+## Emerging victorious and onto the next - iMountains and iValleys {#emerging-victorious-and-onto-the-next-imountains-and-ivalleys}
+
+The months-long experiment with Nix on my personal laptop was a rewarding success, and that called for the next step - _using Nix in production a.k.a at work_. There's this lovely community-maintained project [nix-darwin](https://github.com/LnL7/nix-darwin) which allows you to achieve a somewhat similar setup, albeit via the application layer. Unlike NixOS where you could literally rollback upgrades to your kernel and is fool-proof-declarative, on nix-darwin you can manage all your application installations, your configuration dotfiles as well as many macOS settings. Impressively, nix-darwin supports Homebrew as well as mas (Mac Apple Store) application installations. Sure, one can't configure disk partitions, macOS upgrades and initial manual steps (like logging in to Apple account) using nix-darwin, but that's a trade-off worth living with.
+
+<a id="code-snippet--art of Nix on Mac"></a>
+```shell
+# this is how you apply your configuration to a macOS system
+darwin-rebuild switch --flake .
 ```
