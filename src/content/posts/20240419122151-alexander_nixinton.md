@@ -6,7 +6,7 @@ tags = ["setup", "open-source", "nix"]
 draft = false
 +++
 
-We are at yet another article about [Nix](https://nixos.org/) and an attempt is to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you're building and maintaining software for a long-ish term, then you'd like to minimize surprises and keep some old gears rotating as if for ever. Packaging using Nix sorta guarantees that. Yes, and the other niceties like being "declarative" are great, but seemingly many people don't deeply care about that. Ultimately I'm trying to rant here on how beautiful the Nix ecosystem is, and walk you through the possibilities that could get unlocked.
+We are at yet another article about [Nix](https://nixos.org/) - it is a casual attempt to walk you through how it is to use Nix everyday. I also intend to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you're building and maintaining software for a long-ish term, then you'd like to minimize surprises and keep some old gears rotating as if for ever. Packaging using Nix sorta guarantees that. Yes, and the other niceties like being "declarative" are great, but seemingly many people don't deeply care about that. Ultimately I'm trying to rant here on how beautiful the Nix ecosystem is, and walk you through the possibilities that could get unlocked.
 
 As a long-time lurker on Nix-related blogposts on HN, I decided to give it a roller-coaster try last year by installing NixOS on my personal laptop. Well, while one can install Nix on an existing Linux/MacOS operating system as an application layer, however that path can be deceptive to shortcuts. I wanted to be true to the declarative and immutability properties of Nix, and therefore chose the hard way.
 
@@ -241,7 +241,7 @@ I have a self-hosted software called [Snibox](https://github.com/snibox/snibox) 
 
 ## Closing thoughts {#closing-thoughts}
 
-There's no denying of the learning curve of Nix, and one must give enough time test driving before starting to use it in day-to-day work. The reward is in the longer term, as more and more of your workflows are driven by Nix. If you're setting up your Nix dotfiles repository and would need guidance, I'd be happy to help over email!
+There's no denying of the learning curve of Nix, and one must give enough time test driving before starting to use it in day-to-day work. The reward is in the longer term, as more and more of your workflows are driven by Nix. Eventually, it just fades into the background and _keeps doing its job faithfully_. If you're setting up your Nix dotfiles repository and would need guidance, I'd be happy to help over email!
 
 <div class="github-card" data-github="rounakdatta/dotfiles" data-width="400" data-height="150" data-theme="default"></div>
 <script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
