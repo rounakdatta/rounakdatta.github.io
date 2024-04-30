@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Setup on Rounak&#39;s Blog</title>
-    <link>/tags/setup/</link>
-    <description>Recent content in Setup on Rounak&#39;s Blog</description>
+    <title>Nix on Rounak&#39;s Blog</title>
+    <link>/tags/nix/</link>
+    <description>Recent content in Nix on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
     <lastBuildDate>Fri, 19 Apr 2024 22:27:57 +0530</lastBuildDate>
-    <atom:link href="/tags/setup/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/nix/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Alexander Nixinton</title>
       <link>/posts/20240419122151-alexander_nixinton/</link>
       <pubDate>Fri, 19 Apr 2024 00:00:00 +0530</pubDate>
       <guid>/posts/20240419122151-alexander_nixinton/</guid>
       <description>We are at yet another article about Nix and an attempt is to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you&amp;rsquo;re building and maintaining software for a long-ish term, then you&amp;rsquo;d like to minimize surprises and keep some old gears rotating as if for ever.</description>
-    </item>
-    <item>
-      <title>My everyday tooling around OSS</title>
-      <link>/posts/open-source-tools-everyday/</link>
-      <pubDate>Sun, 03 Jan 2021 00:00:00 +0530</pubDate>
-      <guid>/posts/open-source-tools-everyday/</guid>
-      <description>Speed and efficiency are two different things. ~Rasheed Ogunlaru&#xA;We as engineers love streamlining our workflows. It all boils down to the sheer need and desire for greater control and visibility. In a utopian world, how we think of DAOs is the same way we think of our workflows in the real world. The term workflows I&amp;rsquo;m using could essentially be as simple as cleaning junk (yeah, those donotreply promotional) emails to setting up a blog publishing pipeline.</description>
     </item>
   </channel>
 </rss>

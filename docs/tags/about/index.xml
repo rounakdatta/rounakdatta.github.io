@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>about on Rounak&#39;s Blog</title>
+    <title>About on Rounak&#39;s Blog</title>
     <link>/tags/about/</link>
-    <description>Recent content in about on Rounak&#39;s Blog</description>
+    <description>Recent content in About on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Written and published right from Emacs Org-mode.</copyright><atom:link href="/tags/about/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Written and published right from Emacs Org-mode.</copyright>
+    <atom:link href="/tags/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
       <link>/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>/about/</guid>
-      <description>Rounak Datta Figure 1: My brother (on the left) and me
-Today Our small, new team at CommandK is attempting to solve a niche problem of streamlining secrets delivery to microservices at fast-growing companies. Before that, I had an amazing stint with the Data Platform and Growth Engineering teams at Disney+ Hotstar. I like to call myself a polymath engineer, but ain&amp;rsquo;t an &amp;ldquo;expert&amp;rdquo; in any particular area.
-Besides, I&amp;rsquo;m an avid reader (mostly technology and history), regular cyclist, obsessive writer and a wannabe musician.</description>
+      <description>Rounak Datta Figure 1: My brother (on the left) and me&#xA;Today Our small, new team at CommandK is attempting to solve a niche problem of streamlining secrets delivery to microservices at fast-growing companies. Before that, I had an amazing stint with the Data Platform and Growth Engineering teams at Disney+ Hotstar. I like to call myself a polymath engineer, but ain&amp;rsquo;t an &amp;ldquo;expert&amp;rdquo; in any particular area.&#xA;Besides, I&amp;rsquo;m an avid reader (mostly technology and history), regular cyclist, obsessive writer and a wannabe musician.</description>
     </item>
-    
   </channel>
 </rss>

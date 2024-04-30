@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>self-hosted on Rounak&#39;s Blog</title>
+    <title>Self-Hosted on Rounak&#39;s Blog</title>
     <link>/tags/self-hosted/</link>
-    <description>Recent content in self-hosted on Rounak&#39;s Blog</description>
+    <description>Recent content in Self-Hosted on Rounak&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Written and published right from Emacs Org-mode.</copyright>
-    <lastBuildDate>Sat, 18 Feb 2023 00:00:00 +0530</lastBuildDate><atom:link href="/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Feb 2023 23:52:51 +0530</lastBuildDate>
+    <atom:link href="/tags/self-hosted/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Just setting up my homelab</title>
       <link>/posts/just-setting-up-my-homelab/</link>
       <pubDate>Sat, 18 Feb 2023 00:00:00 +0530</pubDate>
-      
       <guid>/posts/just-setting-up-my-homelab/</guid>
       <description>Over the last few years, I&amp;rsquo;ve been obsessively reading on responsible technology and information warfare. The absolute favourites in this space have been Permanent Record and Mindf*ck. The hobby of homelabbing and having control over my own data originates somewhere around that. I had earlier written about why I think Firefly-III helped me achieve the &amp;ldquo;personal&amp;rdquo; in personal finance. The joy of running a server 24x7 in your living room is mostly about cultivating dopamine and value from custom-built software.</description>
     </item>
-    
     <item>
       <title>Better managing self-finance with Firefly</title>
       <link>/posts/firefly/</link>
       <pubDate>Mon, 25 May 2020 00:00:00 +0530</pubDate>
-      
       <guid>/posts/firefly/</guid>
       <description>To what extent do we track our money? Sites and apps are constantly tracking us so closely, with the only intention of knowing us better and presenting us with more self-relatable content (and potentially ads) and engage us even more into the product. We track our shipments, food, health, habits and reasonably quite everything that costs us time. Yeah, of course we do try to keep a sense of our spendings and definitely give a appreciating / regretting thought at the month-end.</description>
     </item>
-    
   </channel>
 </rss>
