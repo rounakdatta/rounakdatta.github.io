@@ -6,9 +6,7 @@ tags = ["setup", "open-source", "nix"]
 draft = false
 +++
 
-The following is an article about [Nix](https://nixos.org/) and an attempt is to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you're building and maintaining software for a long-ish term, then you'd like to minimize surprises and keep some old gears rotating as if for ever. Packaging using Nix sorta guarantees that. Yes, and the other niceties like being "declarative" are great, but seemingly many people don't deeply care about that.
-
-_The article is neither about Alexander Hamilton, nor about Alexander Nix. Any correlation to their greatness or sophistications are purely coincidental._
+We are at yet another article about [Nix](https://nixos.org/) and an attempt is to put my two cents into why most people like staying away from it, why a handful are happily sacrificing their weekends over it, and why some blokes are just willing to silently ride the wave. As the homepage says, Nix is both your programming language and the framework. The pitch is that if you're building and maintaining software for a long-ish term, then you'd like to minimize surprises and keep some old gears rotating as if for ever. Packaging using Nix sorta guarantees that. Yes, and the other niceties like being "declarative" are great, but seemingly many people don't deeply care about that. Ultimately I'm trying to rant here on how beautiful the Nix ecosystem is, and walk you through the possibilities that could get unlocked.
 
 As a long-time lurker on Nix-related blogposts on HN, I decided to give it a roller-coaster try last year by installing NixOS on my personal laptop. Well, while one can install Nix on an existing Linux/MacOS operating system as an application layer, however that path can be deceptive to shortcuts. I wanted to be true to the declarative and immutability properties of Nix, and therefore chose the hard way.
 
@@ -51,7 +49,7 @@ The promise of Nix just like other infrastructure-as-code frameworks is that you
 nixos-rebuild switch --flake .
 ```
 
-The standard pattern of managing dotfiles is to have a repository consisting of them, and then a bootstrapping program like GNU Stow or Ansible bakes them onto the system. This approach invites duplicacy when there are more than one flavours of the underlying system - one can't possibly embed an if/else logic (across say x86_64 and aarch64) into that innocent dotfile. And this is an area where Nix shines! The configuration (dotfile) and the bootstrapping framework (Nix) are fused into one, so defining logic is very straightforward. A snippet follows to bring the point home:
+The standard pattern of managing dotfiles is to have a repository consisting of them, and then a bootstrapping program like GNU Stow or Ansible bakes them onto the system. This approach invites duplicacy when there are more than one flavours of the underlying system - one can't possibly embed an if/else logic (across say x86_64 and aarch64) into that innocent dotfile. And this is an area where Nix shines! The configuration (dotfile) and the bootstrapping framework (Nix) are fused into one, so defining logic is very straightforward. Fair to call out here that when you're "baking" your configuration dotfiles via Nix, they're immutable and cannot be directly edited. That is, one can't take a shortcut to modify configurations, and instead should build the entire system every time. A snippet follows to bring the point home:
 
 <a id="code-snippet--the art of defining logic"></a>
 ```nix
@@ -140,7 +138,6 @@ Having said that, if your requirement is to have sequential steps, you generally
       fi
       cd $DOOM
 
-      # the following PATH addition is to make sure that binaries like `git`, `emacs` are available for use
       export PATH="${config.home.path}/bin:$PATH"
 
       git init
@@ -167,3 +164,84 @@ The months-long experiment with Nix on my personal laptop was a rewarding succes
 # this is how you apply your configuration to a macOS system
 darwin-rebuild switch --flake .
 ```
+
+
+## Nixy Science {#nixy-science}
+
+
+### Development environments and short-lived environments {#development-environments-and-short-lived-environments}
+
+Nix development environments (as well as shells) are one of the most impressive things to happen out of the immutability properties of the system. On a single occasion, I needed the Wireshark program for a day or two, and all I had to do was `nix-shell -p wireshark`. All the user-data produced by that program gets gracefully garbage-collected once you've exited that temporary shell. One no longer doesn't have to deal around with different versions of the JRE, or confusingly-installed global npm packages.
+
+And while nix shells are more for ad-hoc purposes, one can carefully craft Flakes for specific projects which would serve as the development environment template. Flakes can lock in the versions of each package, so they don't outdate with time. Last year, I attempted [Advent of Code](https://adventofcode.com/) in OCaml and decided to try out Nix development environments - super impressed!
+
+<a id="code-snippet--art of nix develop"></a>
+```nix
+{
+  description = "AOC OCaml programming environment presented to you by Nix";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+	ocamlEnv = with pkgs.ocamlPackages; [
+	  ocaml
+	  utop
+	  dune_3
+	  findlib
+	  ocaml-lsp
+	  ocamlformat
+	];
+      in
+      {
+        devShell = pkgs.mkShell {
+	  buildInputs = ocamlEnv ++ [ pkgs.opam ];
+	  shellHook = ''
+	    export IN_NIX_DEVELOP_SHELL=1
+
+            export OPAMROOT=$NIX_BUILD_TOP/.opam
+	    # unsetting the below env var is required for fixing a thorny issue with `num` install
+	    # similar issue & solution thread: https://github.com/ocaml/Zarith/issues/136
+	    unset OCAMLFIND_DESTDIR
+
+	    opam init --bare --disable-sandboxing -y --shell-setup -vv
+	    opam option -global depext=false
+	    OCAML_VERSION=$(ocaml --version | awk '{printf $5}')
+	    opam switch create $OCAML_VERSION
+	    eval $(opam env --switch=$OCAML_VERSION)
+	    opam install . --deps-only -y -v
+
+	    # figure out what the default shell of this computer is and set it
+            SHELLY=$(getent passwd $USER | awk -F: '{printf $7}')
+	    exec $SHELLY
+	  '';
+	};
+      }
+    );
+}
+```
+
+
+### Secrets management {#secrets-management}
+
+This is an area which is still work-in-progress for me. There exists great tooling like [sops-nix](https://github.com/Mic92/sops-nix), [agenix](https://github.com/yaxitech/ragenix) for injecting secret values into your Nix project. Common use cases might be auto-configuring API keys, setting up your private keys at the required paths, bootstrapping local database client and local password store and so on. The best thing about this declarative design is that your secrets would be encrypted and [tombed](https://dyne.org/software/tomb/) on-device, and you can conveniently commit them to git.
+
+
+### Endless automation {#endless-automation}
+
+Nix offers the scope for endless automation - behold your imaginations! You could write simple scripts and then tie them on to `launchd` / `systemd` to run them periodically and what not. Writing scheduled scripts on UNIX have existed since forever, but the ability to confidently deploy them using Nix on personal computers is something that's impressively an emerging capability to me. Nix brings to personal computers what Packer / AWS AMIs brought to server computing.
+
+I have a self-hosted software called [Snibox](https://github.com/snibox/snibox) to collect snippets of code / programming wisdom as I come through. There's yet another self-hosted software called [Memoet](https://github.com/memoetapp/memoet) which I use to write flash cards about things I want to remember in the longer term. Well, given Snibox doesn't provide a straightforward API and therefore a clever way might be to do some browser scripting. Scripting on the browser and dealing with fresh cookies is something that's possible only on a personal computer where the user is actually logged in - and there's where Nix comes into the picture. To get more clarity on how exactly this is done, you can take a look at this [pull request](https://github.com/rounakdatta/dotfiles/pull/23/files).
+
+
+## Closing thoughts {#closing-thoughts}
+
+There's no denying of the learning curve of Nix, and one must give enough time test driving before starting to use it in day-to-day work. The reward is in the longer term, as more and more of your workflows are driven by Nix. If you're setting up your Nix dotfiles repository and would need guidance, I'd be happy to help over email!
+
+<div class="github-card" data-github="rounakdatta/dotfiles" data-width="400" data-height="150" data-theme="default"></div>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
