@@ -1,68 +1,641 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// For now, we'll manually list some photos
-// Later you can make this dynamic with a photos collection
-const photos = [
-  { src: '/images/trek/peak_done.jpeg', alt: 'Trek peak', caption: 'Summit achieved' },
-  { src: '/images/trek/mountains_day_1.jpeg', alt: 'Mountains', caption: 'First day views' },
-  { src: '/images/trek/snow_all_along.jpeg', alt: 'Snowy trail', caption: 'Snow trail' },
-  { src: '/images/trek/view_from_the_tent.jpeg', alt: 'Tent view', caption: 'Morning from the tent' },
+// Photo albums - each with a title and array of photos
+const albums = [
+  {
+    title: "Himalayan Trek",
+    subtitle: "Dayara Bugyal, 2021",
+    photos: [
+      { src: '/images/trek/peak_done.jpeg', caption: 'Summit achieved' },
+      { src: '/images/trek/mountains_day_1.jpeg', caption: 'First day views' },
+      { src: '/images/trek/snow_all_along.jpeg', caption: 'Snow trail' },
+      { src: '/images/trek/view_from_the_tent.jpeg', caption: 'Morning from the tent' },
+      { src: '/images/raithal_mountains.jpeg', caption: 'Raithal mountains' },
+      { src: '/images/me_on_frozen_lakeside.jpeg', caption: 'Frozen lakeside' },
+      { src: '/images/snowy_way_to_dayara_peak.jpeg', caption: 'Way to peak' },
+      { src: '/images/evening_snowfall_tents.jpeg', caption: 'Evening snowfall' },
+    ]
+  },
+  {
+    title: "Friends & Adventures",
+    subtitle: "The people who matter",
+    photos: [
+      { src: '/images/trek_group_photo.jpeg', caption: 'The crew' },
+      { src: '/images/bright_happy_faces.jpeg', caption: 'Happy faces' },
+      { src: '/images/trek_all_group_photo.jpeg', caption: 'Full group' },
+      { src: '/images/souptik_and_rounak.jpeg', caption: 'Partners in crime' },
+      { src: '/images/trunk_photo_shoot_day_1.jpeg', caption: 'Road trip vibes' },
+      { src: '/images/trekking_in_crocs.jpeg', caption: 'Yes, in crocs!' },
+      { src: '/images/halt_for_the_flag.jpeg', caption: 'Flag stop' },
+      { src: '/images/vinod_ji.jpeg', caption: 'Our guide' },
+    ]
+  },
+  {
+    title: "Snow Days",
+    subtitle: "Winter wonderland moments",
+    photos: [
+      { src: '/images/ankle_deep_snow.jpeg', caption: 'Ankle deep' },
+      { src: '/images/snow_boots.jpeg', caption: 'Snow boots' },
+      { src: '/images/some_more_snow.jpeg', caption: 'More snow!' },
+      { src: '/images/snowflakes_dont_wet_you_so_enjoy.jpeg', caption: 'Enjoying snowflakes' },
+      { src: '/images/rest_easy_on_lakeside.jpeg', caption: 'Lakeside rest' },
+      { src: '/images/on_the_way_to_chilapra.jpeg', caption: 'To Chilapra' },
+    ]
+  },
+  {
+    title: "The Homelab",
+    subtitle: "Where the magic happens",
+    photos: [
+      { src: '/images/raspberry_pi_server.jpg', caption: 'Raspberry Pi cluster' },
+      { src: '/images/dell_latitude_server.jpeg', caption: 'Dell Latitude server' },
+      { src: '/images/desktop_server.jpg', caption: 'Desktop server' },
+      { src: '/images/raspberry_pi.jpg', caption: 'Pi setup' },
+      { src: '/images/nomad_dashboard.png', caption: 'Nomad dashboard' },
+    ]
+  },
 ];
 ---
 
 <BaseLayout title="Photos" description="Photography and visual memories">
   <div class="photos-page">
-    <h1>Photos</h1>
-    <p>WDYM one needs Instagram to have a colourful life?</p>
+    <header class="photos-header">
+      <h1>Photos</h1>
+      <p class="photos-subtitle">WDYM one needs Instagram to have a colourful life?</p>
+      <p class="scroll-hint">
+        <span class="hint-icon">←</span>
+        Scroll horizontally to explore
+        <span class="hint-icon">→</span>
+      </p>
+    </header>
 
-    <div class="photo-grid">
-      {photos.map(photo => (
-        <figure class="photo-item">
-          <img src={photo.src} alt={photo.alt} loading="lazy" />
-          {photo.caption && <figcaption>{photo.caption}</figcaption>}
-        </figure>
+    <div class="albums-container">
+      {albums.map((album, albumIndex) => (
+        <section class="album" data-album-index={albumIndex}>
+          <div class="album-header">
+            <h2>{album.title}</h2>
+            <span class="album-subtitle">{album.subtitle}</span>
+            <div class="album-progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+
+          <div class="album-scroll" tabindex="0">
+            <div class="photos-track">
+              {album.photos.map((photo, photoIndex) => (
+                <figure
+                  class="photo-card"
+                  data-index={photoIndex}
+                  style={`--delay: ${photoIndex * 0.05}s`}
+                >
+                  <div class="photo-frame">
+                    <img
+                      src={photo.src}
+                      alt={photo.caption}
+                      loading="lazy"
+                      draggable="false"
+                    />
+                    <div class="photo-overlay">
+                      <span class="photo-number">{String(photoIndex + 1).padStart(2, '0')}</span>
+                    </div>
+                  </div>
+                  <figcaption>{photo.caption}</figcaption>
+                </figure>
+              ))}
+              <div class="end-spacer"></div>
+            </div>
+          </div>
+        </section>
       ))}
     </div>
+  </div>
 
+  <!-- Lightbox for full-screen view -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-prev" aria-label="Previous">&lsaquo;</button>
+    <button class="lightbox-next" aria-label="Next">&rsaquo;</button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightbox-img" />
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
   </div>
 </BaseLayout>
 
 <style>
   .photos-page {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .photos-header {
     max-width: var(--content-width);
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
   }
 
-  .photos-page h1 {
-    margin-top: 0;
+  .photos-header h1 {
+    margin: 0 0 0.25rem 0;
   }
 
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+  .photos-subtitle {
+    color: var(--color-text-light);
+    margin: 0 0 1rem 0;
   }
 
-  .photo-item {
+  .scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    opacity: 0.7;
+  }
+
+  .hint-icon {
+    display: inline-block;
+    animation: hint-bounce 1.5s ease-in-out infinite;
+  }
+
+  .hint-icon:first-child {
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes hint-bounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  /* Albums container */
+  .albums-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Individual album */
+  .album {
+    position: relative;
+  }
+
+  .album-header {
+    max-width: var(--content-width);
+    margin: 0 auto 1rem;
+    padding: 0 1rem;
+  }
+
+  .album-header h2 {
     margin: 0;
+    font-size: 1.35rem;
+    display: inline-block;
   }
 
-  .photo-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 6px;
-    transition: transform 0.2s ease;
+  .album-subtitle {
+    margin-left: 0.75rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    font-style: italic;
   }
 
-  .photo-item img:hover {
-    transform: scale(1.02);
-  }
-
-  .photo-item figcaption {
+  .album-progress {
     margin-top: 0.5rem;
-    text-align: left;
+    height: 2px;
+    background: var(--color-border);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--color-link);
+    transition: width 0.1s ease-out;
+  }
+
+  /* Horizontal scroll area */
+  .album-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    outline: none;
+  }
+
+  .album-scroll:active {
+    cursor: grabbing;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .album-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .album-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .album-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+
+  .album-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-light);
+  }
+
+  /* Photos track */
+  .photos-track {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1rem calc((100vw - var(--content-width)) / 2 + 1rem);
+    padding-right: 2rem;
+  }
+
+  .end-spacer {
+    min-width: calc((100vw - var(--content-width)) / 2);
+    flex-shrink: 0;
+  }
+
+  /* Photo cards */
+  .photo-card {
+    flex-shrink: 0;
+    margin: 0;
+    scroll-snap-align: center;
+    opacity: 0;
+    animation: card-appear 0.5s ease-out forwards;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes card-appear {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .photo-frame {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.07),
+      0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  .photo-card:hover .photo-frame {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+      0 8px 16px rgba(0, 0, 0, 0.1),
+      0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .photo-frame img {
+    display: block;
+    width: auto;
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    user-select: none;
+  }
+
+  .photo-card:hover .photo-frame img {
+    transform: scale(1.05);
+  }
+
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0.75rem;
+  }
+
+  .photo-card:hover .photo-overlay {
+    opacity: 1;
+  }
+
+  .photo-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: white;
+    opacity: 0.8;
+  }
+
+  .photo-card figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    text-align: center;
+    max-width: 200px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 4px;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .lightbox.active .lightbox-content img {
+    transform: scale(1);
+  }
+
+  .lightbox-caption {
+    color: white;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+    position: absolute;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+    font-family: inherit;
+  }
+
+  .lightbox-close:hover,
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    opacity: 1;
+  }
+
+  .lightbox-close {
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .lightbox-close:hover {
+    transform: rotate(90deg);
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    padding: 1rem;
+  }
+
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    transform: translateY(-50%) scale(1.2);
+  }
+
+  .lightbox-prev {
+    left: 1rem;
+  }
+
+  .lightbox-next {
+    right: 1rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .photos-track {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .photo-frame img {
+      height: 220px;
+    }
+
+    .album-header {
+      padding: 0 1rem;
+    }
+
+    .album-subtitle {
+      display: block;
+      margin-left: 0;
+      margin-top: 0.25rem;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      font-size: 2rem;
+      padding: 0.5rem;
+    }
+
+    .end-spacer {
+      min-width: 1rem;
+    }
+  }
+
+  /* Keyboard focus styles */
+  .album-scroll:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .photo-frame:focus-visible {
+    outline: 3px solid var(--color-link);
+    outline-offset: 3px;
   }
 </style>
+
+<script>
+  // Drag to scroll functionality
+  document.querySelectorAll('.album-scroll').forEach(scroll => {
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    scroll.addEventListener('mousedown', (e) => {
+      isDown = true;
+      scroll.classList.add('dragging');
+      startX = (e as MouseEvent).pageX - (scroll as HTMLElement).offsetLeft;
+      scrollLeft = scroll.scrollLeft;
+    });
+
+    scroll.addEventListener('mouseleave', () => {
+      isDown = false;
+      scroll.classList.remove('dragging');
+    });
+
+    scroll.addEventListener('mouseup', () => {
+      isDown = false;
+      scroll.classList.remove('dragging');
+    });
+
+    scroll.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = (e as MouseEvent).pageX - (scroll as HTMLElement).offsetLeft;
+      const walk = (x - startX) * 1.5;
+      scroll.scrollLeft = scrollLeft - walk;
+    });
+
+    // Update progress bar on scroll
+    scroll.addEventListener('scroll', () => {
+      const maxScroll = scroll.scrollWidth - scroll.clientWidth;
+      const progress = (scroll.scrollLeft / maxScroll) * 100;
+      const progressBar = scroll.closest('.album')?.querySelector('.progress-bar') as HTMLElement;
+      if (progressBar) {
+        progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
+    });
+
+    // Keyboard navigation
+    scroll.addEventListener('keydown', (e) => {
+      const key = (e as KeyboardEvent).key;
+      if (key === 'ArrowRight') {
+        scroll.scrollLeft += 300;
+      } else if (key === 'ArrowLeft') {
+        scroll.scrollLeft -= 300;
+      }
+    });
+  });
+
+  // Lightbox functionality
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  let currentAlbumPhotos: { src: string; caption: string }[] = [];
+  let currentPhotoIndex = 0;
+
+  // Build album data for lightbox navigation
+  const albumsData: { src: string; caption: string }[][] = [];
+  document.querySelectorAll('.album').forEach(album => {
+    const photos: { src: string; caption: string }[] = [];
+    album.querySelectorAll('.photo-card').forEach(card => {
+      const img = card.querySelector('img');
+      const caption = card.querySelector('figcaption');
+      if (img) {
+        photos.push({
+          src: img.getAttribute('src') || '',
+          caption: caption?.textContent || ''
+        });
+      }
+    });
+    albumsData.push(photos);
+  });
+
+  // Open lightbox
+  document.querySelectorAll('.photo-frame').forEach((frame, globalIndex) => {
+    frame.addEventListener('click', (e) => {
+      // Prevent opening if dragging
+      if ((frame.closest('.album-scroll') as HTMLElement)?.classList.contains('dragging')) {
+        return;
+      }
+
+      const album = frame.closest('.album');
+      const albumIndex = parseInt(album?.getAttribute('data-album-index') || '0');
+      const card = frame.closest('.photo-card');
+      const photoIndex = parseInt(card?.getAttribute('data-index') || '0');
+
+      currentAlbumPhotos = albumsData[albumIndex];
+      currentPhotoIndex = photoIndex;
+
+      showPhoto();
+      lightbox?.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function showPhoto() {
+    if (lightboxImg && lightboxCaption && currentAlbumPhotos[currentPhotoIndex]) {
+      lightboxImg.src = currentAlbumPhotos[currentPhotoIndex].src;
+      lightboxCaption.textContent = currentAlbumPhotos[currentPhotoIndex].caption;
+    }
+  }
+
+  // Close lightbox
+  document.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  function closeLightbox() {
+    lightbox?.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Navigation
+  document.querySelector('.lightbox-prev')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentPhotoIndex = (currentPhotoIndex - 1 + currentAlbumPhotos.length) % currentAlbumPhotos.length;
+    showPhoto();
+  });
+
+  document.querySelector('.lightbox-next')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbumPhotos.length;
+    showPhoto();
+  });
+
+  // Keyboard navigation for lightbox
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') {
+      currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbumPhotos.length;
+      showPhoto();
+    }
+    if (e.key === 'ArrowLeft') {
+      currentPhotoIndex = (currentPhotoIndex - 1 + currentAlbumPhotos.length) % currentAlbumPhotos.length;
+      showPhoto();
+    }
+  });
+
+  // Initialize progress bars
+  document.querySelectorAll('.album-scroll').forEach(scroll => {
+    scroll.dispatchEvent(new Event('scroll'));
+  });
+</script>
