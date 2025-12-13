@@ -228,22 +228,14 @@ const albums = [
     cursor: grabbing;
   }
 
-  /* Hide scrollbar but keep functionality */
+  /* Hide scrollbar completely but keep functionality */
   .album-scroll::-webkit-scrollbar {
-    height: 6px;
+    display: none;
   }
 
-  .album-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .album-scroll::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
-  }
-
-  .album-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--color-text-light);
+  .album-scroll {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 
   /* Photos track */
@@ -301,7 +293,7 @@ const albums = [
   .photo-frame img {
     display: block;
     width: auto;
-    height: 280px;
+    height: 340px;
     object-fit: cover;
     transition: transform 0.5s ease;
     user-select: none;
@@ -452,7 +444,7 @@ const albums = [
     }
 
     .photo-frame img {
-      height: 220px;
+      height: 280px;
     }
 
     .album-header {
