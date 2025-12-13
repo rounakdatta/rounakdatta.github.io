@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+const sortedNotes = notes.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group by year
+const notesByYear = sortedNotes.reduce((acc, note) => {
+  const year = note.data.date.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(note);
+  return acc;
+}, {} as Record<number, typeof sortedNotes>);
+
+const years = Object.keys(notesByYear).sort((a, b) => Number(b) - Number(a));
+---
+
+<BaseLayout title="Notes" description="Technical writings and thoughts">
+  <div class="notes-page">
+    <h1>Notes</h1>
+    <p>Stories, ideas, half-baked thoughts and questions, lest we forget.</p>
+
+    {years.map(year => (
+      <section>
+        <h2>{year}</h2>
+        <ul class="post-list">
+          {notesByYear[Number(year)].map(note => (
+            <li>
+              <span class="post-date">
+                {note.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </span>
+              {' '}&mdash;{' '}
+              <a href={`/notes/${note.id}`} class="no-external">{note.data.title}</a>
+              {note.data.tags.length > 0 && (
+                <span class="post-tags">
+                  {note.data.tags.map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .notes-page {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .notes-page h1 {
+    margin-top: 0;
+  }
+</style>

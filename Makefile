@@ -1,10 +1,15 @@
 build:
-	hugo --source src/ --destination ../docs/
+	cd site && npm run build
+
+dev:
+	cd site && npm run dev
 
 run:
 	python3 -m http.server --directory docs/
 
 clean:
-	rm -rf src/content/
 	rm -rf docs/*
 
+# Legacy Hugo commands (deprecated)
+build-hugo:
+	hugo --source src/ --destination ../docs/

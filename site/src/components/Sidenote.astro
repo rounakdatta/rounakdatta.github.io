@@ -1,0 +1,67 @@
+---
+interface Props {
+  id: string;
+  title?: string;
+  date?: string;
+  words?: string;
+}
+
+const { id, title, date, words } = Astro.props;
+---
+
+<span class="sidenote-ref">
+  <sup class="sidenote-number">{id}</sup>
+</span>
+<span class="sidenote-inline">
+  {title && <span class="sidenote-title">{title}</span>}
+  <slot />
+  {(date || words) && (
+    <span class="sidenote-meta">
+      {date && <span>{date}</span>}
+      {date && words && <span>, </span>}
+      {words && <span>{words}</span>}
+    </span>
+  )}
+</span>
+
+<style>
+  .sidenote-ref {
+    position: relative;
+  }
+
+  .sidenote-number {
+    font-size: 0.75rem;
+    color: var(--color-link);
+  }
+
+  .sidenote-inline {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-sidenote);
+    background: #f9f9f9;
+    padding: 0.75rem 1rem;
+    margin: 1em 0;
+    border-left: 2px solid var(--color-border);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .sidenote-title {
+    font-weight: 600;
+    color: var(--color-text);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .sidenote-meta {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  @media (min-width: 901px) {
+    .sidenote-inline {
+      display: none;
+    }
+  }
+</style>

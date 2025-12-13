@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get notes and projects for sidebar
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+const sortedNotes = notes.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recentNotes = sortedNotes.slice(0, 5);
+
+const projects = await getCollection('projects');
+const featuredProjects = projects.filter(p => p.data.featured).sort((a, b) => a.data.order - b.data.order);
+
+// Read and render about.md
+const aboutFile = await import('../content/about.md');
+const AboutContent = aboutFile.default;
+const aboutFrontmatter = aboutFile.frontmatter;
+---
+
+<BaseLayout title="Home">
+  <div class="home-content">
+    <section class="about">
+      <div class="intro-row">
+        <div class="photo-wrapper">
+          <img src={aboutFrontmatter.photo} alt="Rounak Datta" class="profile-photo" />
+          <span class="auto-flair">🛺</span>
+          <div class="location">
+            <span class="pin">📍</span>
+            <span class="city">Bengaluru, IN</span>
+          </div>
+        </div>
+        <div class="intro-text" id="first-para"></div>
+      </div>
+
+      <div class="about-content">
+        <AboutContent />
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .home-content {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .about-content :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .about-content :global(hr) {
+    margin: 1.5rem 0;
+  }
+
+  .about-content :global(h2) {
+    font-size: 1.15rem;
+    margin-top: 0;
+  }
+</style>
+
+<script>
+  // Move first paragraph next to photo
+  document.addEventListener('DOMContentLoaded', () => {
+    const content = document.querySelector('.about-content');
+    const firstPara = content?.querySelector('p');
+    const target = document.getElementById('first-para');
+    if (firstPara && target) {
+      target.appendChild(firstPara);
+    }
+  });
+</script>

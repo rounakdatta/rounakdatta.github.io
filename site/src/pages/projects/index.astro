@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return a.data.order - b.data.order;
+});
+
+// Render content for each project
+const projectsWithContent = await Promise.all(
+  sortedProjects.map(async (project) => {
+    const { Content } = await render(project);
+    return { project, Content };
+  })
+);
+---
+
+<BaseLayout title="Projects" description="Software projects and open source work">
+  <div class="projects-page">
+    <h1>Projects</h1>
+
+    <div class="projects-grid">
+      {projectsWithContent.map(({ project, Content }) => (
+        <div class="project-card">
+          <div class="project-body">
+            <div class="project-text">
+              <h3>
+                {project.data.title}
+                {project.data.featured && <span class="featured-badge">Featured</span>}
+              </h3>
+              <div class="project-content">
+                <Content />
+              </div>
+              <div class="project-links">
+                {project.data.github && (
+                  <a href={project.data.github} class="project-link">Code</a>
+                )}
+                {project.data.url && (
+                  <a href={project.data.url} class="project-link">Website</a>
+                )}
+              </div>
+              {project.data.tags.length > 0 && (
+                <div class="post-tags">
+                  {project.data.tags.map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            {project.data.logo && (
+              <div class="project-image">
+                <img src={project.data.logo} alt="" />
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .projects-page {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .projects-page h1 {
+    margin-top: 0;
+  }
+
+  .projects-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .project-card {
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+  }
+
+  .project-body {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .project-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .project-card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .project-image {
+    flex-shrink: 0;
+    width: 120px;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+  }
+
+  .project-card:hover .project-image img {
+    opacity: 1;
+  }
+
+  @media (max-width: 500px) {
+    .project-body {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .project-image {
+      width: 100px;
+    }
+  }
+
+  .project-content {
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-content :global(p) {
+    margin: 0;
+  }
+
+  .featured-badge {
+    font-size: 0.7rem;
+    background: var(--color-link);
+    color: white;
+    padding: 0.15em 0.5em;
+    border-radius: 3px;
+    font-weight: normal;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .project-link {
+    font-size: 0.85rem;
+  }
+
+  .project-card .post-tags {
+    margin-top: 0.75rem;
+    margin-left: 0;
+  }
+</style>
