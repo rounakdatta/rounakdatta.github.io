@@ -2,7 +2,7 @@
 photo: "/images/profile.jpeg"
 ---
 
-I am solving interesting problems at the intersection of infrastructure and performance at [Lyric](https://lyric.tech), a young & ambitious startup in the niche area of supply chain software. Before this, I also had the chance to be part of the founding team of a now-defunct startup [CommandK](https://web.archive.org/web/20230602140418/https://www.commandk.dev/) which attempted to solve the sprawl problem of code configs and secrets at fast-growing companies. And even before, I had an amazing stint with the Data Platform and Growth Engineering teams at [Disney+ Hotstar](https://www.hotstar.com), a video streaming behemoth. I like to call myself a **polymath engineer**, but ain't an "expert" in any particular area.
+I am solving interesting problems at the intersection of infrastructure and performance at [Lyric](https://lyric.tech), a young & ambitious startup in the niche area of supply chain software. Before this, I had the chance to be part of the founding team of a now-defunct startup [CommandK](https://web.archive.org/web/20230602140418/https://www.commandk.dev/) which attempted to solve the sprawl problem of code configs and secrets at fast-growing companies. And even before, I had an amazing stint with the Data Platform and Growth Engineering teams at [Disney+ Hotstar](https://www.hotstar.com), a video streaming behemoth. I like to call myself a **polymath engineer**, but ain't an "expert" in any particular area.
 
 ---
 
