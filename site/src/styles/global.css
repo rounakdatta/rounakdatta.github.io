@@ -12,7 +12,7 @@
   --color-sidenote: #555;
   --color-code-bg: #f5f5f0;
   --color-code-border: #e0e0d8;
-  --content-width: 680px;
+  --content-width: 740px;
   --sidenote-width: 250px;
   --sidenote-gap: 30px;
 }
@@ -22,7 +22,7 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 body {
