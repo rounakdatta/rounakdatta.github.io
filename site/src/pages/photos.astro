@@ -1,80 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
-// Photo albums - each with a title and array of photos
-const albums = [
-  {
-    title: "Himalayan Trek",
-    subtitle: "Dayara Bugyal, 2021",
-    photos: [
-      { src: '/images/trek/peak_done.jpeg', caption: 'Summit achieved' },
-      { src: '/images/trek/mountains_day_1.jpeg', caption: 'First day views' },
-      { src: '/images/trek/snow_all_along.jpeg', caption: 'Snow trail' },
-      { src: '/images/trek/view_from_the_tent.jpeg', caption: 'Morning from the tent' },
-      { src: '/images/raithal_mountains.jpeg', caption: 'Raithal mountains' },
-      { src: '/images/me_on_frozen_lakeside.jpeg', caption: 'Frozen lakeside' },
-      { src: '/images/snowy_way_to_dayara_peak.jpeg', caption: 'Way to peak' },
-      { src: '/images/evening_snowfall_tents.jpeg', caption: 'Evening snowfall' },
-    ]
-  },
-  {
-    title: "Friends & Adventures",
-    subtitle: "The people who matter",
-    photos: [
-      { src: '/images/trek_group_photo.jpeg', caption: 'The crew' },
-      { src: '/images/bright_happy_faces.jpeg', caption: 'Happy faces' },
-      { src: '/images/trek_all_group_photo.jpeg', caption: 'Full group' },
-      { src: '/images/souptik_and_rounak.jpeg', caption: 'Partners in crime' },
-      { src: '/images/trunk_photo_shoot_day_1.jpeg', caption: 'Road trip vibes' },
-      { src: '/images/trekking_in_crocs.jpeg', caption: 'Yes, in crocs!' },
-      { src: '/images/halt_for_the_flag.jpeg', caption: 'Flag stop' },
-      { src: '/images/vinod_ji.jpeg', caption: 'Our guide' },
-    ]
-  },
-  {
-    title: "Snow Days",
-    subtitle: "Winter wonderland moments",
-    photos: [
-      { src: '/images/ankle_deep_snow.jpeg', caption: 'Ankle deep' },
-      { src: '/images/snow_boots.jpeg', caption: 'Snow boots' },
-      { src: '/images/some_more_snow.jpeg', caption: 'More snow!' },
-      { src: '/images/snowflakes_dont_wet_you_so_enjoy.jpeg', caption: 'Enjoying snowflakes' },
-      { src: '/images/rest_easy_on_lakeside.jpeg', caption: 'Lakeside rest' },
-      { src: '/images/on_the_way_to_chilapra.jpeg', caption: 'To Chilapra' },
-    ]
-  },
-  {
-    title: "The Homelab",
-    subtitle: "Where the magic happens",
-    photos: [
-      { src: '/images/raspberry_pi_server.jpg', caption: 'Raspberry Pi cluster' },
-      { src: '/images/dell_latitude_server.jpeg', caption: 'Dell Latitude server' },
-      { src: '/images/desktop_server.jpg', caption: 'Desktop server' },
-      { src: '/images/raspberry_pi.jpg', caption: 'Pi setup' },
-      { src: '/images/nomad_dashboard.png', caption: 'Nomad dashboard' },
-    ]
-  },
-];
+// Get albums from content collection, sorted by order
+const albumEntries = await getCollection('photoAlbums');
+const albums = albumEntries
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(entry => ({
+    title: entry.data.title,
+    subtitle: entry.data.subtitle,
+    photos: entry.data.photos,
+  }));
 ---
 
 <BaseLayout title="Photos" description="Photography and visual memories">
   <div class="photos-page">
-    <header class="photos-header">
+    <div class="photos-header">
       <h1>Photos</h1>
       <p class="photos-subtitle">WDYM one needs Instagram to have a colourful life?</p>
-      <p class="scroll-hint">
-        <span class="hint-icon">←</span>
-        Scroll horizontally to explore
-        <span class="hint-icon">→</span>
-      </p>
-    </header>
+    </div>
 
     <div class="albums-container">
       {albums.map((album, albumIndex) => (
         <section class="album" data-album-index={albumIndex}>
           <div class="album-header">
             <h2>{album.title}</h2>
-            <span class="album-subtitle">{album.subtitle}</span>
+            {album.subtitle && <span class="album-subtitle">{album.subtitle}</span>}
             <div class="album-progress">
               <div class="progress-bar"></div>
             </div>
@@ -141,29 +92,6 @@ const albums = [
   .photos-subtitle {
     color: var(--color-text-light);
     margin: 0 0 1rem 0;
-  }
-
-  .scroll-hint {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    opacity: 0.7;
-  }
-
-  .hint-icon {
-    display: inline-block;
-    animation: hint-bounce 1.5s ease-in-out infinite;
-  }
-
-  .hint-icon:first-child {
-    animation-direction: alternate-reverse;
-  }
-
-  @keyframes hint-bounce {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(4px); }
   }
 
   /* Albums container */
@@ -293,7 +221,7 @@ const albums = [
   .photo-frame img {
     display: block;
     width: auto;
-    height: 340px;
+    height: 380px;
     object-fit: cover;
     transition: transform 0.5s ease;
     user-select: none;
@@ -444,7 +372,7 @@ const albums = [
     }
 
     .photo-frame img {
-      height: 280px;
+      height: 300px;
     }
 
     .album-header {
