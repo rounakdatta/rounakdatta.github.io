@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const page = await getEntry('pages', 'fitness');
+const { Content } = await render(page);
+---
+
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <div class="page-content">
+    <h1>{page.data.title}</h1>
+    <div class="markdown-content">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .page-content h1 {
+    margin-top: 0;
+  }
+
+  .markdown-content :global(h2) {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .markdown-content :global(p:first-of-type) {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+  }
+</style>

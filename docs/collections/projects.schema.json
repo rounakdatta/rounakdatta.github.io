@@ -30,6 +30,13 @@
           "type": "boolean",
           "default": false
         },
+        "special": {
+          "type": "boolean",
+          "default": false
+        },
+        "internalUrl": {
+          "type": "string"
+        },
         "order": {
           "type": "number",
           "default": 0

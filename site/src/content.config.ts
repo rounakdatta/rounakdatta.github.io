@@ -35,8 +35,18 @@ const projects = defineCollection({
     logo: z.string().optional(),
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
+    special: z.boolean().default(false),
+    internalUrl: z.string().optional(),
     order: z.number().default(0),
   }),
 });
 
-export const collections = { notes, projects, photoAlbums };
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
+export const collections = { notes, projects, photoAlbums, pages };

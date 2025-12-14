@@ -9,8 +9,11 @@ const sortedProjects = projects.sort((a, b) => {
 });
 
 // Render content for each project
-const projectsWithContent = await Promise.all(
-  sortedProjects.map(async (project) => {
+const specialProjects = sortedProjects.filter(p => p.data.special);
+const regularProjects = sortedProjects.filter(p => !p.data.special);
+
+const regularProjectsWithContent = await Promise.all(
+  regularProjects.map(async (project) => {
     const { Content } = await render(project);
     return { project, Content };
   })
@@ -21,8 +24,18 @@ const projectsWithContent = await Promise.all(
   <div class="projects-page">
     <h1>Projects</h1>
 
+    {specialProjects.length > 0 && (
+      <div class="special-projects-grid">
+        {specialProjects.map((project) => (
+          <a href={project.data.internalUrl} class="special-project">
+            <span class="special-title">{project.data.title}</span>
+          </a>
+        ))}
+      </div>
+    )}
+
     <div class="projects-grid">
-      {projectsWithContent.map(({ project, Content }) => (
+      {regularProjectsWithContent.map(({ project, Content }) => (
         <div class="project-card">
           <div class="project-body">
             <div class="project-text">
@@ -71,10 +84,49 @@ const projectsWithContent = await Promise.all(
     margin-top: 0;
   }
 
+  .special-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .special-project {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.03) 0%, rgba(0, 102, 204, 0.08) 100%);
+    border: 1px solid rgba(0, 102, 204, 0.2);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .special-project:hover {
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.06) 0%, rgba(0, 102, 204, 0.12) 100%);
+    border-color: rgba(0, 102, 204, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .special-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 500px) {
+    .special-projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .projects-grid {
     display: grid;
     gap: 1.5rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   .project-card {
@@ -165,4 +217,5 @@ const projectsWithContent = await Promise.all(
     margin-top: 0.75rem;
     margin-left: 0;
   }
+
 </style>
