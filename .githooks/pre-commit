@@ -25,15 +25,15 @@ for img in $STAGED_IMAGES; do
         case "$ext_lower" in
             jpg|jpeg)
                 echo "  Optimizing: $img"
-                magick "$img" -quality 85 -strip "$img"
+                magick "$img" -resize '2000x2000>' -quality 85 -strip "$img"
                 ;;
             png)
                 echo "  Optimizing: $img"
-                magick "$img" -quality 90 -strip "$img"
+                magick "$img" -resize '2000x2000>' -quality 90 -strip "$img"
                 ;;
             webp)
                 echo "  Optimizing: $img"
-                magick "$img" -quality 85 "$img"
+                magick "$img" -resize '2000x2000>' -quality 85 "$img"
                 ;;
         esac
 

@@ -1,7 +1,7 @@
 ---
 title: "homelab.setup"
 github: "https://github.com/rounakdatta/homelab.setup"
-logo: "https://raw.githubusercontent.com/rounakdatta/homelab.setup/refs/heads/main/homelab.setup_logo.png"
+logo: "/images/projects/homelab_logo.png"
 tags: ["automation", "productivity"]
 featured: true
 order: 2

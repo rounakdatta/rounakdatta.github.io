@@ -1,7 +1,7 @@
 ---
 title: "dotfiles"
 github: "https://github.com/rounakdatta/dotfiles"
-logo: "https://raw.githubusercontent.com/rounakdatta/dotfiles/refs/heads/main/logo.png"
+logo: "/images/projects/dotfiles_logo.jpg"
 tags: ["automation", "productivity"]
 featured: true
 order: 3

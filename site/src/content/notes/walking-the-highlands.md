@@ -61,7 +61,7 @@ The magic often lies in sprinkling some uncertainty onto your itinerary!
 
 
   <figure>
-    <img src="/images/walking_the_highlands/a80e1bb0-4e39-4957-a229-08bc39c11ceb_4451x3920.png" />
+    <img src="/images/walking_the_highlands/a80e1bb0-4e39-4957-a229-08bc39c11ceb_4451x3920.jpg" />
     <figcaption>ZnOom out to ZnOom in</figcaption>
   </figure>
 
@@ -71,7 +71,7 @@ I think I also kept you wondering whether I was successful in finishing my West 
 
 
   <figure>
-    <img src="/images/walking_the_highlands/32c50e9a-03fc-4eec-b2d2-31e4537312e5_3344x3605.png" />
+    <img src="/images/walking_the_highlands/32c50e9a-03fc-4eec-b2d2-31e4537312e5_3344x3605.jpg" />
   </figure>
 
 Dear Highlands, I arrived a stranger and left lovestruck. Until we meet again…

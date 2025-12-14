@@ -21,7 +21,7 @@ photos:
     caption: "Mt Abu tells you Rajasthan isn't all desert"
   - src: "/images/rajasthan_2025/IMG_20251209_083646.jpg"
     caption: "Fateh Sagar running loop!"
-  - src: "/images/rajasthan_2025/IMG_2358.PNG"
+  - src: "/images/rajasthan_2025/IMG_2358.jpg"
     caption: "Happy people, yellow people"
   - src: "/images/rajasthan_2025/IMG_2460.jpg"
     caption: "The many colours of Rajasthan"
