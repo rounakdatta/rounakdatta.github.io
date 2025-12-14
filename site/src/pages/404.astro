@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404" description="Page not found">
+  <div class="not-found">
+    <div class="content">
+      <h1>404</h1>
+
+      <div class="image-container">
+        <img src="/images/excusez_moi.webp" alt="Excusez moi" />
+      </div>
+
+      <a href="/" class="home-link">Take me home</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 1rem 1rem;
+  }
+
+  h1 {
+    font-size: 5rem;
+    margin: 0;
+    line-height: 1;
+    color: var(--color-text-light);
+    opacity: 0.3;
+  }
+
+  .image-container {
+    margin: 1rem auto;
+    max-width: 320px;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+  }
+
+  .home-link {
+    display: inline-block;
+    font-size: 1.25rem;
+    padding: 0.75rem 2rem;
+    background: var(--color-link);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .home-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    color: white;
+  }
+
+  @media (max-width: 500px) {
+    h1 {
+      font-size: 4rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+    }
+
+    .image-container {
+      max-width: 280px;
+    }
+  }
+</style>
