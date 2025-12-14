@@ -6,7 +6,7 @@ I am solving interesting problems at the intersection of infrastructure and perf
 
 ---
 
-I'm an avid [reader](https://www.goodreads.com/user/show/23254685-rounak-datta) of non-fiction work (mostly history, technology, psychology), and the stories that connect them help me understand and reason about our complex world. **Cycling, running, hiking** and being an [outdoor person](https://www.strava.com/athletes/70322649) has been my way of life. I've always obsessed being a creative person with stories and [code](https://github.com/rounakdatta) as my medium of expression. Large-scale systems which *just work* (think financial markets, democracy, submarine cables, city logistics) always fascinate me, and an unconditional hobby of mine is to quantitatively deconstruct these systems.
+I'm an avid [reader](https://www.goodreads.com/user/show/23254685-rounak-datta) of non-fiction work (mostly history, technology, psychology), and the stories that connect them help me understand and reason about our complex world. **Cycling, running, hiking** and being an [outdoor person](https://www.strava.com/athletes/70322649) has been my way of life. I've always obsessed being a creative person with stories and [code](https://github.com/rounakdatta) as my medium of expression. Large-scale systems which *just work* (think financial markets, democracy, submarine cables, city logistics) always fascinate me, and an unconditional hobby of mine is to quantitatively deconstruct these systems. I love to talk about twentieth-century history, cultural backdrops of science, economic theories and startup ideas.
 
 Curiosity takes me places, literally. I don't have much social media presence, but I intend to share photos, stories and adventures through this site.
 

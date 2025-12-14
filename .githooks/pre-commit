@@ -1,0 +1,46 @@
+#!/bin/bash
+# Pre-commit hook: Optimize images before committing
+# Only processes staged image files to keep commits fast
+
+# Check if magick is available
+if ! command -v magick &> /dev/null; then
+    echo "Warning: ImageMagick not found. Skipping image optimization."
+    exit 0
+fi
+
+# Get list of staged image files
+STAGED_IMAGES=$(git diff --cached --name-only --diff-filter=ACM | grep -iE '\.(jpg|jpeg|png|webp)$')
+
+if [ -z "$STAGED_IMAGES" ]; then
+    exit 0
+fi
+
+echo "Optimizing staged images..."
+
+for img in $STAGED_IMAGES; do
+    if [ -f "$img" ]; then
+        ext="${img##*.}"
+        ext_lower=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+
+        case "$ext_lower" in
+            jpg|jpeg)
+                echo "  Optimizing: $img"
+                magick "$img" -quality 85 -strip "$img"
+                ;;
+            png)
+                echo "  Optimizing: $img"
+                magick "$img" -quality 90 -strip "$img"
+                ;;
+            webp)
+                echo "  Optimizing: $img"
+                magick "$img" -quality 85 "$img"
+                ;;
+        esac
+
+        # Re-stage the optimized image
+        git add "$img"
+    fi
+done
+
+echo "Image optimization complete!"
+exit 0
