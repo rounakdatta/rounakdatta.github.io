@@ -1,40 +1,860 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
+import activitiesData from '../data/strava-activities.json';
+import highlightRoutes from '../data/highlight-routes.json';
 
 const page = await getEntry('pages', 'fitness');
-const { Content } = await render(page);
+
+// Process activities into a map of date -> activity data
+const activityMap = new Map();
+activitiesData.activities.forEach(activity => {
+  const existing = activityMap.get(activity.date) || { count: 0, distance: 0, types: new Set(), activities: [] };
+  existing.count += 1;
+  existing.distance += activity.distance;
+  existing.types.add(activity.type);
+  existing.activities.push(activity.name);
+  activityMap.set(activity.date, existing);
+});
+
+// Generate calendar data for 2025
+const year = 2025;
+const startDate = new Date(year, 0, 1);
+const endDate = new Date(year, 11, 31);
+
+// Find the first Sunday before or on Jan 1
+const firstSunday = new Date(startDate);
+firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
+
+// Generate all weeks
+const weeks = [];
+let currentDate = new Date(firstSunday);
+
+while (currentDate <= endDate || weeks.length < 53) {
+  const week = [];
+  for (let i = 0; i < 7; i++) {
+    const dateStr = currentDate.toISOString().split('T')[0];
+    const isCurrentYear = currentDate.getFullYear() === year;
+    const activity = activityMap.get(dateStr);
+    const isFuture = currentDate > new Date();
+
+    week.push({
+      date: dateStr,
+      day: currentDate.getDate(),
+      month: currentDate.getMonth(),
+      isCurrentYear,
+      isFuture,
+      count: activity?.count || 0,
+      distance: activity?.distance || 0,
+      types: activity?.types ? Array.from(activity.types) : [],
+      activities: activity?.activities || [],
+    });
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  weeks.push(week);
+  if (weeks.length >= 53) break;
+}
+
+// Calculate stats
+const totalActivities = activitiesData.activities.length;
+const totalDistance = activitiesData.activities.reduce((sum, a) => sum + a.distance, 0);
+const activeDays = activityMap.size;
+const longestStreak = (() => {
+  const dates = Array.from(activityMap.keys()).sort();
+  let maxStreak = 0;
+  let currentStreak = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i - 1]);
+    const curr = new Date(dates[i]);
+    const diffDays = (curr - prev) / (1000 * 60 * 60 * 24);
+    if (diffDays === 1) {
+      currentStreak++;
+    } else {
+      maxStreak = Math.max(maxStreak, currentStreak);
+      currentStreak = 1;
+    }
+  }
+  return Math.max(maxStreak, currentStreak);
+})();
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+// Pre-compute month labels with positions (show each month only once)
+const monthLabels = [];
+const seenMonths = new Set();
+weeks.forEach((week, weekIndex) => {
+  // Find the first day of a new month in this week
+  const newMonthDay = week.find(d => d.isCurrentYear && d.day === 1);
+  if (newMonthDay && !seenMonths.has(newMonthDay.month)) {
+    seenMonths.add(newMonthDay.month);
+    monthLabels.push({ month: months[newMonthDay.month], left: weekIndex * 15 });
+  }
+});
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
-  <div class="page-content">
+  <div class="fitness-page">
     <h1>{page.data.title}</h1>
-    <div class="markdown-content">
-      <Content />
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{totalActivities}</div>
+        <div class="stat-label">Activities</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{(totalDistance / 1000).toFixed(0)}</div>
+        <div class="stat-label">Kilometers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{activeDays}</div>
+        <div class="stat-label">Active Days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{longestStreak}</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
     </div>
+
+    <div class="heatmap-section">
+      <h2>2025</h2>
+
+      <div class="heatmap-container">
+        <div class="heatmap-days">
+          {days.map((day, i) => (
+            <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
+          ))}
+        </div>
+
+        <div class="heatmap-wrapper">
+          <div class="heatmap-months">
+            {monthLabels.map((label) => (
+              <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+            ))}
+          </div>
+
+          <div class="heatmap-grid">
+            {weeks.map((week) => (
+              <div class="heatmap-week">
+                {week.map((day) => {
+                  const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
+                  const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
+                  const classes = ['heatmap-cell', `level-${level}`];
+                  if (!day.isCurrentYear) classes.push('outside');
+                  if (day.isFuture) classes.push('future');
+                  return <div class={classes.join(' ')} title={tooltip} />;
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="heatmap-legend">
+        <span class="legend-label">Less</span>
+        <div class="legend-cell level-0"></div>
+        <div class="legend-cell level-1"></div>
+        <div class="legend-cell level-2"></div>
+        <div class="legend-cell level-3"></div>
+        <span class="legend-label">More</span>
+      </div>
+    </div>
+
+    <div class="highlight-section">
+      <h2>Places we go</h2>
+
+      {highlightRoutes.highlights.map((highlight) => (
+        <div class="route-highlight-wrapper">
+          <div class="route-header">
+            <span class="activity-icon">
+              {highlight.type === 'Hike' && (
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="4" r="2"/>
+                  <path d="M14 23v-6l-1-2-1.7-1.3 1-3.5 2.7 2V16h2v-5l-4-3.7V6h-2v1.5L8 10l-1 3.5 3 2.5-.5 2L6 23h2.5l2.5-4 1 1v3h2z"/>
+                  <path d="M15.5 9l3 1.5-.5 1-3-1.5zM5 13l1.5-1 2 3-1.5 1z"/>
+                </svg>
+              )}
+              {highlight.type === 'Run' && (
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="14" cy="4" r="2"/>
+                  <path d="M10 23l1.5-6 2.5 2v4h2v-5.5l-3-2.5.5-3c1.5 1.5 3.5 2.5 5.5 2.5v-2c-2 0-3.5-1-4.5-2.5l-1-1.5c-.5-.5-1-1-1.5-1-.5 0-.5 0-1 .5l-4 3v4h2v-2.5l1.5-1-2 7.5-4-1-.5 2 6 1.5z"/>
+                </svg>
+              )}
+            </span>
+            <div class="route-header-text">
+              <span class="route-title">{highlight.name}</span>
+              <span class="route-tagline">{highlight.tagline}</span>
+            </div>
+            <div class="date-sticker">
+              <span class="date-month">{new Date(highlight.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+              <span class="date-year">{new Date(highlight.date).getFullYear()}</span>
+            </div>
+          </div>
+          <div class="route-card">
+            <div
+              class="route-map"
+              id={`map-${highlight.id}`}
+              data-center={JSON.stringify(highlight.center)}
+              data-zoom={highlight.zoom}
+              data-route={JSON.stringify(highlight.route)}
+              data-start-time={highlight.startTime}
+              data-photos={JSON.stringify(highlight.photos || [])}
+            ></div>
+            <div class="start-time-flash" id={`flash-${highlight.id}`}>
+              <span class="flash-time">{highlight.startTime}</span>
+            </div>
+            <div class="photo-slideshow" id={`slideshow-${highlight.id}`}></div>
+            <div class="route-overlay">
+              <div class="route-meta">
+                <span>{highlight.location}</span>
+                <span>{highlight.distance} km</span>
+              </div>
+              <a href={highlight.stravaUrl} target="_blank" rel="noopener noreferrer" class="strava-link" title="View on Strava">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
   </div>
 </BaseLayout>
 
 <style>
-  .page-content {
+  .fitness-page {
     max-width: var(--content-width);
     margin: 0 auto;
   }
 
-  .page-content h1 {
+  .fitness-page h1 {
     margin-top: 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
-  .markdown-content :global(h2) {
-    font-size: 1.3rem;
-    margin-top: 2rem;
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 600px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .heatmap-section {
+    margin: 2.5rem 0;
+  }
+
+  .heatmap-section h2 {
+    font-size: 1.2rem;
     margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
   }
 
-  .markdown-content :global(p:first-of-type) {
-    font-size: 1.1rem;
+  .heatmap-container {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .heatmap-days {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-top: 20px;
+  }
+
+  .day-label {
+    font-size: 0.65rem;
+    color: var(--color-text-light);
+    height: 12px;
+    line-height: 12px;
+  }
+
+  .heatmap-wrapper {
+    position: relative;
+    flex: 1;
+  }
+
+  .heatmap-months {
+    position: relative;
+    height: 20px;
+    margin-bottom: 0.5rem;
+  }
+
+  .month-label {
+    position: absolute;
+    font-size: 0.65rem;
     color: var(--color-text-light);
   }
+
+  .heatmap-grid {
+    display: flex;
+    gap: 3px;
+  }
+
+  .heatmap-week {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .heatmap-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  .heatmap-cell:hover {
+    transform: scale(1.2);
+  }
+
+  .heatmap-cell.outside {
+    visibility: hidden;
+  }
+
+  .heatmap-cell.future {
+    background: var(--color-bg);
+    border: 1px dashed var(--color-border);
+  }
+
+  .level-0 {
+    background: #ebedf0;
+  }
+
+  .level-1 {
+    background: #9be9a8;
+  }
+
+  .level-2 {
+    background: #40c463;
+  }
+
+  .level-3 {
+    background: #30a14e;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .level-0 {
+      background: #161b22;
+    }
+    .level-1 {
+      background: #0e4429;
+    }
+    .level-2 {
+      background: #006d32;
+    }
+    .level-3 {
+      background: #26a641;
+    }
+  }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+  }
+
+  .legend-label {
+    font-size: 0.65rem;
+    color: var(--color-text-light);
+  }
+
+  .legend-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+
+  /* Route Highlights - Hall of Fame style */
+  .highlight-section {
+    margin: 4rem 0;
+    /* Break out of container for full-width feel */
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding: 0 5vw;
+  }
+
+  .highlight-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+  }
+
+  .route-highlight-wrapper {
+    max-width: 700px;
+    margin-bottom: 4rem;
+  }
+
+  /* Alternating left-right layout - gentle offset */
+  .route-highlight-wrapper:nth-child(odd) {
+    margin-left: 15%;
+    margin-right: auto;
+  }
+
+  .route-highlight-wrapper:nth-child(even) {
+    margin-left: auto;
+    margin-right: 15%;
+  }
+
+  .route-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.25rem;
+  }
+
+  .activity-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fc4c02;
+  }
+
+  .activity-icon svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  .route-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .route-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  .route-tagline {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    font-style: italic;
+  }
+
+  .date-sticker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: #fc4c02;
+    color: white;
+    border-radius: 50%;
+    margin-left: auto;
+    transform: rotate(8deg);
+    box-shadow: 0 3px 12px rgba(252, 76, 2, 0.35);
+    flex-shrink: 0;
+  }
+
+  /* Left-aligned cards (odd): sticker on left, text follows */
+  .route-highlight-wrapper:nth-child(odd) .date-sticker {
+    order: -1;
+    margin-left: 0;
+    margin-right: 1rem;
+    transform: rotate(-8deg);
+  }
+
+  .route-highlight-wrapper:nth-child(odd) .activity-icon {
+    order: 0;
+  }
+
+  .route-highlight-wrapper:nth-child(odd) .route-header-text {
+    order: 1;
+    margin-right: auto;
+  }
+
+  .date-month {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .date-year {
+    font-size: 0.65rem;
+    font-weight: 500;
+    opacity: 0.9;
+    line-height: 1.2;
+  }
+
+  .route-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .route-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .route-map {
+    height: 450px;
+    width: 100%;
+    background: #1a1a1a;
+  }
+
+  @media (max-width: 900px) {
+    .highlight-section {
+      padding: 0 1rem;
+    }
+
+    .route-highlight-wrapper {
+      max-width: 100%;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+
+  .route-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1.25rem 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 1000;
+  }
+
+  /* Ensure Leaflet doesn't create a new stacking context that hides our overlays */
+  :global(.route-map .leaflet-pane),
+  :global(.route-map .leaflet-control-container) {
+    z-index: auto !important;
+  }
+
+  .route-meta {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.9);
+    flex-wrap: wrap;
+    pointer-events: none;
+  }
+
+  .route-meta span {
+    display: flex;
+    align-items: center;
+  }
+
+  .route-meta span:not(:last-child)::after {
+    content: "·";
+    margin-left: 0.5rem;
+    opacity: 0.5;
+  }
+
+  .strava-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #fc4c02;
+    color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(252, 76, 2, 0.4);
+  }
+
+  .strava-link:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(252, 76, 2, 0.6);
+  }
+
+  .strava-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Vignette effect */
+  .route-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 80px 20px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 16px;
+  }
+
+  /* Start time flash */
+  .start-time-flash {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .start-time-flash.animate {
+    animation: flashIn 3s ease-out forwards;
+  }
+
+  .flash-time {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    letter-spacing: 0.02em;
+  }
+
+  @keyframes flashIn {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Photo slideshow - polaroid stickers */
+  .photo-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hide Leaflet controls for cleaner look */
+  :global(.route-map .leaflet-control-zoom) {
+    display: none;
+  }
+
+  :global(.route-map .leaflet-control-attribution) {
+    font-size: 9px;
+    background: rgba(0,0,0,0.5) !important;
+    color: rgba(255,255,255,0.5) !important;
+    padding: 2px 6px;
+    border-radius: 4px 0 0 0;
+  }
+
+  :global(.route-map .leaflet-control-attribution a) {
+    color: rgba(255,255,255,0.6) !important;
+  }
+
+  /* Animated light - must be global for Leaflet */
+  :global(.runner-light) {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  :global(.runner-dot) {
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #fff 0%, #fc4c02 70%, transparent 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px 4px rgba(252, 76, 2, 0.6);
+  }
 </style>
+
+<script is:inline>
+  // Dynamically load Leaflet CSS
+  var leafletCSS = document.createElement('link');
+  leafletCSS.rel = 'stylesheet';
+  leafletCSS.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(leafletCSS);
+</script>
+<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var mapContainers = document.querySelectorAll('.route-map');
+
+    mapContainers.forEach(function(container) {
+      var center = JSON.parse(container.dataset.center);
+      var zoom = parseInt(container.dataset.zoom, 10);
+      var route = JSON.parse(container.dataset.route);
+      var photos = JSON.parse(container.dataset.photos || '[]');
+      var mapId = container.id;
+      var flashId = mapId.replace('map-', 'flash-');
+      var slideshowId = mapId.replace('map-', 'slideshow-');
+      var flashElement = document.getElementById(flashId);
+      var slideshowElement = document.getElementById(slideshowId);
+      var routeCard = container.closest('.route-card');
+
+      var map = L.map(container.id, {
+        scrollWheelZoom: false,
+      }).setView(center, zoom);
+
+      // Use CartoDB Dark Matter for minimal dark aesthetic
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 19,
+        subdomains: 'abcd',
+      }).addTo(map);
+
+      // Draw the route polyline - Strava-style thick orange
+      var polyline = L.polyline(route, {
+        color: '#fc4c02',
+        weight: 5,
+        opacity: 1,
+        lineJoin: 'round',
+        lineCap: 'round',
+      }).addTo(map);
+
+      // Fit bounds to show entire route
+      map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
+
+      // Animated runner light - runs once through the route
+      var runnerIcon = L.divIcon({
+        className: 'runner-light',
+        html: '<div class="runner-dot"></div>',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+      });
+
+      // Photo slideshow function - polaroids scattered on desk
+      function startSlideshow() {
+        if (!photos.length || !slideshowElement) return;
+
+        // Desk arrangement positions - spread out across the map
+        var arrangements = [
+          { x: -120, y: -60, rotate: -6 },
+          { x: 80, y: -50, rotate: 4 },
+          { x: -80, y: 50, rotate: 5 },
+          { x: 120, y: 40, rotate: -5 },
+          { x: -140, y: 10, rotate: 3 },
+          { x: 100, y: -20, rotate: -4 },
+          { x: -40, y: 70, rotate: 6 },
+        ];
+
+        // Create sticker elements with inline styles
+        var stickers = photos.map(function(url, index) {
+          var pos = arrangements[index % arrangements.length];
+          var sticker = document.createElement('div');
+          // Polaroid style - starts hidden, will animate to final position
+          sticker.style.cssText = 'position:absolute; background:#fff; padding:6px 6px 20px 6px; box-shadow:0 8px 32px rgba(0,0,0,0.5); border-radius:3px; opacity:0; transform:translate(' + pos.x + '%, ' + pos.y + '%) scale(0.8) rotate(' + pos.rotate + 'deg); transition:opacity 0.5s ease, transform 0.5s ease;';
+
+          var img = document.createElement('img');
+          img.src = url;
+          img.alt = 'Activity photo ' + (index + 1);
+          img.style.cssText = 'display:block; width:180px; height:140px; object-fit:cover; border-radius:2px;';
+
+          sticker.appendChild(img);
+          slideshowElement.appendChild(sticker);
+          return { el: sticker, pos: pos };
+        });
+
+        var currentPhoto = 0;
+
+        function showNextPhoto() {
+          if (currentPhoto >= stickers.length) return;
+
+          var sticker = stickers[currentPhoto];
+          // Animate in and STAY - no fade out
+          sticker.el.style.opacity = '1';
+          sticker.el.style.transform = 'translate(' + sticker.pos.x + '%, ' + sticker.pos.y + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
+
+          // Show next photo after delay
+          currentPhoto++;
+          if (currentPhoto < stickers.length) {
+            setTimeout(showNextPhoto, 800);
+          }
+        }
+
+        // Start showing photos after a brief pause
+        setTimeout(showNextPhoto, 500);
+      }
+
+      // Function to start the route animation
+      function startRouteAnimation() {
+        // Trigger start time flash
+        if (flashElement) {
+          flashElement.classList.add('animate');
+        }
+
+        var runner = L.marker(route[0], { icon: runnerIcon }).addTo(map);
+        var currentIndex = 0;
+        var animationSpeed = 70; // ms between points (gentle, leisurely pace)
+
+        var animationInterval = setInterval(function() {
+          currentIndex++;
+          if (currentIndex >= route.length) {
+            clearInterval(animationInterval);
+            map.removeLayer(runner); // Remove the dot when done
+            return;
+          }
+          runner.setLatLng(route[currentIndex]);
+        }, animationSpeed);
+
+        // Start photos after 2 seconds while pulse continues in background
+        setTimeout(startSlideshow, 2000);
+      }
+
+      // Use Intersection Observer to trigger animation when card comes into view
+      var animationStarted = false;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !animationStarted) {
+            animationStarted = true;
+            // Small delay to let user see the map before animation starts
+            setTimeout(startRouteAnimation, 300);
+            observer.unobserve(routeCard);
+          }
+        });
+      }, {
+        threshold: 0.3 // Trigger when 30% of the card is visible
+      });
+
+      observer.observe(routeCard);
+    });
+  });
+</script>
