@@ -4,7 +4,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://rounakdatta.github.io',
+  site: 'https://rounak.taptappers.club',
   outDir: '../docs',
   integrations: [mdx()],
   markdown: {
