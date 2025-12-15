@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 import activitiesData from '../data/strava-activities.json';
 import highlightRoutes from '../data/highlight-routes.json';
+import milestonesData from '../data/milestones.json';
 
 const page = await getEntry('pages', 'fitness');
 
@@ -77,9 +78,24 @@ function generateYearData(year: number) {
   return { year, weeks, monthLabels };
 }
 
-// Generate data for multiple years (newest first for display, reversed for scroll)
-const yearsToShow = [2025, 2024, 2023, 2022];
+// Generate data for multiple years (oldest first, scrolls forward in time)
+const yearsToShow = [2022, 2023, 2024, 2025];
 const yearDataList = yearsToShow.map(y => generateYearData(y));
+
+// Process milestones - find position for each milestone's month
+const processedMilestones = milestonesData.milestones.map(milestone => {
+  const yearData = yearDataList.find(yd => yd.year === milestone.year);
+  if (!yearData) return null;
+
+  const monthLabel = yearData.monthLabels.find(ml => ml.month === months[milestone.month]);
+  if (!monthLabel) return null;
+
+  return {
+    ...milestone,
+    monthName: months[milestone.month],
+    left: monthLabel.left
+  };
+}).filter(Boolean);
 
 ---
 
@@ -219,72 +235,188 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
       <div class="timeline-scroll-container">
         <div class="timeline-track">
           {/* First set of years */}
-          {yearDataList.map((yearData) => (
-            <div class="year-heatmap">
-              <div class="year-label">{yearData.year}</div>
-              <div class="heatmap-container">
-                <div class="heatmap-days">
-                  {days.map((day, i) => (
-                    <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
-                  ))}
-                </div>
-                <div class="heatmap-wrapper">
-                  <div class="heatmap-months">
-                    {yearData.monthLabels.map((label) => (
-                      <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+          {yearDataList.map((yearData) => {
+            const yearMilestones = processedMilestones.filter(m => m.year === yearData.year);
+            return (
+              <div class="year-heatmap">
+                <div class="year-label">{yearData.year}</div>
+                <div class="heatmap-container">
+                  <div class="heatmap-days">
+                    {days.map((day, i) => (
+                      <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
                     ))}
                   </div>
-                  <div class="heatmap-grid">
-                    {yearData.weeks.map((week) => (
-                      <div class="heatmap-week">
-                        {week.map((day) => {
-                          const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
-                          const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
-                          const classes = ['heatmap-cell', `level-${level}`];
-                          if (!day.isCurrentYear) classes.push('outside');
-                          if (day.isFuture) classes.push('future');
-                          return <div class={classes.join(' ')} title={tooltip} />;
-                        })}
-                      </div>
-                    ))}
+                  <div class="heatmap-wrapper">
+                    <div class="heatmap-months">
+                      {yearData.monthLabels.map((label) => (
+                        <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                      ))}
+                    </div>
+                    <div class="heatmap-grid">
+                      {yearData.weeks.map((week) => (
+                        <div class="heatmap-week">
+                          {week.map((day) => {
+                            const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
+                            const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
+                            const classes = ['heatmap-cell', `level-${level}`];
+                            if (!day.isCurrentYear) classes.push('outside');
+                            if (day.isFuture) classes.push('future');
+                            return <div class={classes.join(' ')} title={tooltip} />;
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Milestone annotations */}
+                    {yearMilestones.map((milestone, idx) => {
+                      const isBelow = milestone.position === 'below';
+                      const align = milestone.align || 'center';
+                      const hasNewline = milestone.text.includes('\n');
+                      const rotation = (idx % 2 === 0 ? -3 : 2) + (milestone.month % 3 - 1);
+                      return (
+                        <div
+                          class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
+                          style={`left: ${milestone.left + 10}px`}
+                        >
+                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                          <svg class="milestone-arrow" viewBox="0 0 30 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            {isBelow ? (
+                              /* Arrow pointing up (for below position) */
+                              <>
+                                <path
+                                  d="M 15 48 C 13 35, 17 20, 15 4"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M 10 12 Q 14 4, 15 4 Q 16 4, 20 11"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                              </>
+                            ) : (
+                              /* Arrow pointing down (for above position) */
+                              <>
+                                <path
+                                  d="M 15 2 C 13 15, 17 30, 15 46"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M 10 38 Q 14 46, 15 46 Q 16 46, 20 39"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                              </>
+                            )}
+                          </svg>
+                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           {/* Duplicate set for seamless infinite scroll */}
-          {yearDataList.map((yearData) => (
-            <div class="year-heatmap" aria-hidden="true">
-              <div class="year-label">{yearData.year}</div>
-              <div class="heatmap-container">
-                <div class="heatmap-days">
-                  {days.map((day, i) => (
-                    <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
-                  ))}
-                </div>
-                <div class="heatmap-wrapper">
-                  <div class="heatmap-months">
-                    {yearData.monthLabels.map((label) => (
-                      <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+          {yearDataList.map((yearData) => {
+            const yearMilestones = processedMilestones.filter(m => m.year === yearData.year);
+            return (
+              <div class="year-heatmap" aria-hidden="true">
+                <div class="year-label">{yearData.year}</div>
+                <div class="heatmap-container">
+                  <div class="heatmap-days">
+                    {days.map((day, i) => (
+                      <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
                     ))}
                   </div>
-                  <div class="heatmap-grid">
-                    {yearData.weeks.map((week) => (
-                      <div class="heatmap-week">
-                        {week.map((day) => {
-                          const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
-                          const classes = ['heatmap-cell', `level-${level}`];
-                          if (!day.isCurrentYear) classes.push('outside');
-                          if (day.isFuture) classes.push('future');
-                          return <div class={classes.join(' ')} />;
-                        })}
-                      </div>
-                    ))}
+                  <div class="heatmap-wrapper">
+                    <div class="heatmap-months">
+                      {yearData.monthLabels.map((label) => (
+                        <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                      ))}
+                    </div>
+                    <div class="heatmap-grid">
+                      {yearData.weeks.map((week) => (
+                        <div class="heatmap-week">
+                          {week.map((day) => {
+                            const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
+                            const classes = ['heatmap-cell', `level-${level}`];
+                            if (!day.isCurrentYear) classes.push('outside');
+                            if (day.isFuture) classes.push('future');
+                            return <div class={classes.join(' ')} />;
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Milestone annotations */}
+                    {yearMilestones.map((milestone, idx) => {
+                      const isBelow = milestone.position === 'below';
+                      const align = milestone.align || 'center';
+                      const hasNewline = milestone.text.includes('\n');
+                      const rotation = (idx % 2 === 0 ? -3 : 2) + (milestone.month % 3 - 1);
+                      return (
+                        <div
+                          class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
+                          style={`left: ${milestone.left + 10}px`}
+                        >
+                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                          <svg class="milestone-arrow" viewBox="0 0 30 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            {isBelow ? (
+                              /* Arrow pointing up (for below position) */
+                              <>
+                                <path
+                                  d="M 15 48 C 13 35, 17 20, 15 4"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M 10 12 Q 14 4, 15 4 Q 16 4, 20 11"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                              </>
+                            ) : (
+                              /* Arrow pointing down (for above position) */
+                              <>
+                                <path
+                                  d="M 15 2 C 13 15, 17 30, 15 46"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M 10 38 Q 14 46, 15 46 Q 16 46, 20 39"
+                                  stroke="#fc4c02"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                />
+                              </>
+                            )}
+                          </svg>
+                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -851,6 +983,7 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
 
   .timeline-scroll-container {
     overflow-x: hidden;
+    overflow-y: visible;
     position: relative;
     padding: 1rem 0 2rem;
   }
@@ -859,8 +992,14 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
     display: flex;
     gap: 4rem;
     animation: scrollTimeline 80s linear infinite;
+    animation-play-state: paused; /* Start paused, JS will play when visible */
     width: max-content;
     padding: 0 2rem;
+    overflow: visible;
+  }
+
+  .timeline-track.is-scrolling {
+    animation-play-state: running;
   }
 
   .timeline-scroll-container:hover .timeline-track {
@@ -878,7 +1017,8 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
 
   .year-heatmap {
     flex-shrink: 0;
-    padding: 1rem 0;
+    padding: 4rem 0; /* Extra space for milestone annotations above and below */
+    overflow: visible;
   }
 
   .year-label {
@@ -954,6 +1094,108 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
       font-size: 0.55rem;
     }
   }
+
+  /* Milestone annotations - hand-drawn style */
+  .heatmap-wrapper {
+    overflow: visible;
+  }
+
+  .heatmap-container {
+    overflow: visible;
+  }
+
+  .milestone-annotation {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .milestone-annotation.align-right {
+    transform: translateX(-90%);
+    align-items: flex-end;
+  }
+
+  .milestone-annotation.align-left {
+    transform: translateX(-10%);
+    align-items: flex-start;
+  }
+
+  .milestone-annotation.above {
+    top: -52px;
+  }
+
+  .milestone-annotation.below {
+    bottom: -82px;
+  }
+
+  .milestone-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #fc4c02;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .milestone-annotation .milestone-text.multiline {
+    white-space: pre-line;
+  }
+
+  /* Adjust positioning for multiline text */
+  .milestone-annotation.above:has(.multiline) {
+    top: -68px;
+  }
+
+  .milestone-annotation.below:has(.multiline) {
+    bottom: -97px;
+  }
+
+  .milestone-arrow {
+    width: 28px;
+    height: 45px;
+  }
+
+  .milestone-annotation.above .milestone-arrow {
+    margin-top: -2px;
+  }
+
+  .milestone-annotation.below .milestone-arrow {
+    margin-bottom: -2px;
+  }
+
+  @media (max-width: 600px) {
+    .milestone-annotation.above {
+      top: -42px;
+    }
+
+    .milestone-annotation.below {
+      bottom: -68px;
+    }
+
+    .milestone-annotation.above:has(.multiline) {
+      top: -55px;
+    }
+
+    .milestone-annotation.below:has(.multiline) {
+      bottom: -80px;
+    }
+
+    .milestone-text {
+      font-size: 0.9rem;
+      line-height: 1.05;
+    }
+
+    .milestone-arrow {
+      width: 22px;
+      height: 35px;
+    }
+  }
 </style>
 
 <script is:inline>
@@ -962,6 +1204,12 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
   leafletCSS.rel = 'stylesheet';
   leafletCSS.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
   document.head.appendChild(leafletCSS);
+
+  // Load Caveat font for milestone annotations
+  var caveatFont = document.createElement('link');
+  caveatFont.rel = 'stylesheet';
+  caveatFont.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap';
+  document.head.appendChild(caveatFont);
 </script>
 <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script is:inline>
@@ -1204,5 +1452,25 @@ const yearDataList = yearsToShow.map(y => generateYearData(y));
 
       observer.observe(routeCard);
     });
+
+    // Timeline scroll - only start when visible
+    var timelineSection = document.querySelector('.timeline-section');
+    var timelineTrack = document.querySelector('.timeline-track');
+
+    if (timelineSection && timelineTrack) {
+      var timelineObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            timelineTrack.classList.add('is-scrolling');
+          } else {
+            timelineTrack.classList.remove('is-scrolling');
+          }
+        });
+      }, {
+        threshold: 0.2 // Start when 20% visible
+      });
+
+      timelineObserver.observe(timelineSection);
+    }
   });
 </script>

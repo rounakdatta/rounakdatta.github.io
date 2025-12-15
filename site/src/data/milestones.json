@@ -1,0 +1,97 @@
+{
+  "milestones": [
+    {
+      "year": 2022,
+      "month": 6,
+      "text": "Bought my first\nhybrid bike!",
+      "position": "below"
+    },
+    {
+      "year": 2022,
+      "month": 7,
+      "text": "Signed up\non Strava",
+      "position": "above"
+    },
+    {
+      "year": 2022,
+      "month": 10,
+      "text": "First 50K ride",
+      "position": "above"
+    },
+    {
+      "year": 2023,
+      "month": 4,
+      "text": "Bangalore ORR\nround-about birthday ride",
+      "position": "below"
+    },
+    {
+      "year": 2023,
+      "month": 7,
+      "text": "First 5K run",
+      "position": "above"
+    },
+    {
+      "year": 2023,
+      "month": 9,
+      "text": "First 10K run",
+      "position": "below"
+    },
+    {
+      "year": 2023,
+      "month": 10,
+      "text": "First Half Marathon",
+      "position": "above"
+    },
+    {
+      "year": 2023,
+      "month": 11,
+      "text": "First Devils Circuit",
+      "position": "below"
+    },
+    {
+      "year": 2024,
+      "month": 0,
+      "text": "Kolkata Police HM +\nApollo Sreebhumi",
+      "position": "above",
+      "align": "left"
+    },
+    {
+      "year": 2024,
+      "month": 1,
+      "text": "Jarakabande 30K",
+      "position": "below"
+    },
+    {
+      "year": 2024,
+      "month": 5,
+      "text": "First 100K ride",
+      "position": "below"
+    },
+    {
+      "year": 2024,
+      "month": 8,
+      "text": "Ladakh HM",
+      "position": "above"
+    },
+    {
+      "year": 2024,
+      "month": 9,
+      "text": "Spice Coast Kochi HM",
+      "position": "below"
+    },
+    {
+      "year": 2024,
+      "month": 11,
+      "text": "SKF Goa + Tata Kolkata",
+      "position": "above",
+      "align": "right"
+    },
+    {
+      "year": 2025,
+      "month": 0,
+      "text": "Apollo Sreebhumi\nMarathon",
+      "position": "above",
+      "align": "left"
+    }
+  ]
+}
