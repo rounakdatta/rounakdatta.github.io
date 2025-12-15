@@ -81,52 +81,53 @@ function generateYearData(year: number) {
 const yearsToShow = [2025, 2024, 2023, 2022];
 const yearDataList = yearsToShow.map(y => generateYearData(y));
 
-// Keep 2025 data for backward compatibility with stats
-const weeks = yearDataList[0].weeks;
-
-// Calculate stats
-const totalActivities = activitiesData.activities.length;
-const totalDistance = activitiesData.activities.reduce((sum, a) => sum + a.distance, 0);
-const activeDays = activityMap.size;
-const longestStreak = (() => {
-  const dates = Array.from(activityMap.keys()).sort();
-  let maxStreak = 0;
-  let currentStreak = 1;
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1]);
-    const curr = new Date(dates[i]);
-    const diffDays = (curr - prev) / (1000 * 60 * 60 * 24);
-    if (diffDays === 1) {
-      currentStreak++;
-    } else {
-      maxStreak = Math.max(maxStreak, currentStreak);
-      currentStreak = 1;
-    }
-  }
-  return Math.max(maxStreak, currentStreak);
-})();
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
   <div class="fitness-page">
     <h1>{page.data.title}</h1>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">{totalActivities}</div>
-        <div class="stat-label">Activities</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">{(totalDistance / 1000).toFixed(0)}</div>
-        <div class="stat-label">Kilometers</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">{activeDays}</div>
-        <div class="stat-label">Active Days</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">{longestStreak}</div>
-        <div class="stat-label">Day Streak</div>
+    <div class="distance-journey">
+      <div class="journey-content">
+        <svg class="journey-path" viewBox="0 0 1000 180">
+          <!-- Running path -->
+          <path
+            d="M 80 70 Q 500 10 920 70"
+            fill="none"
+            stroke="#fc4c02"
+            stroke-width="2.5"
+            stroke-dasharray="6 10"
+            stroke-linecap="round"
+          />
+          <!-- Runner icon -->
+          <g transform="translate(48, 43) scale(0.14)" fill="#fc4c02">
+            <path d="M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z"/>
+          </g>
+          <!-- Running distance text -->
+          <g transform="translate(920, 70) rotate(8)">
+            <text x="10" y="-6" class="journey-distance">2,181</text>
+            <text x="10" y="10" class="journey-unit">kms of running</text>
+          </g>
+
+          <!-- Cycling path -->
+          <path
+            d="M 80 140 Q 500 80 920 140"
+            fill="none"
+            stroke="#fc4c02"
+            stroke-width="2.5"
+            stroke-dasharray="6 10"
+            stroke-linecap="round"
+          />
+          <!-- Cyclist icon -->
+          <g transform="translate(45, 108) scale(0.14)" fill="#fc4c02">
+            <path d="M54.46,164.71,82.33,126.5a48,48,0,1,1-12.92-9.44L41.54,155.29a8,8,0,1,0,12.92,9.42ZM208,112a47.81,47.81,0,0,0-16.93,3.09L214.91,156A8,8,0,1,1,201.09,164l-23.83-40.86A48,48,0,1,0,208,112ZM165.93,72H192a8,8,0,0,1,8,8,8,8,0,0,0,16,0,24,24,0,0,0-24-24H152a8,8,0,0,0-6.91,12l11.65,20H99.26L82.91,60A8,8,0,0,0,76,56H48a8,8,0,0,0,0,16H71.41L85.12,95.51,69.41,117.06a47.87,47.87,0,0,1,12.92,9.44l11.59-15.9L125.09,164A8,8,0,1,0,138.91,156l-30.32-52h57.48l11.19,19.17a48.11,48.11,0,0,1,13.81-8.08Z"/>
+          </g>
+          <!-- Cycling distance text -->
+          <g transform="translate(920, 140) rotate(8)">
+            <text x="10" y="-6" class="journey-distance">6,295</text>
+            <text x="10" y="10" class="journey-unit">kms of cycling</text>
+          </g>
+        </svg>
       </div>
     </div>
 
@@ -214,7 +215,7 @@ const longestStreak = (() => {
     </div>
 
     <div class="timeline-section">
-      <h2>Keep On Movin'</h2>
+      <h2>We Keep Movin'</h2>
       <div class="timeline-scroll-container">
         <div class="timeline-track">
           {/* First set of years */}
@@ -286,14 +287,6 @@ const longestStreak = (() => {
           ))}
         </div>
       </div>
-      <div class="heatmap-legend">
-        <span class="legend-label">Less</span>
-        <div class="legend-cell level-0"></div>
-        <div class="legend-cell level-1"></div>
-        <div class="legend-cell level-2"></div>
-        <div class="legend-cell level-3"></div>
-        <span class="legend-label">More</span>
-      </div>
     </div>
 
   </div>
@@ -310,42 +303,6 @@ const longestStreak = (() => {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin: 2rem 0;
-  }
-
-  .stat-card {
-    text-align: center;
-    padding: 1rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-  }
-
-  .stat-value {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--color-text);
-    line-height: 1.2;
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--color-text-light);
-    margin-top: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  @media (max-width: 600px) {
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
   .heatmap-section {
@@ -460,25 +417,58 @@ const longestStreak = (() => {
     }
   }
 
-  .heatmap-legend {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 0;
-    padding: 1rem 2rem 2rem;
-    justify-content: center;
+  /* Distance Journey Visualization */
+  .distance-journey {
+    position: relative;
+    margin: 3rem 0 4rem;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    width: 100vw;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
-  .legend-label {
-    font-size: 0.75rem;
-    color: var(--color-text-light);
-    padding: 0 0.25rem;
+  .journey-content {
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  .legend-cell {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
+  .journey-path {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .journey-distance {
+    font-family: inherit;
+    font-size: 24px;
+    font-weight: 400;
+    fill: #fc4c02;
+  }
+
+  .journey-unit {
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 400;
+    fill: #fc4c02;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 600px) {
+    .distance-journey {
+      margin: 2rem 0 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .journey-distance {
+      font-size: 18px;
+    }
+
+    .journey-unit {
+      font-size: 7px;
+    }
   }
 
   /* Route Highlights - Hall of Fame style */
