@@ -16,6 +16,7 @@
         "https://dgtzuqphqg23d.cloudfront.net/k9kWwBxWD_omTHzk6VmM16UFKSYqXEOIFJW-IpWe8P0-2048x1536.jpg"
       ],
       "distance": 18.77,
+      "duration": "8h 32m",
       "elevation": 1690,
       "type": "Hike",
       "center": [12.664, 75.654],
@@ -51,7 +52,7 @@
     {
       "id": "west-highland-way",
       "name": "West Highland Way",
-      "tagline": "Solo walking the West Highland Way",
+      "tagline": "Solo walking the Highlands",
       "stravaUrl": "https://www.strava.com/activities/14716546540",
       "date": "2025-06-06",
       "startTime": "7:08 AM",
@@ -66,6 +67,7 @@
         "https://dgtzuqphqg23d.cloudfront.net/kimF8vJ8SAV8_l4ZroS4XYlZLmVeu82WlIgpFYfqgC8-2048x1537.jpg"
       ],
       "distance": 45.97,
+      "duration": "11h 15m",
       "elevation": 1027,
       "type": "Hike",
       "center": [56.05, -4.45],

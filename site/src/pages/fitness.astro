@@ -17,43 +17,72 @@ activitiesData.activities.forEach(activity => {
   activityMap.set(activity.date, existing);
 });
 
-// Generate calendar data for 2025
-const year = 2025;
-const startDate = new Date(year, 0, 1);
-const endDate = new Date(year, 11, 31);
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-// Find the first Sunday before or on Jan 1
-const firstSunday = new Date(startDate);
-firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
+// Function to generate calendar data for any year
+function generateYearData(year: number) {
+  const startDate = new Date(year, 0, 1);
+  const endDate = new Date(year, 11, 31);
 
-// Generate all weeks
-const weeks = [];
-let currentDate = new Date(firstSunday);
+  // Find the first Sunday before or on Jan 1
+  const firstSunday = new Date(startDate);
+  firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
 
-while (currentDate <= endDate || weeks.length < 53) {
-  const week = [];
-  for (let i = 0; i < 7; i++) {
-    const dateStr = currentDate.toISOString().split('T')[0];
-    const isCurrentYear = currentDate.getFullYear() === year;
-    const activity = activityMap.get(dateStr);
-    const isFuture = currentDate > new Date();
+  // Generate all weeks
+  const weeks = [];
+  let currentDate = new Date(firstSunday);
 
-    week.push({
-      date: dateStr,
-      day: currentDate.getDate(),
-      month: currentDate.getMonth(),
-      isCurrentYear,
-      isFuture,
-      count: activity?.count || 0,
-      distance: activity?.distance || 0,
-      types: activity?.types ? Array.from(activity.types) : [],
-      activities: activity?.activities || [],
-    });
-    currentDate.setDate(currentDate.getDate() + 1);
+  while (currentDate <= endDate || weeks.length < 53) {
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const dateStr = currentDate.toISOString().split('T')[0];
+      const isCurrentYear = currentDate.getFullYear() === year;
+      const activity = activityMap.get(dateStr);
+      const isFuture = currentDate > new Date();
+
+      week.push({
+        date: dateStr,
+        day: currentDate.getDate(),
+        month: currentDate.getMonth(),
+        isCurrentYear,
+        isFuture,
+        count: activity?.count || 0,
+        distance: activity?.distance || 0,
+        types: activity?.types ? Array.from(activity.types) : [],
+        activities: activity?.activities || [],
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    weeks.push(week);
+    if (weeks.length >= 53) break;
   }
-  weeks.push(week);
-  if (weeks.length >= 53) break;
+
+  // Calculate month label positions for this year
+  const monthLabels = [];
+  const labeledMonths = new Set();
+  let weekIndex = 0;
+  for (const week of weeks) {
+    const firstDayOfWeek = week.find(d => d.isCurrentYear);
+    if (firstDayOfWeek && firstDayOfWeek.day <= 7 && !labeledMonths.has(firstDayOfWeek.month)) {
+      labeledMonths.add(firstDayOfWeek.month);
+      monthLabels.push({
+        month: months[firstDayOfWeek.month],
+        left: weekIndex * 18,
+      });
+    }
+    weekIndex++;
+  }
+
+  return { year, weeks, monthLabels };
 }
+
+// Generate data for multiple years (newest first for display, reversed for scroll)
+const yearsToShow = [2025, 2024, 2023, 2022];
+const yearDataList = yearsToShow.map(y => generateYearData(y));
+
+// Keep 2025 data for backward compatibility with stats
+const weeks = yearDataList[0].weeks;
 
 // Calculate stats
 const totalActivities = activitiesData.activities.length;
@@ -76,21 +105,6 @@ const longestStreak = (() => {
   }
   return Math.max(maxStreak, currentStreak);
 })();
-
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-// Pre-compute month labels with positions (show each month only once)
-const monthLabels = [];
-const seenMonths = new Set();
-weeks.forEach((week, weekIndex) => {
-  // Find the first day of a new month in this week
-  const newMonthDay = week.find(d => d.isCurrentYear && d.day === 1);
-  if (newMonthDay && !seenMonths.has(newMonthDay.month)) {
-    seenMonths.add(newMonthDay.month);
-    monthLabels.push({ month: months[newMonthDay.month], left: weekIndex * 15 });
-  }
-});
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
@@ -116,50 +130,6 @@ weeks.forEach((week, weekIndex) => {
       </div>
     </div>
 
-    <div class="heatmap-section">
-      <h2>2025</h2>
-
-      <div class="heatmap-container">
-        <div class="heatmap-days">
-          {days.map((day, i) => (
-            <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
-          ))}
-        </div>
-
-        <div class="heatmap-wrapper">
-          <div class="heatmap-months">
-            {monthLabels.map((label) => (
-              <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
-            ))}
-          </div>
-
-          <div class="heatmap-grid">
-            {weeks.map((week) => (
-              <div class="heatmap-week">
-                {week.map((day) => {
-                  const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
-                  const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
-                  const classes = ['heatmap-cell', `level-${level}`];
-                  if (!day.isCurrentYear) classes.push('outside');
-                  if (day.isFuture) classes.push('future');
-                  return <div class={classes.join(' ')} title={tooltip} />;
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div class="heatmap-legend">
-        <span class="legend-label">Less</span>
-        <div class="legend-cell level-0"></div>
-        <div class="legend-cell level-1"></div>
-        <div class="legend-cell level-2"></div>
-        <div class="legend-cell level-3"></div>
-        <span class="legend-label">More</span>
-      </div>
-    </div>
-
     <div class="highlight-section">
       <h2>Places we go</h2>
 
@@ -168,16 +138,28 @@ weeks.forEach((week, weekIndex) => {
           <div class="route-header">
             <span class="activity-icon">
               {highlight.type === 'Hike' && (
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="4" r="2"/>
-                  <path d="M14 23v-6l-1-2-1.7-1.3 1-3.5 2.7 2V16h2v-5l-4-3.7V6h-2v1.5L8 10l-1 3.5 3 2.5-.5 2L6 23h2.5l2.5-4 1 1v3h2z"/>
-                  <path d="M15.5 9l3 1.5-.5 1-3-1.5zM5 13l1.5-1 2 3-1.5 1z"/>
+                <svg viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M120,48a32,32,0,1,1,32,32A32,32,0,0,1,120,48Zm72,88c-23.37,0-28.92-8.56-36.6-20.4-3.65-5.64-7.79-12-14.16-17.55a40.92,40.92,0,0,0-8-5.47,8,8,0,0,0-11,3.92L64.66,228.81a8,8,0,0,0,4.15,10.52A7.84,7.84,0,0,0,72,240a8,8,0,0,0,7.34-4.81l33.59-77.27L144,180.12V232a8,8,0,0,0,16,0V176a8,8,0,0,0-3.35-6.51l-37.2-26.57,13.4-30.81c3.57,3.62,6.28,7.8,9.13,12.19,7.67,11.84,16.27,25.11,42,27.36V232a8,8,0,0,0,16,0V144A8,8,0,0,0,192,136ZM72,152a8,8,0,0,0,7.36-4.85l24-56a8,8,0,0,0-4.2-10.5l-28-12a8,8,0,0,0-10.5,4.2l-24,56a8,8,0,0,0,4.2,10.5l28,12A8,8,0,0,0,72,152Z"/>
                 </svg>
               )}
               {highlight.type === 'Run' && (
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="14" cy="4" r="2"/>
-                  <path d="M10 23l1.5-6 2.5 2v4h2v-5.5l-3-2.5.5-3c1.5 1.5 3.5 2.5 5.5 2.5v-2c-2 0-3.5-1-4.5-2.5l-1-1.5c-.5-.5-1-1-1.5-1-.5 0-.5 0-1 .5l-4 3v4h2v-2.5l1.5-1-2 7.5-4-1-.5 2 6 1.5z"/>
+                <svg viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z"/>
+                </svg>
+              )}
+              {highlight.type === 'Walk' && (
+                <svg viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M120,48a32,32,0,1,1,32,32A32,32,0,0,1,120,48Zm88,88c-28.64,0-41.81-13.3-55.75-27.37-3.53-3.57-7.18-7.26-11-10.58-37-32.14-96.22,22.73-98.72,25.08a8,8,0,0,0,10.95,11.66A163.88,163.88,0,0,1,84,113c13.78-7.38,25.39-10.23,34.7-8.58L64.66,228.81a8,8,0,0,0,4.15,10.52A7.84,7.84,0,0,0,72,240a8,8,0,0,0,7.34-4.81l33.59-77.27L144,180.12V232a8,8,0,0,0,16,0V176a8,8,0,0,0-3.35-6.51l-37.2-26.57L132.88,112c2.64,2.44,5.26,5.07,8,7.84C155.05,134.19,172.69,152,208,152a8,8,0,0,0,0-16Z"/>
+                </svg>
+              )}
+              {highlight.type === 'Ride' && (
+                <svg viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M54.46,164.71,82.33,126.5a48,48,0,1,1-12.92-9.44L41.54,155.29a8,8,0,1,0,12.92,9.42ZM208,112a47.81,47.81,0,0,0-16.93,3.09L214.91,156A8,8,0,1,1,201.09,164l-23.83-40.86A48,48,0,1,0,208,112ZM165.93,72H192a8,8,0,0,1,8,8,8,8,0,0,0,16,0,24,24,0,0,0-24-24H152a8,8,0,0,0-6.91,12l11.65,20H99.26L82.91,60A8,8,0,0,0,76,56H48a8,8,0,0,0,0,16H71.41L85.12,95.51,69.41,117.06a47.87,47.87,0,0,1,12.92,9.44l11.59-15.9L125.09,164A8,8,0,1,0,138.91,156l-30.32-52h57.48l11.19,19.17a48.11,48.11,0,0,1,13.81-8.08Z"/>
+                </svg>
+              )}
+              {highlight.type === 'Workout' && (
+                <svg viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M200,64V192a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V136H104v56a16,16,0,0,1-16,16H72a16,16,0,0,1-16-16V64A16,16,0,0,1,72,48H88a16,16,0,0,1,16,16v56h48V64a16,16,0,0,1,16-16h16A16,16,0,0,1,200,64ZM36,72H32A16,16,0,0,0,16,88v32H8.27A8.18,8.18,0,0,0,0,127.47,8,8,0,0,0,8,136h8v32a16,16,0,0,0,16,16h4a4,4,0,0,0,4-4V76A4,4,0,0,0,36,72Zm220,55.47a8.18,8.18,0,0,0-8.25-7.47H240V88a16,16,0,0,0-16-16h-4a4,4,0,0,0-4,4V180a4,4,0,0,0,4,4h4a16,16,0,0,0,16-16V136h8A8,8,0,0,0,256,127.47Z"/>
                 </svg>
               )}
             </span>
@@ -207,7 +189,18 @@ weeks.forEach((week, weekIndex) => {
             <div class="route-overlay">
               <div class="route-meta">
                 <span>{highlight.location}</span>
-                <span>{highlight.distance} km</span>
+                <span class="meta-stat">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                    <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>
+                  </svg>
+                  {highlight.distance} km
+                </span>
+                <span class="meta-stat">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                    <path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+                  </svg>
+                  {highlight.duration}
+                </span>
               </div>
               <a href={highlight.stravaUrl} target="_blank" rel="noopener noreferrer" class="strava-link" title="View on Strava">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -218,6 +211,89 @@ weeks.forEach((week, weekIndex) => {
           </div>
         </div>
       ))}
+    </div>
+
+    <div class="timeline-section">
+      <h2>Keep On Movin'</h2>
+      <div class="timeline-scroll-container">
+        <div class="timeline-track">
+          {/* First set of years */}
+          {yearDataList.map((yearData) => (
+            <div class="year-heatmap">
+              <div class="year-label">{yearData.year}</div>
+              <div class="heatmap-container">
+                <div class="heatmap-days">
+                  {days.map((day, i) => (
+                    <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
+                  ))}
+                </div>
+                <div class="heatmap-wrapper">
+                  <div class="heatmap-months">
+                    {yearData.monthLabels.map((label) => (
+                      <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                    ))}
+                  </div>
+                  <div class="heatmap-grid">
+                    {yearData.weeks.map((week) => (
+                      <div class="heatmap-week">
+                        {week.map((day) => {
+                          const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
+                          const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
+                          const classes = ['heatmap-cell', `level-${level}`];
+                          if (!day.isCurrentYear) classes.push('outside');
+                          if (day.isFuture) classes.push('future');
+                          return <div class={classes.join(' ')} title={tooltip} />;
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* Duplicate set for seamless infinite scroll */}
+          {yearDataList.map((yearData) => (
+            <div class="year-heatmap" aria-hidden="true">
+              <div class="year-label">{yearData.year}</div>
+              <div class="heatmap-container">
+                <div class="heatmap-days">
+                  {days.map((day, i) => (
+                    <div class="day-label" style={i % 2 === 0 ? '' : 'visibility: hidden'}>{day}</div>
+                  ))}
+                </div>
+                <div class="heatmap-wrapper">
+                  <div class="heatmap-months">
+                    {yearData.monthLabels.map((label) => (
+                      <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                    ))}
+                  </div>
+                  <div class="heatmap-grid">
+                    {yearData.weeks.map((week) => (
+                      <div class="heatmap-week">
+                        {week.map((day) => {
+                          const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
+                          const classes = ['heatmap-cell', `level-${level}`];
+                          if (!day.isCurrentYear) classes.push('outside');
+                          if (day.isFuture) classes.push('future');
+                          return <div class={classes.join(' ')} />;
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="heatmap-legend">
+        <span class="legend-label">Less</span>
+        <div class="legend-cell level-0"></div>
+        <div class="legend-cell level-1"></div>
+        <div class="legend-cell level-2"></div>
+        <div class="legend-cell level-3"></div>
+        <span class="legend-label">More</span>
+      </div>
     </div>
 
   </div>
@@ -351,55 +427,58 @@ weeks.forEach((week, weekIndex) => {
     border: 1px dashed var(--color-border);
   }
 
+  /* Strava-style orange color palette */
   .level-0 {
     background: #ebedf0;
   }
 
   .level-1 {
-    background: #9be9a8;
+    background: #fdcfb8;
   }
 
   .level-2 {
-    background: #40c463;
+    background: #fc8c5a;
   }
 
   .level-3 {
-    background: #30a14e;
+    background: #fc4c02;
   }
 
-  /* Dark mode support */
+  /* Dark mode support - Strava orange */
   @media (prefers-color-scheme: dark) {
     .level-0 {
       background: #161b22;
     }
     .level-1 {
-      background: #0e4429;
+      background: #4a2a18;
     }
     .level-2 {
-      background: #006d32;
+      background: #8c3d12;
     }
     .level-3 {
-      background: #26a641;
+      background: #fc4c02;
     }
   }
 
   .heatmap-legend {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-top: 1.5rem;
-    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 0;
+    padding: 1rem 2rem 2rem;
+    justify-content: center;
   }
 
   .legend-label {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: var(--color-text-light);
+    padding: 0 0.25rem;
   }
 
   .legend-cell {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
   }
 
   /* Route Highlights - Hall of Fame style */
@@ -423,6 +502,7 @@ weeks.forEach((week, weekIndex) => {
   .route-highlight-wrapper {
     max-width: 700px;
     margin-bottom: 4rem;
+    position: relative;
   }
 
   /* Alternating left-right layout - gentle offset */
@@ -476,36 +556,35 @@ weeks.forEach((week, weekIndex) => {
   }
 
   .date-sticker {
+    position: absolute;
+    top: 80px;
+    left: -40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
     background: #fc4c02;
     color: white;
     border-radius: 50%;
-    margin-left: auto;
-    transform: rotate(8deg);
-    box-shadow: 0 3px 12px rgba(252, 76, 2, 0.35);
-    flex-shrink: 0;
+    transform: rotate(-12deg);
+    box-shadow: 0 4px 16px rgba(252, 76, 2, 0.4);
+    z-index: 10;
   }
 
-  /* Left-aligned cards (odd): sticker on left, text follows */
+  /* Odd cards (displayed on right side of page): sticker on left of card */
   .route-highlight-wrapper:nth-child(odd) .date-sticker {
-    order: -1;
-    margin-left: 0;
-    margin-right: 1rem;
-    transform: rotate(-8deg);
+    left: -40px;
+    right: auto;
+    transform: rotate(-12deg);
   }
 
-  .route-highlight-wrapper:nth-child(odd) .activity-icon {
-    order: 0;
-  }
-
-  .route-highlight-wrapper:nth-child(odd) .route-header-text {
-    order: 1;
-    margin-right: auto;
+  /* Even cards (displayed on left side of page): sticker on right of card */
+  .route-highlight-wrapper:nth-child(even) .date-sticker {
+    left: auto;
+    right: -40px;
+    transform: rotate(12deg);
   }
 
   .date-month {
@@ -527,7 +606,11 @@ weeks.forEach((week, weekIndex) => {
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, overflow 0s;
+  }
+
+  .route-card.photo-focused {
+    overflow: visible;
   }
 
   .route-card:hover {
@@ -550,6 +633,34 @@ weeks.forEach((week, weekIndex) => {
       max-width: 100%;
       margin-left: 0 !important;
       margin-right: 0 !important;
+    }
+
+    .date-sticker {
+      top: 60px;
+      left: auto;
+      right: -10px;
+      width: 50px;
+      height: 50px;
+    }
+
+    .route-highlight-wrapper:nth-child(odd) .date-sticker,
+    .route-highlight-wrapper:nth-child(even) .date-sticker {
+      left: auto;
+      right: -10px;
+      transform: rotate(10deg);
+    }
+
+    .route-map {
+      height: 380px;
+    }
+
+    /* Ensure focused photos don't cause horizontal scroll */
+    .route-card.photo-focused {
+      overflow: visible;
+    }
+
+    .highlight-section {
+      overflow-x: clip;
     }
   }
 
@@ -584,6 +695,17 @@ weeks.forEach((week, weekIndex) => {
   .route-meta span {
     display: flex;
     align-items: center;
+  }
+
+  .route-meta .meta-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .route-meta .meta-stat svg {
+    opacity: 0.85;
+    flex-shrink: 0;
   }
 
   .route-meta span:not(:last-child)::after {
@@ -691,18 +813,156 @@ weeks.forEach((week, weekIndex) => {
     color: rgba(255,255,255,0.6) !important;
   }
 
-  /* Animated light - must be global for Leaflet */
-  :global(.runner-light) {
+  /* Animated route marker - must be global for Leaflet */
+  :global(.route-marker) {
     background: transparent !important;
     border: none !important;
   }
 
-  :global(.runner-dot) {
-    width: 8px;
-    height: 8px;
-    background: radial-gradient(circle, #fff 0%, #fc4c02 70%, transparent 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 8px 4px rgba(252, 76, 2, 0.6);
+  :global(.route-arrow) {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 14px solid #fc4c02;
+    filter: drop-shadow(0 0 4px rgba(252, 76, 2, 0.8)) drop-shadow(0 0 8px rgba(252, 76, 2, 0.5));
+    transition: transform 0.15s ease-out;
+  }
+
+  :global(.route-marker-wrapper) {
+    transition: transform 0.12s linear;
+  }
+
+  /* Smooth marker movement on map */
+  :global(.route-marker) {
+    transition: transform 0.1s linear !important;
+  }
+
+  /* Timeline Section - Multi-year horizontal scrolling heatmap */
+  .timeline-section {
+    margin: 4rem 0 2rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-border);
+    /* Break out of container for full-width feel */
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    width: 100vw;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%);
+  }
+
+  .timeline-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+  }
+
+  .timeline-scroll-container {
+    overflow-x: hidden;
+    position: relative;
+    padding: 1rem 0 2rem;
+  }
+
+  .timeline-track {
+    display: flex;
+    gap: 4rem;
+    animation: scrollTimeline 80s linear infinite;
+    width: max-content;
+    padding: 0 2rem;
+  }
+
+  .timeline-scroll-container:hover .timeline-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes scrollTimeline {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .year-heatmap {
+    flex-shrink: 0;
+    padding: 1rem 0;
+  }
+
+  .year-label {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .year-heatmap .heatmap-container {
+    overflow: visible;
+  }
+
+  .year-heatmap .heatmap-cell {
+    width: 14px;
+    height: 14px;
+  }
+
+  .year-heatmap .heatmap-week {
+    gap: 4px;
+  }
+
+  .year-heatmap .heatmap-grid {
+    gap: 4px;
+  }
+
+  .year-heatmap .heatmap-days {
+    gap: 4px;
+    padding-top: 22px;
+  }
+
+  .year-heatmap .day-label {
+    height: 14px;
+    line-height: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .timeline-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .timeline-track {
+      gap: 3rem;
+      padding: 0 1rem;
+    }
+
+    .year-label {
+      font-size: 1.1rem;
+    }
+
+    .year-heatmap .heatmap-cell {
+      width: 10px;
+      height: 10px;
+    }
+
+    .year-heatmap .heatmap-week,
+    .year-heatmap .heatmap-grid {
+      gap: 2px;
+    }
+
+    .year-heatmap .heatmap-days {
+      gap: 2px;
+      padding-top: 18px;
+    }
+
+    .year-heatmap .day-label {
+      height: 10px;
+      line-height: 10px;
+      font-size: 0.55rem;
+    }
   }
 </style>
 
@@ -734,11 +994,11 @@ weeks.forEach((week, weekIndex) => {
         scrollWheelZoom: false,
       }).setView(center, zoom);
 
-      // Use CartoDB Dark Matter for minimal dark aesthetic
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxZoom: 19,
-        subdomains: 'abcd',
+      // Use OpenTopoMap for earthy terrain aesthetic - perfect for hiking
+      L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+        maxZoom: 17,
+        subdomains: 'abc',
       }).addTo(map);
 
       // Draw the route polyline - Strava-style thick orange
@@ -753,44 +1013,108 @@ weeks.forEach((week, weekIndex) => {
       // Fit bounds to show entire route
       map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
 
-      // Animated runner light - runs once through the route
-      var runnerIcon = L.divIcon({
-        className: 'runner-light',
-        html: '<div class="runner-dot"></div>',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
+      // Directional arrow marker - points in direction of travel
+      var arrowElement = null;
+      var routeMarkerIcon = L.divIcon({
+        className: 'route-marker',
+        html: '<div class="route-marker-wrapper"><div class="route-arrow"></div></div>',
+        iconSize: [12, 14],
+        iconAnchor: [6, 7],
       });
+
+      // Calculate bearing between two points (for arrow rotation)
+      function getBearing(start, end) {
+        var startLat = start[0] * Math.PI / 180;
+        var startLng = start[1] * Math.PI / 180;
+        var endLat = end[0] * Math.PI / 180;
+        var endLng = end[1] * Math.PI / 180;
+        var dLng = endLng - startLng;
+        var x = Math.sin(dLng) * Math.cos(endLat);
+        var y = Math.cos(startLat) * Math.sin(endLat) - Math.sin(startLat) * Math.cos(endLat) * Math.cos(dLng);
+        var bearing = Math.atan2(x, y) * 180 / Math.PI;
+        return (bearing + 360) % 360;
+      }
 
       // Photo slideshow function - polaroids scattered on desk
       function startSlideshow() {
         if (!photos.length || !slideshowElement) return;
 
-        // Desk arrangement positions - spread out across the map
+        // Balanced arrangement - photos spread across entire card including center
         var arrangements = [
-          { x: -120, y: -60, rotate: -6 },
-          { x: 80, y: -50, rotate: 4 },
-          { x: -80, y: 50, rotate: 5 },
-          { x: 120, y: 40, rotate: -5 },
-          { x: -140, y: 10, rotate: 3 },
-          { x: 100, y: -20, rotate: -4 },
-          { x: -40, y: 70, rotate: 6 },
+          { x: -85, y: -45, rotate: -7 },    // top left
+          { x: 55, y: -40, rotate: 5 },      // top right
+          { x: -25, y: 5, rotate: -3 },      // CENTER (hero position)
+          { x: 75, y: 15, rotate: 6 },       // center right
+          { x: -75, y: 45, rotate: 4 },      // bottom left
+          { x: 45, y: 50, rotate: -5 },      // bottom right
+          { x: 15, y: -50, rotate: 3 },      // top center
         ];
+
+        // Track which photo is currently focused
+        var focusedPhoto = null;
+        var maxZIndex = 10;
+
+        // Responsive photo sizes
+        var isMobileDevice = window.innerWidth <= 900;
+        var photoWidth = isMobileDevice ? 120 : 160;
+        var photoHeight = isMobileDevice ? 90 : 120;
+        var photoPadding = isMobileDevice ? '6px 6px 18px 6px' : '8px 8px 24px 8px';
 
         // Create sticker elements with inline styles
         var stickers = photos.map(function(url, index) {
           var pos = arrangements[index % arrangements.length];
           var sticker = document.createElement('div');
-          // Polaroid style - starts hidden, will animate to final position
-          sticker.style.cssText = 'position:absolute; background:#fff; padding:6px 6px 20px 6px; box-shadow:0 8px 32px rgba(0,0,0,0.5); border-radius:3px; opacity:0; transform:translate(' + pos.x + '%, ' + pos.y + '%) scale(0.8) rotate(' + pos.rotate + 'deg); transition:opacity 0.5s ease, transform 0.5s ease;';
+          // Polaroid style - starts hidden, z-index will be set when photo appears
+          sticker.style.cssText = 'position:absolute; background:#fff; padding:' + photoPadding + '; box-shadow:0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2); border-radius:3px; opacity:0; z-index:1; cursor:pointer; pointer-events:auto; transform:translate(' + pos.x + '%, ' + pos.y + '%) scale(0.8) rotate(' + pos.rotate + 'deg); transition:opacity 0.6s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;';
 
           var img = document.createElement('img');
           img.src = url;
           img.alt = 'Activity photo ' + (index + 1);
-          img.style.cssText = 'display:block; width:180px; height:140px; object-fit:cover; border-radius:2px;';
+          img.style.cssText = 'display:block; width:' + photoWidth + 'px; height:' + photoHeight + 'px; object-fit:cover; border-radius:2px;';
 
           sticker.appendChild(img);
           slideshowElement.appendChild(sticker);
-          return { el: sticker, pos: pos };
+          return { el: sticker, pos: pos, index: index, originalZ: 1, isZoomed: false };
+        });
+
+        // Detect mobile for zoom scale adjustment
+        var isMobile = window.innerWidth <= 900;
+        var zoomScale = isMobile ? 1.8 : 2.4;
+
+        // Click handler for focusing/unfocusing photos
+        stickers.forEach(function(sticker) {
+          sticker.el.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            if (sticker.isZoomed) {
+              // Unfocus - return to original position
+              sticker.el.style.transform = 'translate(' + sticker.pos.x + '%, ' + sticker.pos.y + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
+              sticker.el.style.zIndex = sticker.originalZ;
+              sticker.el.style.boxShadow = '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2)';
+              sticker.isZoomed = false;
+              focusedPhoto = null;
+              // Remove overflow class from card
+              if (routeCard) routeCard.classList.remove('photo-focused');
+            } else {
+              // Unfocus any previously focused photo
+              if (focusedPhoto && focusedPhoto !== sticker) {
+                focusedPhoto.el.style.transform = 'translate(' + focusedPhoto.pos.x + '%, ' + focusedPhoto.pos.y + '%) scale(1) rotate(' + focusedPhoto.pos.rotate + 'deg)';
+                focusedPhoto.el.style.zIndex = focusedPhoto.originalZ;
+                focusedPhoto.el.style.boxShadow = '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2)';
+                focusedPhoto.isZoomed = false;
+              }
+
+              // Focus this photo - zoom in, straighten, bring to front
+              maxZIndex++;
+              sticker.el.style.transform = 'translate(-50%, -50%) scale(' + zoomScale + ') rotate(0deg)';
+              sticker.el.style.zIndex = maxZIndex + 100;
+              sticker.el.style.boxShadow = '0 20px 60px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3)';
+              sticker.isZoomed = true;
+              focusedPhoto = sticker;
+              // Add overflow class to card so photo isn't clipped
+              if (routeCard) routeCard.classList.add('photo-focused');
+            }
+          });
         });
 
         var currentPhoto = 0;
@@ -799,6 +1123,10 @@ weeks.forEach((week, weekIndex) => {
           if (currentPhoto >= stickers.length) return;
 
           var sticker = stickers[currentPhoto];
+          // Set z-index so later photos appear on top (like dropping on a desk)
+          maxZIndex = 10 + currentPhoto;
+          sticker.originalZ = maxZIndex;
+          sticker.el.style.zIndex = maxZIndex;
           // Animate in and STAY - no fade out
           sticker.el.style.opacity = '1';
           sticker.el.style.transform = 'translate(' + sticker.pos.x + '%, ' + sticker.pos.y + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
@@ -821,21 +1149,51 @@ weeks.forEach((week, weekIndex) => {
           flashElement.classList.add('animate');
         }
 
-        var runner = L.marker(route[0], { icon: runnerIcon }).addTo(map);
-        var currentIndex = 0;
-        var animationSpeed = 70; // ms between points (gentle, leisurely pace)
+        var marker = L.marker(route[0], { icon: routeMarkerIcon }).addTo(map);
 
-        var animationInterval = setInterval(function() {
-          currentIndex++;
+        // Get the arrow element after marker is added to DOM
+        setTimeout(function() {
+          arrowElement = marker.getElement().querySelector('.route-arrow');
+          if (arrowElement && route.length > 1) {
+            var initialBearing = getBearing(route[0], route[1]);
+            arrowElement.style.transform = 'rotate(' + initialBearing + 'deg)';
+          }
+        }, 10);
+
+        var currentIndex = 0;
+        var pointsPerStep = 3; // Skip some points for smoother perceived motion
+        var animationSpeed = 100; // ms between updates (smoother with CSS transitions)
+
+        function animateStep() {
+          currentIndex += pointsPerStep;
+
           if (currentIndex >= route.length) {
-            clearInterval(animationInterval);
-            map.removeLayer(runner); // Remove the dot when done
+            // Fade out and remove marker at the end
+            var el = marker.getElement();
+            if (el) {
+              el.style.transition = 'opacity 0.5s ease';
+              el.style.opacity = '0';
+              setTimeout(function() { map.removeLayer(marker); }, 500);
+            }
             return;
           }
-          runner.setLatLng(route[currentIndex]);
-        }, animationSpeed);
 
-        // Start photos after 2 seconds while pulse continues in background
+          // Update position (CSS transition makes it smooth)
+          marker.setLatLng(route[currentIndex]);
+
+          // Rotate arrow to point in direction of travel
+          if (arrowElement && currentIndex + pointsPerStep < route.length) {
+            var bearing = getBearing(route[currentIndex], route[Math.min(currentIndex + pointsPerStep, route.length - 1)]);
+            arrowElement.style.transform = 'rotate(' + bearing + 'deg)';
+          }
+
+          setTimeout(animateStep, animationSpeed);
+        }
+
+        // Start animation
+        setTimeout(animateStep, animationSpeed);
+
+        // Start photos after 2 seconds while marker continues
         setTimeout(startSlideshow, 2000);
       }
 
