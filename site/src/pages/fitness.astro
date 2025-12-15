@@ -87,15 +87,236 @@ const processedMilestones = milestonesData.milestones.map(milestone => {
   const yearData = yearDataList.find(yd => yd.year === milestone.year);
   if (!yearData) return null;
 
-  const monthLabel = yearData.monthLabels.find(ml => ml.month === months[milestone.month]);
-  if (!monthLabel) return null;
+  // Calculate exact position based on the 15th of the month
+  // This avoids label positioning quirks
+  const targetDate = new Date(milestone.year, milestone.month, 15);
+  const targetDateStr = targetDate.toISOString().split('T')[0];
+  
+  // Find the week that contains the 15th (or closest)
+  let weekIndex = yearData.weeks.findIndex(week => week.find(d => d.date === targetDateStr));
+  
+  // Fallback: if 15th not found (e.g. slight date mismatch), approximate with Start of Month + 2 weeks
+  if (weekIndex === -1) {
+      const firstDayOfMonth = new Date(milestone.year, milestone.month, 1).toISOString().split('T')[0];
+      const startWeekIdx = yearData.weeks.findIndex(week => week.find(d => d.date === firstDayOfMonth));
+      if (startWeekIdx !== -1) weekIndex = startWeekIdx + 2;
+      else weekIndex = 0; // Should never happen
+  }
+
+  // Week width is 18px (14px cell + 4px gap). Center is +9px.
+  const centerLeft = (weekIndex * 18) + 9;
+
+  // Simple string hash for consistent randomness
+  const hashString = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash);
+  };
+  
+  const rng = hashString(milestone.text + milestone.year);
 
   return {
     ...milestone,
     monthName: months[milestone.month],
-    left: monthLabel.left
+    left: centerLeft,
+    rng: rng,
+    rotation: (rng % 16) - 8, // -8 to +8 degrees
+    fontWeight: 400 + (rng % 3) * 100 // 400, 500, or 600
   };
 }).filter(Boolean);
+
+// Collision Detection & Tier Assignment
+// We separate top and bottom milestones to handle them independently
+const aboveMilestones = processedMilestones.filter(m => m.position === 'above').sort((a, b) => a.year - b.year || a.left - b.left);
+const belowMilestones = processedMilestones.filter(m => m.position === 'below').sort((a, b) => a.year - b.year || a.left - b.left);
+
+function assignTiers(milestones, defaultPadding = 20) {
+  // Map<Year, Array<TierLastX>> - stores the right-most X coordinate for each tier in a year
+  const yearTierEnds = new Map();
+  
+  milestones.forEach(m => {
+    if (!yearTierEnds.has(m.year)) {
+      yearTierEnds.set(m.year, []);
+    }
+    const tierEnds = yearTierEnds.get(m.year);
+    
+    // 1. Calculate precise width
+    // Handle multiline text - take the longest line
+    const lines = m.text.split('\n');
+    const longestLine = lines.reduce((a, b) => a.length > b.length ? a : b, '');
+    // Approx 9px per char (Caveat font is a bit wide) + padding
+    const width = Math.max(longestLine.length * 9 + 16, 80);
+    
+    // 2. Calculate horizontal bounds [minX, maxX] relative to m.left anchor
+    // Based on CSS transforms:
+    // center: translateX(-50%) -> [left - w/2, left + w/2]
+    // left: translateX(-10%)   -> [left - w*0.1, left + w*0.9]
+    // right: translateX(-90%)  -> [left - w*0.9, left + w*0.1]
+    
+    const align = m.align || 'center';
+    let minX, maxX;
+    
+    if (align === 'left') {
+      minX = m.left - (width * 0.1);
+      maxX = m.left + (width * 0.9);
+    } else if (align === 'right') {
+      minX = m.left - (width * 0.9);
+      maxX = m.left + (width * 0.1);
+    } else {
+      minX = m.left - (width / 2);
+      maxX = m.left + (width / 2);
+    }
+    
+    // 3. Find the lowest tier that is free
+    let assignedTier = 0;
+    while (true) {
+      // Get the right-most edge of the last item in this tier
+      // Default to -Infinity so the first item always fits
+      const lastEnd = tierEnds[assignedTier] !== undefined ? tierEnds[assignedTier] : -Infinity;
+      
+      // Check for overlap: does the current item start after the last one ends?
+      if (minX > lastEnd + defaultPadding) {
+        // Fits!
+        break;
+      }
+      
+      // Collision detected, try next tier
+      assignedTier++;
+    }
+    
+    m.tier = assignedTier;
+    // Update this tier's end position
+    tierEnds[assignedTier] = maxX;
+  });
+}
+
+assignTiers(aboveMilestones);
+assignTiers(belowMilestones);
+
+// Combine back
+const tierMap = new Map();
+[...aboveMilestones, ...belowMilestones].forEach(m => {
+  const key = `${m.year}-${m.month}-${m.text}`;
+  tierMap.set(key, m);
+});
+
+// Helper to generate dynamic handwritten arrow path
+function getArrowPath(tier, position, rng, align) {
+  const isBelow = position === 'below';
+  const baseHeight = 45;
+  const tierStep = 35; 
+  
+  const totalHeight = baseHeight + (tier * tierStep);
+  
+  // Randomize controls slightly for natural look
+  const r1 = (rng % 10) - 5;
+  const r2 = ((rng >> 4) % 10) - 5;
+  
+  // Determine start X offset based on alignment
+  // If text is align-left, it's shifted RIGHT, so arrow starts from +X.
+  // We use exactly 60px to match the CSS transform
+  let startX = 15; // Center of 30px box
+  
+  if (align === 'left') {
+    startX += 60; 
+  } else if (align === 'right') {
+    startX -= 60;
+  }
+  
+  // End X is always 15 (center relative to anchor)
+  const endX = 15;
+
+  // Use a Quadratic Curve (Q) for a smoother, simpler arc than the S-curve
+  // Control point: weighted towards the start (text side) to create a "leaning" look?
+  // Actually, standard midpoint Q is fine.
+  
+  const midX = (startX + endX) / 2;
+  const bulge = (r1 * 2); 
+  
+  if (isBelow) {
+    // Arrow pointing UP
+    // Start at bottom of text (startX, totalHeight) -> End at timeline (endX, 4)
+    return `M ${startX} ${totalHeight} Q ${midX + bulge} ${totalHeight * 0.5}, ${endX} 4`;
+  } else {
+    // Arrow pointing DOWN
+    // Start at timeline (endX, 2) -> End at text (startX, totalHeight)
+    return `M ${endX} 2 Q ${midX + bulge} ${totalHeight * 0.5}, ${startX} ${totalHeight}`;
+  }
+}
+
+function getArrowHead(tier, position, rng, align) {
+  const isBelow = position === 'below';
+  const totalHeight = 45 + (tier * 35);
+  let startX = 15;
+  if (align === 'left') startX += 60;
+  if (align === 'right') startX -= 60;
+  
+  const endX = 15;
+  
+  // Re-calculate control points to match getArrowPath exactly
+  const r1 = (rng % 10) - 5;
+  const midX = (startX + endX) / 2;
+  const bulge = (r1 * 2);
+  const cy = totalHeight * 0.5;
+  const cx = midX + bulge;
+
+  // Calculate tangent vector at the tip
+  // For Quadratic Bezier B(t), tangent at t=1 is P2 - P1.
+  let vx, vy;
+  let tipX, tipY;
+  
+  if (isBelow) {
+     // Path: Text (startX, totalHeight) -> P1(cx, cy) -> Timeline (endX, 4)
+     // Tip is at Timeline (endX, 4)
+     // Tangent vector is P2 - P1
+     tipX = endX;
+     tipY = 4;
+     vx = tipX - cx;
+     vy = tipY - cy;
+  } else {
+     // Path: Timeline (endX, 2) -> P1(cx, cy) -> Text (startX, totalHeight)
+     // Tip is at Text (startX, totalHeight)
+     tipX = startX;
+     tipY = totalHeight;
+     vx = tipX - cx;
+     vy = tipY - cy;
+  }
+  
+  // Normalize vector
+  const len = Math.sqrt(vx*vx + vy*vy);
+  const nx = vx / len;
+  const ny = vy / len;
+  
+  // Perpendicular vector (-ny, nx)
+  const px = -ny;
+  const py = nx;
+  
+  // Arrow dimensions
+  const length = 10;
+  const width = 6;
+  
+  // Calculate wings
+  // Wing1 = Tip - length*N + width*P
+  // Wing2 = Tip - length*N - width*P
+  
+  const w1x = tipX - (length * nx) + (width * px);
+  const w1y = tipY - (length * ny) + (width * py);
+  
+  const w2x = tipX - (length * nx) - (width * px);
+  const w2y = tipY - (length * ny) - (width * py);
+  
+  // Draw simple V shape
+  // Control point for subtle curve on the wings? Optional. 
+  // Let's stick to simple lines for hand-drawn feel, maybe slightly curved.
+  // M w1 Q (tip-len*0.5) tip  <-- gentle curve?
+  // Let's do simple straight lines but with rounded join logic if needed. 
+  // M w1 L tip L w2
+  
+  return `M ${w1x} ${w1y} L ${tipX} ${tipY} L ${w2x} ${w2y}`;
+}
 
 ---
 
@@ -267,57 +488,56 @@ const processedMilestones = milestonesData.milestones.map(milestone => {
                       ))}
                     </div>
                     {/* Milestone annotations */}
-                    {yearMilestones.map((milestone, idx) => {
+                    {yearMilestones.map((originalMilestone, idx) => {
+                      // Lookup processed version with tier info
+                      const key = `${originalMilestone.year}-${originalMilestone.month}-${originalMilestone.text}`;
+                      const milestone = tierMap.get(key) || originalMilestone;
+                      
                       const isBelow = milestone.position === 'below';
                       const align = milestone.align || 'center';
                       const hasNewline = milestone.text.includes('\n');
-                      const rotation = (idx % 2 === 0 ? -3 : 2) + (milestone.month % 3 - 1);
+                      const tier = milestone.tier || 0;
+                      
+                      const verticalOffset = tier * 35;
+                      const arrowHeight = 45 + (tier * 35);
+                      const arrowPath = getArrowPath(tier, milestone.position, milestone.rng || 0, align);
+                      const arrowHead = getArrowHead(tier, milestone.position, milestone.rng || 0, align);
+
                       return (
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
-                          style={`left: ${milestone.left + 10}px`}
+                          style={`
+                            left: ${milestone.left + 10}px;
+                            --tier-offset: ${verticalOffset}px;
+                            --rotation: ${milestone.rotation || 0}deg;
+                            --font-weight: ${milestone.fontWeight || 400};
+                            z-index: ${10 + tier};
+                          `}
                         >
-                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
-                          <svg class="milestone-arrow" viewBox="0 0 30 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            {isBelow ? (
-                              /* Arrow pointing up (for below position) */
-                              <>
-                                <path
-                                  d="M 15 48 C 13 35, 17 20, 15 4"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                                <path
-                                  d="M 10 12 Q 14 4, 15 4 Q 16 4, 20 11"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                              </>
-                            ) : (
-                              /* Arrow pointing down (for above position) */
-                              <>
-                                <path
-                                  d="M 15 2 C 13 15, 17 30, 15 46"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                                <path
-                                  d="M 10 38 Q 14 46, 15 46 Q 16 46, 20 39"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                              </>
-                            )}
+                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`}>{milestone.text}</div>}
+                          <svg 
+                            class="milestone-arrow" 
+                            style={`height: ${arrowHeight}px; width: 30px;`}
+                            viewBox={`0 0 30 ${arrowHeight}`}
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d={arrowPath}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              fill="none"
+                            />
+                            <path
+                              d={arrowHead}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              fill="none"
+                            />
                           </svg>
-                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`}>{milestone.text}</div>}
                         </div>
                       );
                     })}
@@ -358,57 +578,56 @@ const processedMilestones = milestonesData.milestones.map(milestone => {
                       ))}
                     </div>
                     {/* Milestone annotations */}
-                    {yearMilestones.map((milestone, idx) => {
+                    {yearMilestones.map((originalMilestone, idx) => {
+                      // Lookup processed version with tier info
+                      const key = `${originalMilestone.year}-${originalMilestone.month}-${originalMilestone.text}`;
+                      const milestone = tierMap.get(key) || originalMilestone;
+                      
                       const isBelow = milestone.position === 'below';
                       const align = milestone.align || 'center';
                       const hasNewline = milestone.text.includes('\n');
-                      const rotation = (idx % 2 === 0 ? -3 : 2) + (milestone.month % 3 - 1);
+                      const tier = milestone.tier || 0;
+                      
+                      const verticalOffset = tier * 35;
+                      const arrowHeight = 45 + (tier * 35);
+                      const arrowPath = getArrowPath(tier, milestone.position, milestone.rng || 0, align);
+                      const arrowHead = getArrowHead(tier, milestone.position, milestone.rng || 0, align);
+
                       return (
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
-                          style={`left: ${milestone.left + 10}px`}
+                          style={`
+                            left: ${milestone.left + 10}px;
+                            --tier-offset: ${verticalOffset}px;
+                            --rotation: ${milestone.rotation || 0}deg;
+                            --font-weight: ${milestone.fontWeight || 400};
+                            z-index: ${10 + tier};
+                          `}
                         >
-                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
-                          <svg class="milestone-arrow" viewBox="0 0 30 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            {isBelow ? (
-                              /* Arrow pointing up (for below position) */
-                              <>
-                                <path
-                                  d="M 15 48 C 13 35, 17 20, 15 4"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                                <path
-                                  d="M 10 12 Q 14 4, 15 4 Q 16 4, 20 11"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                              </>
-                            ) : (
-                              /* Arrow pointing down (for above position) */
-                              <>
-                                <path
-                                  d="M 15 2 C 13 15, 17 30, 15 46"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                                <path
-                                  d="M 10 38 Q 14 46, 15 46 Q 16 46, 20 39"
-                                  stroke="#fc4c02"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  fill="none"
-                                />
-                              </>
-                            )}
+                          {!isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`}>{milestone.text}</div>}
+                          <svg 
+                            class="milestone-arrow" 
+                            style={`height: ${arrowHeight}px; width: 30px;`}
+                            viewBox={`0 0 30 ${arrowHeight}`}
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d={arrowPath}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              fill="none"
+                            />
+                            <path
+                              d={arrowHead}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              fill="none"
+                            />
                           </svg>
-                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`} style={`transform: rotate(${rotation}deg)`}>{milestone.text}</div>}
+                          {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`}>{milestone.text}</div>}
                         </div>
                       );
                     })}
@@ -1106,95 +1325,77 @@ const processedMilestones = milestonesData.milestones.map(milestone => {
 
   .milestone-annotation {
     position: absolute;
-    transform: translateX(-50%);
+    /* Center the container on the anchor point */
+    transform: translateX(-50%); 
     display: flex;
     flex-direction: column;
     align-items: center;
     pointer-events: none;
     z-index: 10;
+    /* Ensure width doesn't collapse too much */
+    min-width: 100px; 
   }
 
-  .milestone-annotation.align-right {
-    transform: translateX(-90%);
-    align-items: flex-end;
-  }
-
-  .milestone-annotation.align-left {
-    transform: translateX(-10%);
-    align-items: flex-start;
-  }
-
+  /* Fixed positioning relative to the Heatmap Grid (Height ~116px) */
   .milestone-annotation.above {
-    top: -52px;
+    top: auto;
+    /* Sit just above the grid (height 116px + small buffer) */
+    bottom: 118px; 
   }
 
   .milestone-annotation.below {
-    bottom: -82px;
+    bottom: auto;
+    /* Sit just below the wrapper */
+    top: 100%; 
+    margin-top: -10px; /* Pull up closer to grid */
   }
 
   .milestone-text {
     font-family: 'Caveat', cursive;
     font-size: 1.15rem;
-    font-weight: 500;
+    font-weight: var(--font-weight, 500);
     color: #fc4c02;
     white-space: nowrap;
     text-align: center;
     line-height: 1.1;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    transform: rotate(var(--rotation, 0deg));
+    transition: transform 0.2s;
+  }
+
+  /* Shift text relative to arrow without moving arrow */
+  /* We use fixed pixels to match the SVG arrow generation logic strictly */
+  .milestone-annotation.align-left .milestone-text {
+    transform: translateX(60px) rotate(var(--rotation, 0deg));
+  }
+
+  .milestone-annotation.align-right .milestone-text {
+    transform: translateX(-60px) rotate(var(--rotation, 0deg));
   }
 
   .milestone-annotation .milestone-text.multiline {
     white-space: pre-line;
   }
 
-  /* Adjust positioning for multiline text */
+  /* Adjust positioning for multiline text - relative to the dynamic bottom/top */
   .milestone-annotation.above:has(.multiline) {
-    top: -68px;
+    margin-bottom: 8px; /* Reduced margin */
   }
 
   .milestone-annotation.below:has(.multiline) {
-    bottom: -97px;
+    margin-top: 8px;
   }
 
   .milestone-arrow {
-    width: 28px;
-    height: 45px;
+    width: 30px;
+    height: auto; /* Dynamic height */
+    overflow: visible;
+    flex-shrink: 0; /* Prevent squishing */
   }
-
-  .milestone-annotation.above .milestone-arrow {
-    margin-top: -2px;
-  }
-
-  .milestone-annotation.below .milestone-arrow {
-    margin-bottom: -2px;
-  }
-
-  @media (max-width: 600px) {
-    .milestone-annotation.above {
-      top: -42px;
-    }
-
-    .milestone-annotation.below {
-      bottom: -68px;
-    }
-
-    .milestone-annotation.above:has(.multiline) {
-      top: -55px;
-    }
-
-    .milestone-annotation.below:has(.multiline) {
-      bottom: -80px;
-    }
-
-    .milestone-text {
-      font-size: 0.9rem;
-      line-height: 1.05;
-    }
-
-    .milestone-arrow {
-      width: 22px;
-      height: 35px;
-    }
+  
+  /* Ensure SVG is centered in the flexible container */
+  .milestone-annotation svg {
+     display: block;
   }
 </style>
 
