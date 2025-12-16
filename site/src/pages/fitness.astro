@@ -436,6 +436,40 @@ yearsToShow.forEach(year => {
 
 <BaseLayout title={page.data.title} description={page.data.description}>
   <div class="fitness-page">
+    <!-- Background decorations - scattered fitness illustrations -->
+    <div class="bg-decorations" aria-hidden="true">
+      <!-- Left side decorations -->
+      <img src="/illustrations/bottle.png" class="bg-deco deco-L1" alt="" />
+      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-L2" alt="" />
+      <img src="/illustrations/cycle.png" class="bg-deco deco-L3" alt="" />
+      <img src="/illustrations/dosa.png" class="bg-deco deco-L4" alt="" />
+      <img src="/illustrations/alarm.png" class="bg-deco deco-L5" alt="" />
+      <img src="/illustrations/kudos.png" class="bg-deco deco-L6" alt="" />
+      <img src="/illustrations/helmet.png" class="bg-deco deco-L7" alt="" />
+      <img src="/illustrations/shoes.png" class="bg-deco deco-L8" alt="" />
+      <img src="/illustrations/garmin.png" class="bg-deco deco-L9" alt="" />
+      <img src="/illustrations/strava.png" class="bg-deco deco-L10" alt="" />
+      <img src="/illustrations/socks.png" class="bg-deco deco-L11" alt="" />
+      <img src="/illustrations/cap.png" class="bg-deco deco-L12" alt="" />
+      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-L13" alt="" />
+      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-L14" alt="" />
+      <!-- Right side decorations -->
+      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-R1" alt="" />
+      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-R2" alt="" />
+      <img src="/illustrations/helmet.png" class="bg-deco deco-R3" alt="" />
+      <img src="/illustrations/shoes.png" class="bg-deco deco-R4" alt="" />
+      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-R5" alt="" />
+      <img src="/illustrations/dosa.png" class="bg-deco deco-R6" alt="" />
+      <img src="/illustrations/garmin.png" class="bg-deco deco-R7" alt="" />
+      <img src="/illustrations/strava.png" class="bg-deco deco-R8" alt="" />
+      <img src="/illustrations/cycle.png" class="bg-deco deco-R9" alt="" />
+      <img src="/illustrations/kudos.png" class="bg-deco deco-R10" alt="" />
+      <img src="/illustrations/sunscreen.png" class="bg-deco deco-R11" alt="" />
+      <img src="/illustrations/cap.png" class="bg-deco deco-R12" alt="" />
+      <img src="/illustrations/bottle.png" class="bg-deco deco-R13" alt="" />
+      <img src="/illustrations/alarm.png" class="bg-deco deco-R14" alt="" />
+    </div>
+
     <h1>{page.data.title}</h1>
 
     <div class="distance-journey">
@@ -866,6 +900,7 @@ yearsToShow.forEach(year => {
   .fitness-page {
     max-width: var(--content-width);
     margin: 0 auto;
+    position: relative;
   }
 
   .fitness-page h1 {
@@ -873,6 +908,92 @@ yearsToShow.forEach(year => {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Background decorations - scattered fitness illustrations */
+  .bg-decorations {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-deco {
+    position: absolute;
+    opacity: 0.15;
+    filter: grayscale(30%) brightness(1.1) saturate(0.4);
+    pointer-events: none;
+  }
+
+  /* LEFT side decorations - uniform sizing, positioned at left edge */
+  .deco-L1 { width: clamp(200px, 16vw, 320px); top: 0%; left: 20px; transform: rotate(-12deg); }
+  .deco-L2 { width: clamp(200px, 16vw, 320px); top: 7%; left: 40px; transform: rotate(18deg); }
+  .deco-L3 { width: clamp(200px, 16vw, 320px); top: 14%; left: 15px; transform: rotate(-8deg) scaleX(-1); }
+  .deco-L4 { width: clamp(200px, 16vw, 320px); top: 21%; left: 50px; transform: rotate(22deg); }
+  .deco-L5 { width: clamp(200px, 16vw, 320px); top: 28%; left: 25px; transform: rotate(-15deg); }
+  .deco-L6 { width: clamp(200px, 16vw, 320px); top: 35%; left: 35px; transform: rotate(10deg) scaleX(-1); }
+  .deco-L7 { width: clamp(200px, 16vw, 320px); top: 42%; left: 20px; transform: rotate(-20deg); }
+  .deco-L8 { width: clamp(200px, 16vw, 320px); top: 49%; left: 45px; transform: rotate(15deg); }
+  .deco-L9 { width: clamp(200px, 16vw, 320px); top: 56%; left: 30px; transform: rotate(-10deg) scaleX(-1); }
+  .deco-L10 { width: clamp(200px, 16vw, 320px); top: 63%; left: 15px; transform: rotate(8deg); }
+  .deco-L11 { width: clamp(200px, 16vw, 320px); top: 70%; left: 50px; transform: rotate(-18deg); }
+  .deco-L12 { width: clamp(200px, 16vw, 320px); top: 77%; left: 25px; transform: rotate(25deg) scaleX(-1); }
+  .deco-L13 { width: clamp(200px, 16vw, 320px); top: 84%; left: 40px; transform: rotate(-5deg); }
+  .deco-L14 { width: clamp(200px, 16vw, 320px); top: 91%; left: 20px; transform: rotate(12deg); }
+
+  /* RIGHT side decorations - uniform sizing, positioned at right edge */
+  .deco-R1 { width: clamp(200px, 16vw, 320px); top: 3%; right: 25px; transform: rotate(15deg) scaleX(-1); }
+  .deco-R2 { width: clamp(200px, 16vw, 320px); top: 10%; right: 40px; transform: rotate(-22deg); }
+  .deco-R3 { width: clamp(200px, 16vw, 320px); top: 17%; right: 15px; transform: rotate(8deg); }
+  .deco-R4 { width: clamp(200px, 16vw, 320px); top: 24%; right: 50px; transform: rotate(-18deg) scaleX(-1); }
+  .deco-R5 { width: clamp(200px, 16vw, 320px); top: 31%; right: 30px; transform: rotate(12deg); }
+  .deco-R6 { width: clamp(200px, 16vw, 320px); top: 38%; right: 20px; transform: rotate(-25deg); }
+  .deco-R7 { width: clamp(200px, 16vw, 320px); top: 45%; right: 45px; transform: rotate(20deg) scaleX(-1); }
+  .deco-R8 { width: clamp(200px, 16vw, 320px); top: 52%; right: 25px; transform: rotate(-12deg); }
+  .deco-R9 { width: clamp(200px, 16vw, 320px); top: 59%; right: 35px; transform: rotate(5deg); }
+  .deco-R10 { width: clamp(200px, 16vw, 320px); top: 66%; right: 15px; transform: rotate(-15deg) scaleX(-1); }
+  .deco-R11 { width: clamp(200px, 16vw, 320px); top: 73%; right: 50px; transform: rotate(18deg); }
+  .deco-R12 { width: clamp(200px, 16vw, 320px); top: 80%; right: 30px; transform: rotate(-8deg); }
+  .deco-R13 { width: clamp(200px, 16vw, 320px); top: 87%; right: 20px; transform: rotate(22deg) scaleX(-1); }
+  .deco-R14 { width: clamp(200px, 16vw, 320px); top: 94%; right: 40px; transform: rotate(-20deg); }
+
+  /* Even larger on big screens */
+  @media (min-width: 1400px) {
+    .bg-deco {
+      opacity: 0.2;
+    }
+  }
+
+  /* Adjust for tablets */
+  @media (max-width: 1100px) {
+    .bg-deco {
+      width: clamp(120px, 20vw, 180px) !important;
+      opacity: 0.12;
+    }
+  }
+
+  /* Adjust for mobile - smaller, subtler */
+  @media (max-width: 700px) {
+    .bg-deco {
+      width: clamp(80px, 25vw, 120px) !important;
+      opacity: 0.1;
+    }
+    /* Reposition to screen edges on mobile */
+    .deco-L1, .deco-L2, .deco-L3, .deco-L4, .deco-L5, .deco-L6, .deco-L7,
+    .deco-L8, .deco-L9, .deco-L10, .deco-L11, .deco-L12, .deco-L13, .deco-L14 {
+      left: -30px !important;
+    }
+    .deco-R1, .deco-R2, .deco-R3, .deco-R4, .deco-R5, .deco-R6, .deco-R7,
+    .deco-R8, .deco-R9, .deco-R10, .deco-R11, .deco-R12, .deco-R13, .deco-R14 {
+      right: -30px !important;
+    }
   }
 
   .heatmap-section {
