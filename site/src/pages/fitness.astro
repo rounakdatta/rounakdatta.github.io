@@ -342,37 +342,43 @@ const yearHighlights = (milestonesData.yearHighlights || []).map(highlight => {
 }).filter(Boolean);
 
 // Generate hand-drawn HORIZONTAL curly brace SVG path
-// The brace spans the full width of the heatmap (~954px for 53 weeks)
+// Classic curly brace shape: curled ends → straight arms → pointed center
 function getHorizontalBracePath(width, rng) {
   const midX = width / 2;
 
   // Slight randomness for hand-drawn feel
-  const r1 = ((rng % 3) - 1);
-  const r2 = (((rng >> 3) % 3) - 1);
+  const r1 = ((rng % 2) - 0.5) * 0.5;
+  const r2 = (((rng >> 3) % 2) - 0.5) * 0.5;
 
-  // Proper curly brace shape with distinct cusp
-  const topY = 3;            // Top edge where ends sit
-  const cuspY = 22;          // Bottom of cusp (the pointed tip)
-  const midCurveY = 16;      // Where curves meet the cusp arms
-  const cuspArm = 12;        // Width of the V-shaped cusp
+  // Brace dimensions
+  const curlSize = 8;        // Size of the curled ends
+  const topY = 2;            // Top edge (where curls start)
+  const armY = 8;            // Y level of the horizontal arms
+  const cuspY = 24;          // Bottom of cusp (the pointed tip)
 
-  // Build the path:
-  // 1. Start at left end (0, topY)
-  // 2. Curve down toward the left side of the cusp
-  // 3. Sharp line down to the cusp point (center bottom)
-  // 4. Sharp line up to the right side of the cusp
-  // 5. Curve up to the right end (width, topY)
+  // Classic curly brace: curled ends that hook upward, arms going to center, pointed cusp
+  // Shape:  ╭╮_________╱╲_________╭╮
+  //         ╰╯         ╲╱         ╰╯
 
   const path = [
-    `M 0 ${topY + r1}`,
-    // Left curve: from left end, curving down to left arm of cusp
-    `Q ${midX * 0.45} ${topY + 4 + r1}, ${midX - cuspArm} ${midCurveY}`,
-    // Sharp down to cusp point
-    `L ${midX} ${cuspY + r2}`,
-    // Sharp up from cusp point
-    `L ${midX + cuspArm} ${midCurveY}`,
-    // Right curve: from right arm of cusp, curving up to right end
-    `Q ${midX * 1.55} ${topY + 4 - r1}, ${width} ${topY - r2}`
+    // Left curled end - small hook curling inward
+    `M ${curlSize} ${topY + r1}`,
+    `C ${curlSize * 0.3} ${topY}, ${0} ${topY + curlSize * 0.5}, ${0} ${armY}`,
+    `C ${0} ${armY + curlSize * 0.3}, ${curlSize * 0.5} ${armY + 1}, ${curlSize * 1.5} ${armY}`,
+
+    // Left arm - slight curve going to center cusp
+    `Q ${midX * 0.5} ${armY + 2 + r1}, ${midX - 15} ${armY + 4}`,
+
+    // Cusp - pointed V shape
+    `Q ${midX - 5} ${armY + 6}, ${midX} ${cuspY + r2}`,
+    `Q ${midX + 5} ${armY + 6}, ${midX + 15} ${armY + 4}`,
+
+    // Right arm - slight curve going to right end
+    `Q ${midX * 1.5} ${armY + 2 - r1}, ${width - curlSize * 1.5} ${armY}`,
+
+    // Right curled end - small hook curling inward
+    `C ${width - curlSize * 0.5} ${armY + 1}, ${width} ${armY + curlSize * 0.3}, ${width} ${armY}`,
+    `C ${width} ${topY + curlSize * 0.5}, ${width - curlSize * 0.3} ${topY}, ${width - curlSize} ${topY - r1}`,
   ];
 
   return path.join(' ');
@@ -526,7 +532,7 @@ yearsToShow.forEach(year => {
                   <path d="M120,48a32,32,0,1,1,32,32A32,32,0,0,1,120,48Zm72,88c-23.37,0-28.92-8.56-36.6-20.4-3.65-5.64-7.79-12-14.16-17.55a40.92,40.92,0,0,0-8-5.47,8,8,0,0,0-11,3.92L64.66,228.81a8,8,0,0,0,4.15,10.52A7.84,7.84,0,0,0,72,240a8,8,0,0,0,7.34-4.81l33.59-77.27L144,180.12V232a8,8,0,0,0,16,0V176a8,8,0,0,0-3.35-6.51l-37.2-26.57,13.4-30.81c3.57,3.62,6.28,7.8,9.13,12.19,7.67,11.84,16.27,25.11,42,27.36V232a8,8,0,0,0,16,0V144A8,8,0,0,0,192,136ZM72,152a8,8,0,0,0,7.36-4.85l24-56a8,8,0,0,0-4.2-10.5l-28-12a8,8,0,0,0-10.5,4.2l-24,56a8,8,0,0,0,4.2,10.5l28,12A8,8,0,0,0,72,152Z"/>
                 </svg>
               )}
-              {highlight.type === 'Run' && (
+              {(highlight.type === 'Run' || highlight.type === 'TrailRun') && (
                 <svg viewBox="0 0 256 256" fill="currentColor">
                   <path d="M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z"/>
                 </svg>
@@ -1214,6 +1220,8 @@ yearsToShow.forEach(year => {
     height: 450px;
     width: 100%;
     background: #1a1a1a;
+    /* Prevent touch gestures from being captured - allows page scroll */
+    touch-action: pan-y;
   }
 
   @media (max-width: 900px) {
@@ -1800,7 +1808,14 @@ yearsToShow.forEach(year => {
       var routeCard = container.closest('.route-card');
 
       var map = L.map(container.id, {
+        // Disable all interactions - map is display-only
+        dragging: false,
+        touchZoom: false,
         scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        zoomControl: false,
       }).setView(center, zoom);
 
       // Use OpenTopoMap for earthy terrain aesthetic - perfect for hiking
@@ -1870,11 +1885,17 @@ yearsToShow.forEach(year => {
         var photoPadding = isMobileDevice ? '6px 6px 18px 6px' : '8px 8px 24px 8px';
 
         // Create sticker elements with inline styles
+        // All photos positioned at center (left:50%, top:50%) - transform handles offset
+        // This allows smooth animation between scattered and focused states
         var stickers = photos.map(function(url, index) {
           var pos = arrangements[index % arrangements.length];
           var sticker = document.createElement('div');
           // Polaroid style - starts hidden, z-index will be set when photo appears
-          sticker.style.cssText = 'position:absolute; background:#fff; padding:' + photoPadding + '; box-shadow:0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2); border-radius:3px; opacity:0; z-index:1; cursor:pointer; pointer-events:auto; transform:translate(' + pos.x + '%, ' + pos.y + '%) scale(0.8) rotate(' + pos.rotate + 'deg); transition:opacity 0.6s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;';
+          // Smooth, gentle transitions for "pick up and put back" feel
+          // Transform: -50% centers on left:50%/top:50%, then pos.x/y offsets to scattered position
+          var offsetX = -50 + pos.x;
+          var offsetY = -50 + pos.y;
+          sticker.style.cssText = 'position:absolute; left:50%; top:50%; background:#fff; padding:' + photoPadding + '; box-shadow:0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2); border-radius:3px; opacity:0; z-index:1; cursor:pointer; pointer-events:auto; transform:translate(' + offsetX + '%, ' + offsetY + '%) scale(0.8) rotate(' + pos.rotate + 'deg); transition: opacity 0.6s ease, transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;';
 
           var img = document.createElement('img');
           img.src = url;
@@ -1895,9 +1916,13 @@ yearsToShow.forEach(year => {
           sticker.el.addEventListener('click', function(e) {
             e.stopPropagation();
 
+            // Calculate offset for scattered position (same formula as initial)
+            var offsetX = -50 + sticker.pos.x;
+            var offsetY = -50 + sticker.pos.y;
+
             if (sticker.isZoomed) {
-              // Unfocus - return to original position
-              sticker.el.style.transform = 'translate(' + sticker.pos.x + '%, ' + sticker.pos.y + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
+              // Unfocus - gently return to scattered position
+              sticker.el.style.transform = 'translate(' + offsetX + '%, ' + offsetY + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
               sticker.el.style.zIndex = sticker.originalZ;
               sticker.el.style.boxShadow = '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2)';
               sticker.isZoomed = false;
@@ -1907,13 +1932,15 @@ yearsToShow.forEach(year => {
             } else {
               // Unfocus any previously focused photo
               if (focusedPhoto && focusedPhoto !== sticker) {
-                focusedPhoto.el.style.transform = 'translate(' + focusedPhoto.pos.x + '%, ' + focusedPhoto.pos.y + '%) scale(1) rotate(' + focusedPhoto.pos.rotate + 'deg)';
+                var prevOffsetX = -50 + focusedPhoto.pos.x;
+                var prevOffsetY = -50 + focusedPhoto.pos.y;
+                focusedPhoto.el.style.transform = 'translate(' + prevOffsetX + '%, ' + prevOffsetY + '%) scale(1) rotate(' + focusedPhoto.pos.rotate + 'deg)';
                 focusedPhoto.el.style.zIndex = focusedPhoto.originalZ;
                 focusedPhoto.el.style.boxShadow = '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.2)';
                 focusedPhoto.isZoomed = false;
               }
 
-              // Focus this photo - zoom in, straighten, bring to front
+              // Focus this photo - gently zoom in, center, straighten, bring to front
               maxZIndex++;
               sticker.el.style.transform = 'translate(-50%, -50%) scale(' + zoomScale + ') rotate(0deg)';
               sticker.el.style.zIndex = maxZIndex + 100;
@@ -1932,13 +1959,16 @@ yearsToShow.forEach(year => {
           if (currentPhoto >= stickers.length) return;
 
           var sticker = stickers[currentPhoto];
+          // Calculate offset for scattered position
+          var offsetX = -50 + sticker.pos.x;
+          var offsetY = -50 + sticker.pos.y;
           // Set z-index so later photos appear on top (like dropping on a desk)
           maxZIndex = 10 + currentPhoto;
           sticker.originalZ = maxZIndex;
           sticker.el.style.zIndex = maxZIndex;
           // Animate in and STAY - no fade out
           sticker.el.style.opacity = '1';
-          sticker.el.style.transform = 'translate(' + sticker.pos.x + '%, ' + sticker.pos.y + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
+          sticker.el.style.transform = 'translate(' + offsetX + '%, ' + offsetY + '%) scale(1) rotate(' + sticker.pos.rotate + 'deg)';
 
           // Show next photo after delay
           currentPhoto++;
