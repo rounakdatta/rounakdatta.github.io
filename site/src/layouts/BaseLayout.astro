@@ -18,6 +18,7 @@ const { title, description = "Rounak Datta's personal website" } = Astro.props;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
+  <slot name="head" />
 </head>
 <body>
   <div class="page-wrapper">

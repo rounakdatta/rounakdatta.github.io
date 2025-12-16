@@ -435,39 +435,52 @@ yearsToShow.forEach(year => {
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
+  <!-- Preconnect hints for external resources - establishes early connections -->
+  <Fragment slot="head">
+    <!-- Strava CDN for activity photos -->
+    <link rel="preconnect" href="https://dgtzuqphqg23d.cloudfront.net" crossorigin />
+    <link rel="dns-prefetch" href="https://dgtzuqphqg23d.cloudfront.net" />
+    <!-- OpenStreetMap tiles for maps -->
+    <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
+    <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
+    <!-- Leaflet CDN -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+  </Fragment>
+
   <div class="fitness-page">
     <!-- Background decorations - scattered fitness illustrations -->
     <div class="bg-decorations" aria-hidden="true">
-      <!-- Left side decorations -->
-      <img src="/illustrations/bottle.png" class="bg-deco deco-L1" alt="" />
-      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-L2" alt="" />
-      <img src="/illustrations/cycle.png" class="bg-deco deco-L3" alt="" />
-      <img src="/illustrations/dosa.png" class="bg-deco deco-L4" alt="" />
-      <img src="/illustrations/alarm.png" class="bg-deco deco-L5" alt="" />
-      <img src="/illustrations/kudos.png" class="bg-deco deco-L6" alt="" />
-      <img src="/illustrations/helmet.png" class="bg-deco deco-L7" alt="" />
-      <img src="/illustrations/shoes.png" class="bg-deco deco-L8" alt="" />
-      <img src="/illustrations/garmin.png" class="bg-deco deco-L9" alt="" />
-      <img src="/illustrations/strava.png" class="bg-deco deco-L10" alt="" />
-      <img src="/illustrations/socks.png" class="bg-deco deco-L11" alt="" />
-      <img src="/illustrations/cap.png" class="bg-deco deco-L12" alt="" />
-      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-L13" alt="" />
-      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-L14" alt="" />
-      <!-- Right side decorations -->
-      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-R1" alt="" />
-      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-R2" alt="" />
-      <img src="/illustrations/helmet.png" class="bg-deco deco-R3" alt="" />
-      <img src="/illustrations/shoes.png" class="bg-deco deco-R4" alt="" />
-      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-R5" alt="" />
-      <img src="/illustrations/dosa.png" class="bg-deco deco-R6" alt="" />
-      <img src="/illustrations/garmin.png" class="bg-deco deco-R7" alt="" />
-      <img src="/illustrations/strava.png" class="bg-deco deco-R8" alt="" />
-      <img src="/illustrations/cycle.png" class="bg-deco deco-R9" alt="" />
-      <img src="/illustrations/kudos.png" class="bg-deco deco-R10" alt="" />
-      <img src="/illustrations/sunscreen.png" class="bg-deco deco-R11" alt="" />
-      <img src="/illustrations/cap.png" class="bg-deco deco-R12" alt="" />
-      <img src="/illustrations/bottle.png" class="bg-deco deco-R13" alt="" />
-      <img src="/illustrations/alarm.png" class="bg-deco deco-R14" alt="" />
+      <!-- Left side decorations - lazy loaded for performance -->
+      <img src="/illustrations/bottle.png" class="bg-deco deco-L1" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-L2" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cycle.png" class="bg-deco deco-L3" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/dosa.png" class="bg-deco deco-L4" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/alarm.png" class="bg-deco deco-L5" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/kudos.png" class="bg-deco deco-L6" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/helmet.png" class="bg-deco deco-L7" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/shoes.png" class="bg-deco deco-L8" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/garmin.png" class="bg-deco deco-L9" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/strava.png" class="bg-deco deco-L10" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/socks.png" class="bg-deco deco-L11" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cap.png" class="bg-deco deco-L12" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-L13" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-L14" alt="" loading="lazy" decoding="async" />
+      <!-- Right side decorations - lazy loaded for performance -->
+      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-R1" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-R2" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/helmet.png" class="bg-deco deco-R3" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/shoes.png" class="bg-deco deco-R4" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/filter_coffee.png" class="bg-deco deco-R5" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/dosa.png" class="bg-deco deco-R6" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/garmin.png" class="bg-deco deco-R7" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/strava.png" class="bg-deco deco-R8" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cycle.png" class="bg-deco deco-R9" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/kudos.png" class="bg-deco deco-R10" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/sunscreen.png" class="bg-deco deco-R11" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cap.png" class="bg-deco deco-R12" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/bottle.png" class="bg-deco deco-R13" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/alarm.png" class="bg-deco deco-R14" alt="" loading="lazy" decoding="async" />
     </div>
 
     <h1>{page.data.title}</h1>
@@ -2021,7 +2034,10 @@ yearsToShow.forEach(year => {
           var img = document.createElement('img');
           img.src = url;
           img.alt = 'Activity photo ' + (index + 1);
-          img.style.cssText = 'display:block; width:' + photoWidth + 'px; height:' + photoHeight + 'px; object-fit:cover; border-radius:2px;';
+          img.loading = 'lazy'; // Native lazy loading
+          img.decoding = 'async'; // Non-blocking decode
+          img.style.cssText = 'display:block; width:' + photoWidth + 'px; height:' + photoHeight + 'px; object-fit:cover; border-radius:2px; transition: opacity 0.3s ease;';
+          img.classList.add('sticker-photo');
 
           sticker.appendChild(img);
           slideshowElement.appendChild(sticker);
@@ -2290,4 +2306,93 @@ yearsToShow.forEach(year => {
       });
     }
   });
+
+  // ===== SMART PREFETCHING =====
+  // Prefetch images before they enter viewport for blazing fast perceived loading
+
+  (function() {
+    // Collect all external images that should be prefetched
+    var externalImages = [];
+
+    // Find all Strava photos (in highlight cards)
+    document.querySelectorAll('.highlight-photo img, .sticker-photo').forEach(function(img) {
+      if (img.src && img.src.includes('cloudfront.net')) {
+        externalImages.push(img);
+      }
+      if (img.dataset && img.dataset.src) {
+        externalImages.push(img);
+      }
+    });
+
+    // Intersection Observer for prefetching - trigger when 500px before viewport
+    var prefetchObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var img = entry.target;
+
+          // If using data-src for lazy loading, swap it
+          if (img.dataset.src && !img.src) {
+            img.src = img.dataset.src;
+          }
+
+          // Prefetch by creating a new Image object
+          if (img.src && !img.dataset.prefetched) {
+            var prefetch = new Image();
+            prefetch.src = img.src;
+            img.dataset.prefetched = 'true';
+          }
+
+          prefetchObserver.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '500px 0px', // Start loading 500px before entering viewport
+      threshold: 0
+    });
+
+    // Observe all external images
+    externalImages.forEach(function(img) {
+      prefetchObserver.observe(img);
+    });
+
+    // Prefetch images in highlight sections when section approaches
+    document.querySelectorAll('.highlight-section').forEach(function(section) {
+      var sectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            // Prefetch all images in this section
+            entry.target.querySelectorAll('img[src*="cloudfront"]').forEach(function(img) {
+              if (!img.dataset.prefetched) {
+                var prefetch = new Image();
+                prefetch.src = img.src;
+                img.dataset.prefetched = 'true';
+              }
+            });
+            sectionObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '800px 0px', // Prefetch entire section 800px before
+        threshold: 0
+      });
+      sectionObserver.observe(section);
+    });
+
+    // Prefetch map tiles when map section approaches
+    document.querySelectorAll('.route-map').forEach(function(mapContainer) {
+      var mapObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            // Map is about to be visible - Leaflet will load tiles
+            // We've already preconnected, so tiles will load faster
+            mapObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '600px 0px',
+        threshold: 0
+      });
+      mapObserver.observe(mapContainer);
+    });
+  })();
 </script>
