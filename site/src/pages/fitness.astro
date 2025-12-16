@@ -378,6 +378,54 @@ function getHorizontalBracePath(width, rng) {
   return path.join(' ');
 }
 
+// Calculate dynamic padding per year based on actual content
+// This ensures each year has exactly the space it needs - no more, no less
+const yearPaddingMap = new Map();
+yearsToShow.forEach(year => {
+  const yearMilestones = processedMilestones.filter(m => m.year === year);
+  const hasHighlight = yearHighlights.some(h => h.year === year);
+
+  // Find max tier for above and below annotations
+  const aboveAnnotations = yearMilestones.filter(m => m.position === 'above');
+  const belowAnnotations = yearMilestones.filter(m => m.position === 'below');
+
+  const maxAboveTier = aboveAnnotations.length > 0
+    ? Math.max(...aboveAnnotations.map(m => tierMap.get(`${m.year}-${m.month}-${m.text}`)?.tier || 0))
+    : -1; // -1 means no annotations
+  const maxBelowTier = belowAnnotations.length > 0
+    ? Math.max(...belowAnnotations.map(m => tierMap.get(`${m.year}-${m.month}-${m.text}`)?.tier || 0))
+    : -1;
+
+  // Desktop calculations (in px):
+  // - Base annotation: arrow (45px) + text (~30px) = 75px
+  // - Each additional tier: +35px
+  // - Year highlight brace: margin (95px) + brace (28px) + text (~25px) = 148px
+  // - Buffer: 20px for safety
+
+  const baseAnnotationHeight = 75;
+  const tierHeight = 35;
+  const highlightHeight = 148;
+  const buffer = 20;
+
+  // Calculate vertical padding
+  const topPadding = maxAboveTier >= 0
+    ? baseAnnotationHeight + (maxAboveTier * tierHeight) + buffer
+    : 25;
+
+  const bottomPadding = maxBelowTier >= 0 || hasHighlight
+    ? (maxBelowTier >= 0 ? baseAnnotationHeight + (maxBelowTier * tierHeight) : 0)
+      + (hasHighlight ? highlightHeight : 0)
+      + buffer
+    : 25;
+
+  // Calculate horizontal padding needed for annotations that extend beyond the grid
+  // Annotations use translateX(-50%) so they can extend ~half their width on either side
+  // Keep this minimal - just enough to prevent clipping
+  const horizontalPadding = 40; // Compact buffer for annotation overflow
+
+  yearPaddingMap.set(year, { topPadding, bottomPadding, horizontalPadding, hasHighlight });
+});
+
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
@@ -386,44 +434,82 @@ function getHorizontalBracePath(width, rng) {
 
     <div class="distance-journey">
       <div class="journey-content">
-        <svg class="journey-path" viewBox="0 0 1000 180">
-          <!-- Running path -->
+        <!-- Desktop version -->
+        <svg class="journey-path desktop-journey" viewBox="0 0 1000 180" preserveAspectRatio="xMidYMid meet">
+          <!-- Running path - centered from 50 to 950 -->
           <path
-            d="M 80 70 Q 500 10 920 70"
+            d="M 50 70 Q 500 10 950 70"
             fill="none"
             stroke="#fc4c02"
             stroke-width="2.5"
             stroke-dasharray="6 10"
             stroke-linecap="round"
           />
-          <!-- Runner icon -->
-          <g transform="translate(48, 43) scale(0.14)" fill="#fc4c02">
+          <!-- Runner icon - at start of curve -->
+          <g class="journey-icon" transform="translate(18, 43) scale(0.14)" fill="#fc4c02">
             <path d="M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z"/>
           </g>
-          <!-- Running distance text -->
-          <g transform="translate(920, 70) rotate(8)">
+          <!-- Running distance text - at end of curve -->
+          <g class="journey-text" transform="translate(950, 70) rotate(8)">
             <text x="10" y="-6" class="journey-distance">2,181</text>
             <text x="10" y="10" class="journey-unit">kms of running</text>
           </g>
 
-          <!-- Cycling path -->
+          <!-- Cycling path - centered from 50 to 950 -->
           <path
-            d="M 80 140 Q 500 80 920 140"
+            d="M 50 140 Q 500 80 950 140"
             fill="none"
             stroke="#fc4c02"
             stroke-width="2.5"
             stroke-dasharray="6 10"
             stroke-linecap="round"
           />
-          <!-- Cyclist icon -->
-          <g transform="translate(45, 108) scale(0.14)" fill="#fc4c02">
+          <!-- Cyclist icon - at start of curve -->
+          <g class="journey-icon" transform="translate(15, 108) scale(0.14)" fill="#fc4c02">
             <path d="M54.46,164.71,82.33,126.5a48,48,0,1,1-12.92-9.44L41.54,155.29a8,8,0,1,0,12.92,9.42ZM208,112a47.81,47.81,0,0,0-16.93,3.09L214.91,156A8,8,0,1,1,201.09,164l-23.83-40.86A48,48,0,1,0,208,112ZM165.93,72H192a8,8,0,0,1,8,8,8,8,0,0,0,16,0,24,24,0,0,0-24-24H152a8,8,0,0,0-6.91,12l11.65,20H99.26L82.91,60A8,8,0,0,0,76,56H48a8,8,0,0,0,0,16H71.41L85.12,95.51,69.41,117.06a47.87,47.87,0,0,1,12.92,9.44l11.59-15.9L125.09,164A8,8,0,1,0,138.91,156l-30.32-52h57.48l11.19,19.17a48.11,48.11,0,0,1,13.81-8.08Z"/>
           </g>
-          <!-- Cycling distance text -->
-          <g transform="translate(920, 140) rotate(8)">
+          <!-- Cycling distance text - at end of curve -->
+          <g class="journey-text" transform="translate(950, 140) rotate(8)">
             <text x="10" y="-6" class="journey-distance">6,295</text>
             <text x="10" y="10" class="journey-unit">kms of cycling</text>
           </g>
+        </svg>
+
+        <!-- Mobile version - shorter curves, larger elements, properly centered -->
+        <svg class="journey-path mobile-journey" viewBox="0 0 500 160" preserveAspectRatio="xMidYMid meet">
+          <!-- Running path - short curve, centered in 500-wide viewBox -->
+          <path
+            d="M 70 55 Q 250 15 380 55"
+            fill="none"
+            stroke="#fc4c02"
+            stroke-width="2"
+            stroke-dasharray="4 6"
+            stroke-linecap="round"
+          />
+          <!-- Runner icon -->
+          <g transform="translate(38, 30) scale(0.12)" fill="#fc4c02">
+            <path d="M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z"/>
+          </g>
+          <!-- Running distance text -->
+          <text x="388" y="50" class="journey-distance-mobile">2,181</text>
+          <text x="388" y="64" class="journey-unit-mobile">kms of running</text>
+
+          <!-- Cycling path - short curve -->
+          <path
+            d="M 70 115 Q 250 75 380 115"
+            fill="none"
+            stroke="#fc4c02"
+            stroke-width="2"
+            stroke-dasharray="4 6"
+            stroke-linecap="round"
+          />
+          <!-- Cyclist icon -->
+          <g transform="translate(36, 88) scale(0.12)" fill="#fc4c02">
+            <path d="M54.46,164.71,82.33,126.5a48,48,0,1,1-12.92-9.44L41.54,155.29a8,8,0,1,0,12.92,9.42ZM208,112a47.81,47.81,0,0,0-16.93,3.09L214.91,156A8,8,0,1,1,201.09,164l-23.83-40.86A48,48,0,1,0,208,112ZM165.93,72H192a8,8,0,0,1,8,8,8,8,0,0,0,16,0,24,24,0,0,0-24-24H152a8,8,0,0,0-6.91,12l11.65,20H99.26L82.91,60A8,8,0,0,0,76,56H48a8,8,0,0,0,0,16H71.41L85.12,95.51,69.41,117.06a47.87,47.87,0,0,1,12.92,9.44l11.59-15.9L125.09,164A8,8,0,1,0,138.91,156l-30.32-52h57.48l11.19,19.17a48.11,48.11,0,0,1,13.81-8.08Z"/>
+          </g>
+          <!-- Cycling distance text -->
+          <text x="388" y="110" class="journey-distance-mobile">6,295</text>
+          <text x="388" y="124" class="journey-unit-mobile">kms of cycling</text>
         </svg>
       </div>
     </div>
@@ -518,8 +604,9 @@ function getHorizontalBracePath(width, rng) {
           {/* First set of years */}
           {yearDataList.map((yearData) => {
             const yearMilestones = processedMilestones.filter(m => m.year === yearData.year);
+            const padding = yearPaddingMap.get(yearData.year);
             return (
-              <div class="year-heatmap">
+              <div class="year-heatmap" style={`--top-pad: ${padding.topPadding}px; --bottom-pad: ${padding.bottomPadding}px; --h-pad: ${padding.horizontalPadding}px;`}>
                 <div class="year-label">{yearData.year}</div>
                 <div class="heatmap-container">
                   <div class="heatmap-days">
@@ -530,7 +617,7 @@ function getHorizontalBracePath(width, rng) {
                   <div class="heatmap-wrapper">
                     <div class="heatmap-months">
                       {yearData.monthLabels.map((label) => (
-                        <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                        <div class="month-label" style={`--label-left: ${label.left}`}>{label.month}</div>
                       ))}
                     </div>
                     <div class="heatmap-grid">
@@ -566,7 +653,7 @@ function getHorizontalBracePath(width, rng) {
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
                           style={`
-                            left: ${milestone.left}px;
+                            --milestone-left: ${milestone.left};
                             --tier-offset: ${verticalOffset}px;
                             --rotation: ${milestone.rotation || 0}deg;
                             --font-weight: ${milestone.fontWeight || 400};
@@ -613,7 +700,7 @@ function getHorizontalBracePath(width, rng) {
                             viewBox={`0 0 ${braceWidth} ${braceHeight}`}
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            style={`width: ${braceWidth}px;`}
+                            style={`--brace-width: ${braceWidth}`}
                           >
                             <path
                               d={bracePath}
@@ -641,8 +728,9 @@ function getHorizontalBracePath(width, rng) {
           {/* Duplicate set for seamless infinite scroll */}
           {yearDataList.map((yearData) => {
             const yearMilestones = processedMilestones.filter(m => m.year === yearData.year);
+            const padding = yearPaddingMap.get(yearData.year);
             return (
-              <div class="year-heatmap" aria-hidden="true">
+              <div class="year-heatmap" aria-hidden="true" style={`--top-pad: ${padding.topPadding}px; --bottom-pad: ${padding.bottomPadding}px; --h-pad: ${padding.horizontalPadding}px;`}>
                 <div class="year-label">{yearData.year}</div>
                 <div class="heatmap-container">
                   <div class="heatmap-days">
@@ -653,7 +741,7 @@ function getHorizontalBracePath(width, rng) {
                   <div class="heatmap-wrapper">
                     <div class="heatmap-months">
                       {yearData.monthLabels.map((label) => (
-                        <div class="month-label" style={`left: ${label.left}px`}>{label.month}</div>
+                        <div class="month-label" style={`--label-left: ${label.left}`}>{label.month}</div>
                       ))}
                     </div>
                     <div class="heatmap-grid">
@@ -689,7 +777,7 @@ function getHorizontalBracePath(width, rng) {
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
                           style={`
-                            left: ${milestone.left}px;
+                            --milestone-left: ${milestone.left};
                             --tier-offset: ${verticalOffset}px;
                             --rotation: ${milestone.rotation || 0}deg;
                             --font-weight: ${milestone.fontWeight || 400};
@@ -736,7 +824,7 @@ function getHorizontalBracePath(width, rng) {
                             viewBox={`0 0 ${braceWidth} ${braceHeight}`}
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            style={`width: ${braceWidth}px;`}
+                            style={`--brace-width: ${braceWidth}`}
                           >
                             <path
                               d={bracePath}
@@ -826,6 +914,7 @@ function getHorizontalBracePath(width, rng) {
     position: absolute;
     font-size: 0.65rem;
     color: var(--color-text-light);
+    left: calc(var(--label-left) * 1px);
   }
 
   .heatmap-grid {
@@ -926,18 +1015,61 @@ function getHorizontalBracePath(width, rng) {
     letter-spacing: 0.08em;
   }
 
+  /* Desktop/Mobile SVG visibility */
+  .mobile-journey {
+    display: none !important;
+  }
+
+  .desktop-journey {
+    display: block !important;
+  }
+
+  /* Mobile text styles */
+  .journey-distance-mobile {
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 400;
+    fill: #fc4c02;
+  }
+
+  .journey-unit-mobile {
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 400;
+    fill: #fc4c02;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   @media (max-width: 600px) {
+    .desktop-journey {
+      display: none !important;
+    }
+
+    .mobile-journey {
+      display: block !important;
+    }
+
     .distance-journey {
-      margin: 2rem 0 3rem;
+      margin: 1.5rem 0 2rem;
       padding: 0 0.5rem;
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
     }
 
-    .journey-distance {
-      font-size: 18px;
+    .distance-journey .journey-content {
+      max-width: none;
+      margin: 0 auto;
+      padding: 0;
+      width: 100%;
     }
 
-    .journey-unit {
-      font-size: 7px;
+    .journey-path {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
   }
 
@@ -1308,6 +1440,7 @@ function getHorizontalBracePath(width, rng) {
     margin-right: calc(-50vw + 50%);
     width: 100vw;
     background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%);
+    overflow: visible;
   }
 
   .timeline-section h2 {
@@ -1340,7 +1473,7 @@ function getHorizontalBracePath(width, rng) {
 
   .timeline-track {
     display: flex;
-    gap: 4rem;
+    gap: 0.5rem;
     width: max-content;
     padding: 0 2rem;
     overflow: visible;
@@ -1348,7 +1481,11 @@ function getHorizontalBracePath(width, rng) {
 
   .year-heatmap {
     flex-shrink: 0;
-    padding: 4rem 0 10rem; /* Extra space: 4rem top for annotations, 10rem bottom for year highlight brace */
+    /* Dynamic padding based on actual content - calculated per year */
+    padding-top: var(--top-pad, 4rem);
+    padding-bottom: var(--bottom-pad, 10rem);
+    padding-left: var(--h-pad, 50px);
+    padding-right: var(--h-pad, 50px);
     overflow: visible;
   }
 
@@ -1395,18 +1532,47 @@ function getHorizontalBracePath(width, rng) {
   }
 
   @media (max-width: 600px) {
+    .timeline-section {
+      margin: 2rem 0 1rem;
+      padding-top: 2rem;
+      overflow: visible;
+    }
+
+    .timeline-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
     .timeline-track {
-      gap: 3rem;
+      gap: 0.25rem;
       padding: 0 1rem;
+      overflow: visible;
+    }
+
+    .timeline-scroll-container {
+      padding: 0.5rem 0 1rem;
+      overflow-x: auto;
+      overflow-y: visible;
     }
 
     .year-label {
       font-size: 1.1rem;
+      margin-bottom: 0.5rem;
     }
 
+    /* Scale dynamic padding for mobile (0.65x of desktop values) */
+    .year-heatmap {
+      padding-top: calc(var(--top-pad, 4rem) * 0.65);
+      padding-bottom: calc(var(--bottom-pad, 10rem) * 0.65);
+      padding-left: calc(var(--h-pad, 50px) * 0.6);
+      padding-right: calc(var(--h-pad, 50px) * 0.6);
+      overflow: visible;
+    }
+
+    /* Mobile cell sizes - 8px cells, 2px gaps = 10px per week */
     .year-heatmap .heatmap-cell {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
     }
 
     .year-heatmap .heatmap-week,
@@ -1416,13 +1582,68 @@ function getHorizontalBracePath(width, rng) {
 
     .year-heatmap .heatmap-days {
       gap: 2px;
-      padding-top: 18px;
+      padding-top: 16px;
     }
 
     .year-heatmap .day-label {
-      height: 10px;
-      line-height: 10px;
+      height: 8px;
+      line-height: 8px;
+      font-size: 0.5rem;
+    }
+
+    .year-heatmap .heatmap-wrapper,
+    .year-heatmap .heatmap-container {
+      overflow: visible;
+    }
+
+    /* Scale positions: mobile_week = 10px, desktop_week = 18px */
+    /* Ratio: 10/18 = 0.556 */
+    .month-label {
+      left: calc(var(--label-left) * 0.556px) !important;
       font-size: 0.55rem;
+    }
+
+    .milestone-annotation {
+      left: calc(var(--milestone-left) * 0.556px) !important;
+      min-width: 60px;
+    }
+
+    /* Adjust annotation vertical positions for smaller grid (~68px height) */
+    .milestone-annotation.above {
+      bottom: 70px;
+    }
+
+    .milestone-annotation.below {
+      margin-top: -5px;
+    }
+
+    /* Smaller annotation text */
+    .milestone-text {
+      font-size: 0.85rem;
+    }
+
+    .milestone-text.multiline {
+      font-size: 0.75rem;
+    }
+
+    /* Scale arrows for mobile */
+    .milestone-arrow {
+      transform: scale(0.65);
+      transform-origin: center;
+    }
+
+    /* Year highlight brace - scale width and adjust position */
+    .curly-brace-horizontal {
+      width: calc(var(--brace-width) * 0.556px) !important;
+      height: 20px;
+    }
+
+    .year-highlight-brace {
+      margin-top: 60px;
+    }
+
+    .year-highlight-text {
+      font-size: 0.85rem;
     }
   }
 
@@ -1438,14 +1659,16 @@ function getHorizontalBracePath(width, rng) {
   .milestone-annotation {
     position: absolute;
     /* Center the container on the anchor point */
-    transform: translateX(-50%); 
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     pointer-events: none;
     z-index: 10;
     /* Ensure width doesn't collapse too much */
-    min-width: 100px; 
+    min-width: 100px;
+    /* Use CSS variable for responsive positioning */
+    left: calc(var(--milestone-left) * 1px);
   }
 
   /* Fixed positioning relative to the Heatmap Grid (Height ~116px) */
@@ -1527,6 +1750,7 @@ function getHorizontalBracePath(width, rng) {
   .curly-brace-horizontal {
     height: 28px;
     flex-shrink: 0;
+    width: calc(var(--brace-width) * 1px);
   }
 
   .year-highlight-text {
@@ -1543,20 +1767,6 @@ function getHorizontalBracePath(width, rng) {
     transform: rotate(var(--rotation, 0deg));
   }
 
-  /* Mobile adjustments for year highlight */
-  @media (max-width: 600px) {
-    .year-highlight-brace {
-      margin-top: 75px;
-    }
-
-    .curly-brace-horizontal {
-      height: 26px;
-    }
-
-    .year-highlight-text {
-      font-size: 1rem;
-    }
-  }
 </style>
 
 <script is:inline>
