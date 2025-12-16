@@ -317,6 +317,67 @@ function getArrowHead(tier, position, rng, align) {
   return `M ${w1x} ${w1y} L ${tipX} ${tipY} L ${w2x} ${w2y}`;
 }
 
+// Process year highlights (curly braces spanning full year)
+const yearHighlights = (milestonesData.yearHighlights || []).map(highlight => {
+  const yearData = yearDataList.find(yd => yd.year === highlight.year);
+  if (!yearData) return null;
+
+  // String hash for consistent randomness
+  const hashString = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash);
+  };
+
+  const rng = hashString(highlight.text + highlight.year);
+
+  return {
+    ...highlight,
+    rng,
+    rotation: ((rng % 6) - 3), // -3 to +3 degrees (subtle)
+  };
+}).filter(Boolean);
+
+// Generate hand-drawn HORIZONTAL curly brace SVG path
+// The brace spans the full width of the heatmap (~954px for 53 weeks)
+function getHorizontalBracePath(width, rng) {
+  const midX = width / 2;
+
+  // Slight randomness for hand-drawn feel
+  const r1 = ((rng % 3) - 1);
+  const r2 = (((rng >> 3) % 3) - 1);
+
+  // Proper curly brace shape with distinct cusp
+  const topY = 3;            // Top edge where ends sit
+  const cuspY = 22;          // Bottom of cusp (the pointed tip)
+  const midCurveY = 16;      // Where curves meet the cusp arms
+  const cuspArm = 12;        // Width of the V-shaped cusp
+
+  // Build the path:
+  // 1. Start at left end (0, topY)
+  // 2. Curve down toward the left side of the cusp
+  // 3. Sharp line down to the cusp point (center bottom)
+  // 4. Sharp line up to the right side of the cusp
+  // 5. Curve up to the right end (width, topY)
+
+  const path = [
+    `M 0 ${topY + r1}`,
+    // Left curve: from left end, curving down to left arm of cusp
+    `Q ${midX * 0.45} ${topY + 4 + r1}, ${midX - cuspArm} ${midCurveY}`,
+    // Sharp down to cusp point
+    `L ${midX} ${cuspY + r2}`,
+    // Sharp up from cusp point
+    `L ${midX + cuspArm} ${midCurveY}`,
+    // Right curve: from right arm of cusp, curving up to right end
+    `Q ${midX * 1.55} ${topY + 4 - r1}, ${width} ${topY - r2}`
+  ];
+
+  return path.join(' ');
+}
+
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description}>
@@ -539,6 +600,39 @@ function getArrowHead(tier, position, rng, align) {
                         </div>
                       );
                     })}
+                    {/* Year highlight - horizontal curly brace spanning full year */}
+                    {yearHighlights.filter(h => h.year === yearData.year).map((highlight) => {
+                      const braceWidth = yearData.weeks.length * 18; // Width of heatmap grid (weeks × 18px)
+                      const braceHeight = 28; // Height of SVG (enough for the cusp)
+                      const bracePath = getHorizontalBracePath(braceWidth, highlight.rng);
+
+                      return (
+                        <div class="year-highlight-brace">
+                          <svg
+                            class="curly-brace-horizontal"
+                            viewBox={`0 0 ${braceWidth} ${braceHeight}`}
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={`width: ${braceWidth}px;`}
+                          >
+                            <path
+                              d={bracePath}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"
+                            />
+                          </svg>
+                          <div
+                            class="year-highlight-text"
+                            style={`--rotation: ${highlight.rotation}deg;`}
+                          >
+                            {highlight.text}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -626,6 +720,39 @@ function getArrowHead(tier, position, rng, align) {
                             />
                           </svg>
                           {isBelow && <div class={`milestone-text ${hasNewline ? 'multiline' : ''}`}>{milestone.text}</div>}
+                        </div>
+                      );
+                    })}
+                    {/* Year highlight - horizontal curly brace (duplicate for infinite scroll) */}
+                    {yearHighlights.filter(h => h.year === yearData.year).map((highlight) => {
+                      const braceWidth = yearData.weeks.length * 18;
+                      const braceHeight = 28;
+                      const bracePath = getHorizontalBracePath(braceWidth, highlight.rng);
+
+                      return (
+                        <div class="year-highlight-brace">
+                          <svg
+                            class="curly-brace-horizontal"
+                            viewBox={`0 0 ${braceWidth} ${braceHeight}`}
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={`width: ${braceWidth}px;`}
+                          >
+                            <path
+                              d={bracePath}
+                              stroke="#fc4c02"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"
+                            />
+                          </svg>
+                          <div
+                            class="year-highlight-text"
+                            style={`--rotation: ${highlight.rotation}deg;`}
+                          >
+                            {highlight.text}
+                          </div>
                         </div>
                       );
                     })}
@@ -1221,7 +1348,7 @@ function getArrowHead(tier, position, rng, align) {
 
   .year-heatmap {
     flex-shrink: 0;
-    padding: 4rem 0; /* Extra space for milestone annotations above and below */
+    padding: 4rem 0 10rem; /* Extra space: 4rem top for annotations, 10rem bottom for year highlight brace */
     overflow: visible;
   }
 
@@ -1381,6 +1508,54 @@ function getArrowHead(tier, position, rng, align) {
   /* Ensure SVG is centered in the flexible container */
   .milestone-annotation svg {
      display: block;
+  }
+
+  /* Year highlight - horizontal curly brace spanning full year */
+  .year-highlight-brace {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    /* Position well below heatmap, clearing any "below" milestone annotations */
+    margin-top: 95px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .curly-brace-horizontal {
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .year-highlight-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fc4c02;
+    white-space: nowrap;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    margin-top: 4px;
+    /* Slight hand-drawn tilt */
+    transform: rotate(var(--rotation, 0deg));
+  }
+
+  /* Mobile adjustments for year highlight */
+  @media (max-width: 600px) {
+    .year-highlight-brace {
+      margin-top: 75px;
+    }
+
+    .curly-brace-horizontal {
+      height: 26px;
+    }
+
+    .year-highlight-text {
+      font-size: 1rem;
+    }
   }
 </style>
 

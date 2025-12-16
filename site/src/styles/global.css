@@ -332,6 +332,17 @@ footer .footer-sep {
   opacity: 0.5;
 }
 
+footer .footer-attribution {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+footer .no-copyright {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
 /* Post list */
 .post-list {
   list-style: none;
