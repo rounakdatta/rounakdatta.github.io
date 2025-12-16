@@ -237,13 +237,13 @@ function getArrowPath(tier, position, rng, align) {
   const bulge = (r1 * 2); 
   
   if (isBelow) {
-    // Arrow pointing UP
-    // Start at bottom of text (startX, totalHeight) -> End at timeline (endX, 4)
+    // Arrow pointing UP to heatmap
+    // Start at text (startX, totalHeight) -> Tip at heatmap (endX, 4)
     return `M ${startX} ${totalHeight} Q ${midX + bulge} ${totalHeight * 0.5}, ${endX} 4`;
   } else {
-    // Arrow pointing DOWN
-    // Start at timeline (endX, 2) -> End at text (startX, totalHeight)
-    return `M ${endX} 2 Q ${midX + bulge} ${totalHeight * 0.5}, ${startX} ${totalHeight}`;
+    // Arrow pointing DOWN to heatmap
+    // Start at text (startX, 2) -> Tip at heatmap (endX, totalHeight)
+    return `M ${startX} 2 Q ${midX + bulge} ${totalHeight * 0.5}, ${endX} ${totalHeight}`;
   }
 }
 
@@ -267,19 +267,18 @@ function getArrowHead(tier, position, rng, align) {
   // For Quadratic Bezier B(t), tangent at t=1 is P2 - P1.
   let vx, vy;
   let tipX, tipY;
-  
+
   if (isBelow) {
-     // Path: Text (startX, totalHeight) -> P1(cx, cy) -> Timeline (endX, 4)
-     // Tip is at Timeline (endX, 4)
-     // Tangent vector is P2 - P1
+     // Path: Text (startX, totalHeight) -> P1(cx, cy) -> Heatmap (endX, 4)
+     // Tip is at Heatmap (endX, 4)
      tipX = endX;
      tipY = 4;
      vx = tipX - cx;
      vy = tipY - cy;
   } else {
-     // Path: Timeline (endX, 2) -> P1(cx, cy) -> Text (startX, totalHeight)
-     // Tip is at Text (startX, totalHeight)
-     tipX = startX;
+     // Path: Text (startX, 2) -> P1(cx, cy) -> Heatmap (endX, totalHeight)
+     // Tip is at Heatmap (endX, totalHeight) - ALWAYS at center regardless of alignment
+     tipX = endX;
      tipY = totalHeight;
      vx = tipX - cx;
      vy = tipY - cy;
@@ -478,11 +477,10 @@ function getArrowHead(tier, position, rng, align) {
                         <div class="heatmap-week">
                           {week.map((day) => {
                             const level = day.count === 0 ? 0 : day.count === 1 ? 1 : day.count === 2 ? 2 : 3;
-                            const tooltip = day.isCurrentYear && !day.isFuture ? `${day.date}: ${day.count} activities` : '';
                             const classes = ['heatmap-cell', `level-${level}`];
                             if (!day.isCurrentYear) classes.push('outside');
                             if (day.isFuture) classes.push('future');
-                            return <div class={classes.join(' ')} title={tooltip} />;
+                            return <div class={classes.join(' ')} />;
                           })}
                         </div>
                       ))}
@@ -507,7 +505,7 @@ function getArrowHead(tier, position, rng, align) {
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
                           style={`
-                            left: ${milestone.left + 10}px;
+                            left: ${milestone.left}px;
                             --tier-offset: ${verticalOffset}px;
                             --rotation: ${milestone.rotation || 0}deg;
                             --font-weight: ${milestone.fontWeight || 400};
@@ -597,7 +595,7 @@ function getArrowHead(tier, position, rng, align) {
                         <div
                           class={`milestone-annotation ${isBelow ? 'below' : 'above'} align-${align}`}
                           style={`
-                            left: ${milestone.left + 10}px;
+                            left: ${milestone.left}px;
                             --tier-offset: ${verticalOffset}px;
                             --rotation: ${milestone.rotation || 0}deg;
                             --font-weight: ${milestone.fontWeight || 400};
@@ -718,12 +716,6 @@ function getArrowHead(tier, position, rng, align) {
     width: 12px;
     height: 12px;
     border-radius: 2px;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-
-  .heatmap-cell:hover {
-    transform: scale(1.2);
   }
 
   .heatmap-cell.outside {
@@ -1201,37 +1193,30 @@ function getArrowHead(tier, position, rng, align) {
   }
 
   .timeline-scroll-container {
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: visible;
     position: relative;
     padding: 1rem 0 2rem;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    cursor: grab;
+  }
+
+  .timeline-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .timeline-scroll-container:active {
+    cursor: grabbing;
   }
 
   .timeline-track {
     display: flex;
     gap: 4rem;
-    animation: scrollTimeline 80s linear infinite;
-    animation-play-state: paused; /* Start paused, JS will play when visible */
     width: max-content;
     padding: 0 2rem;
     overflow: visible;
-  }
-
-  .timeline-track.is-scrolling {
-    animation-play-state: running;
-  }
-
-  .timeline-scroll-container:hover .timeline-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes scrollTimeline {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
   }
 
   .year-heatmap {
@@ -1654,24 +1639,119 @@ function getArrowHead(tier, position, rng, align) {
       observer.observe(routeCard);
     });
 
-    // Timeline scroll - only start when visible
+    // Timeline scroll - auto-scroll with manual override
     var timelineSection = document.querySelector('.timeline-section');
+    var scrollContainer = document.querySelector('.timeline-scroll-container');
     var timelineTrack = document.querySelector('.timeline-track');
 
-    if (timelineSection && timelineTrack) {
+    if (timelineSection && scrollContainer && timelineTrack) {
+      var isVisible = false;
+      var isUserInteracting = false;
+      var autoScrollSpeed = 0.5; // pixels per frame (slow ambient scroll)
+      var animationId = null;
+
+      // Auto-scroll function
+      function autoScroll() {
+        if (!isVisible || isUserInteracting) {
+          animationId = requestAnimationFrame(autoScroll);
+          return;
+        }
+
+        scrollContainer.scrollLeft += autoScrollSpeed;
+
+        // Infinite loop: when we've scrolled past halfway (duplicate content), reset
+        var halfWidth = timelineTrack.scrollWidth / 2;
+        if (scrollContainer.scrollLeft >= halfWidth) {
+          scrollContainer.scrollLeft = 0;
+        }
+
+        animationId = requestAnimationFrame(autoScroll);
+      }
+
+      // Start auto-scroll loop
+      animationId = requestAnimationFrame(autoScroll);
+
+      // Intersection Observer - only auto-scroll when visible
       var timelineObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            timelineTrack.classList.add('is-scrolling');
-          } else {
-            timelineTrack.classList.remove('is-scrolling');
-          }
+          isVisible = entry.isIntersecting;
         });
       }, {
-        threshold: 0.2 // Start when 20% visible
+        threshold: 0.2
+      });
+      timelineObserver.observe(timelineSection);
+
+      // Handle user interaction - pause auto-scroll
+      function pauseAutoScroll() {
+        isUserInteracting = true;
+      }
+
+      function resumeAutoScroll() {
+        isUserInteracting = false;
+      }
+
+      // Mouse drag for desktop
+      var isDragging = false;
+      var startX = 0;
+      var scrollStart = 0;
+
+      scrollContainer.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollStart = scrollContainer.scrollLeft;
+        pauseAutoScroll();
       });
 
-      timelineObserver.observe(timelineSection);
+      scrollContainer.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        var x = e.pageX - scrollContainer.offsetLeft;
+        var walk = (x - startX) * 1.5; // Scroll speed multiplier
+        scrollContainer.scrollLeft = scrollStart - walk;
+      });
+
+      scrollContainer.addEventListener('mouseup', function() {
+        isDragging = false;
+        resumeAutoScroll();
+      });
+
+      scrollContainer.addEventListener('mouseleave', function() {
+        if (isDragging) {
+          isDragging = false;
+          resumeAutoScroll();
+        }
+      });
+
+      // Touch swipe for mobile
+      var touchStartX = 0;
+      var touchScrollStart = 0;
+
+      scrollContainer.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].pageX;
+        touchScrollStart = scrollContainer.scrollLeft;
+        pauseAutoScroll();
+      }, { passive: true });
+
+      scrollContainer.addEventListener('touchmove', function(e) {
+        var x = e.touches[0].pageX;
+        var walk = (touchStartX - x) * 1.2;
+        scrollContainer.scrollLeft = touchScrollStart + walk;
+      }, { passive: true });
+
+      scrollContainer.addEventListener('touchend', function() {
+        resumeAutoScroll();
+      });
+
+      // Handle infinite loop when user scrolls manually
+      scrollContainer.addEventListener('scroll', function() {
+        var halfWidth = timelineTrack.scrollWidth / 2;
+        if (scrollContainer.scrollLeft >= halfWidth) {
+          scrollContainer.scrollLeft = scrollContainer.scrollLeft - halfWidth;
+        } else if (scrollContainer.scrollLeft <= 0 && !isDragging) {
+          // If scrolled to start, could jump to end for reverse infinite scroll
+          // But keeping it simple - just let it stay at start
+        }
+      });
     }
   });
 </script>

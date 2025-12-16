@@ -13,4 +13,8 @@ export default defineConfig({
       wrap: true,
     },
   },
+  image: {
+    // Disable image optimization - use images as-is from public folder
+    service: { entrypoint: 'astro/assets/services/noop' },
+  },
 });
