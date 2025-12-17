@@ -343,6 +343,24 @@ footer .no-copyright {
   opacity: 0.7;
 }
 
+footer .footer-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Footer mobile layout - stack vertically */
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  footer .mobile-hide {
+    display: none;
+  }
+}
+
 /* Post list */
 .post-list {
   list-style: none;
@@ -416,7 +434,7 @@ hr {
 
 @media (max-width: 700px) {
   html {
-    font-size: 16px;
+    font-size: 18px; /* Larger for comfortable mobile reading */
   }
 
   .page-wrapper {
