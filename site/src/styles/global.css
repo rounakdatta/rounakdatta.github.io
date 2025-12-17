@@ -1,5 +1,10 @@
 /* Tufte-inspired CSS with Anil Madhavapeddy style */
 
+/* Force light mode - disable automatic dark mode */
+:root {
+  color-scheme: light only;
+}
+
 :root {
   --font-body: 'EB Garamond', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
