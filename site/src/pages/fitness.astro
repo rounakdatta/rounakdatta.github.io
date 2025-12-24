@@ -467,8 +467,8 @@ yearsToShow.forEach(year => {
       <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-L13" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/cycle_bell.png" class="bg-deco deco-L14" alt="" loading="lazy" decoding="async" />
       <!-- Right side decorations - lazy loaded for performance -->
-      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-R1" alt="" loading="lazy" decoding="async" />
-      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-R2" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/sunscreen.png" class="bg-deco deco-R1" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/socks.png" class="bg-deco deco-R2" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/helmet.png" class="bg-deco deco-R3" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/shoes.png" class="bg-deco deco-R4" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/filter_coffee.png" class="bg-deco deco-R5" alt="" loading="lazy" decoding="async" />
@@ -477,10 +477,10 @@ yearsToShow.forEach(year => {
       <img src="/illustrations/strava.png" class="bg-deco deco-R8" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/cycle.png" class="bg-deco deco-R9" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/kudos.png" class="bg-deco deco-R10" alt="" loading="lazy" decoding="async" />
-      <img src="/illustrations/sunscreen.png" class="bg-deco deco-R11" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/arm_sleeve.png" class="bg-deco deco-R11" alt="" loading="lazy" decoding="async" />
       <img src="/illustrations/cap.png" class="bg-deco deco-R12" alt="" loading="lazy" decoding="async" />
-      <img src="/illustrations/bottle.png" class="bg-deco deco-R13" alt="" loading="lazy" decoding="async" />
-      <img src="/illustrations/alarm.png" class="bg-deco deco-R14" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/alarm.png" class="bg-deco deco-R13" alt="" loading="lazy" decoding="async" />
+      <img src="/illustrations/cycle_bell.png" class="bg-deco deco-R14" alt="" loading="lazy" decoding="async" />
     </div>
 
     <h1>{page.data.title}</h1>
@@ -1100,21 +1100,6 @@ yearsToShow.forEach(year => {
     background: #fc4c02;
   }
 
-  /* Dark mode support - Strava orange */
-  @media (prefers-color-scheme: dark) {
-    .level-0 {
-      background: #161b22;
-    }
-    .level-1 {
-      background: #4a2a18;
-    }
-    .level-2 {
-      background: #8c3d12;
-    }
-    .level-3 {
-      background: #fc4c02;
-    }
-  }
 
   /* Distance Journey Visualization */
   .distance-journey {
@@ -1665,12 +1650,6 @@ yearsToShow.forEach(year => {
   .year-heatmap .day-label {
     height: 14px;
     line-height: 14px;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .timeline-section {
-      background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
-    }
   }
 
   @media (max-width: 600px) {
