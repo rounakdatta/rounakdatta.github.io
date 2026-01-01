@@ -940,47 +940,47 @@ yearsToShow.forEach(year => {
 
   .bg-deco {
     position: absolute;
-    opacity: 0.15;
-    filter: grayscale(30%) brightness(1.1) saturate(0.4);
+    opacity: 0.18;
+    mix-blend-mode: multiply;
     pointer-events: none;
   }
 
   /* LEFT side decorations - uniform sizing, positioned at left edge */
   .deco-L1 { width: clamp(200px, 16vw, 320px); top: 0%; left: 20px; transform: rotate(-12deg); }
   .deco-L2 { width: clamp(200px, 16vw, 320px); top: 7%; left: 40px; transform: rotate(18deg); }
-  .deco-L3 { width: clamp(200px, 16vw, 320px); top: 14%; left: 15px; transform: rotate(-8deg) scaleX(-1); }
+  .deco-L3 { width: clamp(200px, 16vw, 320px); top: 14%; left: 15px; transform: rotate(-8deg) ; }
   .deco-L4 { width: clamp(200px, 16vw, 320px); top: 21%; left: 50px; transform: rotate(22deg); }
   .deco-L5 { width: clamp(200px, 16vw, 320px); top: 28%; left: 25px; transform: rotate(-15deg); }
-  .deco-L6 { width: clamp(200px, 16vw, 320px); top: 35%; left: 35px; transform: rotate(10deg) scaleX(-1); }
+  .deco-L6 { width: clamp(200px, 16vw, 320px); top: 35%; left: 35px; transform: rotate(10deg) ; }
   .deco-L7 { width: clamp(200px, 16vw, 320px); top: 42%; left: 20px; transform: rotate(-20deg); }
   .deco-L8 { width: clamp(200px, 16vw, 320px); top: 49%; left: 45px; transform: rotate(15deg); }
-  .deco-L9 { width: clamp(200px, 16vw, 320px); top: 56%; left: 30px; transform: rotate(-10deg) scaleX(-1); }
+  .deco-L9 { width: clamp(200px, 16vw, 320px); top: 56%; left: 30px; transform: rotate(-10deg) ; }
   .deco-L10 { width: clamp(200px, 16vw, 320px); top: 63%; left: 15px; transform: rotate(8deg); }
   .deco-L11 { width: clamp(200px, 16vw, 320px); top: 70%; left: 50px; transform: rotate(-18deg); }
-  .deco-L12 { width: clamp(200px, 16vw, 320px); top: 77%; left: 25px; transform: rotate(25deg) scaleX(-1); }
+  .deco-L12 { width: clamp(200px, 16vw, 320px); top: 77%; left: 25px; transform: rotate(25deg) ; }
   .deco-L13 { width: clamp(200px, 16vw, 320px); top: 84%; left: 40px; transform: rotate(-5deg); }
   .deco-L14 { width: clamp(200px, 16vw, 320px); top: 91%; left: 20px; transform: rotate(12deg); }
 
   /* RIGHT side decorations - uniform sizing, positioned at right edge */
-  .deco-R1 { width: clamp(200px, 16vw, 320px); top: 3%; right: 25px; transform: rotate(15deg) scaleX(-1); }
+  .deco-R1 { width: clamp(200px, 16vw, 320px); top: 3%; right: 25px; transform: rotate(15deg) ; }
   .deco-R2 { width: clamp(200px, 16vw, 320px); top: 10%; right: 40px; transform: rotate(-22deg); }
   .deco-R3 { width: clamp(200px, 16vw, 320px); top: 17%; right: 15px; transform: rotate(8deg); }
-  .deco-R4 { width: clamp(200px, 16vw, 320px); top: 24%; right: 50px; transform: rotate(-18deg) scaleX(-1); }
+  .deco-R4 { width: clamp(200px, 16vw, 320px); top: 24%; right: 50px; transform: rotate(-18deg) ; }
   .deco-R5 { width: clamp(200px, 16vw, 320px); top: 31%; right: 30px; transform: rotate(12deg); }
   .deco-R6 { width: clamp(200px, 16vw, 320px); top: 38%; right: 20px; transform: rotate(-25deg); }
-  .deco-R7 { width: clamp(200px, 16vw, 320px); top: 45%; right: 45px; transform: rotate(20deg) scaleX(-1); }
+  .deco-R7 { width: clamp(200px, 16vw, 320px); top: 45%; right: 45px; transform: rotate(20deg) ; }
   .deco-R8 { width: clamp(200px, 16vw, 320px); top: 52%; right: 25px; transform: rotate(-12deg); }
   .deco-R9 { width: clamp(200px, 16vw, 320px); top: 59%; right: 35px; transform: rotate(5deg); }
-  .deco-R10 { width: clamp(200px, 16vw, 320px); top: 66%; right: 15px; transform: rotate(-15deg) scaleX(-1); }
+  .deco-R10 { width: clamp(200px, 16vw, 320px); top: 66%; right: 15px; transform: rotate(-15deg) ; }
   .deco-R11 { width: clamp(200px, 16vw, 320px); top: 73%; right: 50px; transform: rotate(18deg); }
   .deco-R12 { width: clamp(200px, 16vw, 320px); top: 80%; right: 30px; transform: rotate(-8deg); }
-  .deco-R13 { width: clamp(200px, 16vw, 320px); top: 87%; right: 20px; transform: rotate(22deg) scaleX(-1); }
+  .deco-R13 { width: clamp(200px, 16vw, 320px); top: 87%; right: 20px; transform: rotate(22deg) ; }
   .deco-R14 { width: clamp(200px, 16vw, 320px); top: 94%; right: 40px; transform: rotate(-20deg); }
 
-  /* Even larger on big screens */
+  /* Even larger on big screens - slightly more visible */
   @media (min-width: 1400px) {
     .bg-deco {
-      opacity: 0.2;
+      opacity: 0.22;
     }
   }
 
@@ -988,24 +988,25 @@ yearsToShow.forEach(year => {
   @media (max-width: 1100px) {
     .bg-deco {
       width: clamp(120px, 20vw, 180px) !important;
-      opacity: 0.12;
+      opacity: 0.15;
     }
   }
 
-  /* Adjust for mobile - smaller, subtler */
+  /* Adjust for mobile - visible from edges */
   @media (max-width: 700px) {
     .bg-deco {
-      width: clamp(80px, 25vw, 120px) !important;
-      opacity: 0.1;
+      width: clamp(100px, 30vw, 140px) !important;
+      opacity: 0.15;
     }
-    /* Reposition to screen edges on mobile */
+    /* Position left icons to show from left edge */
     .deco-L1, .deco-L2, .deco-L3, .deco-L4, .deco-L5, .deco-L6, .deco-L7,
     .deco-L8, .deco-L9, .deco-L10, .deco-L11, .deco-L12, .deco-L13, .deco-L14 {
-      left: -30px !important;
+      left: -15px !important;
     }
+    /* Position right icons to show from right edge */
     .deco-R1, .deco-R2, .deco-R3, .deco-R4, .deco-R5, .deco-R6, .deco-R7,
     .deco-R8, .deco-R9, .deco-R10, .deco-R11, .deco-R12, .deco-R13, .deco-R14 {
-      right: -30px !important;
+      right: -15px !important;
     }
   }
 
