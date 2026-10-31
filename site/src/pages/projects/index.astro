@@ -3,42 +3,28 @@ import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
-import { chapters } from '../../lib/journal';
-import { fitRoute } from '../../lib/routes';
 
 const all = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const books = await getCollection('books');
 
-// A journal kept on this site is only shown once it has something in it.
-const journals = all.filter((p) => p.data.internalUrl && !(p.data.internalUrl === '/reading/' && books.length === 0));
+// The Reading and Fitness projects live on this site, so they lead as tiles of their own.
+const special = all.filter((p) => p.data.internalUrl);
 const repos = await Promise.all(
   all.filter((p) => !p.data.internalUrl).map(async (project) => ({ project, Content: (await render(project)).Content })),
 );
-
-// The fitness journal introduces itself with a few of its own routes.
-const shapes = chapters.slice(0, 6).map((c) => fitRoute(c.route, 64, 64, 6));
 const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Finished', retired: 'Retired' } as const;
 ---
 
 <BaseLayout title="Projects" description="Software Rounak Datta builds and keeps building: a self-hosted homelab, Nix dotfiles, and the fitness journal on this site.">
   <h1>Projects</h1>
 
-  {journals.length > 0 && (
-    <ul class="journals">
-      {journals.map((p) => (
-        <li>
-          <a class="journal" href={p.data.internalUrl}>
-            {p.data.internalUrl === '/fitness/' && (
-              <svg class="shapes" viewBox={`0 0 ${64 * shapes.length} 64`} aria-hidden="true">
-                {shapes.map((s, i) => <path d={s.d} transform={`translate(${i * 64} 0)`} />)}
-              </svg>
-            )}
-            <span class="journal-title">{p.data.title}</span>
-            {p.data.description && <span class="journal-description">{p.data.description}</span>}
-          </a>
-        </li>
+  {special.length > 0 && (
+    <div class="special-projects">
+      {special.map((p) => (
+        <a href={p.data.internalUrl} class="special-project">
+          <span class="special-title">{p.data.title}</span>
+        </a>
       ))}
-    </ul>
+    </div>
   )}
 
   <ul class="repos">
@@ -49,7 +35,7 @@ const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Fin
         <li class="repo">
           {logo && <Image src={logo} alt="" width={112} height={112} layout="fixed" fit="contain" class="logo" />}
           <div class="repo-text">
-            <h2>{title}</h2>
+            <h2>{title}{project.data.featured && <span class="featured-badge">Featured</span>}</h2>
             <div class="prose repo-body"><Content /></div>
             {facts.length > 0 && <p class="facts">{facts.join(' · ')}</p>}
             <p class="links">
@@ -64,53 +50,61 @@ const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Fin
 </BaseLayout>
 
 <style>
-  .journals,
   .repos {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .journals {
-    margin-bottom: 2.5em;
+  .special-projects {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 0.5em 0 2.5em;
   }
 
-  .journal {
-    display: grid;
-    gap: 0.2em;
-    padding: 1.1em 1.25em 1.2em;
-    border: 1px solid var(--rule);
+  .special-project {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 3%, var(--paper)), color-mix(in oklab, var(--accent) 8%, var(--paper)));
+    border: 1px solid color-mix(in oklab, var(--accent) 22%, var(--paper));
     border-radius: var(--radius);
     text-decoration: none;
-    transition: border-color 0.15s;
+    transition: transform 0.2s var(--ease-out), border-color 0.2s, background 0.2s;
   }
 
-  .journal:hover {
-    border-color: color-mix(in oklab, var(--route) 45%, var(--rule));
+  .special-project:hover {
+    background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 6%, var(--paper)), color-mix(in oklab, var(--accent) 12%, var(--paper)));
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--paper));
+    transform: translateY(-2px);
   }
 
-  .shapes {
-    height: 2.6em;
-    width: auto;
-    max-width: 100%;
-    margin-bottom: 0.5em;
-  }
-
-  .shapes path {
-    fill: none;
-    stroke: var(--route);
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .journal-title {
+  .special-title {
+    font-size: 0.9em;
     font-weight: 600;
-    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-align: center;
   }
 
-  .journal-description {
-    color: var(--ink-muted);
+  @media (max-width: 34rem) {
+    .special-projects {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .featured-badge {
+    margin-left: 0.6em;
+    padding: 0.15em 0.5em;
+    border-radius: 3px;
+    background: var(--accent);
+    color: var(--paper);
+    font-size: 0.55em;
+    font-weight: 400;
+    vertical-align: 0.3em;
+    letter-spacing: 0.02em;
   }
 
   .repo {
@@ -128,6 +122,14 @@ const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Fin
     height: 112px;
     object-fit: contain;
     border-radius: var(--radius);
+  }
+
+  /* Logos are drawn for white paper (homelab's name is black ink), so at night they sit on a light card. */
+  @media (prefers-color-scheme: dark) {
+    .logo {
+      background: #f4f1e6;
+      padding: 6px;
+    }
   }
 
   .repo-text {

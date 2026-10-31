@@ -1,4 +1,5 @@
 ---
+featured: true
 year: 2020
 status: active
 stack: ["Nix", "home-manager"]

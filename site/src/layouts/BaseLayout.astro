@@ -33,7 +33,9 @@ const canonical = new URL(path, SITE.url).href;
 const fullTitle = title ? `${title} — ${SITE.name}` : SITE.name;
 const ogPath = image ?? `/og${path === '/' ? '/home' : path.replace(/\/$/, '').replace(/\.html$/, '')}.png`;
 const ogImage = new URL(ogPath, SITE.url).href;
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+// The fitness journal and the reading list are projects, so inside them Projects is where you are.
+const isCurrent = (href: string) =>
+  path.startsWith(href) || (href === '/projects/' && /^\/(fitness|reading)\//.test(path));
 ---
 
 <!doctype html>

@@ -1,4 +1,5 @@
 ---
+featured: true
 year: 2022
 status: active
 stack: ["Kubernetes (k3s)", "Helm", "Tailscale"]

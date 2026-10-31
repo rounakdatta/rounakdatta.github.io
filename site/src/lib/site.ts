@@ -9,10 +9,9 @@ export const SITE = {
 };
 
 export const NAV = [
-  { href: '/notes/', label: 'Notes' },
   { href: '/projects/', label: 'Projects' },
+  { href: '/notes/', label: 'Notes' },
   { href: '/photos/', label: 'Photos' },
-  { href: '/fitness/', label: 'Fitness' },
 ] as const;
 
 export const ELSEWHERE = [
