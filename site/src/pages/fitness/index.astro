@@ -5,6 +5,7 @@ import Icon from '../../components/Icon.astro';
 import Calendar from '../../components/fitness/Calendar.astro';
 import { activities, totalsOf, km, kmWhole, kmTenths, sportOf, sportIcon, lastUpdated } from '../../lib/fitness';
 import { daysOf } from '../../lib/calendar';
+import { compactPath } from '../../lib/routes';
 import { chapters, chapterOnDate, chapterOf, milestones, yearNotes, bests, linkFor } from '../../lib/journal';
 import { monthOfYear, spokenDate, fullDate, isoDate } from '../../lib/dates';
 import shoes from '../../assets/illustrations/shoes.png';
@@ -124,7 +125,7 @@ const titleFor = (a: (typeof activities)[number]) => chapterOf(a.id)?.title ?? a
             )}
             {c.plate && (
               <svg viewBox={`0 0 ${c.plate.width} ${c.plate.height}`} aria-hidden="true" data-vt={`route-${c.slug}`}>
-                <path d={c.plate.d} />
+                <path d={compactPath(c.plate.d, 3)} />
                 {c.publicStart && <circle cx={c.plate.start[0]} cy={c.plate.start[1]} r="11" />}
               </svg>
             )}

@@ -47,3 +47,52 @@ export function fitRoute(route: LatLng[] | LatLng[][], width: number, height: nu
   const d = parts.map((part) => `M${part.map(([x, y]) => `${r(x)} ${r(y)}`).join('L')}`).join('');
   return { d, start: parts[0][0], end: parts.at(-1)!.at(-1)!, length: Math.ceil(length) };
 }
+
+type Point = [number, number];
+
+/** Distance from p to the segment a–b. */
+function offset([px, py]: Point, [ax, ay]: Point, [bx, by]: Point): number {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const t = dx || dy ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy))) : 0;
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+}
+
+/** Ramer–Douglas–Peucker: the fewest points that stay within `tolerance` of the original line. */
+function simplify(points: Point[], tolerance: number): Point[] {
+  if (points.length < 3) return points;
+  const keep = new Uint8Array(points.length);
+  keep[0] = keep[points.length - 1] = 1;
+  const stack: [number, number][] = [[0, points.length - 1]];
+  while (stack.length) {
+    const [first, last] = stack.pop()!;
+    let worst = 0;
+    let index = 0;
+    for (let i = first + 1; i < last; i++) {
+      const d = offset(points[i], points[first], points[last]);
+      if (d > worst) [worst, index] = [d, i];
+    }
+    if (worst > tolerance) {
+      keep[index] = 1;
+      stack.push([first, index], [index, last]);
+    }
+  }
+  return points.filter((_, i) => keep[i]);
+}
+
+/**
+ * An SVG route path ("M x y L x y … M …"), redrawn with only the points it needs and whole-number
+ * coordinates. Each route tile on /fitness/ is about 200px wide but carried all ~600 of its points
+ * to a tenth of a unit: 190 KB of the page's 324 KB. Every stroke keeps its first and last point.
+ */
+export function compactPath(d: string, tolerance: number): string {
+  return d
+    .split('M')
+    .filter(Boolean)
+    .map((stroke) => {
+      const points = stroke.split('L').map((pair) => pair.trim().split(/\s+/).map(Number) as Point);
+      const kept = simplify(points, tolerance).map(([x, y]) => `${Math.round(x)} ${Math.round(y)}`);
+      return `M${kept.filter((p, i) => i === 0 || p !== kept[i - 1] || i === kept.length - 1).join('L')}`;
+    })
+    .join('');
+}

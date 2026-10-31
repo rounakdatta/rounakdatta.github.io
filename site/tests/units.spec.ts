@@ -229,3 +229,37 @@ test('a chapter spanning several days includes every outing of its kind on those
     expect(new Set(track.ids), file).toEqual(new Set(sameKind));
   }
 });
+
+test.describe('compact route paths', () => {
+  const pointsOf = (d: string) => d.split('M').filter(Boolean).map((s) => s.split('L').map((p) => p.trim().split(/\s+/).map(Number)));
+
+  test('a straight stretch needs only its ends', async () => {
+    const { compactPath } = await import('../src/lib/routes');
+    const line = `M${Array.from({ length: 100 }, (_, i) => `${i * 10} ${i * 5}`).join('L')}`;
+    expect(compactPath(line, 1)).toBe('M0 0L990 495');
+  });
+
+  test('the drawing does not move: every original point stays within the tolerance of the new line', async () => {
+    const { compactPath } = await import('../src/lib/routes');
+    const wiggle = `M${Array.from({ length: 400 }, (_, i) => `${i * 3} ${(200 + 80 * Math.sin(i / 9) + 0.6 * Math.sin(i * 1.7)).toFixed(1)}`).join('L')}`;
+    const compact = compactPath(wiggle, 1.5);
+    const [kept] = pointsOf(compact);
+    const [original] = pointsOf(wiggle);
+    // The contrast that proves it did something: far fewer points.
+    expect(kept.length).toBeLessThan(original.length / 3);
+    const near = ([px, py]: number[]) =>
+      kept.slice(1).some(([bx, by], i) => {
+        const [ax, ay] = kept[i];
+        const dx = bx - ax, dy = by - ay;
+        const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy || 1)));
+        return Math.hypot(px - (ax + t * dx), py - (ay + t * dy)) <= 1.5 + 0.75; // tolerance, plus rounding
+      });
+    expect(original.every(near)).toBe(true);
+  });
+
+  test('every stroke of a route that is drawn in parts keeps its own start and end', async () => {
+    const { compactPath } = await import('../src/lib/routes');
+    const compact = compactPath('M0 0L5 0.2L10 0M50 50L55 50.1L60 50', 1);
+    expect(compact).toBe('M0 0L10 0M50 50L60 50');
+  });
+});

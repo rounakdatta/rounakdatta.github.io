@@ -8,6 +8,7 @@ import PhotoViewer from '../../components/PhotoViewer.astro';
 import { chapters, type Chapter } from '../../lib/journal';
 import { sportOf, sportIcon, kmTenths, paceOf } from '../../lib/fitness';
 import { spokenDate, isoDate, dateRange } from '../../lib/dates';
+import { compactPath } from '../../lib/routes';
 
 export async function getStaticPaths() {
   return chapters.map((chapter, i) => ({
@@ -89,6 +90,8 @@ const profileLine = `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).j
 const peakIndex = heights.indexOf(high);
 const peakAt = (pts[peakIndex]?.[0] ?? 0) / PW;
 const profileArea = `${profileLine}L${PW} ${PH}L0 ${PH}Z`;
+// The map is drawn up to about 1,150px across 1,200 units: under a unit of give is under a pixel.
+const route = chapter.plate ? compactPath(chapter.plate.d, 0.8) : '';
 const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plate.end[0], chapter.plate.start[1] - chapter.plate.end[1]) < 30;
 ---
 
@@ -116,8 +119,8 @@ const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plat
           <img src={light.src} srcset={light.srcset} sizes={SIZES} width={chapter.plate.width} height={chapter.plate.height} alt="" fetchpriority="high" decoding="async" />
         </picture>
         <svg viewBox={`0 0 ${chapter.plate.width} ${chapter.plate.height}`} role="img" aria-label={`The route of ${chapter.title}, ${kmText} around ${chapter.place}`} style={`view-transition-name: route-${chapter.slug}`}>
-          <path class="casing" d={chapter.plate.d} />
-          <path class="line" d={chapter.plate.d} />
+          <path class="casing" d={route} />
+          <path class="line" d={route} />
           {chapter.publicStart && !isLoop && <circle class="end" cx={chapter.plate.end[0]} cy={chapter.plate.end[1]} r="9" />}
           {chapter.publicStart && <circle class="start" cx={chapter.plate.start[0]} cy={chapter.plate.start[1]} r="9" />}
         </svg>
