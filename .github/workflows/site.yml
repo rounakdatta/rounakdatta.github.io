@@ -1,0 +1,65 @@
+# Builds, checks and deploys the site. Pages serves the artifact this uploads;
+# nothing built is ever committed (until Nov 2026 the build lived in docs/).
+name: Site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - run: npm ci
+
+      # Astro keeps every optimised image here; restoring it means a build
+      # only re-encodes the photos that changed.
+      - uses: actions/cache@v6
+        with:
+          path: site/node_modules/.astro
+          key: astro-${{ hashFiles('site/src/**/*.{jpg,jpeg,png,webp,avif}') }}
+          restore-keys: astro-
+
+      - run: npm run check
+      - run: npm run build
+
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v5
