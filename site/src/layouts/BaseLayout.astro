@@ -1,75 +1,103 @@
 ---
+import { Font } from 'astro:assets';
+import { SITE, NAV, ELSEWHERE } from '../lib/site';
+import '../styles/global.css';
+
 interface Props {
-  title: string;
+  /** The page's own title. Omit on the home page, whose title is just the name. */
+  title?: string;
   description?: string;
+  /** Link-preview image, as a site path. Defaults to the one generated for this page. */
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article' | 'profile';
+  published?: Date;
+  modified?: Date;
+  /** For pages that are not a place of their own (the 404): no canonical address, not indexed. */
+  noindex?: boolean;
 }
 
-const { title, description = "Rounak Datta's personal website" } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  image,
+  imageAlt,
+  type = 'website',
+  published,
+  modified,
+  noindex = false,
+} = Astro.props;
+
+const path = Astro.url.pathname;
+const canonical = new URL(path, SITE.url).href;
+const fullTitle = title ? `${title} — ${SITE.name}` : SITE.name;
+const ogPath = image ?? `/og${path === '/' ? '/home' : path.replace(/\/$/, '').replace(/\.html$/, '')}.png`;
+const ogImage = new URL(ogPath, SITE.url).href;
+// The fitness journal and the reading list are projects, so inside them Projects is where you are.
+const isCurrent = (href: string) =>
+  path.startsWith(href) || (href === '/projects/' && /^\/(fitness|reading)\//.test(path));
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="light only" />
-  <meta name="description" content={description} />
-  <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <title>{title} | Rounak Datta</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
-  <slot name="head" />
-</head>
-<body>
-  <div class="page-wrapper">
-    <header>
-      <nav class="main-nav">
-        <a href="/" class="site-title no-external">Rounak Datta</a>
-        <div class="nav-links">
-          <a href="/projects" class="no-external"><span class="nav-icon">⧉</span> Projects</a>
-          <a href="/notes" class="no-external"><span class="nav-icon">✐</span> Notes</a>
-          <a href="/photos" class="no-external"><span class="nav-icon">◻</span> Photos</a>
-        </div>
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt ?? title ?? SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={SITE.twitter} />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {modified && <meta property="article:modified_time" content={modified.toISOString()} />}
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fffff8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#151412" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name}: notes`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <Font cssVariable="--font-serif" preload={[{ weight: 400, style: 'normal' }]} />
+    <Font cssVariable="--font-mono" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="site-header">
+      <a class="site-name" href="/" aria-current={path === '/' ? 'page' : undefined}>{SITE.name}</a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          {NAV.map(({ href, label }) => (
+            <li><a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a></li>
+          ))}
+        </ul>
       </nav>
     </header>
 
-    <main>
+    <main id="content" class="site-main">
       <slot />
     </main>
 
-    <footer>
-      <span class="footer-attribution">
-        <span class="no-copyright">©</span>
-        Human ideated, Claude coded
-      </span>
-      <span class="footer-sep mobile-hide">·</span>
-      <span class="footer-links">
-        <a href="https://github.com/rounakdatta">GitHub</a>
-        <span class="footer-sep">/</span>
-        <a href="https://twitter.com/rounakdatta12">Twitter</a>
-        <span class="footer-sep">/</span>
-        <a href="https://www.linkedin.com/in/rounakdatta/">LinkedIn</a>
-      </span>
+    <footer class="site-footer">
+      <p><s aria-hidden="true">©</s><span class="visually-hidden">No copyright.</span> Human ideated, Claude coded</p>
+      <ul>
+        {ELSEWHERE.map(({ href, label }) => <li><a href={href}>{label}</a></li>)}
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
     </footer>
-  </div>
-<script>
-  // Open external links in new tab
-  document.querySelectorAll('a[href^="http"]').forEach(link => {
-    if (!link.href.includes(window.location.hostname)) {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
-  });
-</script>
-</body>
+  </body>
 </html>
-
-<style is:global>
-  @import '../styles/global.css';
-</style>

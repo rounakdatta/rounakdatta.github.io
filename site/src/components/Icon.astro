@@ -1,0 +1,72 @@
+---
+// Every icon on the site is drawn, and all but two come from one family (Phosphor, MIT),
+// so they share a stroke and render the same everywhere. Emoji and Unicode symbols
+// came from whatever font a device happened to have, and showed as empty boxes on some.
+// The rickshaw is Material Symbols' electric_rickshaw (Apache-2.0) and the Strava mark is
+// Simple Icons' (CC0): Phosphor has neither.
+import arrowLeft from '@phosphor-icons/core/regular/arrow-left.svg?raw';
+import arrowRight from '@phosphor-icons/core/regular/arrow-right.svg?raw';
+import arrowUpRight from '@phosphor-icons/core/regular/arrow-up-right.svg?raw';
+import barbell from '@phosphor-icons/core/fill/barbell-fill.svg?raw';
+import bicycle from '@phosphor-icons/core/fill/bicycle-fill.svg?raw';
+import clock from '@phosphor-icons/core/regular/clock.svg?raw';
+import hike from '@phosphor-icons/core/fill/person-simple-hike-fill.svg?raw';
+import mapPin from '@phosphor-icons/core/regular/map-pin.svg?raw';
+import mountains from '@phosphor-icons/core/regular/mountains.svg?raw';
+import path from '@phosphor-icons/core/regular/path.svg?raw';
+import rss from '@phosphor-icons/core/regular/rss.svg?raw';
+import run from '@phosphor-icons/core/fill/person-simple-run-fill.svg?raw';
+import walk from '@phosphor-icons/core/fill/person-simple-walk-fill.svg?raw';
+import x from '@phosphor-icons/core/regular/x.svg?raw';
+import rickshaw from '../icons/rickshaw.svg?raw';
+import strava from '../icons/strava.svg?raw';
+
+const ICONS = {
+  'arrow-left': arrowLeft,
+  'arrow-right': arrowRight,
+  'arrow-up-right': arrowUpRight,
+  clock,
+  'map-pin': mapPin,
+  mountains,
+  path,
+  rss,
+  x,
+  // Sports are filled, so they read as marks beside a title rather than as UI.
+  Run: run,
+  TrailRun: run,
+  Ride: bicycle,
+  Hike: hike,
+  Walk: walk,
+  Workout: barbell,
+  rickshaw,
+  strava,
+};
+
+export type IconName = keyof typeof ICONS;
+
+interface Props {
+  name: IconName;
+  /** Accessible name. Omit it for decorative icons beside text that already says the same thing. */
+  label?: string;
+  size?: string;
+  class?: string;
+}
+
+const { name, label, size = '1em', class: className } = Astro.props;
+const source = ICONS[name];
+const viewBox = source.match(/viewBox="([^"]+)"/)![1];
+const inner = source.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+---
+
+<svg
+  class:list={['icon', className]}
+  viewBox={viewBox}
+  width={size}
+  height={size}
+  fill="currentColor"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+  set:html={inner}
+/>

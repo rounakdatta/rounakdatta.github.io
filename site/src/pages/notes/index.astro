@@ -1,59 +1,60 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import NoteList from '../../components/NoteList.astro';
+import { publishedNotes, tagSlug } from '../../lib/notes';
 
-const notes = await getCollection('notes', ({ data }) => !data.draft);
-const sortedNotes = notes.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const notes = await publishedNotes();
 
-// Group by year
-const notesByYear = sortedNotes.reduce((acc, note) => {
-  const year = note.data.date.getFullYear();
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(note);
-  return acc;
-}, {} as Record<number, typeof sortedNotes>);
-
-const years = Object.keys(notesByYear).sort((a, b) => Number(b) - Number(a));
+// Topics are only worth a row when they gather more than one note.
+const counts = new Map<string, number>();
+for (const note of notes) for (const tag of note.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+const topics = [...counts].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 ---
 
-<BaseLayout title="Notes" description="Technical writings and thoughts">
-  <div class="notes-page">
-    <h1>Notes</h1>
-    <p>Stories, ideas, half-baked thoughts and questions, lest we forget.</p>
+<BaseLayout title="Notes" description="Stories, ideas, half-baked thoughts and questions, lest we forget: notes by Rounak Datta on software, self-hosting and travel.">
+  <h1>Notes</h1>
+  <p class="lede">Stories, ideas, half-baked thoughts and questions, lest we forget.</p>
 
-    {years.map(year => (
-      <section>
-        <h2>{year}</h2>
-        <ul class="post-list">
-          {notesByYear[Number(year)].map(note => (
-            <li>
-              <span class="post-date">
-                {note.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </span>
-              {' '}&mdash;{' '}
-              <a href={`/notes/${note.id}`} class="no-external">{note.data.title}</a>
-              {note.data.tags.length > 0 && (
-                <span class="post-tags">
-                  {note.data.tags.map(tag => (
-                    <span class="tag">{tag}</span>
-                  ))}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
-  </div>
+  {topics.length > 0 && (
+    <nav class="topics" aria-label="Topics">
+      <span class="label">Topics</span>
+      <ul>
+        {topics.map(([tag, n]) => (
+          <li><a href={`/notes/tags/${tagSlug(tag)}/`}>{tag}</a> <span class="count">{n}</span></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <NoteList notes={notes} />
 </BaseLayout>
 
 <style>
-  .notes-page {
-    max-width: var(--content-width);
-    margin: 0 auto;
+  .lede {
+    color: var(--ink-muted);
+    font-style: italic;
   }
 
-  .notes-page h1 {
-    margin-top: 0;
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3em 1em;
+    margin: 1.4em 0 2em;
+    font-size: 0.92em;
+  }
+
+  .topics ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em 1.1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .count {
+    color: var(--ink-muted);
+    font-size: 0.85em;
   }
 </style>

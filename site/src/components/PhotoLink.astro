@@ -1,0 +1,48 @@
+---
+// One photo in a gallery: the picture at the size it is shown, linked to its full-size version.
+import { Image } from 'astro:assets';
+import { fullSize, altOf, type Photo } from '../lib/photos';
+
+interface Props {
+  photo: Photo;
+  /** Height it is shown at on a phone and on anything larger, in CSS pixels. Omit for a column layout. */
+  heights?: [phone: number, larger: number];
+  /** For column layouts: how wide the photo is shown (an HTML sizes attribute). */
+  sizes?: string;
+  priority?: boolean;
+  class?: string;
+}
+
+const { photo, heights, sizes, priority = false, class: className } = Astro.props;
+const full = await fullSize(photo);
+const aspect = photo.src.width / photo.src.height;
+
+// A strip photo has a fixed height, so its width follows from its shape; offer exactly the widths
+// a phone and a laptop at 1× and 2× will ask for.
+const stripWidths = heights && [...new Set([heights[0], heights[1], heights[0] * 2, heights[1] * 2, heights[0] * 3].map((h) => Math.round(h * aspect)))]
+  .filter((w) => w <= photo.src.width)
+  .sort((a, b) => a - b);
+const stripSizes = heights && `(max-width: 34rem) ${Math.round(heights[0] * aspect)}px, ${Math.round(heights[1] * aspect)}px`;
+---
+
+<a
+  href={full.src}
+  class:list={['photo-link', className]}
+  data-pswp-width={full.width}
+  data-pswp-height={full.height}
+  data-pswp-srcset={full.srcset}
+  data-caption={photo.caption}
+  style={heights ? `--aspect: ${aspect}` : undefined}
+>
+  <Image
+    src={photo.src}
+    alt={altOf(photo)}
+    widths={stripWidths ?? [400, 800, 1200].filter((w) => w <= photo.src.width)}
+    sizes={stripSizes ?? sizes ?? '100vw'}
+    format="avif"
+    quality={60}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : undefined}
+    layout="none"
+  />
+</a>

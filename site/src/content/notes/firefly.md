@@ -52,7 +52,7 @@ When you set up Firefly on your local system or a remote server, you set up a `f
 10. Satisfies the developer inside me by providing with an API (automations galore!)
 11. Helps me save up for big and small goals with a well knitted piggy bank system.
 
-![Firefly Dashboard](/images/firefly.png)
+![Firefly Dashboard](../../assets/images/firefly.png)
 *Sample Firefly Dashboard taken from <https://www.firefly-iii.org/#screenshots>*
 
 ## My Setup

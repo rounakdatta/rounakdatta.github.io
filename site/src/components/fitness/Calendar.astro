@@ -1,0 +1,308 @@
+---
+// One year of days, drawn twice: weeks running across for a wide screen, months running down for a
+// phone (the old calendar shrank the desktop drawing to 0.556× and scrolled itself sideways forever).
+// Each shade is a single path, so a year is a handful of elements rather than 365.
+import { yearCells, squaresPath, stackLabels, handWidth, type Day } from '../../lib/calendar';
+import type { Chapter, Milestone } from '../../lib/journal';
+
+interface Props {
+  year: number;
+  days: Map<string, Day>;
+  today: string;
+  /** The first day anything was recorded. */
+  from: string;
+  milestones: Milestone[];
+  note?: string;
+  chapters: Map<string, Chapter>;
+  label: string;
+}
+
+const { year, days, today, from, milestones, note, chapters, label } = Astro.props;
+const cells = yearCells(year, days, today, from);
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// A gentle, repeatable wobble for hand-drawn marks: the same note bends the same way on every build.
+const wobble = (text: string) => {
+  let h = 0;
+  for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) | 0;
+  return ((Math.abs(h) % 9) - 4) / 4;
+};
+
+// ---------- Weeks across (wide screens) ----------
+const W = { cell: 12, step: 15, left: 30, hand: 17, tier: 24, arrow: 22 };
+const weeks = Math.max(...cells.map((c) => c.week), 52) + 1;
+const gridWidth = weeks * W.step;
+const width = W.left + gridWidth + 8;
+const monthStart = (m: number) => cells.find((c) => c.month === m && c.day === 0);
+const columnOf = (m: number) => {
+  const mid = cells.find((c) => c.month === m && c.day === 14) ?? monthStart(m);
+  return mid ? W.left + mid.week * W.step + W.cell / 2 : null;
+};
+
+const placed = (side: 'above' | 'below') =>
+  stackLabels(
+    milestones.filter((m) => m.position === side && columnOf(m.month) !== null),
+    (m) => columnOf(m.month)!,
+    (m) => Math.max(...m.text.split('\n').map((l) => handWidth(l, W.hand))),
+  );
+const above = placed('above');
+const below = placed('below');
+const linesOf = (m: Milestone) => m.text.split('\n').length;
+const tiersAbove = above.length ? Math.max(...above.map((p) => p.tier + linesOf(p.item) - 1)) + 1 : 0;
+const tiersBelow = below.length ? Math.max(...below.map((p) => p.tier + linesOf(p.item) - 1)) + 1 : 0;
+
+const top = tiersAbove ? tiersAbove * W.tier + W.arrow : 4;
+const gridTop = top + 18;
+const gridBottom = gridTop + 7 * W.step - (W.step - W.cell);
+const notesBottom = gridBottom + (tiersBelow ? W.arrow + tiersBelow * W.tier : 0);
+const height = notesBottom + (note ? 54 : 8);
+
+const wide = (level: number) =>
+  squaresPath(cells.filter((c) => c.level === level).map((c) => [W.left + c.week * W.step, gridTop + c.weekday * W.step]), W.cell);
+
+const clampX = (x: number, w: number) => Math.min(Math.max(x, w / 2 + 2), width - w / 2 - 2);
+
+/** A pencil arrow from a note to the column it is about. */
+function arrow(fromX: number, fromY: number, toX: number, toY: number, bend: number) {
+  const midX = (fromX + toX) / 2 + bend * 6;
+  const midY = (fromY + toY) / 2;
+  const angle = Math.atan2(toY - midY, toX - midX);
+  const head = (a: number) => `${toX - 6 * Math.cos(angle + a)} ${toY - 6 * Math.sin(angle + a)}`;
+  return `M${fromX} ${fromY}Q${midX} ${midY} ${toX} ${toY}M${head(0.5)}L${toX} ${toY}L${head(-0.5)}`;
+}
+
+// ---------- Months down (phones) ----------
+const N = { cell: 8, step: 10.5, left: 30, row: 13, hand: 15, line: 19 };
+const narrowWidth = N.left + 31 * N.step;
+const rows: { month: number; y: number; notes: { text: string; y: number }[] }[] = [];
+let cursor = 4;
+for (let m = 0; m < 12; m++) {
+  if (!cells.some((c) => c.month === m)) break;
+  const y = cursor;
+  cursor += N.row;
+  const notes = milestones
+    .filter((ms) => ms.month === m)
+    .map((ms) => {
+      const text = ms.text.replace(/\n/g, ' ');
+      const ny = cursor + N.line - 5;
+      cursor += N.line;
+      return { text, y: ny };
+    });
+  if (notes.length) cursor += 4;
+  rows.push({ month: m, y, notes });
+}
+const narrowHeight = cursor + (note ? 30 : 4);
+const rowY = new Map(rows.map((r) => [r.month, r.y]));
+const narrow = (level: number) =>
+  squaresPath(cells.filter((c) => c.level === level && rowY.has(c.month)).map((c) => [N.left + c.day * N.step, rowY.get(c.month)!]), N.cell);
+
+const ringed = cells.filter((c) => chapters.has(c.date));
+---
+
+<figure class="calendar" data-year={year}>
+  <svg
+    class="weeks"
+    viewBox={`0 0 ${width} ${height}`}
+    width={width}
+    height={height}
+    role="img"
+    aria-label={label}
+    data-layout="weeks"
+    data-left={W.left}
+    data-top={gridTop}
+    data-step={W.step}
+    data-cell={W.cell}
+    data-offset={cells[0] ? cells[0].weekday : 0}
+  >
+    {MONTHS.map((name, m) => {
+      const start = monthStart(m);
+      return start && <text class="month" x={W.left + start.week * W.step} y={gridTop - 6}>{name}</text>;
+    })}
+    {['Mon', 'Wed', 'Fri'].map((d, i) => <text class="weekday" x={0} y={gridTop + i * 2 * W.step + W.cell - 2}>{d}</text>)}
+    <path class="before" d={wide(-1)} />
+    {[0, 1, 2, 3, 4].map((level) => <path class={`l${level}`} d={wide(level)} />)}
+
+    {above.map(({ item, tier }) => {
+      const cx = columnOf(item.month)!;
+      const lines = item.text.split('\n');
+      const w = Math.max(...lines.map((l) => handWidth(l, W.hand)));
+      const x = clampX(cx, w);
+      const textTop = top - W.arrow - (tier + lines.length) * W.tier;
+      return (
+        <g class="note">
+          {lines.map((line, i) => <text x={x} y={textTop + (i + 1) * W.tier - 6} text-anchor="middle">{line}</text>)}
+          <path d={arrow(x, top - W.arrow + 2, cx, gridTop - 20, wobble(item.text))} />
+        </g>
+      );
+    })}
+    {below.map(({ item, tier }) => {
+      const cx = columnOf(item.month)!;
+      const lines = item.text.split('\n');
+      const w = Math.max(...lines.map((l) => handWidth(l, W.hand)));
+      const x = clampX(cx, w);
+      const textTop = gridBottom + W.arrow + tier * W.tier;
+      return (
+        <g class="note">
+          <path d={arrow(x, textTop + 2, cx, gridBottom + 4, wobble(item.text))} />
+          {lines.map((line, i) => <text x={x} y={textTop + (i + 1) * W.tier - 6} text-anchor="middle">{line}</text>)}
+        </g>
+      );
+    })}
+    {note && (
+      <g class="note year-note">
+        <path d={`M${W.left} ${notesBottom + 10}q0 9 9 9H${W.left + gridWidth / 2 - 10}q10 0 10 9q0 -9 10 -9H${W.left + gridWidth - 9}q9 0 9 -9`} />
+        <text x={W.left + gridWidth / 2} y={notesBottom + 48} text-anchor="middle">{note}</text>
+      </g>
+    )}
+    {ringed.map((c) => {
+      const chapter = chapters.get(c.date)!;
+      return (
+        <a href={`/fitness/${chapter.slug}/`} tabindex="-1" aria-hidden="true">
+          <rect class="ring" x={W.left + c.week * W.step - 2} y={gridTop + c.weekday * W.step - 2} width={W.cell + 4} height={W.cell + 4} rx="3" />
+        </a>
+      );
+    })}
+  </svg>
+
+  <svg
+    class="months"
+    viewBox={`0 0 ${narrowWidth} ${narrowHeight}`}
+    role="img"
+    aria-label={label}
+    data-layout="months"
+    data-left={N.left}
+    data-step={N.step}
+    data-cell={N.cell}
+    data-rows={JSON.stringify(rows.map((r) => r.y))}
+  >
+    {rows.map((r) => <text class="month" x={0} y={r.y + N.cell}>{MONTHS[r.month]}</text>)}
+    <path class="before" d={narrow(-1)} />
+    {[0, 1, 2, 3, 4].map((level) => <path class={`l${level}`} d={narrow(level)} />)}
+    {rows.flatMap((r) =>
+      r.notes.map((n) => (
+        <g class="note">
+          <text x={N.left} y={n.y}>{n.text}</text>
+        </g>
+      )),
+    )}
+    {note && <g class="note"><text x={N.left} y={narrowHeight - 8}>{note}</text></g>}
+    {ringed
+      .filter((c) => rowY.has(c.month))
+      .map((c) => {
+        const chapter = chapters.get(c.date)!;
+        return (
+          <a href={`/fitness/${chapter.slug}/`} tabindex="-1" aria-hidden="true">
+            <rect class="ring" x={N.left + c.day * N.step - 1.5} y={rowY.get(c.month)! - 1.5} width={N.cell + 3} height={N.cell + 3} rx="2" />
+          </a>
+        );
+      })}
+  </svg>
+
+  {milestones.length > 0 && (
+    <ul class="visually-hidden">
+      {milestones.map((m) => <li>{MONTHS[m.month]} {year}: {m.text.replace(/\n/g, ' ')}</li>)}
+    </ul>
+  )}
+</figure>
+
+<style>
+  .calendar {
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--font-serif);
+  }
+
+  .months {
+    display: none;
+    width: 100%;
+  }
+
+  /* A phone gets months running down, which fit its width without scrolling or shrinking. */
+  @media (max-width: 40rem) {
+    .weeks {
+      display: none;
+    }
+
+    .months {
+      display: block;
+    }
+  }
+
+  .month,
+  .weekday {
+    font-size: 11px;
+    fill: var(--ink-muted);
+  }
+
+  .months .month {
+    font-size: 9px;
+  }
+
+  .before {
+    fill: none;
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+
+  .l0 {
+    fill: var(--rule);
+  }
+
+  .l1 {
+    fill: color-mix(in oklab, var(--route) 24%, var(--paper));
+  }
+
+  .l2 {
+    fill: color-mix(in oklab, var(--route) 46%, var(--paper));
+  }
+
+  .l3 {
+    fill: color-mix(in oklab, var(--route) 72%, var(--paper));
+  }
+
+  .l4 {
+    fill: var(--route);
+  }
+
+  /* Handwriting for the moments that made the year, as before; pencil, not a sticker. */
+  .note text {
+    font-family: var(--font-hand);
+    font-size: 17px;
+    fill: color-mix(in oklab, var(--route) 82%, var(--ink));
+  }
+
+  .months .note text {
+    font-size: 14px;
+  }
+
+  .note path {
+    fill: none;
+    stroke: color-mix(in oklab, var(--route) 82%, var(--ink));
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .year-note text {
+    font-size: 18px;
+  }
+
+  /* A ringed day has a chapter of its own: the exception, so it is the only thing marked. */
+  .ring {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+
+  /* Rings are a shortcut for the pointer: the same chapters are links in "Places we go". */
+  a:hover .ring {
+    stroke: var(--accent);
+    stroke-width: 2.2;
+  }
+</style>

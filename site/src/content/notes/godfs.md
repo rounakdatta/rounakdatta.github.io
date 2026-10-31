@@ -17,7 +17,7 @@ The source for this project is [rounakdatta/GoDFS](https://github.com/rounakdatt
 
 Proven systems like [Google FileSystem (GFS)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf) and [Hadoop Distributed FileSystem](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.pdf) have almost made developers take distributed architectures for granted. We now regularly use open-source systems like the Hadoop ecosystem tools, managed cloud services without worrying of the underlying engineering behind scaling it across machines, data-centers and continents. In this implementation as well, we have abstracted the working of RPC, filesystem storage considerations, thus making it not production-ready ;)
 
-![DynamoDB Rant](/images/dynamodb_rant.png)
+![DynamoDB Rant](../../assets/images/dynamodb_rant.png)
 *[Source](https://www.jeremydaly.com/takeaways-from-dynamodb-deep-dive-advanced-design-patterns-dat403/)*
 
 ### The pieces

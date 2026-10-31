@@ -1,0 +1,95 @@
+---
+// Full-screen photos for any [data-gallery] on the page. Each photo is a plain link to its
+// full-size image, so without JavaScript it still opens; with it, PhotoSwipe takes over:
+// pinch and pan that stop at the photo's edge, swipe between photos, swipe down to close,
+// arrows and Escape, and focus returned to the photo you came from.
+// The viewer (about 20 KB) is only downloaded the first time someone opens a photo.
+---
+
+<script>
+  type Slide = { src: string; srcset?: string; width: number; height: number; alt: string; caption: string };
+
+  const slidesOf = (gallery: Element): Slide[] =>
+    [...gallery.querySelectorAll<HTMLAnchorElement>('a[data-pswp-width]')].map((a) => ({
+      src: a.href,
+      srcset: a.dataset.pswpSrcset,
+      width: Number(a.dataset.pswpWidth),
+      height: Number(a.dataset.pswpHeight),
+      alt: a.querySelector('img')?.alt ?? '',
+      caption: a.dataset.caption ?? '',
+    }));
+
+  document.addEventListener('click', async (event) => {
+    const link = (event.target as Element).closest?.<HTMLAnchorElement>('a[data-pswp-width]');
+    const gallery = link?.closest('[data-gallery]');
+    if (!link || !gallery || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+
+    const slides = slidesOf(gallery);
+    const index = [...gallery.querySelectorAll('a[data-pswp-width]')].indexOf(link);
+    const [{ default: PhotoSwipe }] = await Promise.all([import('photoswipe'), import('photoswipe/style.css')]);
+
+    const pswp = new PhotoSwipe({
+      dataSource: slides,
+      index,
+      bgOpacity: 1,
+      showHideAnimationType: 'fade',
+      closeTitle: 'Close',
+      zoomTitle: 'Zoom',
+      arrowPrevTitle: 'Previous photo',
+      arrowNextTitle: 'Next photo',
+      errorMsg: 'This photo didn’t load.',
+      // Clicking the photo zooms; clicking the dark around it closes. A second tap is never held back.
+      imageClickAction: 'zoom-or-close',
+      tapAction: 'toggle-controls',
+      doubleTapAction: false,
+      paddingFn: (viewport) => (viewport.x < 700 ? { top: 0, bottom: 64, left: 0, right: 0 } : { top: 32, bottom: 88, left: 64, right: 64 }),
+    });
+
+    pswp.on('uiRegister', () => {
+      pswp.ui?.registerElement({
+        name: 'caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        onInit: (el) => {
+          el.setAttribute('aria-live', 'polite');
+          pswp.on('change', () => {
+            const slide = slides[pswp.currIndex];
+            el.textContent = slide.caption;
+            el.hidden = !slide.caption;
+          });
+        },
+      });
+    });
+
+    pswp.init();
+  });
+</script>
+
+<style is:global>
+  .pswp {
+    --pswp-bg: #12110f;
+    --pswp-placeholder-bg: #1e1d1a;
+    --pswp-icon-color: #e8e4d8;
+    --pswp-icon-color-secondary: #12110f;
+    font-family: var(--font-serif);
+  }
+
+  .pswp__caption {
+    position: absolute;
+    left: 50%;
+    bottom: max(1.1rem, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    width: min(92vw, 40rem);
+    color: #e8e4d8;
+    font-size: 1.05rem;
+    text-align: center;
+    text-wrap: balance;
+    pointer-events: none;
+  }
+
+  .pswp--ui-visible .pswp__caption {
+    opacity: 1;
+  }
+</style>

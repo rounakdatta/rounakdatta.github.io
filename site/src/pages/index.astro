@@ -1,71 +1,205 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { Content as Intro } from '../content/home/intro.md';
+import { Content as Story } from '../content/home/story.md';
+import profile from '../assets/images/profile.jpeg';
+import { publishedNotes } from '../lib/notes';
+import { activities, totalsOf, km } from '../lib/fitness';
+import { monthOfYear } from '../lib/dates';
+import { SITE, ELSEWHERE } from '../lib/site';
 
-// Get notes and projects for sidebar
-const notes = await getCollection('notes', ({ data }) => !data.draft);
-const sortedNotes = notes.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const recentNotes = sortedNotes.slice(0, 5);
+const latestNote = (await publishedNotes())[0];
+const latestAlbum = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order)[0];
+const moving = totalsOf(activities);
 
-const projects = await getCollection('projects');
-const featuredProjects = projects.filter(p => p.data.featured).sort((a, b) => a.data.order - b.data.order);
-
-// Read and render about.md
-const aboutFile = await import('../content/about.md');
-const AboutContent = aboutFile.default;
-const aboutFrontmatter = aboutFile.frontmatter;
+// Structured data so a search engine knows whose site this is.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: 'Software engineer',
+  homeLocation: { '@type': 'Place', name: 'Bengaluru, India' },
+  sameAs: ELSEWHERE.map((e) => e.href),
+};
 ---
 
-<BaseLayout title="Home">
-  <div class="home-content">
-    <section class="about">
-      <div class="intro-row">
-        <div class="photo-wrapper">
-          <img src={aboutFrontmatter.photo} alt="Rounak Datta" class="profile-photo" />
-          <span class="auto-flair">🛺</span>
-          <div class="location">
-            <span class="pin">📍</span>
-            <span class="city">Bengaluru, IN</span>
-          </div>
-        </div>
-        <div class="intro-text" id="first-para"></div>
-      </div>
+<BaseLayout type="profile">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(person)} />
 
-      <div class="about-content">
-        <AboutContent />
+  <section class="intro">
+    <div class="portrait">
+      <div class="frame">
+        <Image src={profile} alt="Rounak, smiling, in front of a weathered wooden door" width={140} height={140} layout="fixed" priority class="photo" />
+        <span class="rickshaw" aria-hidden="true"><Icon name="rickshaw" size="1.35em" /></span>
       </div>
-    </section>
+      <p class="place"><Icon name="map-pin" /> Bengaluru</p>
+    </div>
+    <div class="intro-text prose">
+      <Intro />
+    </div>
+  </section>
+
+  <section class="lately" aria-labelledby="lately">
+    <h2 id="lately" class="label">Lately</h2>
+    <ul>
+      {latestNote && (
+        <li>
+          <span class="kind">Writing</span>
+          <a href={`/notes/${latestNote.id}/`}>{latestNote.data.title}</a>
+          <time class="when" datetime={latestNote.data.date.toISOString()}>{monthOfYear(latestNote.data.date)}</time>
+        </li>
+      )}
+      {latestAlbum && (
+        <li>
+          <span class="kind">Photos</span>
+          <a href={`/photos/${latestAlbum.id}/`}>{latestAlbum.data.title}</a>
+          <span class="when">{latestAlbum.data.photos.length} photos</span>
+        </li>
+      )}
+      <li>
+        <span class="kind">Moving</span>
+        <a href="/fitness/">{km(moving.footAndBike)} km on foot and by bike</a>
+        <span class="when">since {monthOfYear(new Date(`${moving.first}T00:00:00Z`))}</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="story prose">
+    <Story />
   </div>
 </BaseLayout>
 
 <style>
-  .home-content {
-    max-width: var(--content-width);
-    margin: 0 auto;
+  .intro {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 2.25rem);
+    margin-bottom: 2.2rem;
   }
 
-  .about-content :global(p:first-child) {
-    margin-top: 0;
+  .portrait {
+    flex-shrink: 0;
+    text-align: center;
   }
 
-  .about-content :global(hr) {
-    margin: 1.5rem 0;
+  .frame {
+    position: relative;
+    width: 140px;
+    height: 140px;
   }
 
-  .about-content :global(h2) {
-    font-size: 1.15rem;
-    margin-top: 0;
+  .photo {
+    display: block;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* The rickshaw parks at nine o'clock. Hover the photo and it drives one lap round it. */
+  .rickshaw {
+    position: absolute;
+    inset: 0;
+    color: var(--ink-muted);
+    offset-path: circle(80px at 70px 70px);
+    offset-distance: 50%;
+    offset-rotate: auto;
+    width: 1.35em;
+    height: 1.35em;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .frame:hover .rickshaw {
+      animation: lap 2.4s var(--ease-out);
+    }
+  }
+
+  @keyframes lap {
+    from {
+      offset-distance: 50%;
+    }
+    to {
+      offset-distance: 150%;
+    }
+  }
+
+  .place {
+    margin: 0.7rem 0 0;
+    font-size: 0.8em;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .intro-text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .lately {
+    margin: 0 0 2.4rem;
+    padding: 0.9rem 0 1rem;
+    border-block: 1px solid var(--rule);
+  }
+
+  .lately h2 {
+    margin: 0 0 0.4rem;
+    font-size: 0.9em;
+  }
+
+  .lately ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lately li {
+    display: grid;
+    grid-template-columns: 5.5em 1fr auto;
+    align-items: baseline;
+    gap: 0.75em;
+    margin: 0.35em 0;
+  }
+
+  .kind {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+  }
+
+  .when {
+    color: var(--ink-muted);
+    font-size: 0.9em;
+    white-space: nowrap;
+  }
+
+  .story :global(h2) {
+    font-size: 1.15em;
+  }
+
+  /* A phone stacks the photo over the words, and each "lately" line over its label. */
+  @media (max-width: 34rem) {
+    .intro {
+      flex-direction: column;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .portrait {
+      align-self: center;
+    }
+
+    .lately li {
+      grid-template-columns: 1fr auto;
+      row-gap: 0;
+    }
+
+    .kind {
+      grid-column: 1 / -1;
+      font-size: 0.85em;
+    }
   }
 </style>
-
-<script>
-  // Move first paragraph next to photo
-  document.addEventListener('DOMContentLoaded', () => {
-    const content = document.querySelector('.about-content');
-    const firstPara = content?.querySelector('p');
-    const target = document.getElementById('first-para');
-    if (firstPara && target) {
-      target.appendChild(firstPara);
-    }
-  });
-</script>

@@ -23,7 +23,7 @@ My trajectory in Emacs has just started, and to make the start smooth I went ahe
 
 It is now 2021 and I have decided to be a full-time Emacsian. This means that the "texts" I edit furthur would most probably be written in Emacs itself. In the past, I have experimented with blogg-struggl-ing with raw html-css based blogs with manually maintained indexing and navigation, Notion-as-CMS with notablog (quite an impressive project, check it out). For me, private notetaking and public blogging had never converged before I came across [Roam Research](https://roamresearch.com/). And with its pricing, came a slew of open-source alternatives of which [org-roam](https://github.com/org-roam/org-roam) fit my bill finally. The community has left no stone unturned, and thus with org-roam, we have [ox-hugo](https://github.com/kaushalmodi/ox-hugo) as the transport protocol to web publishing. I chose the [Er](https://github.com/lingxz/er) theme thinking it'd be pleasing to my readers' eyes (is it?). The figure below would help you figure out how much I literally mean the phrase "Written and published right from Emacs Org-mode.":
 
-![Blog publish flow - seamless, isn't it?](/images/blog_publish_flow.png)
+![Blog publish flow - seamless, isn't it?](../../assets/images/blog_publish_flow.png)
 
 ## First we shape our tools, thereafter they shape us
 
@@ -55,7 +55,7 @@ Did I also forget to tell you that I contributed back to [gopassbridge](https://
 
 ## Organizing finance, knowledge
 
-All the while we've been sharpening the tools we'd work with everyday. Now, with everyday the most organizational pain could be personal finance and knowledge. Yes, we've covered another self-hosted software Firefly and the hacks around it in a [different blog post](/notes/firefly). And we definitely can do better with GNUCash for other fast-moving investments tracking. Local GNUCash client + remote database is my favourite setup.
+All the while we've been sharpening the tools we'd work with everyday. Now, with everyday the most organizational pain could be personal finance and knowledge. Yes, we've covered another self-hosted software Firefly and the hacks around it in a [different blog post](/notes/firefly/). And we definitely can do better with GNUCash for other fast-moving investments tracking. Local GNUCash client + remote database is my favourite setup.
 
 When it comes to bookmarks management, its again in general a case of browser lock-in. If not lock-in, it could be poor, hacky synchronization strategies. Ideally, bookmark manager should be an independent software module, and [buku](https://github.com/jarun/buku) does its job nicely here. buku also has a good webserver (which can preferably run locally on demand) for the data analyst within you!
 
