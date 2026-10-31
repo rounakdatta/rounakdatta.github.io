@@ -52,6 +52,9 @@ for (const [path] of builtPages()) {
     });
 
     await page.goto(path, { waitUntil: 'networkidle' });
+    // What loads before a scroll depends on the connection Chrome believes it has (playwright.config.ts).
+    // Check the premise, so a wrong browser fails here and not as a page that seems heavy.
+    expect(await page.evaluate(() => (navigator as { connection?: { effectiveType?: string } }).connection?.effectiveType), 'the test browser should believe it is on 4G').toBe('4g');
     const firstView = bytes;
     // When a page is over, say what made it heavy rather than just by how much.
     const heaviest = [...sizes].sort((a, b) => b[1] - a[1]).slice(0, 4)

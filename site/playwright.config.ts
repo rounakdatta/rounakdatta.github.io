@@ -23,6 +23,9 @@ export default defineConfig({
     launchOptions: executablePath
       ? { executablePath, args: [...args, '--no-sandbox', '--disable-dev-shm-usage'] }
       : { args },
+    // On CI, the full Chromium rather than Playwright's default headless shell, which ignores the
+    // forced connection type and lazy-loads as if on an unknown network (17 trek photos, not 10).
+    ...(executablePath ? {} : { channel: 'chromium' }),
   },
   // Tests run against the production build, served the way Pages serves it.
   webServer: {

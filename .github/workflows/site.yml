@@ -34,7 +34,8 @@ jobs:
 
       # Astro keeps every optimised image here; restoring it means a build
       # only re-encodes the photos that changed.
-      - uses: actions/cache@v6
+      - id: images
+        uses: actions/cache/restore@v6
         with:
           path: site/node_modules/.astro
           key: astro-${{ hashFiles('site/src/**/*.jpg', 'site/src/**/*.jpeg', 'site/src/**/*.png', 'site/src/**/*.webp') }}
@@ -42,6 +43,14 @@ jobs:
 
       - run: npm run check
       - run: npm run build
+
+      # Saved as soon as the build has them: a failing test later must not throw away ten minutes
+      # of encoding (the one-step cache action only saves when the whole job succeeds).
+      - if: steps.images.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: site/node_modules/.astro
+          key: ${{ steps.images.outputs.cache-primary-key }}
 
       - run: npx playwright install --with-deps chromium
       - run: npm test
