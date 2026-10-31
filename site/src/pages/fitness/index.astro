@@ -3,9 +3,9 @@ import { Image, Font } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import Calendar from '../../components/fitness/Calendar.astro';
-import { activities, totalsOf, km, kmWhole, kmTenths, sportOf, lastUpdated } from '../../lib/fitness';
+import { activities, totalsOf, km, kmWhole, kmTenths, sportOf, sportIcon, lastUpdated } from '../../lib/fitness';
 import { daysOf } from '../../lib/calendar';
-import { chapters, chapterOnDate, milestones, yearNotes, bests, linkFor } from '../../lib/journal';
+import { chapters, chapterOnDate, chapterOf, milestones, yearNotes, bests, linkFor } from '../../lib/journal';
 import { monthOfYear, spokenDate, fullDate, isoDate } from '../../lib/dates';
 import shoes from '../../assets/illustrations/shoes.png';
 import cycle from '../../assets/illustrations/cycle.png';
@@ -43,8 +43,13 @@ const bestCards = [
   bests.climb && { label: 'Most climbing', value: `${(bests.climb.elevation ?? 0).toLocaleString('en-GB')} m`, a: bests.climb },
 ].filter(Boolean) as { label: string; value: string; a: (typeof activities)[number] }[];
 const bestMonth = bests.month;
+const hoursAndMinutes = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  return h ? `${h} h ${m} min` : `${m} min`;
+};
 // A day that has a chapter is called by the chapter's title, not by its Strava label ("131R. NH366 - L F Goa").
-const titleFor = (a: (typeof activities)[number]) => chapters.find((c) => c.id === a.id)?.title ?? a.name;
+const titleFor = (a: (typeof activities)[number]) => chapterOf(a.id)?.title ?? a.name;
 ---
 
 <BaseLayout
@@ -107,12 +112,16 @@ const titleFor = (a: (typeof activities)[number]) => chapters.find((c) => c.id =
     <div class="section-head">
       <h2 id="places">Places we go</h2>
       <Image src={cycle} alt="" width={120} class="sketch" loading="lazy" />
-      <p class="muted">{chapters.length} days worth drawing. Each opens with its map, its numbers and its photos.</p>
+      <p class="muted">Days worth a page of their own.</p>
     </div>
     <ul class="shapes">
       {chapters.map((c) => (
         <li>
           <a href={`/fitness/${c.slug}/`}>
+            {!c.plate && (
+              // A day with no route (an indoor race) shows what it was, drawn, where the route would be.
+              <span class="no-route" aria-hidden="true"><Icon name={sportIcon(c.type)} size="2.6em" /></span>
+            )}
             {c.plate && (
               <svg viewBox={`0 0 ${c.plate.width} ${c.plate.height}`} aria-hidden="true" data-vt={`route-${c.slug}`}>
                 <path d={c.plate.d} />
@@ -120,7 +129,7 @@ const titleFor = (a: (typeof activities)[number]) => chapters.find((c) => c.id =
               </svg>
             )}
             <span class="shape-title">{c.title}</span>
-            <span class="shape-meta">{kmWhole(c.distance)} km {sportOf(c.type) === 'walk' ? 'hike' : sportOf(c.type)} · {monthOfYear(new Date(`${c.date}T00:00:00Z`))}</span>
+            <span class="shape-meta">{c.distance > 0 ? `${kmWhole(c.distance)} km ${c.type === 'Hike' ? 'hike' : sportOf(c.type)}` : hoursAndMinutes(c.movingTime)}{c.days.length > 1 && ` over ${c.days.length} days`} · {monthOfYear(new Date(`${c.date}T00:00:00Z`))}</span>
           </a>
         </li>
       ))}
@@ -425,6 +434,15 @@ const titleFor = (a: (typeof activities)[number]) => chapters.find((c) => c.id =
     aspect-ratio: 3 / 2;
     margin-bottom: 0.5em;
     border-bottom: 1px solid var(--rule);
+  }
+
+  .no-route {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+    color: var(--route);
   }
 
   .shapes path {

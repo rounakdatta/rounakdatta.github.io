@@ -21,7 +21,7 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { trimNear, privacyRadius } from './privacy.mjs';
+import { trimNear, privacyRadius, dropSpecks } from './privacy.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exists = (path) => access(path).then(() => true, () => false);
@@ -128,47 +128,92 @@ await mkdir(join(ROOT, 'src/data/fitness/tracks'), { recursive: true });
 // fetching it again would trim it differently, and redraw (and recommit) its map for nothing.
 // `npm run strava -- --refresh` fetches every chapter again anyway.
 const refresh = process.argv.includes('--refresh');
+
+/** A place name for a route that has none, from OpenStreetMap's own reverse geocoder (one request a second). */
+async function placeOf([lat, lng]) {
+  await new Promise((resolve) => setTimeout(resolve, 1100));
+  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${lat}&lon=${lng}`, {
+    headers: { 'User-Agent': 'rounak.taptappers.club site build (github.com/rounakdatta/rounakdatta.github.io)' },
+  });
+  if (!res.ok) return '';
+  const { address = {} } = await res.json();
+  const local = address.city ?? address.town ?? address.village ?? address.county ?? address.state_district;
+  const wider = address.city === 'Singapore' ? '' : address.state ?? address.country;
+  // "Ramanagara taluk" reads as Ramanagara; OpenStreetMap still calls the city Bangalore.
+  const tidy = (name) => name?.replace(/ taluk$/, '').replace(/^Bangalore( (North|South|East|West|Urban))?$/, 'Bengaluru');
+  return [tidy(local), wider].filter((part, i, all) => part && all.indexOf(part) === i).join(', ');
+}
+
 for (const chapter of chapters) {
   const trackFile = join(ROOT, `src/data/fitness/tracks/${chapter.slug}.json`);
   if (!refresh && (await exists(trackFile))) continue;
-  const detail = await strava(`/activities/${chapter.id}`);
-  const streams = await strava(`/activities/${chapter.id}/streams?keys=altitude,distance,latlng&key_by_type=true`);
 
-  const raw = streams.latlng?.data ?? decodePolyline(detail.map?.polyline ?? detail.map?.summary_polyline ?? '');
-  // About 600 points in all, shared between the segments by length, enough to draw smoothly.
-  // A race or a public trailhead starts nowhere private; anything else might start at a door.
-  const segments = trimNear(raw, chapter.publicStart ? 0 : privacyRadius());
-  const total = segments.reduce((n, seg) => n + seg.length, 0);
-  const route = segments.map((segment) => thin(segment, Math.max(2, Math.ceil((600 * segment.length) / total))).map(([lat, lng]) => [round(lat, 5), round(lng, 5)]));
-  if (!route.length) {
-    console.warn(`  ${chapter.slug}: the whole route is close to where it started, so it is not drawn`);
-    continue;
+  // A chapter is one activity, or several in a row (a trek walked over days): `ids` lists them in order.
+  const ids = chapter.ids ?? [chapter.id];
+  const parts = [];
+  for (const id of ids) {
+    const detail = await strava(`/activities/${id}`);
+    const streams = await strava(`/activities/${id}/streams?keys=altitude,distance,latlng&key_by_type=true`).catch(() => ({}));
+    parts.push({ id, detail, streams });
   }
 
-  // Height against distance, a hundred and fifty samples: enough for a line under the map.
-  const altitude = streams.altitude?.data ?? [];
-  const along = streams.distance?.data ?? [];
-  const step = Math.max(1, Math.floor(altitude.length / 150));
-  const profile = altitude.filter((_, i) => i % step === 0).map((h, i) => [Math.round(along[i * step] ?? 0), round(h, 1)]);
+  // About 600 points in all, shared between the segments by length, enough to draw smoothly.
+  // A race or a public trailhead starts nowhere private; anything else might start at a door.
+  // An indoor session (HYROX, a gym) has no route at all, and its chapter simply has no map.
+  const segments = parts.flatMap(({ detail, streams }) => {
+    const raw = streams.latlng?.data ?? decodePolyline(detail.map?.polyline ?? detail.map?.summary_polyline ?? '');
+    return dropSpecks(trimNear(raw, chapter.publicStart ? 0 : privacyRadius()));
+  });
+  const total = segments.reduce((n, seg) => n + seg.length, 0);
+  const route = segments.map((segment) => thin(segment, Math.max(2, Math.ceil((600 * segment.length) / total))).map(([lat, lng]) => [round(lat, 5), round(lng, 5)]));
 
+  // Height against distance across every part, a hundred and fifty samples in all. An indoor
+  // session has a barometer but no distance, so its heights would draw nothing true: none at all.
+  const profile = [];
+  let offset = 0;
+  for (const { detail, streams } of route.length ? parts : []) {
+    const altitude = streams.altitude?.data ?? [];
+    const along = streams.distance?.data ?? [];
+    const step = Math.max(1, Math.floor((altitude.length * parts.length) / 150));
+    altitude.forEach((h, i) => { if (i % step === 0) profile.push([Math.round(offset + (along[i] ?? 0)), round(h, 1)]); });
+    offset += detail.distance;
+  }
+
+  const first = parts[0].detail;
+  const last = parts.at(-1).detail;
+  const sum = (key) => parts.reduce((n, { detail }) => n + (detail[key] ?? 0), 0);
+  const middle = route.flat()[Math.floor(route.flat().length / 2)];
   const track = {
-    id: chapter.id,
-    date: detail.start_date_local.slice(0, 10),
-    startTime: detail.start_date_local.slice(11, 16),
-    type: detail.sport_type ?? detail.type,
-    distance: Math.floor(detail.distance),
-    movingTime: detail.moving_time,
-    elapsedTime: detail.elapsed_time,
-    elevation: Math.floor(detail.total_elevation_gain ?? 0),
+    id: ids[0],
+    ids,
+    date: first.start_date_local.slice(0, 10),
+    endDate: last.start_date_local.slice(0, 10),
+    startTime: first.start_date_local.slice(11, 16),
+    type: first.sport_type ?? first.type,
+    distance: Math.floor(sum('distance')),
+    movingTime: sum('moving_time'),
+    elapsedTime: sum('elapsed_time'),
+    elevation: Math.floor(sum('total_elevation_gain')),
+    ...(first.average_heartrate && { averageHeartrate: Math.round(first.average_heartrate), maxHeartrate: Math.round(first.max_heartrate) }),
+    place: chapter.place ?? (middle ? await placeOf(middle) : ''),
     route,
     profile,
   };
   await writeFile(trackFile, `${JSON.stringify(track)}\n`);
 
+  // Photos: the ones chapters.json lists, or else every photo on the activities, in order.
+  let urls = chapter.photos;
+  if (!urls) {
+    urls = [];
+    for (const { id } of parts) {
+      const photos = await strava(`/activities/${id}/photos?size=2048&photo_sources=true`);
+      urls.push(...photos.map((ph) => ph.urls?.['2048']).filter(Boolean));
+    }
+  }
   const dir = join(ROOT, `src/assets/fitness/${chapter.slug}`);
   await mkdir(dir, { recursive: true });
   let fetched = 0;
-  for (const [i, url] of chapter.photos.entries()) {
+  for (const [i, url] of urls.entries()) {
     const file = join(dir, `photo-${i + 1}.jpg`);
     if (await exists(file)) continue;
     const res = await fetch(url);
@@ -180,5 +225,5 @@ for (const chapter of chapters) {
     await sharp(Buffer.from(await res.arrayBuffer())).rotate().resize(2000, 2000, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 84, mozjpeg: true }).toFile(file);
     fetched++;
   }
-  console.log(`${chapter.slug}: ${route.flat().length} points in ${route.length} part${route.length === 1 ? '' : 's'}, ${profile.length} heights, ${fetched} new photos`);
+  console.log(`${chapter.slug}: ${parts.length > 1 ? `${parts.length} activities, ` : ''}${route.flat().length} points in ${route.length} part${route.length === 1 ? '' : 's'}, ${profile.length} heights, ${fetched} new photos${track.place ? `, ${track.place}` : ''}`);
 }

@@ -7,13 +7,21 @@ import { activities, sportOf, type Activity } from './fitness';
 
 interface Track {
   id: number;
+  /** Every activity in the chapter, in order: one, or several for a trek walked over days. */
+  ids?: number[];
   date: string;
+  /** The last day, when a chapter spans several. */
+  endDate?: string;
   startTime: string;
   type: string;
   distance: number;
   movingTime: number;
   elapsedTime: number;
   elevation: number;
+  averageHeartrate?: number;
+  maxHeartrate?: number;
+  /** Where, looked up from the route when chapters.json does not say. */
+  place?: string;
   /** The route as segments: anything near its start or finish is left out (see scripts/privacy.mjs). */
   route: [number, number][][];
   /** [metres along, metres above the sea] */
@@ -30,7 +38,10 @@ export interface Chapter extends Track {
   place: string;
   photos: ImageMetadata[];
   plates?: { light: ImageMetadata; dark: ImageMetadata };
-  stravaUrl: string;
+  /** One link per activity: a trek has a link for each day. */
+  stravaUrls: string[];
+  /** Every date the chapter spans. */
+  days: string[];
 }
 
 const tracks = import.meta.glob<Track>('../data/fitness/tracks/*.json', { eager: true, import: 'default' });
@@ -48,23 +59,33 @@ export const chapters: Chapter[] = chapterList
     const track = tracks[`../data/fitness/tracks/${c.slug}.json`];
     if (!track) return [];
     const [light, dark] = [imagesOf(c.slug, 'plate-light')[0], imagesOf(c.slug, 'plate-dark')[0]];
+    const ids = track.ids ?? [track.id];
+    const days: string[] = [];
+    for (let d = new Date(`${track.date}T00:00:00Z`); d <= new Date(`${track.endDate ?? track.date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + 1))
+      days.push(d.toISOString().slice(0, 10));
     return [
       {
         ...track,
+        ids,
         slug: c.slug,
         publicStart: 'publicStart' in c && c.publicStart === true,
         title: c.title,
-        tagline: c.tagline,
-        place: c.place,
+        tagline: c.tagline ?? '',
+        place: ('place' in c && c.place) || track.place || '',
         photos: imagesOf(c.slug, 'photo-'),
         plates: light && dark ? { light, dark } : undefined,
-        stravaUrl: `https://www.strava.com/activities/${c.id}`,
+        stravaUrls: ids.map((id) => `https://www.strava.com/activities/${id}`),
+        days,
       },
     ];
   })
   .sort((a, b) => b.date.localeCompare(a.date));
 
-export const chapterOnDate = new Map(chapters.map((c) => [c.date, c]));
+/** Every day a chapter covers rings in the calendar: a six-day trek rings six days. */
+export const chapterOnDate = new Map(chapters.flatMap((c) => c.days.map((day) => [day, c] as const)));
+
+/** The chapter an activity belongs to, if any. */
+export const chapterOf = (id?: number) => chapters.find((c) => id !== undefined && c.ids?.includes(id));
 
 export interface Milestone {
   year: number;
@@ -84,7 +105,7 @@ export interface Best {
 }
 
 const linkFor = (a: Activity) => {
-  const chapter = chapters.find((c) => c.id === a.id);
+  const chapter = chapterOf(a.id);
   return chapter ? `/fitness/${chapter.slug}/` : a.id ? `https://www.strava.com/activities/${a.id}` : undefined;
 };
 

@@ -31,3 +31,12 @@ export const dayInYear = (d: Date) => dayMonth.format(d);
 
 /** Machine-readable date for <time datetime>. */
 export const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+
+/** "25–30 Oct 2026", "30 Oct – 2 Nov 2026", "30 Dec 2025 – 2 Jan 2026": a span of days, said once. */
+export function dateRange(from: Date, to: Date): string {
+  const sameYear = from.getUTCFullYear() === to.getUTCFullYear();
+  const sameMonth = sameYear && from.getUTCMonth() === to.getUTCMonth();
+  if (sameMonth) return `${from.getUTCDate()}–${dayMonthYear.format(to)}`;
+  if (sameYear) return `${dayMonth.format(from)} – ${dayMonthYear.format(to)}`;
+  return `${dayMonthYear.format(from)} – ${dayMonthYear.format(to)}`;
+}

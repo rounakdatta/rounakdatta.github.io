@@ -1,5 +1,93 @@
 [
   {
+    "ids": [
+      20725045850,
+      20737056192,
+      20749910030,
+      20760948848,
+      20775583816,
+      20787075638
+    ],
+    "slug": "khopra-ridge-trek",
+    "title": "Khopra Ridge Trek",
+    "tagline": "",
+    "publicStart": true
+  },
+  {
+    "id": 19983617153,
+    "slug": "california-madness",
+    "title": "California Madness",
+    "tagline": ""
+  },
+  {
+    "id": 19859164879,
+    "slug": "san-francisco-hills",
+    "title": "San Francisco Hills",
+    "tagline": ""
+  },
+  {
+    "id": 19785645009,
+    "slug": "san-francisco-half",
+    "title": "San Francisco Half",
+    "tagline": ""
+  },
+  {
+    "id": 19688013511,
+    "slug": "chicago-ride",
+    "title": "Chicago Ride",
+    "tagline": ""
+  },
+  {
+    "id": 19217800422,
+    "slug": "al-qudra-cycling",
+    "title": "Al Qudra Cycling",
+    "tagline": "",
+    "publicStart": true,
+    "place": "Al Qudra, Dubai"
+  },
+  {
+    "id": 18805836550,
+    "slug": "tenginkallu-day-hike",
+    "title": "Tenginkallu Day Hike",
+    "tagline": ""
+  },
+  {
+    "id": 18524058264,
+    "slug": "hilly-22k",
+    "title": "Hilly 22K",
+    "tagline": ""
+  },
+  {
+    "id": 18359015001,
+    "slug": "dawn-to-dusk-ride",
+    "title": "Dawn to Dusk Ride",
+    "tagline": ""
+  },
+  {
+    "id": 17537310549,
+    "slug": "fastest-half-2026",
+    "title": "Fastest Half of 2026",
+    "tagline": ""
+  },
+  {
+    "id": 18166488802,
+    "slug": "oduba-group-cycling",
+    "title": "Oduba Group Cycling",
+    "tagline": ""
+  },
+  {
+    "id": 20068151658,
+    "slug": "singapore-15k",
+    "title": "Singapore 15K",
+    "tagline": ""
+  },
+  {
+    "id": 18087187296,
+    "slug": "hyrox",
+    "title": "HYROX",
+    "tagline": ""
+  },
+  {
     "id": 16851037597,
     "slug": "orr-wrapped-2025",
     "title": "ORR Wrapped 2025",

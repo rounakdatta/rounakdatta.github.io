@@ -36,3 +36,17 @@ export function trimNear(points, radius) {
  * surfaced 45 m apart on the one road out.)
  */
 export const privacyRadius = () => 1000 + Math.random() * 600;
+
+const lengthOf = (segment) => segment.slice(1).reduce((sum, p, i) => sum + metresBetween(segment[i], p), 0);
+
+/**
+ * Trimming can leave crumbs: a few points where a route grazed the cut-off circle. Drawn small,
+ * they read as stray dots of ink, so pieces under `metres` go too. The longest piece always
+ * stays, so a short route is never left with nothing.
+ */
+export function dropSpecks(segments, metres = 1000) {
+  if (segments.length < 2) return segments;
+  const lengths = segments.map(lengthOf);
+  const longest = lengths.indexOf(Math.max(...lengths));
+  return segments.filter((_, i) => i === longest || lengths[i] >= metres);
+}

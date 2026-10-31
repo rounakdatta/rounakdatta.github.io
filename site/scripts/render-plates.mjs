@@ -179,6 +179,8 @@ for (const chapter of chapters) {
   const trackFile = join(ROOT, `src/data/fitness/tracks/${chapter.slug}.json`);
   const track = JSON.parse(await readFile(trackFile, 'utf8'));
   if (missingOnly && track.plate) continue;
+  // An indoor session has no ground to draw.
+  if (!track.route.length) continue;
   const points = track.route.flat();
   const lats = points.map((p) => p[0]);
   const lngs = points.map((p) => p[1]);

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { excerptOf, readingMinutes, isPublished, proseOf } from '../src/lib/text';
 import { totalsOf, km, sportOf, activities, type Activity } from '../src/lib/fitness';
 import { fitRoute, type LatLng } from '../src/lib/routes';
-import { shortDate, spokenDate } from '../src/lib/dates';
+import { shortDate, spokenDate, dateRange } from '../src/lib/dates';
 
 test.describe('summaries', () => {
   test('a note that opens with an epigraph is summarised from its first real paragraph', () => {
@@ -194,4 +194,24 @@ test.describe('route privacy', () => {
     const { trimNear } = await import('../scripts/privacy.mjs');
     expect(trimNear([0, 0.1, 0.3, 0.1, 0].map(north), 800)).toEqual([]);
   });
+});
+
+test('a span of days is said once, whichever months and years it crosses', () => {
+  const d = (s: string) => new Date(`${s}T00:00:00Z`);
+  expect(dateRange(d('2026-10-25'), d('2026-10-30'))).toBe('25–30 Oct 2026');
+  expect(dateRange(d('2026-10-30'), d('2026-11-02'))).toBe('30 Oct – 2 Nov 2026');
+  expect(dateRange(d('2025-12-30'), d('2026-01-02'))).toBe('30 Dec 2025 – 2 Jan 2026');
+});
+
+test('crumbs left by trimming are dropped, but never the whole route', async () => {
+  const { dropSpecks } = await import('../scripts/privacy.mjs');
+  const east = (fromKm: number, toKm: number): [number, number][] =>
+    Array.from({ length: 11 }, (_, i) => [12.95, 77.7 + (fromKm + ((toKm - fromKm) * i) / 10) / 108.6]);
+  const ride = east(0, 15);
+  const crumb = east(20, 20.05);
+  const piece = east(30, 33);
+  expect(dropSpecks([ride, crumb, piece])).toEqual([ride, piece]);
+  // A route whose only piece is short keeps it.
+  expect(dropSpecks([crumb])).toEqual([crumb]);
+  expect(dropSpecks([crumb, east(40, 40.5)]).length).toBe(1);
 });

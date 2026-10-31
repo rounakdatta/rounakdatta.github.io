@@ -9,9 +9,10 @@ const MB = 1024 * KB;
 /** First view is what loads before any scrolling; whole page is after reading to the end. */
 const BUDGETS: [RegExp, { firstView: number; whole: number }][] = [
   [/^\/fitness\/$/, { firstView: 250 * KB, whole: 3 * MB }],
-  // A chapter is a photo page: on a phone its few photos sit within Chrome's lazy-loading distance
-  // of the first screen, so they count as first view. The map plate itself is about 35 KB.
-  [/^\/fitness\/.+/, { firstView: 500 * KB, whole: 2 * MB }],
+  // A chapter is a photo page. On a phone Chrome starts fetching lazy photos about 1,250px before
+  // they scroll in, so the first five or six thumbnails count as first view, each already the right
+  // size (400px for a 195px slot at 2×). The trek's 13 photos made that 523 KB. The map is ~35 KB.
+  [/^\/fitness\/.+/, { firstView: 600 * KB, whole: 2 * MB }],
   [/^\/photos\//, { firstView: 400 * KB, whole: 3 * MB }],
   // A note may open with a photo across the column: one AVIF of 150–170 KB, plus the fonts.
   [/^\/notes\/.+/, { firstView: 400 * KB, whole: 3 * MB }],

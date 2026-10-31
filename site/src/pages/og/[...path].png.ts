@@ -58,7 +58,7 @@ export const getStaticPaths = (async () => {
         photo: await photoForCard(fileOf(album.data.photos[0].src as never)!),
       }),
     });
-  const longest = chapters.reduce((a, b) => (b.distance > a.distance ? b : a));
+  const longest = chapters.filter((c) => c.route.length).reduce((a, b) => (b.distance > a.distance ? b : a));
   cards.push({
     path: 'fitness',
     card: {
@@ -74,8 +74,8 @@ export const getStaticPaths = (async () => {
       card: {
         kicker: 'The Fitness Project',
         title: c.title,
-        footnote: `${kmTenths(c.distance)} km ${sportOf(c.type) === 'walk' ? 'hike' : sportOf(c.type)} · ${c.place}`,
-        route: fitRoute(c.route, 400, 400, 24).d,
+        footnote: [c.distance > 0 ? `${kmTenths(c.distance)} km ${c.type === 'Hike' ? 'hike' : sportOf(c.type)}` : '', c.place].filter(Boolean).join(' · ') || 'The Fitness Project',
+        route: c.route.length ? fitRoute(c.route, 400, 400, 24).d : undefined,
       },
     });
 

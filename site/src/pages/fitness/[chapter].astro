@@ -7,7 +7,7 @@ import PhotoLink from '../../components/PhotoLink.astro';
 import PhotoViewer from '../../components/PhotoViewer.astro';
 import { chapters, type Chapter } from '../../lib/journal';
 import { sportOf, sportIcon, kmTenths, paceOf } from '../../lib/fitness';
-import { spokenDate, isoDate } from '../../lib/dates';
+import { spokenDate, isoDate, dateRange } from '../../lib/dates';
 
 export async function getStaticPaths() {
   return chapters.map((chapter, i) => ({
@@ -24,7 +24,11 @@ interface Props {
 
 const { chapter, newer, older } = Astro.props;
 const date = new Date(`${chapter.date}T00:00:00Z`);
+const endDate = chapter.endDate && chapter.endDate !== chapter.date ? new Date(`${chapter.endDate}T00:00:00Z`) : undefined;
+// "Sun 25 Oct 2026", or for a trek "25–30 Oct 2026".
+const when = endDate ? dateRange(date, endDate) : spokenDate(date);
 const sport = sportOf(chapter.type);
+const hasDistance = chapter.distance > 0;
 const noun = sport === 'walk' ? (chapter.type === 'Hike' ? 'hike' : 'walk') : sport;
 const doing = ({ ride: 'riding', run: 'running', hike: 'hiking', walk: 'walking' } as Record<string, string>)[noun] ?? noun;
 
@@ -40,17 +44,24 @@ const duration = (seconds: number) => {
 // The number that matters differs by sport: pace for a run, speed for a ride, and for a hike the
 // whole time out there (a pace of 24:43 a kilometre says nothing about a mountain).
 const pace = (() => {
+  if (!hasDistance) return chapter.averageHeartrate ? { label: 'Heart rate', value: `${chapter.averageHeartrate} bpm average` } : null;
   if (sport === 'ride') return { label: 'Average speed', value: `${(Math.floor((chapter.distance / chapter.movingTime) * 36) / 10).toFixed(1)} km/h` };
   if (sport === 'run') return { label: 'Pace', value: `${paceOf(chapter.movingTime, chapter.distance)} /km` };
   return { label: 'Out there', value: duration(chapter.elapsedTime) };
 })();
+// Only the numbers a day actually has: a gym session has no distance and climbs nothing;
+// a trek walked over days has a day count instead of one start time.
 const stats = [
-  { label: 'Distance', value: kmText },
+  hasDistance && { label: 'Distance', value: kmText },
+  endDate && { label: 'Days', value: String(chapter.days.length) },
   { label: 'Moving', value: duration(chapter.movingTime) },
-  { label: 'Climbed', value: `${chapter.elevation.toLocaleString('en-GB')} m` },
+  hasDistance && { label: 'Climbed', value: `${chapter.elevation.toLocaleString('en-GB')} m` },
   pace,
-  { label: 'Started', value: started },
-];
+  !endDate && { label: 'Started', value: started },
+].filter(Boolean) as { label: string; value: string }[];
+// What a shared link says: the caption if there is one, then what the day was, and whose.
+const what = hasDistance ? `${kmText} of ${doing}${chapter.place ? ` around ${chapter.place}` : ''}` : `${duration(chapter.movingTime)} of ${chapter.title}`;
+const description = [chapter.tagline, `${what[0].toUpperCase()}${what.slice(1)}, ${when}.`, "From Rounak Datta's fitness journal."].filter(Boolean).join(' ');
 
 // The plate in both inks, at the sizes a phone and a laptop ask for. WebP rather than AVIF: a map is
 // flat colour, which WebP holds as well, and encodes ten times faster.
@@ -83,17 +94,17 @@ const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plat
 
 <BaseLayout
   title={chapter.title}
-  description={`${chapter.tagline} ${kmText} of ${doing} around ${chapter.place}, ${spokenDate(date)}: the route, the numbers and the photos.`}
+  description={description}
   type="article"
   published={date}
 >
   <header class="head">
     <p class="label crumb"><a href="/fitness/">The Fitness Project</a></p>
     <h1>{chapter.title}</h1>
-    <p class="tagline">{chapter.tagline}</p>
+    {chapter.tagline && <p class="tagline">{chapter.tagline}</p>}
     <p class="meta">
       <Icon name={sportIcon(chapter.type)} size="1.15em" />
-      <span><time datetime={isoDate(date)}>{spokenDate(date)}</time> · {chapter.place}</span>
+      <span><time datetime={isoDate(date)}>{when}</time>{chapter.place && ` · ${chapter.place}`}</span>
     </p>
   </header>
 
@@ -149,7 +160,11 @@ const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plat
     </ul>
   )}
 
-  <p class="strava"><a href={chapter.stravaUrl}>This {noun} on Strava <Icon name="arrow-up-right" /></a></p>
+  {chapter.stravaUrls.length === 1 ? (
+    <p class="strava"><a href={chapter.stravaUrls[0]}>{hasDistance ? `This ${noun}` : 'This session'} on Strava <Icon name="arrow-up-right" /></a></p>
+  ) : (
+    <p class="strava">On Strava, day by day: {chapter.stravaUrls.map((url, i) => <>{i > 0 && ', '}<a href={url}>{i + 1}</a></>)} <Icon name="arrow-up-right" /></p>
+  )}
 
   <nav class="next-steps" aria-label="More chapters">
     {older && (

@@ -20,7 +20,7 @@ npm test           # against the build: CHROME_PATH=… if Playwright has no bro
 | an album | `site/src/content/photos/<slug>.md` | `photos: [{ src, caption, alt }]`, paths relative to the file. |
 | a project | `site/src/content/projects/<slug>.md` | `year`, `status`, `stack`, `github`/`url`, a `logo`. |
 | a book | `site/src/content/books.yaml` | The Reading page lists them by shelf once there are any. |
-| a fitness chapter | `site/src/data/fitness/chapters.json` | The Strava activity id, a slug, title, tagline, place and photo URLs; then run the two commands below. |
+| a fitness chapter | `site/src/data/fitness/chapters.json` | A Strava activity `id` (or `ids` for a trek walked over days), a `slug`, `title` and `tagline`. Optional: `place` (otherwise looked up from the route), `photos` (otherwise the activity's own), and `publicStart` for a race or trailhead, so the route is drawn whole. Then run the two commands below. |
 
 ## The fitness journal
 
