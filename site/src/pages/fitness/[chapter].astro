@@ -163,7 +163,7 @@ const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plat
   {chapter.stravaUrls.length === 1 ? (
     <p class="strava"><a href={chapter.stravaUrls[0]}>{hasDistance ? `This ${noun}` : 'This session'} on Strava <Icon name="arrow-up-right" /></a></p>
   ) : (
-    <p class="strava">On Strava, day by day: {chapter.stravaUrls.map((url, i) => <>{i > 0 && ', '}<a href={url}>{i + 1}</a></>)} <Icon name="arrow-up-right" /></p>
+    <p class="strava">On Strava, stage by stage: {chapter.stravaUrls.map((url, i) => <>{i > 0 && ', '}<a href={url} aria-label={`Stage ${i + 1} on Strava`}>{i + 1}</a></>)} <Icon name="arrow-up-right" /></p>
   )}
 
   <nav class="next-steps" aria-label="More chapters">

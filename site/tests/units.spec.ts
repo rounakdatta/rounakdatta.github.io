@@ -215,3 +215,17 @@ test('crumbs left by trimming are dropped, but never the whole route', async () 
   expect(dropSpecks([crumb])).toEqual([crumb]);
   expect(dropSpecks([crumb, east(40, 40.5)]).length).toBe(1);
 });
+
+test('a chapter spanning several days includes every outing of its kind on those days', async () => {
+  const { readFileSync, readdirSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const data = join(import.meta.dirname, '..', 'src', 'data');
+  const log: { id: number; date: string; type: string }[] = JSON.parse(readFileSync(join(data, 'strava-activities.json'), 'utf8')).activities;
+  for (const file of readdirSync(join(data, 'fitness', 'tracks'))) {
+    const track = JSON.parse(readFileSync(join(data, 'fitness', 'tracks', file), 'utf8'));
+    if (!track.endDate || track.endDate === track.date) continue;
+    // The trek once left out two short afternoon legs, because a list of "big days" hid anything under 3 km.
+    const sameKind = log.filter((a) => a.date >= track.date && a.date <= track.endDate && a.type === track.type).map((a) => a.id);
+    expect(new Set(track.ids), file).toEqual(new Set(sameKind));
+  }
+});
