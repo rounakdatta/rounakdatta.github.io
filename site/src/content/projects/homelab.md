@@ -1,9 +1,10 @@
 ---
+year: 2022
+status: active
+stack: ["Kubernetes (k3s)", "Helm", "Tailscale"]
 title: "homelab.setup"
 github: "https://github.com/rounakdatta/homelab.setup"
-logo: "/images/projects/homelab_logo.png"
-tags: ["automation", "productivity"]
-featured: true
+logo: "../../assets/images/projects/homelab_logo.png"
 order: 2
 ---
 

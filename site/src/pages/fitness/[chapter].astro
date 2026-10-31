@@ -1,0 +1,428 @@
+---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import PhotoLink from '../../components/PhotoLink.astro';
+import PhotoViewer from '../../components/PhotoViewer.astro';
+import { chapters, type Chapter } from '../../lib/journal';
+import { sportOf, sportIcon, kmTenths, paceOf } from '../../lib/fitness';
+import { spokenDate, isoDate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  return chapters.map((chapter, i) => ({
+    params: { chapter: chapter.slug },
+    props: { chapter, newer: chapters[i - 1], older: chapters[i + 1] },
+  }));
+}
+
+interface Props {
+  chapter: Chapter;
+  newer?: Chapter;
+  older?: Chapter;
+}
+
+const { chapter, newer, older } = Astro.props;
+const date = new Date(`${chapter.date}T00:00:00Z`);
+const sport = sportOf(chapter.type);
+const noun = sport === 'walk' ? (chapter.type === 'Hike' ? 'hike' : 'walk') : sport;
+const doing = ({ ride: 'riding', run: 'running', hike: 'hiking', walk: 'walking' } as Record<string, string>)[noun] ?? noun;
+
+// Numbers that never overstate: kilometres are cut, not rounded, to one decimal.
+const kmText = `${kmTenths(chapter.distance)} km`;
+const [h, m] = chapter.startTime.split(':').map(Number);
+const started = `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`;
+const duration = (seconds: number) => {
+  const hh = Math.floor(seconds / 3600);
+  const mm = Math.floor((seconds % 3600) / 60);
+  return hh ? `${hh} h ${mm} min` : `${mm} min`;
+};
+// The number that matters differs by sport: pace for a run, speed for a ride, and for a hike the
+// whole time out there (a pace of 24:43 a kilometre says nothing about a mountain).
+const pace = (() => {
+  if (sport === 'ride') return { label: 'Average speed', value: `${(Math.floor((chapter.distance / chapter.movingTime) * 36) / 10).toFixed(1)} km/h` };
+  if (sport === 'run') return { label: 'Pace', value: `${paceOf(chapter.movingTime, chapter.distance)} /km` };
+  return { label: 'Out there', value: duration(chapter.elapsedTime) };
+})();
+const stats = [
+  { label: 'Distance', value: kmText },
+  { label: 'Moving', value: duration(chapter.movingTime) },
+  { label: 'Climbed', value: `${chapter.elevation.toLocaleString('en-GB')} m` },
+  pace,
+  { label: 'Started', value: started },
+];
+
+// The plate in both inks, at the sizes a phone and a laptop ask for. WebP rather than AVIF: a map is
+// flat colour, which WebP holds as well, and encodes ten times faster.
+const WIDTHS = [600, 900, 1200, 1800];
+const SIZES = '(max-width: 34rem) calc(100vw - 2.2rem), (max-width: 76rem) calc(100vw - 4rem), 72rem';
+const plateSet = async (image?: ImageMetadata) =>
+  image && Promise.all(WIDTHS.map((width) => getImage({ src: image, width, format: 'webp', quality: 78 }))).then((all) => ({
+    src: all[2].src,
+    srcset: all.map((v, i) => `${v.src} ${WIDTHS[i]}w`).join(', '),
+  }));
+const light = await plateSet(chapter.plates?.light);
+const dark = await plateSet(chapter.plates?.dark);
+
+// Height against distance, scaled into a strip as wide as the plate.
+const profile = chapter.profile;
+const heights = profile.map(([, alt]) => alt);
+const low = Math.min(...heights);
+const high = Math.max(...heights);
+const span = Math.max(high - low, 20);
+const along = profile.at(-1)?.[0] || 1;
+const PW = 1200;
+const PH = 110;
+const pts = profile.map(([d, alt]) => [(d / along) * PW, PH - 8 - ((alt - low) / span) * (PH - 24)]);
+const profileLine = `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L')}`;
+const peakIndex = heights.indexOf(high);
+const peakAt = (pts[peakIndex]?.[0] ?? 0) / PW;
+const profileArea = `${profileLine}L${PW} ${PH}L0 ${PH}Z`;
+const isLoop = chapter.plate && Math.hypot(chapter.plate.start[0] - chapter.plate.end[0], chapter.plate.start[1] - chapter.plate.end[1]) < 30;
+---
+
+<BaseLayout
+  title={chapter.title}
+  description={`${chapter.tagline} ${kmText} of ${doing} around ${chapter.place}, ${spokenDate(date)}: the route, the numbers and the photos.`}
+  type="article"
+  published={date}
+>
+  <header class="head">
+    <p class="label crumb"><a href="/fitness/">The Fitness Project</a></p>
+    <h1>{chapter.title}</h1>
+    <p class="tagline">{chapter.tagline}</p>
+    <p class="meta">
+      <Icon name={sportIcon(chapter.type)} size="1.15em" />
+      <span><time datetime={isoDate(date)}>{spokenDate(date)}</time> · {chapter.place}</span>
+    </p>
+  </header>
+
+  {chapter.plate && light && dark && (
+    <figure class="plate wide">
+      <div class="frame" style={`aspect-ratio: ${chapter.plate.width} / ${chapter.plate.height}`}>
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset={dark.srcset} sizes={SIZES} />
+          <img src={light.src} srcset={light.srcset} sizes={SIZES} width={chapter.plate.width} height={chapter.plate.height} alt="" fetchpriority="high" decoding="async" />
+        </picture>
+        <svg viewBox={`0 0 ${chapter.plate.width} ${chapter.plate.height}`} role="img" aria-label={`The route of ${chapter.title}, ${kmText} around ${chapter.place}`} style={`view-transition-name: route-${chapter.slug}`}>
+          <path class="casing" d={chapter.plate.d} />
+          <path class="line" d={chapter.plate.d} />
+          {chapter.publicStart && !isLoop && <circle class="end" cx={chapter.plate.end[0]} cy={chapter.plate.end[1]} r="9" />}
+          {chapter.publicStart && <circle class="start" cx={chapter.plate.start[0]} cy={chapter.plate.start[1]} r="9" />}
+        </svg>
+      </div>
+      <figcaption>
+        Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, via <a href="https://openfreemap.org">OpenFreeMap</a>; terrain from <a href="https://registry.opendata.aws/terrain-tiles/">Terrain Tiles</a>. {!chapter.publicStart
+          ? 'The stretch nearest the start and the finish is left off the drawing, on purpose.'
+          : isLoop ? 'It ends where it began.' : 'Hollow dot: the start. Filled: the finish.'}
+      </figcaption>
+    </figure>
+  )}
+
+  <dl class="stats">
+    {stats.map((s) => (
+      <div>
+        <dt>{s.label}</dt>
+        <dd>{s.value}</dd>
+      </div>
+    ))}
+  </dl>
+
+  {profile.length > 2 && (
+    <figure class="profile wide">
+      <svg viewBox={`0 0 ${PW} ${PH}`} preserveAspectRatio="none" role="img" aria-label={`Elevation along the way, from ${Math.round(low)} m to ${Math.round(high)} m`}>
+        <path class="area" d={profileArea} />
+        <path class="ridge" d={profileLine} />
+      </svg>
+      <span class="peak" style={`--at: ${peakAt}`}>{Math.round(high).toLocaleString('en-GB')} m</span>
+      <figcaption>Elevation along the way, from {Math.round(low).toLocaleString('en-GB')} m to {Math.round(high).toLocaleString('en-GB')} m</figcaption>
+    </figure>
+  )}
+
+  {chapter.photos.length > 0 && (
+    <ul class="photos wide" data-gallery>
+      {chapter.photos.map((src, i) => (
+        <li>
+          <PhotoLink photo={{ src, alt: `Photo ${i + 1} of ${chapter.photos.length} from ${chapter.title}` }} sizes="(max-width: 60rem) 50vw, 23rem" />
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <p class="strava"><a href={chapter.stravaUrl}>This {noun} on Strava <Icon name="arrow-up-right" /></a></p>
+
+  <nav class="next-steps" aria-label="More chapters">
+    {older && (
+      <a class="step older" href={`/fitness/${older.slug}/`} rel="prev">
+        <span class="label"><Icon name="arrow-left" /> Before</span>
+        <span class="step-title">{older.title}</span>
+      </a>
+    )}
+    {newer && (
+      <a class="step newer" href={`/fitness/${newer.slug}/`} rel="next">
+        <span class="label">After <Icon name="arrow-right" /></span>
+        <span class="step-title">{newer.title}</span>
+      </a>
+    )}
+    <a class="all" href="/fitness/">All places</a>
+  </nav>
+
+  <PhotoViewer />
+</BaseLayout>
+
+<style>
+  .head {
+    margin-bottom: 1.6em;
+  }
+
+  .crumb {
+    margin-bottom: 0.2em;
+  }
+
+  .crumb a {
+    color: inherit;
+  }
+
+  h1 {
+    margin-bottom: 0.15em;
+  }
+
+  .tagline {
+    margin: 0 0 0.4em;
+    font-style: italic;
+    font-size: 1.1em;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0;
+    color: var(--ink-muted);
+  }
+
+  .meta :global(.icon) {
+    color: var(--route);
+  }
+
+  .plate {
+    margin: 0 0 1.6em;
+  }
+
+  .frame {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-raised);
+  }
+
+  .frame img,
+  .frame svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .casing {
+    fill: none;
+    stroke: var(--paper);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.85;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .start,
+  .end {
+    stroke: var(--route);
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .start {
+    fill: var(--paper);
+  }
+
+  .end {
+    fill: var(--route);
+  }
+
+  .plate figcaption {
+    text-align: left;
+    font-size: 0.75em;
+  }
+
+  .plate figcaption a {
+    color: inherit;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5em, 1fr));
+    gap: 0.8em 1.5em;
+    margin: 0 0 1.4em;
+  }
+
+  .stats dt {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    font-size: 0.95em;
+  }
+
+  .stats dd {
+    margin: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .profile {
+    position: relative;
+    margin: 0 0 2.4em;
+    padding-top: 1.4em;
+  }
+
+  /* The highest point is labelled where it is, not at an edge that reads like the finish. */
+  .peak {
+    position: absolute;
+    top: 0;
+    left: clamp(2em, calc(var(--at) * 100%), calc(100% - 2em));
+    transform: translateX(-50%);
+    font-size: 0.8em;
+    color: var(--ink-muted);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .profile svg {
+    display: block;
+    width: 100%;
+    height: 4.5em;
+  }
+
+  .area {
+    fill: color-mix(in oklab, var(--route) 14%, var(--paper));
+  }
+
+  .ridge {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 1.6;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .profile figcaption {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .photos {
+    columns: 3 16rem;
+    column-gap: 1rem;
+    margin: 0 0 1.5em;
+    padding: 0;
+    list-style: none;
+  }
+
+  .photos li {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* On a phone the photos are a set to tap into, two across: a fifth of the scrolling, and a
+     third of the bytes of five photos each as wide as the screen. */
+  @media (max-width: 34rem) {
+    .photos {
+      columns: 2;
+      column-gap: 0.6rem;
+    }
+
+    .photos li {
+      margin-bottom: 0.6rem;
+    }
+  }
+
+  .photos :global(.photo-link) {
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-raised);
+  }
+
+  .photos :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .strava a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .next-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em 2em;
+    margin-top: 2.5em;
+    padding-top: 1.4em;
+    border-top: 1px solid var(--rule);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    text-decoration: none;
+  }
+
+  .step .label {
+    font-size: 0.9em;
+  }
+
+  .step-title {
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .step:hover .step-title {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+
+  .newer {
+    grid-column: 2;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .all {
+    grid-column: 1 / -1;
+    justify-self: center;
+    font-size: 0.92em;
+  }
+
+  @media (max-width: 34rem) {
+    .next-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .newer {
+      grid-column: 1;
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>

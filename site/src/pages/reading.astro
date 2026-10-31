@@ -1,23 +1,70 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry } from 'astro:content';
+import { monthOfYear } from '../lib/dates';
 
-const page = await getEntry('pages', 'reading');
+const books = await getCollection('books');
+const shelf = (status: string) =>
+  books
+    .filter((b) => b.data.status === status)
+    .sort((a, b) => (b.data.finished?.valueOf() ?? 0) - (a.data.finished?.valueOf() ?? 0));
+const shelves = [
+  { title: 'Reading now', books: shelf('reading') },
+  { title: 'Read', books: shelf('read') },
+  { title: 'Next', books: shelf('want') },
+].filter((s) => s.books.length > 0);
+const goodreads = 'https://www.goodreads.com/user/show/23254685-rounak-datta';
 ---
 
-<BaseLayout title={page.data.title} description={page.data.description}>
-  <div class="page-content">
-    <h1>{page.data.title}</h1>
-  </div>
+<BaseLayout title="The Reading Project" description="Books Rounak Datta is reading and has read: mostly history, technology and psychology.">
+  <h1>The Reading Project</h1>
+
+  {shelves.length === 0 ? (
+    // Not empty forever, just not written yet: say where the list lives in the meantime.
+    <p class="lede">The reading list is still being written up. Until then, it lives on <a href={goodreads}>Goodreads</a>.</p>
+  ) : (
+    shelves.map((s) => (
+      <section aria-labelledby={`shelf-${s.title.toLowerCase().replace(/\s+/g, '-')}`}>
+        <h2 id={`shelf-${s.title.toLowerCase().replace(/\s+/g, '-')}`}>{s.title}</h2>
+        <ul class="books">
+          {s.books.map(({ data }) => (
+            <li>
+              <span class="book-title">{data.url ? <a href={data.url}>{data.title}</a> : data.title}</span>
+              <span class="author">{data.author}{data.finished && `, ${monthOfYear(data.finished)}`}</span>
+              {data.note && <p class="note">{data.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
 </BaseLayout>
 
 <style>
-  .page-content {
-    max-width: var(--content-width);
-    margin: 0 auto;
+  .lede {
+    color: var(--ink-muted);
   }
 
-  .page-content h1 {
-    margin-top: 0;
+  .books {
+    padding: 0;
+    list-style: none;
+  }
+
+  .books li {
+    margin-bottom: 1em;
+  }
+
+  .book-title {
+    font-weight: 600;
+  }
+
+  .author {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 0.92em;
+  }
+
+  .note {
+    margin: 0.3em 0 0;
   }
 </style>

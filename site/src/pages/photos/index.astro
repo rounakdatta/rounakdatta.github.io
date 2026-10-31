@@ -1,0 +1,136 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PhotoLink from '../../components/PhotoLink.astro';
+import PhotoViewer from '../../components/PhotoViewer.astro';
+import Icon from '../../components/Icon.astro';
+import { monthOfYear } from '../../lib/dates';
+
+const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Photos" description="Photographs by Rounak Datta: trips, weddings, mountains and cities.">
+  <header class="head">
+    <h1>Photos</h1>
+    <p class="lede">WDYM one needs Instagram to have a colourful life?</p>
+  </header>
+
+  {albums.map((album, a) => (
+    <section class="album" aria-labelledby={`album-${album.id}`}>
+      <header class="album-head">
+        <h2 id={`album-${album.id}`}><a href={`/photos/${album.id}/`}>{album.data.title}</a></h2>
+        <p class="album-meta">
+          {album.data.subtitle && <span class="subtitle">{album.data.subtitle}</span>}
+          <span>{album.data.date && `${monthOfYear(album.data.date)} · `}{album.data.photos.length} photos</span>
+        </p>
+      </header>
+      <ul class="strip full" data-gallery tabindex="0" aria-label={`${album.data.title}, scroll for more`}>
+        {album.data.photos.map((photo, i) => (
+          <li><PhotoLink photo={photo} heights={[240, 340]} priority={a === 0 && i < 2} /></li>
+        ))}
+      </ul>
+      <p class="album-link"><a href={`/photos/${album.id}/`}>The whole album <Icon name="arrow-right" /></a></p>
+    </section>
+  ))}
+
+  <PhotoViewer />
+</BaseLayout>
+
+<style>
+  .lede {
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  /* Sections hold a full-width strip, so they are grids that pass the page's columns through. */
+  .album {
+    grid-column: full;
+    display: grid;
+    grid-template-columns: subgrid;
+    margin-top: 2.5em;
+  }
+
+  .album > * {
+    grid-column: content;
+  }
+
+  .album > .full {
+    grid-column: full;
+  }
+
+  .album-head h2 {
+    margin: 0;
+    font-size: 1.3em;
+  }
+
+  .album-head h2 a {
+    text-decoration: none;
+  }
+
+  .album-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.8em;
+    margin: 0.1em 0 0.9em;
+    color: var(--ink-muted);
+    font-size: 0.92em;
+  }
+
+  .subtitle {
+    font-style: italic;
+  }
+
+  /* A strip you scroll sideways, with a thin, honest scrollbar: mouse users can see there's more. */
+  .strip {
+    /* Starts in line with the text, runs off the right edge, and scrolls back to the left edge. */
+    --inset: max(var(--gutter), (100% - var(--measure)) / 2);
+    display: flex;
+    padding-inline: var(--inset);
+    scroll-padding-inline: var(--inset);
+    gap: 0.75rem;
+    margin: 0;
+    padding-block: 0 0.75rem;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+  }
+
+  .strip li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+
+  .strip :global(.photo-link) {
+    display: block;
+    height: 340px;
+    aspect-ratio: var(--aspect);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-raised);
+  }
+
+  .strip :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .strip:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .album-link {
+    margin: 0.4em 0 0;
+    font-size: 0.95em;
+  }
+
+  @media (max-width: 34rem) {
+    .strip :global(.photo-link) {
+      height: 240px;
+    }
+  }
+</style>

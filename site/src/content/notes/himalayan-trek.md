@@ -21,7 +21,7 @@ Our journey was of course a convergence, but involving divergences before and af
 
 Our team of six needs no introduction except Shubham. Me, Rohan, Mayank, Agnivo and Lahul are school-friends and have been knowing each other since childhood. Shubham (whose nickname is Katty) is a college friend of Rohan who joined us at his interest.
 
-![Excited faces at the CCU airport](/images/airport_selfie.jpg)
+![Excited faces at the CCU airport](../../assets/images/airport_selfie.jpg)
 
 We reached New Delhi on time, and all of us except Katty met outside the airport (Agnivo's flight was quite delayed though). We took an Uber to the spot (**near Kashmere Gate bus stop**) from where we were to catch the bus to Dehradun. Interesting fact to note is that the Uber driver gave us a very pleasurable tour by highlighting various important places in Delhi (of course the ones which fell on the route) and chit-chatting about politics, good and bad things about Delhi. Our sleeper bus was quite late in arrival as well as departure, and that gave us the chance to treat ourselves with bread-omlette and our brought-from-home-tiffins. The bus was not a very comfortable ride, but we got some stress-busting sleep.
 
@@ -31,33 +31,33 @@ The second day had an abrupt start (this is normal from past Chennai-Bangalore b
 
 We were to travel from **Dehradun ISBT** to **Raithal** (a village up the hills) through Uttar Kashi. The car journey was quite a long one (with multiple food breaks, a lot of music and sleepy eyes), but eventful. We met some other fellow travellers who were on the same route like us. The upward (and downward as well) journey proved yet again that mountain drivers have amazing control over the wheel. One thought that had kept us bothered is that our shoes were not yet ready[^1]. A fun fact was that while on lunch stop at Uttar Kashi, we, tired and long-withstanded from bathrooms, were in search of a restaurant which had an attached bathroom so that we could get fresh for the day before lunch. Luckily Hotel HillView Restaurant came to our rescue as well as had a delicious meal for us. So good the food, that we decided to eat at the same place in the return journey as well.
 
-![Stop ft. Maggi break](/images/dehra_dun_to_raithal.jpeg)
+![Stop ft. Maggi break](../../assets/images/dehra_dun_to_raithal.jpeg)
 
-![Our favourite hotel at Uttar Kashi (courtesy: Google Images)](/images/hill_view_restaurant_uttarkashi.jpeg)
+![Our favourite hotel at Uttar Kashi (courtesy: Google Images)](../../assets/images/hill_view_restaurant_uttarkashi.jpeg)
 
 We also were able to conclude our shoe confusion at Uttar Kashi - unable to find the recommended Quechua Trek 100 shoes, we settled for ankle-high Snow shoes (locally called Kaplas). The shoes were very uncomfortable on non-snow surfaces, especially on flat cement but we had to have plan C to reject it.
 
-![Stiff ankle and steady body, are you joking!?](/images/snow_boots.jpeg)
+![Stiff ankle and steady body, are you joking!?](../../assets/images/snow_boots.jpeg)
 
 We spent the night at a homestay at Raithal where we met our co-trekkers as well (a group of Bengali professors/teachers). We also met our guide **Chandramohan ji**[^2] The mountains were very aesthetic from the homestay lobby and night was indeed very very chilling. Poor-network days had started from that night.
 
-![Chill, beauty and adventure - all start from here!](/images/raithal_mountains.jpeg)
+![Chill, beauty and adventure - all start from here!](../../assets/images/raithal_mountains.jpeg)
 
 ## Day Trek Starts!
 
-![Crocs and mountains! Of course we do that here ;)](/images/trekking_in_crocs.jpeg)
+![Crocs and mountains! Of course we do that here ;)](../../assets/images/trekking_in_crocs.jpeg)
 
 We started the day with some light breakfast and mental hotchpotch. Of course I had got my snow trekking boots, they were too difficult to walk with. I set out with Chandramohan ji in search of trekking shoes in the nearby market, but in vain. And there I decided, on the approval and confidence of Chandramohan ji, to trek with Crocs. Walking the stones and boulders and rocks were surprisingly easy with crocs, and that got me great speed. I was actually high on morale, and moderate on bagpack, so I had a great run on the first day. Boulders, edges of mountains, broken trees, high steps - we did it all.
 
-![On mountains, you'd generally keep walking, if its a stop, its a photo-shoot](/images/mountains_day_1.jpeg)
+![On mountains, you'd generally keep walking, if its a stop, its a photo-shoot](../../assets/images/mountains_day_1.jpeg)
 
-![Broken tree trunks x streams!](/images/trunk_photo_shoot_day_1.jpeg)
+![Broken tree trunks x streams!](../../assets/images/trunk_photo_shoot_day_1.jpeg)
 
 We reached our destination for the day **Neihata**, a grassland valley somewhere in the middle of the Himalayas. The valley was lush green in the afternoon with some patches of snow here and there. The scenery was amazing to enjoy with the tea that was being served. This was going to be the first night (my first experience) we were going to stay in tents and sleep in sleeping bags. What seemed trivial in the afternoon soon became clearly exciting. There was a good amount of snowfall throughout the evening, that not only covered the greenery into snow white, but also dropped the temperature to almost zero. With such shivering cold and sun gone down, we found ourselves keeping closer to each other with torchlights (and headlights), alternating between rubbing our hands for warmth and putting on the woolen gloves. There was also a small fire setup[^3] which became our hub of comfort, socializing and hearing amazing mountain stories. Post torchlit dinner, we spent a great deal of time chatting, laughing with Chandramohan ji and Vinod ji (our adjacent group's guide).
 
-![Snow fell in the evening, and we shivered inside the tents](/images/evening_snowfall_tents.jpeg)
+![Snow fell in the evening, and we shivered inside the tents](../../assets/images/evening_snowfall_tents.jpeg)
 
-![Guys enjoy snowflakes, afterall they don't wet you that much](/images/snowflakes_dont_wet_you_so_enjoy.jpeg)
+![Guys enjoy snowflakes, afterall they don't wet you that much](../../assets/images/snowflakes_dont_wet_you_so_enjoy.jpeg)
 
 Meanwhile I started practising wearing the snow boots while roaming around in the valley. Sleeping bags were a first-time experience for me - they weren't comfortable, and to add to the discomfort, snow accumulated on the edges of the tent making the inner surface very very cold. Tents are generally wind-proof though.
 
@@ -65,11 +65,11 @@ Meanwhile I started practising wearing the snow boots while roaming around in th
 
 Our penultimate stop was **Chilapra**. This was going to be our basecamp for Dayara peak, and our start of return journey. I set out uneasy in the snow boots. The day's journey was overall smooth, we encountered patches of snow, but difficulty was still moderate. There were beautiful peaks and lakes and valleys as we passed through. All we could get from the day were some nice pictures and snow warm-up.
 
-![We unite on the way to Chilapra](/images/on_the_way_to_chilapra.jpeg)
+![We unite on the way to Chilapra](../../assets/images/on_the_way_to_chilapra.jpeg)
 
-![Rest easy on the lakeside](/images/rest_easy_on_lakeside.jpeg)
+![Rest easy on the lakeside](../../assets/images/rest_easy_on_lakeside.jpeg)
 
-![Me, "candid"-ing on the lakeside](/images/me_on_frozen_lakeside.jpeg)
+![Me, "candid"-ing on the lakeside](../../assets/images/me_on_frozen_lakeside.jpeg)
 
 The stop we reached was even colder in terms of temperature, with lowest-felt touching around -9°C. The sky was crystal clear in the night and we had a nice time beside the fire. We saw interesting forms of life like an artificial lake at the spot - which mountaineers have crafted to make water storage and collection easy. We had the peak-climbing next day, and we geared up to that by going to sleep *slightly* early.
 
@@ -77,21 +77,21 @@ The stop we reached was even colder in terms of temperature, with lowest-felt to
 
 Chandramohan ji had already conveyed us of the trek start time as 7am for the day beforehand thereby plus-plusing the difficulty. One more point to note for the day was that we were to travel light and carry our tiffin boxes along. We of course didn't knew in hindsight that the day's climb would be the toughest of all, and the most satisfying and experience-rich. We arranged and secured our items into a single tent and set out. I was more confident with the shoes now, but the hardest part was yet to come.
 
-![Snow boots are finally at their job!](/images/ankle_deep_snow.jpeg)
+![Snow boots are finally at their job!](../../assets/images/ankle_deep_snow.jpeg)
 
 This is the day we started getting ankle-deep snow. The road was long, but very very beautiful. We were walking along the edges of snow-covered mountains unlike the edges along the shrubs-and-rocks. Fresh-snow-filled paths are less risky than molten-snow paths. Again, snow paths are comparatively less riskier than pebble/rocky paths.
 
-![We take photos at the stop-and-see points](/images/halt_for_the_flag.jpeg)
+![We take photos at the stop-and-see points](../../assets/images/halt_for_the_flag.jpeg)
 
-![Snow is all you see](/images/snow_all_along.jpeg)
+![Snow is all you see](../../assets/images/snow_all_along.jpeg)
 
-![Do you want to see some more snow?](/images/some_more_snow.jpeg)
+![Do you want to see some more snow?](../../assets/images/some_more_snow.jpeg)
 
-![Should we climb or stop-and-enjoy?](/images/snowy_way_to_dayara_peak.jpeg)
+![Should we climb or stop-and-enjoy?](../../assets/images/snowy_way_to_dayara_peak.jpeg)
 
 The ultimate peak-climbing was absolutely enthralling and humbling experience. I, along with my friend Rohan were more tired and were lagging behind. At the last portion, we took a shortcut and chose a more steep route. Chandramohan ji handheld us, and we climbed over the rocks through over 45° elevation. This was an amazing and satisfying experience. We spent some 20-25 mins on the peak, took photos and chilled with the other folks. Needless to say, we had to be very careful at those edges!
 
-![Accomplishment celebration on Dayara peak](/images/peak_done.jpeg)
+![Accomplishment celebration on Dayara peak](../../assets/images/peak_done.jpeg)
 
 Our stop post-peak was **Gui** and it was a smooth way from the Dayara peak. We had an intermediate lunch stop, where we consumed our half-spoiled tiffins. Chilled Frooti felt heavenly. By the time we reached Gui, we were extremely tired, and spent a great deal of time lying still on the grasslands. We were wondering how the other teams had the energy to play football :).
 
@@ -99,23 +99,23 @@ Our stop post-peak was **Gui** and it was a smooth way from the Dayara peak. We 
 
 Trek was at the finish line! Our descent had already begun, and our next stop was Raithal (yes!). We were at high josh, however the thought of again putting on snow boots was slightly an uneasy. I started with wearing those shoes, but after a quarter of the journey I put on my crocs and *Sonic*-ed my way through the mountains post that.
 
-![Wake-up view from our tent, which hotel gives you this ;)](/images/view_from_the_tent.jpeg)
+![Wake-up view from our tent, which hotel gives you this ;)](../../assets/images/view_from_the_tent.jpeg)
 
-![Meet Vinod ji, our co-trek guide](/images/vinod_ji.jpeg)
+![Meet Vinod ji, our co-trek guide](../../assets/images/vinod_ji.jpeg)
 
-![Can you guess what was the joke!?](/images/bright_happy_faces.jpeg)
+![Can you guess what was the joke!?](../../assets/images/bright_happy_faces.jpeg)
 
 Before the journey, we took way too many group photos (including our co-trekkers).
 
-![Our team finishing the trek in style!](/images/trek_group_photo.jpeg)
+![Our team finishing the trek in style!](../../assets/images/trek_group_photo.jpeg)
 
-![Our partner trekkers, a stand-all photo](/images/trek_all_group_photo.jpeg)
+![Our partner trekkers, a stand-all photo](../../assets/images/trek_all_group_photo.jpeg)
 
 I was able to descend very comfortably in crocs. With the *very heavy* snow boots hanging behind me on the sack (and occasionally kicking me), I made my way swiftly chatting with Chandramohan ji about mountains and life. *I truly had a kickass descent.* We even met Mani on the way, the last time in our trek. We also met other fellow trekkers (on the way up, lazily on the way down), came across residents and mountaineers carrying eggs, wood above, mules making their way above clumsily. The last portion of the journey was quite comfortable as well, and we finally were back in the **Raithal** homestay from where we started.
 
 We got ourselves some food from the local stores (yes, stores are back) and got refreshed. Bathroom availability was once again a thing :). We chatted around, packed our luggages and chilled for the rest of the day. Chandramohan ji and Vinod ji joined us for the evening party.
 
-![Dayara Bugyal trek map (Source: Google Images)](/images/dayara_bugyal_map.jpeg)
+![Dayara Bugyal trek map (Source: Google Images)](../../assets/images/dayara_bugyal_map.jpeg)
 
 [^1]: Our trek plan actually changed due to heavy snowfall. It was initially Har ki dun, but it got diverted to Dayara Bugyal. We had confirmed a shoe rent at Sankri (a stop on the way to Har ki dun) but that plan went haywire at the last moment due to itinerary change. So, we had to figure out a plan B here.
 [^2]: Chandramohan ji is the son of a legendary trekking guide Sulak Ram Rana.

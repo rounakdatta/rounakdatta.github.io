@@ -1,7 +1,6 @@
 ---
+description: "A running and riding journal, drawn from Strava."
 title: "The Fitness Project"
-featured: true
-special: true
-internalUrl: "/fitness"
+internalUrl: "/fitness/"
 order: 1
 ---

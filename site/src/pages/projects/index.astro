@@ -1,221 +1,178 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { chapters } from '../../lib/journal';
+import { fitRoute } from '../../lib/routes';
 
-const projects = await getCollection('projects');
-const sortedProjects = projects.sort((a, b) => {
-  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  return a.data.order - b.data.order;
-});
+const all = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const books = await getCollection('books');
 
-// Render content for each project
-const specialProjects = sortedProjects.filter(p => p.data.special);
-const regularProjects = sortedProjects.filter(p => !p.data.special);
-
-const regularProjectsWithContent = await Promise.all(
-  regularProjects.map(async (project) => {
-    const { Content } = await render(project);
-    return { project, Content };
-  })
+// A journal kept on this site is only shown once it has something in it.
+const journals = all.filter((p) => p.data.internalUrl && !(p.data.internalUrl === '/reading/' && books.length === 0));
+const repos = await Promise.all(
+  all.filter((p) => !p.data.internalUrl).map(async (project) => ({ project, Content: (await render(project)).Content })),
 );
+
+// The fitness journal introduces itself with a few of its own routes.
+const shapes = chapters.slice(0, 6).map((c) => fitRoute(c.route, 64, 64, 6));
+const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Finished', retired: 'Retired' } as const;
 ---
 
-<BaseLayout title="Projects" description="Software projects and open source work">
-  <div class="projects-page">
-    <h1>Projects</h1>
+<BaseLayout title="Projects" description="Software Rounak Datta builds and keeps building: a self-hosted homelab, Nix dotfiles, and the fitness journal on this site.">
+  <h1>Projects</h1>
 
-    {specialProjects.length > 0 && (
-      <div class="special-projects-grid">
-        {specialProjects.map((project) => (
-          <a href={project.data.internalUrl} class="special-project">
-            <span class="special-title">{project.data.title}</span>
-          </a>
-        ))}
-      </div>
-    )}
-
-    <div class="projects-grid">
-      {regularProjectsWithContent.map(({ project, Content }) => (
-        <div class="project-card">
-          <div class="project-body">
-            <div class="project-text">
-              <h3>
-                {project.data.title}
-                {project.data.featured && <span class="featured-badge">Featured</span>}
-              </h3>
-              <div class="project-content">
-                <Content />
-              </div>
-              <div class="project-links">
-                {project.data.github && (
-                  <a href={project.data.github} class="project-link">Code</a>
-                )}
-                {project.data.url && (
-                  <a href={project.data.url} class="project-link">Website</a>
-                )}
-              </div>
-              {project.data.tags.length > 0 && (
-                <div class="post-tags">
-                  {project.data.tags.map(tag => (
-                    <span class="tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-            {project.data.logo && (
-              <div class="project-image">
-                <img src={project.data.logo} alt="" />
-              </div>
+  {journals.length > 0 && (
+    <ul class="journals">
+      {journals.map((p) => (
+        <li>
+          <a class="journal" href={p.data.internalUrl}>
+            {p.data.internalUrl === '/fitness/' && (
+              <svg class="shapes" viewBox={`0 0 ${64 * shapes.length} 64`} aria-hidden="true">
+                {shapes.map((s, i) => <path d={s.d} transform={`translate(${i * 64} 0)`} />)}
+              </svg>
             )}
-          </div>
-        </div>
+            <span class="journal-title">{p.data.title}</span>
+            {p.data.description && <span class="journal-description">{p.data.description}</span>}
+          </a>
+        </li>
       ))}
-    </div>
-  </div>
+    </ul>
+  )}
+
+  <ul class="repos">
+    {repos.map(({ project, Content }) => {
+      const { title, logo, year, status, stack, github, url } = project.data;
+      const facts = [year && `Since ${year}`, status && statusLabel[status], stack.join(', ')].filter(Boolean);
+      return (
+        <li class="repo">
+          {logo && <Image src={logo} alt="" width={112} height={112} layout="fixed" fit="contain" class="logo" />}
+          <div class="repo-text">
+            <h2>{title}</h2>
+            <div class="prose repo-body"><Content /></div>
+            {facts.length > 0 && <p class="facts">{facts.join(' · ')}</p>}
+            <p class="links">
+              {github && <a href={github}>Code <Icon name="arrow-up-right" /></a>}
+              {url && <a href={url}>Website <Icon name="arrow-up-right" /></a>}
+            </p>
+          </div>
+        </li>
+      );
+    })}
+  </ul>
 </BaseLayout>
 
 <style>
-  .projects-page {
-    max-width: var(--content-width);
-    margin: 0 auto;
+  .journals,
+  .repos {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .projects-page h1 {
-    margin-top: 0;
+  .journals {
+    margin-bottom: 2.5em;
   }
 
-  .special-projects-grid {
+  .journal {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .special-project {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem 1rem;
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.03) 0%, rgba(0, 102, 204, 0.08) 100%);
-    border: 1px solid rgba(0, 102, 204, 0.2);
-    border-radius: 4px;
+    gap: 0.2em;
+    padding: 1.1em 1.25em 1.2em;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: border-color 0.15s;
   }
 
-  .special-project:hover {
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.06) 0%, rgba(0, 102, 204, 0.12) 100%);
-    border-color: rgba(0, 102, 204, 0.3);
-    transform: translateY(-2px);
+  .journal:hover {
+    border-color: color-mix(in oklab, var(--route) 45%, var(--rule));
   }
 
-  .special-title {
-    font-size: 0.9rem;
+  .shapes {
+    height: 2.6em;
+    width: auto;
+    max-width: 100%;
+    margin-bottom: 0.5em;
+  }
+
+  .shapes path {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .journal-title {
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-text);
+    font-size: 1.1em;
   }
 
-  @media (max-width: 500px) {
-    .special-projects-grid {
-      grid-template-columns: 1fr;
-    }
+  .journal-description {
+    color: var(--ink-muted);
   }
 
-  .projects-grid {
+  .repo {
     display: grid;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: 1fr auto;
+    gap: 1.5em;
+    padding: 1.6em 0;
+    border-top: 1px solid var(--rule);
   }
 
-  .project-card {
-    padding: 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
+  .logo {
+    grid-column: 2;
+    grid-row: 1;
+    width: 112px;
+    height: 112px;
+    object-fit: contain;
+    border-radius: var(--radius);
   }
 
-  .project-body {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .project-text {
-    flex: 1;
+  .repo-text {
+    grid-column: 1;
+    grid-row: 1;
     min-width: 0;
   }
 
-  .project-card h3 {
-    margin: 0 0 0.75rem 0;
-    font-size: 1.15rem;
+  .repo h2 {
+    margin: 0 0 0.35em;
+    font-size: 1.2em;
+  }
+
+  .repo-body :global(p) {
+    margin-bottom: 0.6em;
+  }
+
+  .facts {
+    margin: 0 0 0.3em;
+    font-size: 0.88em;
+    color: var(--ink-muted);
+  }
+
+  .links {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .project-image {
-    flex-shrink: 0;
-    width: 120px;
-  }
-
-  .project-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    opacity: 0.9;
-    transition: opacity 0.2s;
-  }
-
-  .project-card:hover .project-image img {
-    opacity: 1;
-  }
-
-  @media (max-width: 500px) {
-    .project-body {
-      flex-direction: column-reverse;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .project-image {
-      width: 100px;
-    }
-  }
-
-  .project-content {
-    color: var(--color-text);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 0.75rem;
-  }
-
-  .project-content :global(p) {
+    gap: 1.25em;
     margin: 0;
+    font-size: 0.95em;
   }
 
-  .featured-badge {
-    font-size: 0.7rem;
-    background: var(--color-link);
-    color: white;
-    padding: 0.15em 0.5em;
-    border-radius: 3px;
-    font-weight: normal;
-  }
+  /* On a phone the picture sits above the words, small. */
+  @media (max-width: 34rem) {
+    .repo {
+      grid-template-columns: 1fr;
+      gap: 0.8em;
+    }
 
-  .project-links {
-    display: flex;
-    gap: 1rem;
-  }
+    .logo {
+      grid-column: 1;
+      width: 72px;
+      height: 72px;
+    }
 
-  .project-link {
-    font-size: 0.85rem;
+    .repo-text {
+      grid-row: 2;
+    }
   }
-
-  .project-card .post-tags {
-    margin-top: 0.75rem;
-    margin-left: 0;
-  }
-
 </style>

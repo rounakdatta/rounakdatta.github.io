@@ -44,7 +44,9 @@ export async function readWholePage(page: Page) {
   }
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForLoadState('networkidle');
-  await page.evaluate(() => Promise.all([...document.images].map((img) => img.decode().catch(() => {}))));
+  // A lazy image that never started loading never decodes either, so each wait is capped.
+  await page.evaluate(() =>
+    Promise.all([...document.images].map((img) => Promise.race([img.decode().catch(() => {}), new Promise((r) => setTimeout(r, 2500))]))));
 }
 
 /** Pull every URL a page refers to: links, sources, srcsets and the preview image. */

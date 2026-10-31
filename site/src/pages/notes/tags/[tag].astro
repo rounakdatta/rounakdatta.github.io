@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import NoteList from '../../../components/NoteList.astro';
+import { publishedNotes, tagSlug, type Note } from '../../../lib/notes';
+
+export async function getStaticPaths() {
+  const notes = await publishedNotes();
+  const tags = new Map<string, { name: string; notes: Note[] }>();
+  for (const note of notes)
+    for (const name of note.data.tags) {
+      const slug = tagSlug(name);
+      tags.set(slug, { name, notes: [...(tags.get(slug)?.notes ?? []), note] });
+    }
+  return [...tags].map(([tag, { name, notes }]) => ({ params: { tag }, props: { name, notes } }));
+}
+
+interface Props {
+  name: string;
+  notes: Note[];
+}
+
+const { name, notes } = Astro.props;
+const count = notes.length === 1 ? 'One note' : `${notes.length} notes`;
+---
+
+<BaseLayout title={`Notes on ${name}`} description={`${count} by Rounak Datta tagged “${name}”.`}>
+  <p class="label crumb"><a href="/notes/">Notes</a> / tagged</p>
+  <h1>{name}</h1>
+  <p class="muted">{count}.</p>
+  <NoteList notes={notes} />
+  <p class="back"><a href="/notes/">All notes</a></p>
+</BaseLayout>
+
+<style>
+  .crumb {
+    margin-bottom: 0.2em;
+  }
+
+  .crumb a {
+    color: inherit;
+  }
+
+  h1 {
+    margin-bottom: 0.2em;
+  }
+
+  .back {
+    margin-top: 2em;
+  }
+</style>

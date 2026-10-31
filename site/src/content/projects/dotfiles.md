@@ -1,9 +1,10 @@
 ---
+year: 2020
+status: active
+stack: ["Nix", "home-manager"]
 title: "dotfiles"
 github: "https://github.com/rounakdatta/dotfiles"
-logo: "/images/projects/dotfiles_logo.jpg"
-tags: ["automation", "productivity"]
-featured: true
+logo: "../../assets/images/projects/dotfiles_logo.jpg"
 order: 3
 ---
 

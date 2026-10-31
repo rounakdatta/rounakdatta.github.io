@@ -1,7 +1,6 @@
 ---
+description: "The books behind how I think."
 title: "The Reading Project"
-featured: true
-special: true
-internalUrl: "/reading"
+internalUrl: "/reading/"
 order: 0
 ---

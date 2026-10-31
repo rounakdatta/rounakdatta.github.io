@@ -5,7 +5,7 @@ tags: ["self-hosting", "hobby"]
 draft: false
 ---
 
-Over the last few years, I've been obsessively reading on responsible technology and information warfare. The absolute favourites in this space have been [Permanent Record](https://www.goodreads.com/book/show/46223297-permanent-record) and [Mindf*ck](https://www.goodreads.com/en/book/show/52269471). The hobby of homelabbing and having control over my own data originates somewhere around that. I had earlier [written about](/notes/firefly) why I think Firefly-III helped me achieve the "personal" in personal finance. The joy of running a server 24x7 in your living room is mostly about cultivating dopamine and value from custom-built software. Although most of what we run is off-the-shelf OSS projects, however the extensions and close-knit integrations between them is where the magic happens. As with every hobby, running a homelab is a journey - it is never perfect, but always better than before.
+Over the last few years, I've been obsessively reading on responsible technology and information warfare. The absolute favourites in this space have been [Permanent Record](https://www.goodreads.com/book/show/46223297-permanent-record) and [Mindf*ck](https://www.goodreads.com/en/book/show/52269471). The hobby of homelabbing and having control over my own data originates somewhere around that. I had earlier [written about](/notes/firefly/) why I think Firefly-III helped me achieve the "personal" in personal finance. The joy of running a server 24x7 in your living room is mostly about cultivating dopamine and value from custom-built software. Although most of what we run is off-the-shelf OSS projects, however the extensions and close-knit integrations between them is where the magic happens. As with every hobby, running a homelab is a journey - it is never perfect, but always better than before.
 
 ## Tales of my homelab journey
 
@@ -15,19 +15,19 @@ I took my first attempt at it during my undergraduate years - it was a tiny 1GB 
 
 ### The Homelab - Bring Him Home
 
-As I was progressing in my career, organically came the need to track/juggle multiple tasks, and getting reminded of them at the right times. I found myself re-experimenting with TODO managers. With the same FOSS philosophy in mind, I wanted something that's hackable, cross-platform and nifty. Stumbling upon [Vikunja](https://vikunja.io/), I immediately knew *this* is what I needed. Again around December 2021, we went for a [Himalayan trek](/notes/himalayan-trek) Back from the mountains, we had to create a shareable (web) gallery of all our scenic photos and vlogs. DSLR and GoPro media was too big to fit on the Google Photos / Drive free plan. And that called for a better plan. It's funny to draw these connections, but these were indeed the signals of evolution. Taking opinions from my friends, we thought of going ahead with products like [Nextcloud](https://nextcloud.com/) or [Photoprism](https://www.photoprism.app/) (both of which are self-hosted photo/video sharing products). I decided that it was the time to invest into a 8GB Raspberry Pi, and migrate the DigitalOcean droplet to the Pi. Or well, you can also rephrase as - it was finally time to bring the homelab ... home.
+As I was progressing in my career, organically came the need to track/juggle multiple tasks, and getting reminded of them at the right times. I found myself re-experimenting with TODO managers. With the same FOSS philosophy in mind, I wanted something that's hackable, cross-platform and nifty. Stumbling upon [Vikunja](https://vikunja.io/), I immediately knew *this* is what I needed. Again around December 2021, we went for a [Himalayan trek](/notes/himalayan-trek/) Back from the mountains, we had to create a shareable (web) gallery of all our scenic photos and vlogs. DSLR and GoPro media was too big to fit on the Google Photos / Drive free plan. And that called for a better plan. It's funny to draw these connections, but these were indeed the signals of evolution. Taking opinions from my friends, we thought of going ahead with products like [Nextcloud](https://nextcloud.com/) or [Photoprism](https://www.photoprism.app/) (both of which are self-hosted photo/video sharing products). I decided that it was the time to invest into a 8GB Raspberry Pi, and migrate the DigitalOcean droplet to the Pi. Or well, you can also rephrase as - it was finally time to bring the homelab ... home.
 
-![Freshly plucked Raspberry Pi](/images/raspberry_pi.jpg)
+![Freshly plucked Raspberry Pi](../../assets/images/raspberry_pi.jpg)
 
 I thought I'll be able to quickly get the migration done dedicating some late nights and weekends. Also, having learnt Ansible and Infrastructure-as-Code at work, I decided to make good use of the opportunity. Conversely, *just* migrating the sphaggeti code didn't make sense in terms of future scalability - if I were to onboard other self-hosted applications into it, I'd have to craft a systematic way of deploying and maintaining. Multiple other things like SSH access (for administration) and exposing publicly had to be figured out. Back then I did have a little experience working with Kubernetes and I wasn't really bullish on it given the operational complexity. Hashicorp Nomad came to the rescue having read about [similar](https://mrkaran.dev/posts/home-server-nomad/) [setups](https://github.com/assareh/home-lab). The Tailscale team came out with their [amazingly smooth Wireguard VPN](https://tailscale.com/blog/how-tailscale-works/) product in mid-2020, and so did the Cloudflare team with [Cloudflare Tunnels](https://blog.cloudflare.com/tunnel-for-everyone/). In hindsight it does feel like the right-place, right-time - these products indeed made my life much easier! With about two weeks of hacking, I had neat subdomains ready for eight (up from three!) of my self-hosted applications. It was unbelievable that an affordable pocket Raspberry Pi had 4 vCPUs, 8GB of RAM and could run all my applications so smooth. I was initially using [UNIX Password Store](https://www.passwordstore.org/) (local) for all the deployment secrets, but with the migration to Bitwarden, GitOps (deploy on every `main` commit through GitHub Actions) was an actual thing!
 
-![Enclosed Pi server (there used to be a USB-connected HDD for persistent storage back then)](/images/raspberry_pi_server.jpg)
+![Enclosed Pi server (there used to be a USB-connected HDD for persistent storage back then)](../../assets/images/raspberry_pi_server.jpg)
 
 ### Old drawers to the rescue
 
 There's a psychological hope cycle when dealing with Raspberry Pi homeservers - first you tend to underestimate these tiny devices, then you keeping loading it with stuff and get amazed at how much it can get done. Unfortunately the last phase is the Pi struggling to keep up with your perceived overestimations. And of course, summer heat plays spoilersport. I soon realized that my CPU, and not memory requirements had overgrown the Pi. Coincidentally we had a "computer room" with multiple legacy desktops and laptops lying around - most of them outdated hardware. The curious in me wanted to repurpose some of them into a homelab multi-node cluster. But to headstart simple, I chose a Dell Latitude E6400 (my father's one-upon-a-time workstation) and went all-into the migration yet again. Migration was super simple this time except the pains of `scp`-ing the huge data directory and rebuilding some container images for AMD64 (Pi was ARM64 V8).
 
-![Dell Latitude working hard in silence right on my workstation](/images/dell_latitude_server.jpeg)
+![Dell Latitude working hard in silence right on my workstation](../../assets/images/dell_latitude_server.jpeg)
 
 The stint with the Dell Latitude as my homelab hardware was sweet yet short. The sweetness comes from the fact that laptops have batteries (and are hence tolerant to power outages) and a screen (which helps enormously for first-time & urgent debugging scenarios). Although the Intel Core2Duo was theoretically much more performant than ARM Cortex A72, decade-old hardware is ... well, decade old. I/O intensive tasks like Photoprism video transcoding, Nextcloud, Duplicati were struggling to keep up - *the two poor cores were interrupted way too much to do any useful work*. It was clear indication that I needed to invest in modern hardware.
 
@@ -39,7 +39,7 @@ Thanks to Moore's law, hardware prices deprecates faster than their effectivenes
 
 I don't claim to understand hyperthreading technology completely, but my benchmarking experiments showed impressive results. The luxury of having a lot of RAM meant the freedom to *move fast and deploy things*. Nextcloud synchronization, Photoprism image loading times, Duplicati backup durations showed prominent improvement. And with desktop-grade fans, finally I didn't have to worry about active cooling. Occasionally I celebrate the fact that my machine neither heats up the room, nor does it make any greater noise than an Apple Silicon Mac.
 
-![Humble yet powerful desktop server](/images/desktop_server.jpg)
+![Humble yet powerful desktop server](../../assets/images/desktop_server.jpg)
 
 ## What's cooking in my lab
 
@@ -47,7 +47,7 @@ If you happen to do homelabbing as a hobby, you know that there's the on-premise
 
 In case you've been wondering, I've been using Ubuntu server on both the current desktop machine, as well as the past Dell Latitude laptop. And there's the very cool [DietPi](https://dietpi.com/) which I used to run on my Raspberry Pi. On container orchestration front, I'm a fan of the simple, straightforward philosophy of Hashicorp Nomad.
 
-![An average day on the Nomad dashboard](/images/nomad_dashboard.png)
+![An average day on the Nomad dashboard](../../assets/images/nomad_dashboard.png)
 
 ## Learnings and what's next
 
@@ -59,6 +59,6 @@ In case you've been wondering, I've been using Ubuntu server on both the current
 - Running a hardware machine 24x7 isn't trivial if your residence is prone to frequent power cuts or poor broadband internet connection. In those cases, it's justified to rent out the cloud. In the long term, cost of owning hardware will balance out cost of renting equivalent hardware. Needless to say, cloud's reliability is unmatched.
 - While Ansible does work good, it doesn't honour the spirits of functional programming. I have a long term plan to re-write my IaC in something like Nix. That doesn't give me any performance / quality improvements, but improves reproducibility and confidence to experiment without fear.
 
-![Homelab meme](/images/homelab_overengineering_meme.jpg)
+![Homelab meme](../../assets/images/homelab_overengineering_meme.jpg)
 
 That's all for the writeup!

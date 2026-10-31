@@ -10,12 +10,19 @@
     "test": "playwright test",
     "strava": "node scripts/strava-sync.mjs",
     "astro": "astro",
-    "postinstall": "cd .. && git config core.hooksPath .githooks || true"
+    "postinstall": "cd .. && git config core.hooksPath .githooks || true",
+    "plates": "node scripts/render-plates.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.5",
     "@astrojs/mdx": "^8.1.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/eb-garamond": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
     "astro": "^7.4.4",
+    "photoswipe": "^5.4.4",
+    "satori": "^0.63.2",
     "sharp": "^0.35.5"
   },
   "private": true,
@@ -25,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@playwright/test": "^1.64.1",
+    "maplibre-gl": "^6.16.0",
     "typescript": "^6.0.3"
   }
 }

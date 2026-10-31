@@ -8,6 +8,8 @@ for (const screen of SCREENS) {
   test.describe(screen.name, () => {
     test.use({
       viewport: { width: screen.width, height: screen.height },
+      // The screen behind the window too: the desktop profile otherwise keeps a 1920px one.
+      screen: { width: screen.width, height: screen.height },
       isMobile: screen.isMobile,
       hasTouch: screen.isMobile,
       deviceScaleFactor: screen.deviceScaleFactor,
@@ -40,6 +42,8 @@ for (const screen of SCREENS) {
 
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  // Every screen of a long note is photographed twice, a beat apart.
+  test.setTimeout(180_000);
 
   for (const path of pages) {
     test(`${path} holds still for someone who asked for less motion`, async ({ page }) => {

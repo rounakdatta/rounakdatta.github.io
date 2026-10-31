@@ -1,0 +1,49 @@
+---
+// Several photos in a note, side by side, each opening full screen:
+//   import a from '../../assets/images/x.jpg';
+//   <Gallery photos={[{ src: a, alt: 'What it shows', caption: 'What I want to say' }, …]} />
+// Wider than the prose on a laptop, so the photos get room; one column on a phone.
+import PhotoLink from './PhotoLink.astro';
+import PhotoViewer from './PhotoViewer.astro';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+  photos: Photo[];
+}
+const { photos } = Astro.props;
+---
+
+<div class="gallery" data-gallery>
+  {photos.map((photo) => (
+    <figure>
+      <PhotoLink photo={photo} sizes="(max-width: 34rem) 100vw, 24rem" />
+      {photo.caption && <figcaption>{photo.caption}</figcaption>}
+    </figure>
+  ))}
+</div>
+<PhotoViewer />
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem;
+    margin: 1.8em 0;
+  }
+
+  .gallery figure {
+    margin: 0;
+  }
+
+  .gallery :global(.photo-link) {
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .gallery :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

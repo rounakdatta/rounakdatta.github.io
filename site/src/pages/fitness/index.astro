@@ -1,0 +1,618 @@
+---
+import { Image, Font } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import Calendar from '../../components/fitness/Calendar.astro';
+import { activities, totalsOf, km, kmWhole, kmTenths, sportOf, lastUpdated } from '../../lib/fitness';
+import { daysOf } from '../../lib/calendar';
+import { chapters, chapterOnDate, milestones, yearNotes, bests, linkFor } from '../../lib/journal';
+import { monthOfYear, spokenDate, fullDate, isoDate } from '../../lib/dates';
+import shoes from '../../assets/illustrations/shoes.png';
+import cycle from '../../assets/illustrations/cycle.png';
+import garmin from '../../assets/illustrations/garmin.png';
+
+const all = totalsOf(activities);
+const days = daysOf(activities);
+const today = isoDate(lastUpdated);
+const since = new Date(`${all.first}T00:00:00Z`);
+const years = [...new Set(activities.map((a) => Number(a.date.slice(0, 4))))].sort();
+const thisYear = years.at(-1)!;
+const yearTotals = (y: number) => totalsOf(activities.filter((a) => a.date.startsWith(String(y))));
+
+// The three lines are drawn to scale: the longest is the most kilometres, the others in proportion.
+const lines = [
+  { sport: 'Ride', metres: all.ride, words: 'ridden' },
+  { sport: 'Run', metres: all.run, words: 'run' },
+  { sport: 'Hike', metres: all.walk, words: 'walked and hiked' },
+] as const;
+const longest = Math.max(...lines.map((l) => l.metres));
+
+// Only days with something on them, for the calendar's tooltip.
+const tooltipDays = Object.fromEntries([...days].map(([date, d]) => [date, d.summary]));
+
+// A number never wraps away from its unit: each part is kept whole.
+const yearParts = (y: number) => {
+  const t = yearTotals(y);
+  return [t.run && `${km(t.run)}\u00a0km run`, t.ride && `${km(t.ride)}\u00a0km ridden`, t.walk && `${km(t.walk)}\u00a0km walked`, `${t.days}\u00a0days moving`].filter(Boolean) as string[];
+};
+const yearLabel = (y: number) => yearParts(y).join(' · ');
+
+const bestCards = [
+  bests.run && { label: 'Longest run', value: `${kmTenths(bests.run.distance)} km`, a: bests.run },
+  bests.ride && { label: 'Longest ride', value: `${kmTenths(bests.ride.distance)} km`, a: bests.ride },
+  bests.climb && { label: 'Most climbing', value: `${(bests.climb.elevation ?? 0).toLocaleString('en-GB')} m`, a: bests.climb },
+].filter(Boolean) as { label: string; value: string; a: (typeof activities)[number] }[];
+const bestMonth = bests.month;
+// A day that has a chapter is called by the chapter's title, not by its Strava label ("131R. NH366 - L F Goa").
+const titleFor = (a: (typeof activities)[number]) => chapters.find((c) => c.id === a.id)?.title ?? a.name;
+---
+
+<BaseLayout
+  title="The Fitness Project"
+  description={`${km(all.footAndBike)} km on foot and by bike since ${monthOfYear(since)}: Rounak Datta's running and riding journal, with the routes, the photos and the days in between.`}
+>
+  <Font slot="head" cssVariable="--font-hand" preload />
+
+  <header class="hero">
+    <h1>The Fitness Project</h1>
+    <p class="lede">A running and riding journal, drawn from Strava.</p>
+
+    <p class="total">
+      <span class="figure">{km(all.footAndBike)} km</span>
+      <span class="total-words">on foot and by bike since {monthOfYear(since)}</span>
+    </p>
+
+    <ul class="lines">
+      {lines.map((l) => (
+        <li style={`--share: ${l.metres / longest}`}>
+          <Icon name={l.sport} size="1.5em" />
+          <div class="track">
+            <svg class="dash" viewBox="0 0 1000 24" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 Q 500 2 998 14" /></svg>
+            <span class="line-figure"><b>{km(l.metres)} km</b> {l.words}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="updated muted">
+      {thisYear}: {km(yearTotals(thisYear).footAndBike)} km over {yearTotals(thisYear).days} days so far.
+      Updated <time datetime={isoDate(lastUpdated)}>{spokenDate(lastUpdated)}</time>.
+    </p>
+  </header>
+
+  <!--
+    Only the route being opened is named for the transition, so only it grows into its map and the
+    rest of the page simply fades: naming all seventeen made the browser photograph every one.
+    Coming back, the same route shrinks home into its square. Inline, so it is listening before
+    the page first paints.
+  -->
+  <script is:inline>
+    (() => {
+      const tile = (url) => url && document.querySelector('.shapes a[href="' + new URL(url).pathname + '"] svg');
+      addEventListener('pageswap', (event) => {
+        const el = event.viewTransition && tile(event.activation && event.activation.entry && event.activation.entry.url);
+        if (el) el.style.viewTransitionName = el.dataset.vt;
+      });
+      addEventListener('pagereveal', (event) => {
+        const from = window.navigation && navigation.activation && navigation.activation.from;
+        const el = event.viewTransition && tile(from && from.url);
+        if (!el) return;
+        el.style.viewTransitionName = el.dataset.vt;
+        event.viewTransition.finished.finally(() => (el.style.viewTransitionName = ''));
+      });
+    })();
+  </script>
+
+  <section class="places full" aria-labelledby="places">
+    <div class="section-head">
+      <h2 id="places">Places we go</h2>
+      <Image src={cycle} alt="" width={120} class="sketch" loading="lazy" />
+      <p class="muted">{chapters.length} days worth drawing. Each opens with its map, its numbers and its photos.</p>
+    </div>
+    <ul class="shapes">
+      {chapters.map((c) => (
+        <li>
+          <a href={`/fitness/${c.slug}/`}>
+            {c.plate && (
+              <svg viewBox={`0 0 ${c.plate.width} ${c.plate.height}`} aria-hidden="true" data-vt={`route-${c.slug}`}>
+                <path d={c.plate.d} />
+                {c.publicStart && <circle cx={c.plate.start[0]} cy={c.plate.start[1]} r="11" />}
+              </svg>
+            )}
+            <span class="shape-title">{c.title}</span>
+            <span class="shape-meta">{kmWhole(c.distance)} km {sportOf(c.type) === 'walk' ? 'hike' : sportOf(c.type)} · {monthOfYear(new Date(`${c.date}T00:00:00Z`))}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="journey wide" aria-labelledby="journey" data-from={all.first} data-today={today}>
+    <div class="section-head">
+      <h2 id="journey">The journey</h2>
+      <Image src={shoes} alt="" width={120} class="sketch" loading="lazy" />
+      <p class="muted">Every day since the first ride, darker for longer. A ringed day has a chapter of its own.</p>
+    </div>
+
+    <p class="legend" aria-hidden="true">
+      <span>Rest</span>
+      <svg viewBox="0 0 84 12" width="84" height="12">
+        {[0, 1, 2, 3, 4].map((l) => <rect class={`l${l}`} x={l * 17} width="12" height="12" rx="1" />)}
+      </svg>
+      <span>2 hours or more</span>
+      <svg viewBox="0 0 16 16" width="16" height="16"><rect class="ring" x="2" y="2" width="12" height="12" rx="3" /></svg>
+      <span>A chapter</span>
+    </p>
+
+    {years.map((y) => (
+      <div class="year">
+        <h3>
+          <span class="year-number">{y}</span>
+          <span class="year-sum">{yearParts(y).map((part, i) => <><span class="part">{part}</span>{i < yearParts(y).length - 1 && ' · '}</>)}</span>
+        </h3>
+        <Calendar
+          year={y}
+          days={days}
+          today={today}
+          from={all.first ?? ''}
+          milestones={milestones.filter((m) => m.year === y)}
+          note={yearNotes.find((n) => n.year === y)?.text}
+          chapters={chapterOnDate}
+          label={`${y}: ${yearLabel(y)}`}
+        />
+      </div>
+    ))}
+    <p class="tooltip" role="status" hidden></p>
+    <script type="application/json" id="calendar-days" set:html={JSON.stringify(tooltipDays)} />
+  </section>
+
+  <section class="bests" aria-labelledby="bests">
+    <div class="section-head">
+      <h2 id="bests">Bests</h2>
+      <Image src={garmin} alt="" width={110} class="sketch" loading="lazy" />
+    </div>
+    <dl>
+      {bestCards.map(({ label, value, a }) => (
+        <div>
+          <dt>{label}</dt>
+          <dd class="best-value">{value}</dd>
+          <dd class="best-when">{linkFor(a) ? <a href={linkFor(a)}>{titleFor(a)}</a> : titleFor(a)}, {fullDate(new Date(`${a.date}T00:00:00Z`))}</dd>
+        </div>
+      ))}
+      {bestMonth && (
+        <div>
+          <dt>Biggest month</dt>
+          <dd class="best-value">{km(bestMonth.metres)} km</dd>
+          <dd class="best-when">{new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${bestMonth.key}-01T00:00:00Z`))}</dd>
+        </div>
+      )}
+    </dl>
+  </section>
+
+  <p class="follow">
+    <a href="https://www.strava.com/athletes/70322649"><Icon name="strava" /> Follow along on Strava</a>
+  </p>
+</BaseLayout>
+
+<script>
+  // The calendar's tooltip: which day is under the pointer (or the finger), and what happened on it.
+  const days: Record<string, string> = JSON.parse(document.getElementById('calendar-days')?.textContent ?? '{}');
+  const journey = document.querySelector<HTMLElement>('.journey');
+  const tip = document.querySelector<HTMLElement>('.journey .tooltip');
+  const spoken = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+  function dateAt(svg: SVGSVGElement, clientX: number, clientY: number): string | null {
+    const point = new DOMPoint(clientX, clientY).matrixTransform(svg.getScreenCTM()!.inverse());
+    const { layout, left, top, step, cell, offset, rows } = svg.dataset;
+    const year = Number(svg.closest<HTMLElement>('.calendar')!.dataset.year);
+    const s = Number(step);
+    const c = Number(cell);
+    const col = Math.floor((point.x - Number(left)) / s);
+    if (col < 0 || (point.x - Number(left)) % s > c) return null;
+    let date: Date;
+    if (layout === 'weeks') {
+      const row = Math.floor((point.y - Number(top)) / s);
+      if (row < 0 || row > 6 || (point.y - Number(top)) % s > c) return null;
+      date = new Date(Date.UTC(year, 0, 1 + col * 7 + row - Number(offset)));
+    } else {
+      const ys: number[] = JSON.parse(rows ?? '[]');
+      const month = ys.findIndex((y) => point.y >= y && point.y <= y + c);
+      if (month < 0 || col > 30) return null;
+      date = new Date(Date.UTC(year, month, col + 1));
+      if (date.getUTCMonth() !== month) return null;
+    }
+    const iso = date.toISOString().slice(0, 10);
+    // A day still to come has no square, so it has nothing to say either.
+    return date.getUTCFullYear() === year && iso <= (journey?.dataset.today ?? iso) ? iso : null;
+  }
+
+  function show(event: PointerEvent) {
+    const svg = (event.target as Element).closest?.<SVGSVGElement>('.calendar svg');
+    const date = svg && dateAt(svg, event.clientX, event.clientY);
+    if (!tip || !date) {
+      if (tip) tip.hidden = true;
+      return;
+    }
+    const from = journey?.dataset.from ?? '';
+    const what = date < from ? 'before the journal began' : days[date] ?? 'rest day';
+    tip.textContent = `${spoken.format(new Date(`${date}T00:00:00Z`)).replace(',', '')} · ${what}`;
+    tip.hidden = false;
+    const box = tip.parentElement!.getBoundingClientRect();
+    const x = Math.min(Math.max(event.clientX - box.left, 8), box.width - tip.offsetWidth - 8);
+    tip.style.transform = `translate(${x}px, ${event.clientY - box.top - 44}px)`;
+  }
+
+  journey?.addEventListener('pointermove', show);
+  journey?.addEventListener('pointerdown', show);
+  journey?.addEventListener('pointerleave', () => tip && (tip.hidden = true));
+</script>
+
+<style>
+  .hero {
+    margin-bottom: 3.5em;
+  }
+
+  .lede {
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  .total {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2em 0.6em;
+    margin: 1.6em 0 1em;
+  }
+
+  .figure {
+    font-size: clamp(2.6em, 2em + 3vw, 3.6em);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .total-words {
+    color: var(--ink-muted);
+  }
+
+  .lines {
+    margin: 0 0 1em;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lines li {
+    display: grid;
+    grid-template-columns: 1.7em 1fr;
+    align-items: center;
+    gap: 0.6em;
+    margin: 0.35em 0;
+    color: var(--route);
+  }
+
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    min-width: 0;
+  }
+
+  /* Drawn to scale against the longest, leaving room for the words beside it. */
+  .dash {
+    flex: none;
+    width: calc((100% - 12.5em) * var(--share));
+    height: 1.1em;
+    overflow: visible;
+  }
+
+  /* A phone has no room beside the line, so the words go above it and the line keeps its scale. */
+  @media (max-width: 34rem) {
+    .track {
+      flex-wrap: wrap;
+      row-gap: 0;
+    }
+
+    .line-figure {
+      order: -1;
+      width: 100%;
+    }
+
+    .dash {
+      width: calc(100% * var(--share));
+    }
+  }
+
+  .dash path {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 2.4;
+    stroke-dasharray: 7 9;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .line-figure {
+    color: var(--ink-muted);
+    white-space: nowrap;
+    font-size: 0.95em;
+  }
+
+  .line-figure b {
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .updated {
+    font-size: 0.9em;
+  }
+
+  .section-head {
+    position: relative;
+    margin-bottom: 1.4em;
+  }
+
+  .section-head h2 {
+    margin: 0 0 0.2em;
+  }
+
+  .section-head p {
+    margin: 0;
+    max-width: 34em;
+  }
+
+  /* The old page scattered 28 sketches as wallpaper. Now one sits beside each section, like a stamp. */
+  .sketch {
+    position: absolute;
+    right: 0;
+    top: -0.6em;
+    width: 5.5em;
+    height: auto;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sketch {
+      filter: invert(1);
+      opacity: 0.35;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .sketch {
+      width: 4em;
+      top: -0.2em;
+    }
+  }
+
+  /* ---------- Places ---------- */
+
+  .places {
+    display: grid;
+    grid-template-columns: subgrid;
+    margin-bottom: 4em;
+  }
+
+  .places > * {
+    grid-column: content;
+  }
+
+  .places > .shapes {
+    grid-column: wide;
+  }
+
+  .shapes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 2em 1.5em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shapes a {
+    display: grid;
+    gap: 0.15em;
+    text-decoration: none;
+  }
+
+  .shapes svg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .shapes path {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .shapes circle {
+    fill: var(--paper);
+    stroke: var(--route);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .shapes a:hover path {
+    stroke-width: 3.4;
+  }
+
+  .shape-title {
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .shapes a:hover .shape-title {
+    color: var(--accent);
+  }
+
+  .shape-meta {
+    color: var(--ink-muted);
+    font-size: 0.88em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  @media (max-width: 34rem) {
+    .shapes {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5em 1em;
+    }
+  }
+
+  /* ---------- Journey ---------- */
+
+  .journey {
+    position: relative;
+    margin-bottom: 4em;
+  }
+
+  .journey .section-head,
+  .legend {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em 0.6em;
+    margin-bottom: 1.5em;
+    font-size: 0.85em;
+    color: var(--ink-muted);
+  }
+
+  .legend svg + span + svg {
+    margin-left: 1em;
+  }
+
+  .legend .l0 { fill: var(--rule); }
+  .legend .l1 { fill: color-mix(in oklab, var(--route) 24%, var(--paper)); }
+  .legend .l2 { fill: color-mix(in oklab, var(--route) 46%, var(--paper)); }
+  .legend .l3 { fill: color-mix(in oklab, var(--route) 72%, var(--paper)); }
+  .legend .l4 { fill: var(--route); }
+  .legend .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+
+  .year {
+    margin: 0 auto 2.2em;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .year h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1em 0.75em;
+    margin: 0 0 0.4em 30px;
+    font-size: 1em;
+  }
+
+  .year-number {
+    font-size: 1.25em;
+    font-variant-numeric: lining-nums;
+  }
+
+  .year-sum .part {
+    white-space: nowrap;
+  }
+
+  .year-sum {
+    font-weight: 400;
+    font-size: 0.85em;
+    color: var(--ink-muted);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  @media (max-width: 40rem) {
+    .year {
+      width: auto;
+    }
+
+    .year h3 {
+      margin-left: 0;
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0.3em 0.7em;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.82em;
+    white-space: nowrap;
+    pointer-events: none;
+    font-variant-numeric: lining-nums;
+    z-index: 2;
+  }
+
+  /* ---------- Bests ---------- */
+
+  .bests dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5em 2em;
+    margin: 0;
+  }
+
+  .bests dt {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+  }
+
+  .bests dd {
+    margin: 0;
+  }
+
+  .best-value {
+    font-size: 1.7em;
+    font-weight: 600;
+    line-height: 1.2;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .best-when {
+    color: var(--ink-muted);
+    font-size: 0.9em;
+  }
+
+  .follow {
+    margin-top: 3.5em;
+    text-align: center;
+  }
+
+  .follow a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.5em 1.1em;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    text-decoration: none;
+  }
+
+  .follow a:hover {
+    border-color: var(--route);
+    color: var(--route);
+  }
+
+  .follow :global(.icon) {
+    color: var(--route);
+  }
+</style>

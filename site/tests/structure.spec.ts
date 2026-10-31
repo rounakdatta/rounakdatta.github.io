@@ -1,6 +1,6 @@
 // Checks that need no browser: they read the built HTML the way a crawler or a link preview would.
 import { test, expect } from '@playwright/test';
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { builtPages, referencedUrls, DIST, SITE } from './site';
 
@@ -12,7 +12,8 @@ function fileFor(pathname: string): string | null {
   const candidates = clean.endsWith('/')
     ? [join(DIST, clean, 'index.html')]
     : [join(DIST, clean), join(DIST, clean, 'index.html'), join(DIST, `${clean}.html`)];
-  return candidates.find((c) => existsSync(c)) ?? null;
+  // A directory is not a page: only a file counts as somewhere a link can land.
+  return candidates.find((c) => existsSync(c) && statSync(c).isFile()) ?? null;
 }
 
 test('the site was built before testing it', () => {
@@ -31,7 +32,10 @@ for (const [path, html] of pages) {
         if (id && !html.includes(`id="${id}"`)) broken.push(raw);
         continue;
       }
-      if (!fileFor(url.pathname)) broken.push(raw);
+      const file = fileFor(url.pathname);
+      if (!file) broken.push(raw);
+      // Pages answers /notes/x with a 301 to /notes/x/: a wasted round trip on every click.
+      else if (!url.pathname.endsWith('/') && file.endsWith('index.html')) broken.push(`${raw} (redirects; add the trailing slash)`);
     }
     expect(broken, 'these go nowhere').toEqual([]);
   });
