@@ -1,0 +1,62 @@
+# Keeps the fitness journal current: every Monday, pull new activities (and any new chapter's route,
+# photos and map plates) from Strava, commit them, and redeploy.
+#
+# Idle until three repository secrets exist, from a Strava API app (strava.com/settings/api):
+# STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET and STRAVA_REFRESH_TOKEN. Authorise the token with the
+# activity:read scope, not read_all: then Strava itself applies your privacy zones to the routes
+# and leaves "Only You" activities out.
+name: Strava
+
+on:
+  schedule:
+    - cron: '30 1 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      HAS_STRAVA: ${{ secrets.STRAVA_REFRESH_TOKEN != '' }}
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - if: env.HAS_STRAVA != 'true'
+        run: echo "No Strava secrets yet; nothing to do." && exit 0
+        working-directory: .
+
+      - if: env.HAS_STRAVA == 'true'
+        uses: actions/checkout@v7
+
+      - if: env.HAS_STRAVA == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - if: env.HAS_STRAVA == 'true'
+        run: npm ci && npx playwright install --with-deps chromium
+
+      - if: env.HAS_STRAVA == 'true'
+        run: npm run strava && npm run plates -- --missing
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+
+      # A push made with this workflow's token does not start other workflows, so ask for the deploy.
+      - if: env.HAS_STRAVA == 'true'
+        run: |
+          git add -A src/data src/assets/fitness
+          if git diff --cached --quiet; then echo "Nothing new on Strava."; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Fitness journal: sync from Strava"
+          git push
+          gh workflow run site.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}

@@ -37,7 +37,7 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: site/node_modules/.astro
-          key: astro-${{ hashFiles('site/src/**/*.{jpg,jpeg,png,webp,avif}') }}
+          key: astro-${{ hashFiles('site/src/**/*.jpg', 'site/src/**/*.jpeg', 'site/src/**/*.png', 'site/src/**/*.webp') }}
           restore-keys: astro-
 
       - run: npm run check
