@@ -12,38 +12,36 @@
     ],
     "slug": "khopra-ridge-trek",
     "title": "Khopra Ridge Trek",
-    "tagline": "",
-    "publicStart": true
+    "tagline": "Six days of ridge walking. Tempo Fuel ftw!",
+    "publicStart": true,
+    "place": "Annapurna region, Nepal"
   },
   {
     "id": 19983617153,
     "slug": "california-madness",
     "title": "California Madness",
-    "tagline": ""
-  },
-  {
-    "id": 19859164879,
-    "slug": "san-francisco-hills",
-    "title": "San Francisco Hills",
-    "tagline": ""
+    "tagline": "The most brutal climbs I've ever done, through deep forests",
+    "place": "San Francisco Peninsula, California"
   },
   {
     "id": 19785645009,
-    "slug": "san-francisco-half",
-    "title": "San Francisco Half",
-    "tagline": ""
+    "slug": "golden-gate-half",
+    "title": "Golden Gate Half",
+    "tagline": "Hi to Karl the Fog",
+    "place": "San Francisco, California"
   },
   {
     "id": 19688013511,
-    "slug": "chicago-ride",
-    "title": "Chicago Ride",
-    "tagline": ""
+    "slug": "north-branch-trail",
+    "title": "North Branch Trail",
+    "tagline": "North Branch Trail has my heart",
+    "place": "Chicago"
   },
   {
     "id": 19217800422,
     "slug": "al-qudra-cycling",
     "title": "Al Qudra Cycling",
-    "tagline": "",
+    "tagline": "Roads to nowhere & mirages",
     "publicStart": true,
     "place": "Al Qudra, Dubai"
   },
@@ -51,43 +49,40 @@
     "id": 18805836550,
     "slug": "tenginkallu-day-hike",
     "title": "Tenginkallu Day Hike",
-    "tagline": ""
+    "tagline": "Lyric & friends"
   },
   {
     "id": 18524058264,
-    "slug": "hilly-22k",
-    "title": "Hilly 22K",
-    "tagline": ""
+    "slug": "nandi-hills-22k",
+    "title": "Nandi Hills 22K",
+    "tagline": "The word of the town is Tempo Fuel",
+    "place": "Nandi Hills, Karnataka"
   },
   {
     "id": 18359015001,
     "slug": "dawn-to-dusk-ride",
     "title": "Dawn to Dusk Ride",
-    "tagline": ""
-  },
-  {
-    "id": 17537310549,
-    "slug": "fastest-half-2026",
-    "title": "Fastest Half of 2026",
-    "tagline": ""
+    "tagline": "The uphill detours will continue until fitness improves"
   },
   {
     "id": 18166488802,
     "slug": "oduba-group-cycling",
     "title": "Oduba Group Cycling",
-    "tagline": ""
+    "tagline": "Sakkath start to Sunday"
   },
   {
     "id": 20068151658,
-    "slug": "singapore-15k",
-    "title": "Singapore 15K",
-    "tagline": ""
+    "slug": "marina-bay-at-dawn",
+    "title": "Marina Bay at Dawn",
+    "tagline": "A dawn loop: Merlion, Helix Bridge, Marina Barrage",
+    "place": "Singapore"
   },
   {
     "id": 18087187296,
-    "slug": "hyrox",
-    "title": "HYROX",
-    "tagline": ""
+    "slug": "hyrox-bengaluru",
+    "title": "HYROX Bengaluru",
+    "tagline": "Teamwork makes the dream work",
+    "place": "Bengaluru, Karnataka"
   },
   {
     "id": 16851037597,
