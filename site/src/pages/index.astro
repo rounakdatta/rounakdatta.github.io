@@ -1,19 +1,11 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { Content as Intro } from '../content/home/intro.md';
 import { Content as Story } from '../content/home/story.md';
 import profile from '../assets/images/profile.jpeg';
-import { publishedNotes } from '../lib/notes';
-import { activities, totalsOf, km } from '../lib/fitness';
-import { monthOfYear } from '../lib/dates';
 import { SITE, ELSEWHERE } from '../lib/site';
-
-const latestNote = (await publishedNotes())[0];
-const latestAlbum = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order)[0];
-const moving = totalsOf(activities);
 
 // Structured data so a search engine knows whose site this is.
 const person = {
@@ -34,7 +26,7 @@ const person = {
     <div class="portrait">
       <div class="frame">
         <Image src={profile} alt="Rounak, smiling, in front of a weathered wooden door" width={140} height={140} layout="fixed" priority class="photo" />
-        <span class="rickshaw" aria-hidden="true"><Icon name="rickshaw" size="1.35em" /></span>
+        <span class="rickshaw" aria-hidden="true">🛺</span>
       </div>
       <p class="place"><Icon name="map-pin" /> Bengaluru</p>
     </div>
@@ -43,30 +35,6 @@ const person = {
     </div>
   </section>
 
-  <section class="lately" aria-labelledby="lately">
-    <h2 id="lately" class="label">Lately</h2>
-    <ul>
-      {latestNote && (
-        <li>
-          <span class="kind">Writing</span>
-          <a href={`/notes/${latestNote.id}/`}>{latestNote.data.title}</a>
-          <time class="when" datetime={latestNote.data.date.toISOString()}>{monthOfYear(latestNote.data.date)}</time>
-        </li>
-      )}
-      {latestAlbum && (
-        <li>
-          <span class="kind">Photos</span>
-          <a href={`/photos/${latestAlbum.id}/`}>{latestAlbum.data.title}</a>
-          <span class="when">{latestAlbum.data.photos.length} photos</span>
-        </li>
-      )}
-      <li>
-        <span class="kind">Moving</span>
-        <a href="/fitness/">{km(moving.footAndBike)} km on foot and by bike</a>
-        <span class="when">since {monthOfYear(new Date(`${moving.first}T00:00:00Z`))}</span>
-      </li>
-    </ul>
-  </section>
 
   <div class="story prose">
     <Story />
@@ -100,32 +68,16 @@ const person = {
     object-fit: cover;
   }
 
-  /* The rickshaw parks at nine o'clock. Hover the photo and it drives one lap round it. */
+  /* The rickshaw parks at nine o'clock. The emoji faces left; turned a quarter it heads down. */
   .rickshaw {
     position: absolute;
-    inset: 0;
-    color: var(--ink-muted);
-    offset-path: circle(80px at 70px 70px);
-    offset-distance: 50%;
-    offset-rotate: auto;
-    width: 1.35em;
-    height: 1.35em;
+    top: 70px;
+    left: -28px;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 1.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
     pointer-events: none;
-  }
-
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .frame:hover .rickshaw {
-      animation: lap 2.4s var(--ease-out);
-    }
-  }
-
-  @keyframes lap {
-    from {
-      offset-distance: 50%;
-    }
-    to {
-      offset-distance: 150%;
-    }
   }
 
   .place {
@@ -139,48 +91,11 @@ const person = {
     margin-bottom: 0;
   }
 
-  .lately {
-    margin: 0 0 2.4rem;
-    padding: 0.9rem 0 1rem;
-    border-block: 1px solid var(--rule);
-  }
-
-  .lately h2 {
-    margin: 0 0 0.4rem;
-    font-size: 0.9em;
-  }
-
-  .lately ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .lately li {
-    display: grid;
-    grid-template-columns: 5.5em 1fr auto;
-    align-items: baseline;
-    gap: 0.75em;
-    margin: 0.35em 0;
-  }
-
-  .kind {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.05em;
-    color: var(--ink-muted);
-  }
-
-  .when {
-    color: var(--ink-muted);
-    font-size: 0.9em;
-    white-space: nowrap;
-  }
-
   .story :global(h2) {
     font-size: 1.15em;
   }
 
-  /* A phone stacks the photo over the words, and each "lately" line over its label. */
+  /* A phone stacks the photo over the words. */
   @media (max-width: 34rem) {
     .intro {
       flex-direction: column;
@@ -190,16 +105,6 @@ const person = {
 
     .portrait {
       align-self: center;
-    }
-
-    .lately li {
-      grid-template-columns: 1fr auto;
-      row-gap: 0;
-    }
-
-    .kind {
-      grid-column: 1 / -1;
-      font-size: 0.85em;
     }
   }
 </style>

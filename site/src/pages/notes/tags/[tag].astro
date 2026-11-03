@@ -26,9 +26,7 @@ const count = notes.length === 1 ? 'One note' : `${notes.length} notes`;
 <BaseLayout title={`Notes on ${name}`} description={`${count} by Rounak Datta tagged “${name}”.`}>
   <p class="label crumb"><a href="/notes/">Notes</a> / tagged</p>
   <h1>{name}</h1>
-  <p class="muted">{count}.</p>
   <NoteList notes={notes} />
-  <p class="back"><a href="/notes/">All notes</a></p>
 </BaseLayout>
 
 <style>
@@ -42,9 +40,5 @@ const count = notes.length === 1 ? 'One note' : `${notes.length} notes`;
 
   h1 {
     margin-bottom: 0.2em;
-  }
-
-  .back {
-    margin-top: 2em;
   }
 </style>

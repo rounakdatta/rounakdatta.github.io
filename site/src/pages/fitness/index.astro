@@ -1,573 +1,1240 @@
 ---
-import { Image, Font } from 'astro:assets';
+import { getImage, Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import Calendar from '../../components/fitness/Calendar.astro';
-import { activities, totalsOf, km, kmWhole, kmTenths, sportOf, sportIcon, lastUpdated } from '../../lib/fitness';
+import { activities, totalsOf, km, kmTenths, sportIcon, lastUpdated } from '../../lib/fitness';
 import { daysOf } from '../../lib/calendar';
 import { compactPath } from '../../lib/routes';
-import { chapters, chapterOnDate, chapterOf, milestones, yearNotes, bests, linkFor } from '../../lib/journal';
-import { monthOfYear, spokenDate, fullDate, isoDate } from '../../lib/dates';
-import shoes from '../../assets/illustrations/shoes.png';
-import cycle from '../../assets/illustrations/cycle.png';
-import garmin from '../../assets/illustrations/garmin.png';
+import { placePolaroids, pointsOf, along, coverage, type Point } from '../../lib/polaroids';
+import { chapters, milestones, yearNotes, type Chapter } from '../../lib/journal';
+import { monthOfYear, isoDate } from '../../lib/dates';
 
 const all = totalsOf(activities);
 const days = daysOf(activities);
 const today = isoDate(lastUpdated);
-const since = new Date(`${all.first}T00:00:00Z`);
 const years = [...new Set(activities.map((a) => Number(a.date.slice(0, 4))))].sort();
-const thisYear = years.at(-1)!;
-const yearTotals = (y: number) => totalsOf(activities.filter((a) => a.date.startsWith(String(y))));
-
-// The three lines are drawn to scale: the longest is the most kilometres, the others in proportion.
-const lines = [
-  { sport: 'Ride', metres: all.ride, words: 'ridden' },
-  { sport: 'Run', metres: all.run, words: 'run' },
-  { sport: 'Hike', metres: all.walk, words: 'walked and hiked' },
-] as const;
-const longest = Math.max(...lines.map((l) => l.metres));
-
-// Only days with something on them, for the calendar's tooltip.
 const tooltipDays = Object.fromEntries([...days].map(([date, d]) => [date, d.summary]));
+// The runner and the rider at the start of the two arcs (Phosphor's filled icons, drawn inline).
+const RUNNER = 'M120,56a32,32,0,1,1,32,32A32,32,0,0,1,120,56Zm103.28,74.08a8,8,0,0,0-10.6-4c-.25.12-26.71,10.72-72.18-20.19-52.29-35.54-88-7.77-89.51-6.57a8,8,0,1,0,10,12.48c.26-.21,25.12-19.5,64.07,3.27-4.25,13.35-12.76,31.82-25.25,47-18.56,22.48-41.11,32.56-67,30A8,8,0,0,0,31.2,208a92.29,92.29,0,0,0,9.34.47c27.38,0,52-12.38,71.63-36.18.57-.69,1.14-1.4,1.69-2.1C133.31,175.29,168,190.3,168,232a8,8,0,0,0,16,0c0-24.65-10.08-45.35-29.15-59.86a104.29,104.29,0,0,0-31.31-15.81A169.31,169.31,0,0,0,139,124c26.14,16.09,46.84,20,60.69,20,12.18,0,19.06-3,19.67-3.28A8,8,0,0,0,223.28,130.08Z';
+const RIDER = 'M54.46,164.71,82.33,126.5a48,48,0,1,1-12.92-9.44L41.54,155.29a8,8,0,1,0,12.92,9.42ZM208,112a47.81,47.81,0,0,0-16.93,3.09L214.91,156A8,8,0,1,1,201.09,164l-23.83-40.86A48,48,0,1,0,208,112ZM165.93,72H192a8,8,0,0,1,8,8,8,8,0,0,0,16,0,24,24,0,0,0-24-24H152a8,8,0,0,0-6.91,12l11.65,20H99.26L82.91,60A8,8,0,0,0,76,56H48a8,8,0,0,0,0,16H71.41L85.12,95.51,69.41,117.06a47.87,47.87,0,0,1,12.92,9.44l11.59-15.9L125.09,164A8,8,0,1,0,138.91,156l-30.32-52h57.48l11.19,19.17a48.11,48.11,0,0,1,13.81-8.08Z';
 
-// A number never wraps away from its unit: each part is kept whole.
-const yearParts = (y: number) => {
-  const t = yearTotals(y);
-  return [t.run && `${km(t.run)}\u00a0km run`, t.ride && `${km(t.ride)}\u00a0km ridden`, t.walk && `${km(t.walk)}\u00a0km walked`, `${t.days}\u00a0days moving`].filter(Boolean) as string[];
+// ---------- The cards ----------
+
+// One map, two shapes: landscape on wide screens, portrait on phones, each with its own drawing.
+const WIDE = { width: 1200, height: 800 };
+const TALL = { width: 900, height: 1000 };
+// A polaroid is 23% of the map's width on a wide screen and 30% on a phone; in each map's own
+// units that is the footprint the group is laid out with.
+const PRINT_WIDE = { width: 276, height: 240 };
+const PRINT_TALL = { width: 270, height: 234 };
+const MAX_WIDE = 5;
+const MAX_TALL = 4;
+
+// Maps are flat colour: WebP at 72 holds them as well as AVIF does, and encodes far faster.
+const plateSet = async (image: ImageMetadata, widths: number[]) => {
+  const all = await Promise.all(widths.map((width) => getImage({ src: image, width, format: 'webp', quality: 72 })));
+  return { src: all[1].src, srcset: all.map((v, i) => `${v.src} ${widths[i]}w`).join(', ') };
 };
-const yearLabel = (y: number) => yearParts(y).join(' · ');
 
-const bestCards = [
-  bests.run && { label: 'Longest run', value: `${kmTenths(bests.run.distance)} km`, a: bests.run },
-  bests.ride && { label: 'Longest ride', value: `${kmTenths(bests.ride.distance)} km`, a: bests.ride },
-  bests.climb && { label: 'Most climbing', value: `${(bests.climb.elevation ?? 0).toLocaleString('en-GB')} m`, a: bests.climb },
-].filter(Boolean) as { label: string; value: string; a: (typeof activities)[number] }[];
-const bestMonth = bests.month;
-const hoursAndMinutes = (seconds: number) => {
+const thumbnail = async (image: ImageMetadata) => {
+  const widths = [240, 480, 800].filter((w) => w <= image.width);
+  const all = await Promise.all(widths.map((width) => getImage({ src: image, width, height: Math.round(width * 0.75), fit: 'cover', format: 'avif', quality: 60 })));
+  return { src: all[0].src, srcset: all.map((v, i) => `${v.src} ${widths[i]}w`).join(', ') };
+};
+
+const twelveHour = (hhmm: string) => {
+  const [h, m] = hhmm.split(':').map(Number);
+  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+};
+
+const duration = (seconds: number) => {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   return h ? `${h} h ${m} min` : `${m} min`;
 };
-// A day that has a chapter is called by the chapter's title, not by its Strava label ("131R. NH366 - L F Goa").
-const titleFor = (a: (typeof activities)[number]) => chapterOf(a.id)?.title ?? a.name;
+
+const cards = await Promise.all(
+  chapters.map(async (c: Chapter, i) => {
+    const wideRoute = c.plate ? along(pointsOf(c.plate.d), 6) : [];
+    const tallRoute = c.plateTall ? along(pointsOf(c.plateTall.d), 6) : [];
+    const shown = c.photos.slice(0, MAX_WIDE);
+    const wideSlots = placePolaroids(wideRoute, shown.length, { frame: WIDE, size: PRINT_WIDE });
+    const tallSlots = placePolaroids(tallRoute, Math.min(shown.length, MAX_TALL), { frame: TALL, size: PRINT_TALL, centre: { x: 0.5, y: 0.45 } });
+    // What the photos hide of the route, reported on the card, so a test can tell "placed well" from "never placed".
+    const hidden = coverage(wideRoute, wideSlots.map((s) => [s.x * WIDE.width, s.y * WIDE.height] as Point), PRINT_WIDE);
+    return {
+      c,
+      first: i === 0,
+      side: i % 2 === 0 ? 'odd' : 'even',
+      plates: c.plates && {
+        light: await plateSet(c.plates.light, [600, 900, 1200]),
+        dark: await plateSet(c.plates.dark, [600, 900, 1200]),
+        // A phone's map spans the screen: 800 covers a 400px-wide phone at 2×.
+        tallLight: await plateSet(c.plates.tallLight, [500, 800, 960]),
+        tallDark: await plateSet(c.plates.tallDark, [500, 800, 960]),
+      },
+      wide: c.plate ? compactPath(c.plate.d, 0.8) : '',
+      tall: c.plateTall ? compactPath(c.plateTall.d, 0.8) : '',
+      photos: await Promise.all(
+        shown.map(async (src, k) => ({ ...(await thumbnail(src)), wide: wideSlots[k], tall: tallSlots[k] })),
+      ),
+      hidden: Math.round(hidden * 100),
+      month: new Date(`${c.date}T00:00:00Z`).toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' }),
+      year: c.date.slice(0, 4),
+      start: twelveHour(c.startTime),
+      meta: [c.place, c.distance > 0 && `${kmTenths(c.distance)} km`, c.days.length > 1 ? `${c.days.length} days` : duration(c.movingTime)].filter(Boolean) as string[],
+    };
+  }),
+);
+
+// ---------- The sketches in the margins ----------
+
+const drawings = import.meta.glob<ImageMetadata>('../../assets/illustrations/*.png', { eager: true, import: 'default' });
+const sketch = (name: string) => drawings[`../../assets/illustrations/${name}.png`];
+const LEFT = ['bottle', 'filter_coffee', 'cycle', 'dosa', 'alarm', 'kudos', 'helmet', 'shoes', 'garmin', 'strava', 'socks', 'cap', 'arm_sleeve', 'cycle_bell'];
+const RIGHT = ['sunscreen', 'socks', 'helmet', 'shoes', 'filter_coffee', 'dosa', 'garmin', 'strava', 'cycle', 'kudos', 'arm_sleeve', 'cap', 'alarm', 'cycle_bell'];
+const TILT_L = [-12, 18, -8, 22, -15, 10, -20, 15, -10, 8, -18, 25, -5, 12];
+const TILT_R = [15, -22, 8, -18, 12, -25, 20, -12, 5, -15, 18, -8, 22, -20];
+const NUDGE_L = [20, 40, 15, 50, 25, 35, 20, 45, 30, 15, 50, 25, 40, 20];
+const NUDGE_R = [25, 40, 15, 50, 30, 20, 45, 25, 35, 15, 50, 30, 20, 40];
+const thumbs = Object.fromEntries(
+  await Promise.all(
+    [...new Set([...LEFT, ...RIGHT])].map(async (name) => {
+      const widths = [200, 320];
+      const set = await Promise.all(widths.map((width) => getImage({ src: sketch(name), width, format: 'webp', quality: 70 })));
+      return [name, { src: set[1].src, srcset: set.map((v, i) => `${v.src} ${widths[i]}w`).join(', ') }];
+    }),
+  ),
+);
+const sketches = [
+  ...LEFT.map((name, i) => ({ name, side: 'left', top: i * 7, nudge: NUDGE_L[i], tilt: TILT_L[i] })),
+  ...RIGHT.map((name, i) => ({ name, side: 'right', top: 3 + i * 7, nudge: NUDGE_R[i], tilt: TILT_R[i] })),
+];
 ---
 
 <BaseLayout
   title="The Fitness Project"
-  description={`${km(all.footAndBike)} km on foot and by bike since ${monthOfYear(since)}: Rounak Datta's running and riding journal, with the routes, the photos and the days in between.`}
+  description={`${km(all.footAndBike)} km on foot and by bike since ${monthOfYear(new Date(`${all.first}T00:00:00Z`))}: Rounak Datta's running and riding journal, with the routes, the photos and the days in between.`}
 >
-  <Font slot="head" cssVariable="--font-hand" preload />
-
-  <header class="hero">
-    <h1>The Fitness Project</h1>
-    <p class="lede">A running and riding journal, drawn from Strava.</p>
-
-    <p class="total">
-      <span class="figure">{km(all.footAndBike)} km</span>
-      <span class="total-words">on foot and by bike since {monthOfYear(since)}</span>
-    </p>
-
-    <ul class="lines">
-      {lines.map((l) => (
-        <li style={`--share: ${l.metres / longest}`}>
-          <Icon name={l.sport} size="1.5em" />
-          <div class="track">
-            <svg class="dash" viewBox="0 0 1000 24" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 Q 500 2 998 14" /></svg>
-            <span class="line-figure"><b>{km(l.metres)} km</b> {l.words}</span>
-          </div>
-        </li>
-      ))}
-    </ul>
-
-    <p class="updated muted">
-      {thisYear}: {km(yearTotals(thisYear).footAndBike)} km over {yearTotals(thisYear).days} days so far.
-      Updated <time datetime={isoDate(lastUpdated)}>{spokenDate(lastUpdated)}</time>.
-    </p>
-  </header>
-
-  <!--
-    Only the route being opened is named for the transition, so only it grows into its map and the
-    rest of the page simply fades: naming all seventeen made the browser photograph every one.
-    Coming back, the same route shrinks home into its square. Inline, so it is listening before
-    the page first paints.
-  -->
-  <script is:inline>
-    (() => {
-      const tile = (url) => url && document.querySelector('.shapes a[href="' + new URL(url).pathname + '"] svg');
-      addEventListener('pageswap', (event) => {
-        const el = event.viewTransition && tile(event.activation && event.activation.entry && event.activation.entry.url);
-        if (el) el.style.viewTransitionName = el.dataset.vt;
-      });
-      addEventListener('pagereveal', (event) => {
-        const from = window.navigation && navigation.activation && navigation.activation.from;
-        const el = event.viewTransition && tile(from && from.url);
-        if (!el) return;
-        el.style.viewTransitionName = el.dataset.vt;
-        event.viewTransition.finished.finally(() => (el.style.viewTransitionName = ''));
-      });
-    })();
+  <Font slot="head" cssVariable="--font-hand" />
+  <!-- Before the first paint: if motion is welcome, the cards start undrawn and play as they arrive. -->
+  <script is:inline slot="head">
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
   </script>
 
+  <div class="sketches" aria-hidden="true">
+    {sketches.map((s) => (
+      <img
+        src={thumbs[s.name].src}
+        srcset={thumbs[s.name].srcset}
+        sizes="(max-width: 40rem) 110px, clamp(180px, 16vw, 320px)"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        class={`sketch ${s.side}`}
+        style={`top: ${s.top}%; --nudge: ${s.nudge}px; --tilt: ${s.tilt}deg`}
+      />
+    ))}
+  </div>
+
+  <h1 class="title">The Fitness Project</h1>
+
+  <div class="journey full" role="img" aria-label={`${km(all.run)} km of running and ${km(all.ride)} km of cycling`}>
+    <svg class="arcs wide-arcs" viewBox="0 0 1000 180" aria-hidden="true">
+      <path class="arc" d="M 50 70 Q 500 10 950 70" />
+      <path class="figure-icon" transform="translate(18, 43) scale(0.14)" d={RUNNER} />
+      <g transform="translate(950, 70) rotate(8)">
+        <text x="10" y="-6" class="figure">{km(all.run)}</text>
+        <text x="10" y="10" class="unit">kms of running</text>
+      </g>
+      <path class="arc" d="M 50 140 Q 500 80 950 140" />
+      <path class="figure-icon" transform="translate(15, 108) scale(0.14)" d={RIDER} />
+      <g transform="translate(950, 140) rotate(8)">
+        <text x="10" y="-6" class="figure">{km(all.ride)}</text>
+        <text x="10" y="10" class="unit">kms of cycling</text>
+      </g>
+    </svg>
+    <svg class="arcs narrow-arcs" viewBox="0 0 500 160" aria-hidden="true">
+      <path class="arc" d="M 70 55 Q 250 15 380 55" />
+      <path class="figure-icon" transform="translate(38, 30) scale(0.12)" d={RUNNER} />
+      <text x="388" y="50" class="figure">{km(all.run)}</text>
+      <text x="388" y="64" class="unit">kms of running</text>
+      <path class="arc" d="M 70 115 Q 250 75 380 115" />
+      <path class="figure-icon" transform="translate(36, 88) scale(0.12)" d={RIDER} />
+      <text x="388" y="110" class="figure">{km(all.ride)}</text>
+      <text x="388" y="124" class="unit">kms of cycling</text>
+    </svg>
+  </div>
+
   <section class="places full" aria-labelledby="places">
-    <div class="section-head">
-      <h2 id="places">Places we go</h2>
-      <Image src={cycle} alt="" width={120} class="sketch" loading="lazy" />
-      <p class="muted">Days worth a page of their own.</p>
-    </div>
-    <ul class="shapes">
-      {chapters.map((c) => (
-        <li>
-          <a href={`/fitness/${c.slug}/`}>
-            {!c.plate && (
-              // A day with no route (an indoor race) shows what it was, drawn, where the route would be.
-              <span class="no-route" aria-hidden="true"><Icon name={sportIcon(c.type)} size="2.6em" /></span>
-            )}
-            {c.plate && (
-              <svg viewBox={`0 0 ${c.plate.width} ${c.plate.height}`} aria-hidden="true" data-vt={`route-${c.slug}`}>
-                <path d={compactPath(c.plate.d, 3)} />
-                {c.publicStart && <circle cx={c.plate.start[0]} cy={c.plate.start[1]} r="11" />}
-              </svg>
-            )}
-            <span class="shape-title">{c.title}</span>
-            <span class="shape-meta">{c.distance > 0 ? `${kmWhole(c.distance)} km ${c.type === 'Hike' ? 'hike' : sportOf(c.type)}` : hoursAndMinutes(c.movingTime)}{c.days.length > 1 && ` over ${c.days.length} days`} · {monthOfYear(new Date(`${c.date}T00:00:00Z`))}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <h2 id="places" class="section-title">Places we go</h2>
+
+    {cards.map(({ c, first, side, plates, wide, tall, photos, hidden, month, year, start, meta }) => (
+      <article class:list={['place', side]} id={c.slug} aria-labelledby={`t-${c.slug}`}>
+        <header class="place-head">
+          <span class="sport"><Icon name={sportIcon(c.type)} size="2.6rem" /></span>
+          <div>
+            <h3 id={`t-${c.slug}`} class="place-title">{c.title}</h3>
+            {c.tagline && <p class="tagline">{c.tagline}</p>}
+          </div>
+        </header>
+        <p class="sticker" aria-hidden="true"><span class="sticker-month">{month}</span><span class="sticker-year">{year}</span></p>
+
+        <div class="card" data-hidden={hidden}>
+          <div class="ground">
+          {plates ? (
+            <picture class="plate">
+              <source media="(max-width: 40rem) and (prefers-color-scheme: dark)" srcset={plates.tallDark.srcset} sizes="100vw" />
+              <source media="(max-width: 40rem)" srcset={plates.tallLight.srcset} sizes="100vw" />
+              <source media="(prefers-color-scheme: dark)" srcset={plates.dark.srcset} sizes="(max-width: 56rem) 100vw, 760px" />
+              <img
+                src={plates.light.src}
+                srcset={plates.light.srcset}
+                sizes="(max-width: 56rem) 100vw, 760px"
+                alt=""
+                width={WIDE.width}
+                height={WIDE.height}
+                loading={first ? 'eager' : 'lazy'}
+                fetchpriority={first ? 'high' : undefined}
+                decoding="async"
+              />
+            </picture>
+          ) : (
+            <div class="plate blank" aria-hidden="true"></div>
+          )}
+
+          {wide && (
+            <svg class="route wide" viewBox={`0 0 ${WIDE.width} ${WIDE.height}`} role="img" aria-label={`The route of ${c.title}`}>
+              <path class="casing" d={wide} pathLength="1" />
+              <path class="line" id={`r-${c.slug}-w`} d={wide} pathLength="1" />
+              <path class="marker" d="M11 0L-8 7L-4 0L-8-7Z">
+                <animateMotion begin="indefinite" dur="2.4s" fill="freeze" rotate="auto" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines="0.45 0 0.25 1">
+                  <mpath href={`#r-${c.slug}-w`} />
+                </animateMotion>
+              </path>
+            </svg>
+          )}
+          {tall && (
+            <svg class="route tall" viewBox={`0 0 ${TALL.width} ${TALL.height}`} role="img" aria-label={`The route of ${c.title}`}>
+              <path class="casing" d={tall} pathLength="1" />
+              <path class="line" id={`r-${c.slug}-t`} d={tall} pathLength="1" />
+              <path class="marker" d="M11 0L-8 7L-4 0L-8-7Z">
+                <animateMotion begin="indefinite" dur="2.4s" fill="freeze" rotate="auto" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines="0.45 0 0.25 1">
+                  <mpath href={`#r-${c.slug}-t`} />
+                </animateMotion>
+              </path>
+            </svg>
+          )}
+          </div>
+
+          <p class="start" aria-hidden="true">{start}</p>
+
+          {photos.length > 0 && (
+            <ul class="polaroids">
+              {photos.map((p, k) => (
+                <li
+                  class:list={['slot', { 'wide-only': !p.tall }]}
+                  style={`--i: ${k}; --x: ${p.wide.x}; --y: ${p.wide.y}; --r: ${p.wide.r}deg${p.tall ? `; --xm: ${p.tall.x}; --ym: ${p.tall.y}; --rm: ${p.tall.r}deg` : ''}`}
+                >
+                  <button type="button" class="polaroid" aria-pressed="false" aria-label={`Photo ${k + 1} of ${photos.length}, ${c.title}`}>
+                    <img
+                      src={p.src}
+                      srcset={p.srcset}
+                      sizes="(max-width: 40rem) 27vw, 175px"
+                      data-zoom-sizes="(max-width: 40rem) 66vw, 420px"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div class="overlay">
+            <p class="meta">{meta.map((part, k) => <><span class="part">{part}{k < meta.length - 1 && '\u00a0·'}</span>{k < meta.length - 1 && ' '}</>)}</p>
+            <a class="strava" href={c.stravaUrls[0]} aria-label={`${c.title} on Strava`}><Icon name="strava" /></a>
+          </div>
+        </div>
+      </article>
+    ))}
   </section>
 
-  <section class="journey wide" aria-labelledby="journey" data-from={all.first} data-today={today}>
-    <div class="section-head">
-      <h2 id="journey">The journey</h2>
-      <Image src={shoes} alt="" width={120} class="sketch" loading="lazy" />
-      <p class="muted">Every day since the first ride, darker for longer. A ringed day has a chapter of its own.</p>
-    </div>
-
-    <p class="legend" aria-hidden="true">
-      <span>Rest</span>
-      <svg viewBox="0 0 84 12" width="84" height="12">
-        {[0, 1, 2, 3, 4].map((l) => <rect class={`l${l}`} x={l * 17} width="12" height="12" rx="1" />)}
-      </svg>
-      <span>2 hours or more</span>
-      <svg viewBox="0 0 16 16" width="16" height="16"><rect class="ring" x="2" y="2" width="12" height="12" rx="3" /></svg>
-      <span>A chapter</span>
-    </p>
-
-    {years.map((y) => (
-      <div class="year">
-        <h3>
-          <span class="year-number">{y}</span>
-          <span class="year-sum">{yearParts(y).map((part, i) => <><span class="part">{part}</span>{i < yearParts(y).length - 1 && ' · '}</>)}</span>
-        </h3>
-        <Calendar
-          year={y}
-          days={days}
-          today={today}
-          from={all.first ?? ''}
-          milestones={milestones.filter((m) => m.year === y)}
-          note={yearNotes.find((n) => n.year === y)?.text}
-          chapters={chapterOnDate}
-          label={`${y}: ${yearLabel(y)}`}
-        />
-      </div>
-    ))}
+  <section class="moving full" aria-labelledby="moving">
+    <h2 id="moving" class="section-title">We Keep Movin'</h2>
+    <Calendar years={years} days={days} today={today} from={all.first ?? ''} milestones={milestones} yearNotes={yearNotes} labelledby="moving" />
     <p class="tooltip" role="status" hidden></p>
     <script type="application/json" id="calendar-days" set:html={JSON.stringify(tooltipDays)} />
   </section>
 
-  <section class="bests" aria-labelledby="bests">
-    <div class="section-head">
-      <h2 id="bests">Bests</h2>
-      <Image src={garmin} alt="" width={110} class="sketch" loading="lazy" />
-    </div>
-    <dl>
-      {bestCards.map(({ label, value, a }) => (
-        <div>
-          <dt>{label}</dt>
-          <dd class="best-value">{value}</dd>
-          <dd class="best-when">{linkFor(a) ? <a href={linkFor(a)}>{titleFor(a)}</a> : titleFor(a)}, {fullDate(new Date(`${a.date}T00:00:00Z`))}</dd>
-        </div>
-      ))}
-      {bestMonth && (
-        <div>
-          <dt>Biggest month</dt>
-          <dd class="best-value">{km(bestMonth.metres)} km</dd>
-          <dd class="best-when">{new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${bestMonth.key}-01T00:00:00Z`))}</dd>
-        </div>
-      )}
-    </dl>
-  </section>
+  <!-- The page opened on two arcs, running and cycling, side by side. It closes with them meeting. -->
+  <div class="ending full">
+    <svg class="end wide-end" viewBox="0 0 1000 210">
+      <mask id="end-reveal-w" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="210">
+        <path class="reveal" d="M 92 72 C 380 30, 600 50, 742 104" pathLength="1" />
+        <path class="reveal" d="M 92 150 C 380 196, 600 172, 742 112" pathLength="1" />
+      </mask>
+      <path class="figure-icon" transform="translate(42, 46) scale(0.14)" d={RUNNER} />
+      <path class="figure-icon" transform="translate(38, 124) scale(0.14)" d={RIDER} />
+      <g mask="url(#end-reveal-w)">
+        <path class="arc" d="M 92 72 C 380 30, 600 50, 742 104" />
+        <path class="arc" d="M 92 150 C 380 196, 600 172, 742 112" />
+      </g>
+      <circle class="ring" cx="750" cy="108" r="8" />
+      <circle class="dot" cx="750" cy="108" r="8" />
+      <g transform="rotate(-4 780 116)"><text class="hand" x="780" y="118">to be continued…</text></g>
+    </svg>
+    <svg class="end narrow-end" viewBox="0 0 500 250">
+      <mask id="end-reveal-n" maskUnits="userSpaceOnUse" x="0" y="0" width="500" height="250">
+        <path class="reveal" d="M 70 62 C 220 30, 330 50, 402 100" pathLength="1" />
+        <path class="reveal" d="M 70 140 C 220 176, 330 156, 402 108" pathLength="1" />
+      </mask>
+      <path class="figure-icon" transform="translate(26, 40) scale(0.13)" d={RUNNER} />
+      <path class="figure-icon" transform="translate(22, 118) scale(0.13)" d={RIDER} />
+      <g mask="url(#end-reveal-n)">
+        <path class="arc" d="M 70 62 C 220 30, 330 50, 402 100" />
+        <path class="arc" d="M 70 140 C 220 176, 330 156, 402 108" />
+      </g>
+      <circle class="ring" cx="410" cy="104" r="7" />
+      <circle class="dot" cx="410" cy="104" r="7" />
+      <g transform="rotate(-4 250 214)"><text class="hand" x="250" y="214" text-anchor="middle">to be continued…</text></g>
+    </svg>
+  </div>
 
-  <p class="follow">
-    <a href="https://www.strava.com/athletes/70322649"><Icon name="strava" /> Follow along on Strava</a>
-  </p>
+  <!-- Inline, so a card never waits on a download to appear. -->
+  <script is:inline data-from={all.first} data-today={today}>
+    (() => {
+      const root = document.documentElement;
+  
+      // ---------- Cards play once, as they arrive ----------
+      const play = (card) => {
+        card.classList.add('play');
+        for (const svg of card.querySelectorAll('svg.route')) {
+          if (svg.getBoundingClientRect().width) svg.querySelector('animateMotion')?.beginElement();
+        }
+      };
+      if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
+        const seen = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            play(entry.target);
+            seen.unobserve(entry.target);
+          }
+        }, { threshold: 0.35 });
+        document.querySelectorAll('.card, .ending').forEach((el) => seen.observe(el));
+      } else {
+        root.classList.remove('motion');
+      }
+  
+      // ---------- A polaroid picked up, and put back ----------
+      const putBack = (card) => {
+        for (const slot of card.querySelectorAll('.slot.zoomed')) {
+          slot.classList.remove('zoomed');
+          slot.querySelector('.polaroid').setAttribute('aria-pressed', 'false');
+        }
+      };
+      document.addEventListener('click', (event) => {
+        const card = event.target.closest('.card');
+        if (!card) return;
+        const button = event.target.closest('.polaroid');
+        if (!button) return putBack(card);
+        const slot = button.parentElement;
+        const wasUp = slot.classList.contains('zoomed');
+        putBack(card);
+        if (wasUp) return;
+        slot.classList.add('zoomed');
+        button.setAttribute('aria-pressed', 'true');
+        // Bigger on screen, so ask for the bigger print.
+        const img = button.querySelector('img');
+        if (img.dataset.zoomSizes) img.sizes = img.dataset.zoomSizes;
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') document.querySelectorAll('.card').forEach(putBack);
+      });
+  
+      // ---------- The strip of days: it drifts on its own, and holds still for anyone looking ----------
+      const script = document.currentScript;
+      const from = script.dataset.from;
+      const today = script.dataset.today;
+      const days = JSON.parse(document.getElementById('calendar-days')?.textContent || '{}');
+      const tip = document.querySelector('.moving .tooltip');
+      const section = document.querySelector('.moving');
+      const spoken = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+      const strip = document.querySelector('.strip');
+      const track = strip?.querySelector('.track');
+      const first = track?.querySelector('svg');
+      let copy = null;
+      let expected = 0;
+      let restUntil = 0;
+      let focused = false;
+      let drag = null;
+      let pointer = '';
+      const now = () => performance.now();
+      // Where the strip begins in its scroller, and how long it is: the copy begins at start + length.
+      let start = 0;
+      let length = 0;
+      const measure = () => {
+        start = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+        length = first.getBoundingClientRect().width;
+      };
+  
+      if (strip && first && root.classList.contains('motion')) {
+        // The same years again behind the first, so the strip comes round without a seam.
+        copy = first.cloneNode(true);
+        copy.setAttribute('aria-hidden', 'true');
+        copy.removeAttribute('role');
+        copy.removeAttribute('aria-label');
+        track.append(copy);
+        new ResizeObserver(measure).observe(first);
+  
+        const SPEED = 28; // px a second: slow enough to read a note as it passes
+        let pos = 0;
+        let last = 0;
+        let frame = 0;
+        const tick = (t) => {
+          frame = requestAnimationFrame(tick);
+          if (drag || focused || t < restUntil) {
+            last = 0;
+            track.style.transform = '';
+            return;
+          }
+          // Carry on from wherever a hand left it.
+          if (!last) pos = strip.scrollLeft;
+          pos += (SPEED * Math.min(t - (last || t), 50)) / 1000;
+          last = t;
+          if (!length) measure();
+          if (length && pos >= start + length) pos -= length;
+          // Whole pixels by scrolling, and the fraction by a transform, so it glides at any speed.
+          const whole = Math.floor(pos);
+          strip.scrollLeft = expected = whole;
+          track.style.transform = pos > whole ? `translateX(${(whole - pos).toFixed(2)}px)` : '';
+          if (tip && !tip.hidden) tip.hidden = true;
+        };
+        new IntersectionObserver((entries) => {
+          // Only the latest word counts: a quick fling past can bring "gone" and "back" together.
+          cancelAnimationFrame(frame);
+          last = 0;
+          if (entries[entries.length - 1].isIntersecting) frame = requestAnimationFrame(tick);
+        }).observe(strip);
+  
+        // A scroll it didn't make is someone's hand: a swipe, a wheel, a key. It waits for them.
+        strip.addEventListener('scroll', () => {
+          if (Math.abs(strip.scrollLeft - expected) > 1.5) restUntil = Math.max(restUntil, now() + 2500);
+        }, { passive: true });
+        // Reached by keyboard, it holds still to be read; a click to drag it doesn't hold it for good.
+        strip.addEventListener('focusin', () => strip.matches(':focus-visible') && (focused = true));
+        strip.addEventListener('focusout', () => (focused = false));
+      }
+  
+      // A mouse looking at the strip holds it; a mouse leaving lets it go. Fingers scroll it natively.
+      strip?.addEventListener('pointermove', (event) => {
+        // Only a pointer that really moved: a strip drifting under a still one isn't someone looking.
+        const at = `${event.clientX},${event.clientY}`;
+        if (event.pointerType !== 'touch' && at !== pointer) restUntil = now() + 3000;
+        pointer = at;
+        if (!drag || event.pointerId !== drag.id) return;
+        // The button came up somewhere we never heard about: the drag is over.
+        if (!(event.buttons & 1)) return letGo(event);
+        const dx = event.clientX - drag.x;
+        if (!strip.classList.contains('dragging')) {
+          if (Math.abs(dx) < 4) return;
+          strip.classList.add('dragging');
+          if (tip) tip.hidden = true;
+        }
+        let left = drag.left - dx;
+        if (copy) {
+          // Dragged past either end, it comes round, as it does on its own.
+          if (left < start) (left += length), (drag.left += length);
+          else if (left >= start + length) (left -= length), (drag.left -= length);
+        }
+        strip.scrollLeft = expected = left;
+      });
+      strip?.addEventListener('pointerdown', (event) => {
+        restUntil = now() + (event.pointerType === 'touch' ? 4000 : 3000);
+        if (event.pointerType !== 'mouse' || event.button !== 0) return;
+        drag = { id: event.pointerId, x: event.clientX, left: strip.scrollLeft };
+        // Held from the press, so the release reaches the strip wherever the mouse has wandered.
+        strip.setPointerCapture(event.pointerId);
+      });
+      function letGo(event) {
+        if (event.pointerType === 'touch') restUntil = now() + 3000;
+        if (!drag || event.pointerId !== drag.id) return;
+        drag = null;
+        strip.classList.remove('dragging');
+      }
+      strip?.addEventListener('pointerup', letGo);
+      strip?.addEventListener('pointercancel', letGo);
+      strip?.addEventListener('pointerleave', (event) => {
+        if (event.pointerType !== 'touch' && !drag) restUntil = 0;
+      });
+  
+      // ---------- What happened on a day in the strip ----------
+  
+      // The day under a point. The gaps between squares belong to the nearest day, so the tooltip
+      // doesn't blink on and off as a pointer crosses them.
+      const dateAt = (svg, clientX, clientY) => {
+        const point = new DOMPoint(clientX, clientY).matrixTransform(svg.getScreenCTM().inverse());
+        const top = Number(svg.dataset.top);
+        const step = Number(svg.dataset.step);
+        const half = (step - Number(svg.dataset.cell)) / 2;
+        const row = Math.floor((point.y - top + half) / step);
+        if (row < 0 || row > 6) return null;
+        for (const [year, left, offset, skip, columns] of JSON.parse(svg.dataset.years)) {
+          const col = Math.floor((point.x - left + half) / step);
+          if (col < skip || col >= columns) continue;
+          const date = new Date(Date.UTC(year, 0, 1 + col * 7 + row - offset));
+          const iso = date.toISOString().slice(0, 10);
+          return date.getUTCFullYear() === year && iso >= svg.dataset.start && iso <= today ? iso : null;
+        }
+        return null;
+      };
+  
+      let hideSoon = 0;
+      const hide = () => tip && (tip.hidden = true);
+      const show = (event) => {
+        clearTimeout(hideSoon);
+        const svg = event.target.closest?.('svg.days');
+        const date = svg && !strip.classList.contains('dragging') && dateAt(svg, event.clientX, event.clientY);
+        if (!tip || !date) return hide();
+        const what = date < from ? 'before the journal began' : days[date] || 'rest day';
+        tip.textContent = `${spoken.format(new Date(`${date}T00:00:00Z`)).replace(',', '')} · ${what}`;
+        tip.hidden = false;
+        const box = section.getBoundingClientRect();
+        const x = Math.min(Math.max(event.clientX - box.left - tip.offsetWidth / 2, 8), box.width - tip.offsetWidth - 8);
+        tip.style.transform = `translate(${x}px, ${event.clientY - box.top - 46}px)`;
+      };
+      section?.addEventListener('pointermove', show);
+      section?.addEventListener('pointerdown', show);
+      // A finger lifts as soon as it taps, so what it tapped stays up a moment longer.
+      section?.addEventListener('pointerleave', (event) => {
+        clearTimeout(hideSoon);
+        if (event.pointerType === 'touch') hideSoon = setTimeout(hide, 2500);
+        else hide();
+      });
+    })();
+  </script>
 </BaseLayout>
 
-<script>
-  // The calendar's tooltip: which day is under the pointer (or the finger), and what happened on it.
-  const days: Record<string, string> = JSON.parse(document.getElementById('calendar-days')?.textContent ?? '{}');
-  const journey = document.querySelector<HTMLElement>('.journey');
-  const tip = document.querySelector<HTMLElement>('.journey .tooltip');
-  const spoken = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
-  function dateAt(svg: SVGSVGElement, clientX: number, clientY: number): string | null {
-    const point = new DOMPoint(clientX, clientY).matrixTransform(svg.getScreenCTM()!.inverse());
-    const { layout, left, top, step, cell, offset, rows } = svg.dataset;
-    const year = Number(svg.closest<HTMLElement>('.calendar')!.dataset.year);
-    const s = Number(step);
-    const c = Number(cell);
-    const col = Math.floor((point.x - Number(left)) / s);
-    if (col < 0 || (point.x - Number(left)) % s > c) return null;
-    let date: Date;
-    if (layout === 'weeks') {
-      const row = Math.floor((point.y - Number(top)) / s);
-      if (row < 0 || row > 6 || (point.y - Number(top)) % s > c) return null;
-      date = new Date(Date.UTC(year, 0, 1 + col * 7 + row - Number(offset)));
-    } else {
-      const ys: number[] = JSON.parse(rows ?? '[]');
-      const month = ys.findIndex((y) => point.y >= y && point.y <= y + c);
-      if (month < 0 || col > 30) return null;
-      date = new Date(Date.UTC(year, month, col + 1));
-      if (date.getUTCMonth() !== month) return null;
-    }
-    const iso = date.toISOString().slice(0, 10);
-    // A day still to come has no square, so it has nothing to say either.
-    return date.getUTCFullYear() === year && iso <= (journey?.dataset.today ?? iso) ? iso : null;
-  }
-
-  function show(event: PointerEvent) {
-    const svg = (event.target as Element).closest?.<SVGSVGElement>('.calendar svg');
-    const date = svg && dateAt(svg, event.clientX, event.clientY);
-    if (!tip || !date) {
-      if (tip) tip.hidden = true;
-      return;
-    }
-    const from = journey?.dataset.from ?? '';
-    const what = date < from ? 'before the journal began' : days[date] ?? 'rest day';
-    tip.textContent = `${spoken.format(new Date(`${date}T00:00:00Z`)).replace(',', '')} · ${what}`;
-    tip.hidden = false;
-    const box = tip.parentElement!.getBoundingClientRect();
-    const x = Math.min(Math.max(event.clientX - box.left, 8), box.width - tip.offsetWidth - 8);
-    tip.style.transform = `translate(${x}px, ${event.clientY - box.top - 44}px)`;
-  }
-
-  journey?.addEventListener('pointermove', show);
-  journey?.addEventListener('pointerdown', show);
-  journey?.addEventListener('pointerleave', () => tip && (tip.hidden = true));
-</script>
 
 <style>
-  .hero {
-    margin-bottom: 3.5em;
-  }
+  /* ---------- Page ---------- */
 
-  .lede {
-    color: var(--ink-muted);
-    font-style: italic;
-  }
-
-  .total {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.2em 0.6em;
-    margin: 1.6em 0 1em;
-  }
-
-  .figure {
-    font-size: clamp(2.6em, 2em + 3vw, 3.6em);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-
-  .total-words {
-    color: var(--ink-muted);
-  }
-
-  .lines {
-    margin: 0 0 1em;
-    padding: 0;
-    list-style: none;
-  }
-
-  .lines li {
-    display: grid;
-    grid-template-columns: 1.7em 1fr;
-    align-items: center;
-    gap: 0.6em;
-    margin: 0.35em 0;
-    color: var(--route);
-  }
-
-  .track {
-    display: flex;
-    align-items: center;
-    gap: 0.7em;
-    min-width: 0;
-  }
-
-  /* Drawn to scale against the longest, leaving room for the words beside it. */
-  .dash {
-    flex: none;
-    width: calc((100% - 12.5em) * var(--share));
-    height: 1.1em;
-    overflow: visible;
-  }
-
-  /* A phone has no room beside the line, so the words go above it and the line keeps its scale. */
-  @media (max-width: 34rem) {
-    .track {
-      flex-wrap: wrap;
-      row-gap: 0;
-    }
-
-    .line-figure {
-      order: -1;
-      width: 100%;
-    }
-
-    .dash {
-      width: calc(100% * var(--share));
-    }
-  }
-
-  .dash path {
-    fill: none;
-    stroke: var(--route);
-    stroke-width: 2.4;
-    stroke-dasharray: 7 9;
-    stroke-linecap: round;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .line-figure {
-    color: var(--ink-muted);
-    white-space: nowrap;
-    font-size: 0.95em;
-  }
-
-  .line-figure b {
-    color: var(--ink);
-    font-weight: 600;
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-
-  .updated {
-    font-size: 0.9em;
-  }
-
-  .section-head {
+  /* The sketches sit behind everything on the page, clipped to it so none can widen a phone. */
+  :global(main:has(.sketches)) {
     position: relative;
-    margin-bottom: 1.4em;
+    isolation: isolate;
   }
 
-  .section-head h2 {
-    margin: 0 0 0.2em;
+  .sketches {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: clip;
+    pointer-events: none;
   }
 
-  .section-head p {
-    margin: 0;
-    max-width: 34em;
-  }
-
-  /* The old page scattered 28 sketches as wallpaper. Now one sits beside each section, like a stamp. */
   .sketch {
     position: absolute;
-    right: 0;
-    top: -0.6em;
-    width: 5.5em;
+    width: clamp(180px, 16vw, 320px);
     height: auto;
-    opacity: 0.5;
-    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    transform: rotate(var(--tilt));
+  }
+
+  .sketch.left {
+    left: var(--nudge);
+  }
+
+  .sketch.right {
+    right: var(--nudge);
   }
 
   @media (prefers-color-scheme: dark) {
     .sketch {
       filter: invert(1);
-      opacity: 0.35;
+      mix-blend-mode: screen;
+      opacity: 0.1;
     }
   }
 
-  @media (max-width: 34rem) {
+  @media (max-width: 69rem) {
     .sketch {
-      width: 4em;
-      top: -0.2em;
+      width: clamp(120px, 20vw, 180px);
+      opacity: 0.14;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .sketch {
+      width: 110px;
+      opacity: 0.12;
+    }
+
+    .sketch.left {
+      left: -15px;
+    }
+
+    .sketch.right {
+      right: -15px;
+    }
+  }
+
+  .title {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  .section-title {
+    margin: 0 0 2.4rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1.2em;
+    color: var(--ink-muted);
+  }
+
+  /* ---------- The two arcs ---------- */
+
+  .journey {
+    margin: 2.5rem 0 3.5rem;
+    padding-inline: 1rem;
+  }
+
+  .arcs {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    margin-inline: auto;
+    overflow: visible;
+    color: var(--route);
+  }
+
+  .arc {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 2.5;
+    stroke-dasharray: 6 10;
+    stroke-linecap: round;
+  }
+
+  .figure-icon {
+    fill: var(--route);
+  }
+
+  .figure {
+    fill: var(--route);
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .unit {
+    fill: var(--route);
+    font-family: var(--font-serif);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .narrow-arcs {
+    display: none;
+  }
+
+  .narrow-arcs .arc {
+    stroke-width: 2;
+    stroke-dasharray: 4 6;
+  }
+
+  .narrow-arcs .figure {
+    font-size: 22px;
+  }
+
+  .narrow-arcs .unit {
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 40rem) {
+    .wide-arcs {
+      display: none;
+    }
+
+    .narrow-arcs {
+      display: block;
+    }
+
+    .journey {
+      margin: 1.5rem 0 2.5rem;
+      padding-inline: 0;
     }
   }
 
   /* ---------- Places ---------- */
 
   .places {
-    display: grid;
-    grid-template-columns: subgrid;
-    margin-bottom: 4em;
+    padding-inline: 5vw;
+    margin-bottom: 3rem;
   }
 
-  .places > * {
-    grid-column: content;
+  .place {
+    position: relative;
+    max-width: 760px;
+    margin-bottom: 3.5rem;
   }
 
-  .places > .shapes {
-    grid-column: wide;
+  /* Cards step left and right down the page, like prints pinned along a wall. */
+  .place.odd {
+    margin-left: 15%;
+    margin-right: auto;
   }
 
-  .shapes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-    gap: 2em 1.5em;
+  .place.even {
+    margin-left: auto;
+    margin-right: 15%;
+  }
+
+  .place-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.2rem;
+  }
+
+  .sport {
+    color: var(--route);
+    line-height: 0;
+  }
+
+  .place-title {
+    margin: 0;
+    font-size: 1.2em;
+    line-height: 1.25;
+  }
+
+  .tagline {
+    margin: 0.1em 0 0;
+    font-size: 0.92em;
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  .sticker {
+    position: absolute;
+    top: 80px;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin: 0;
+    border-radius: 50%;
+    background: var(--route);
+    color: #fff;
+    line-height: 1.1;
+    box-shadow: 0 4px 16px color-mix(in oklab, var(--route) 40%, transparent);
+  }
+
+  .odd .sticker {
+    left: -40px;
+    transform: rotate(-12deg);
+  }
+
+  .even .sticker {
+    right: -40px;
+    transform: rotate(12deg);
+  }
+
+  .sticker-month {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .sticker-year {
+    font-size: 0.64rem;
+    opacity: 0.9;
+    font-variant-numeric: lining-nums;
+  }
+
+  /* ---------- The card: map, route, photos ---------- */
+
+  .card {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    isolation: isolate;
+  }
+
+  /* No frame: the map is printed into the page and fades into it on every side, more at the foot,
+     where the place and the numbers sit on bare paper. Being a mask, it fades into whatever the
+     page is, light or dark, with no colour to keep in step. */
+  .ground {
+    position: absolute;
+    inset: 0;
+    mask-image:
+      linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+      linear-gradient(to bottom, transparent, #000 11%, #000 74%, transparent 97%);
+    mask-composite: intersect;
+  }
+
+  .plate,
+  .plate img,
+  .route {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .plate img {
+    display: block;
+    object-fit: cover;
+  }
+
+  .plate.blank {
+    background: var(--paper-raised);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .plate.blank {
+      background: #22201c;
+    }
+  }
+
+  .route {
+    z-index: 2;
+    overflow: visible;
+  }
+
+  .route.tall {
+    display: none;
+  }
+
+  .casing,
+  .line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .casing {
+    stroke: var(--paper);
+    stroke-width: 7;
+    opacity: 0.85;
+  }
+
+  .line {
+    stroke: var(--route);
+    stroke-width: 3.2;
+  }
+
+  .marker {
+    fill: var(--route);
+    stroke: var(--paper);
+    stroke-width: 1.5;
+    opacity: 0;
+    filter: drop-shadow(0 0 4px color-mix(in oklab, var(--route) 70%, transparent));
+  }
+
+  /* The start time flashes in the corner away from the date sticker. */
+  .start {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.2rem;
+    z-index: 30;
+    margin: 0;
+    font-size: 1.05em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-shadow: 0 0 10px var(--paper), 0 0 2px var(--paper);
+    font-variant-numeric: lining-nums tabular-nums;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .odd .start {
+    left: auto;
+    right: 1.2rem;
+  }
+
+  .polaroids {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .shapes a {
-    display: grid;
-    gap: 0.15em;
-    text-decoration: none;
+  .slot {
+    position: absolute;
+    left: calc(var(--x) * 100%);
+    top: calc(var(--y) * 100%);
+    z-index: calc(1 + var(--i));
+    width: 23%;
+    transform: translate(-50%, -50%) rotate(var(--r));
+    transition:
+      left 0.5s var(--ease-out),
+      top 0.5s var(--ease-out),
+      transform 0.5s var(--ease-out),
+      opacity 0.45s ease;
   }
 
-  .shapes svg {
+  .polaroid {
+    display: block;
     width: 100%;
+    margin: 0;
+    padding: 4.5% 4.5% 14%;
+    border: 0;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32), 0 2px 8px rgba(0, 0, 0, 0.16);
+    cursor: zoom-in;
+    transition: box-shadow 0.4s;
+  }
+
+  .polaroid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
     height: auto;
-    aspect-ratio: 3 / 2;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid var(--rule);
+    object-fit: cover;
+    border-radius: 2px;
+    background: #eee;
   }
 
-  .no-route {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 3 / 2;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid var(--rule);
-    color: var(--route);
+  .slot.zoomed {
+    left: 50%;
+    top: 50%;
+    z-index: 60;
+    transform: translate(-50%, -50%) scale(2.4) rotate(0deg);
   }
 
-  .shapes path {
-    fill: none;
-    stroke: var(--route);
-    stroke-width: 2.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
+  .slot.zoomed .polaroid {
+    cursor: zoom-out;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
   }
 
-  .shapes circle {
-    fill: var(--paper);
-    stroke: var(--route);
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
+  .polaroid:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
   }
 
-  .shapes a:hover path {
-    stroke-width: 3.4;
-  }
-
-  .shape-title {
-    font-weight: 600;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-
-  .shapes a:hover .shape-title {
-    color: var(--accent);
-  }
-
-  .shape-meta {
-    color: var(--ink-muted);
-    font-size: 0.88em;
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-
-  @media (max-width: 34rem) {
-    .shapes {
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5em 1em;
-    }
-  }
-
-  /* ---------- Journey ---------- */
-
-  .journey {
-    position: relative;
-    margin-bottom: 4em;
-  }
-
-  .journey .section-head,
-  .legend {
-    max-width: var(--measure);
-    margin-inline: auto;
-  }
-
-  .legend {
+  /* The place and the numbers, written on the paper where the map has faded out. */
+  .overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 30;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4em 0.6em;
-    margin-bottom: 1.5em;
-    font-size: 0.85em;
-    color: var(--ink-muted);
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.4rem 0.2rem;
+    pointer-events: none;
   }
 
-  .legend svg + span + svg {
-    margin-left: 1em;
-  }
-
-  .legend .l0 { fill: var(--rule); }
-  .legend .l1 { fill: color-mix(in oklab, var(--route) 24%, var(--paper)); }
-  .legend .l2 { fill: color-mix(in oklab, var(--route) 46%, var(--paper)); }
-  .legend .l3 { fill: color-mix(in oklab, var(--route) 72%, var(--paper)); }
-  .legend .l4 { fill: var(--route); }
-  .legend .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
-
-  .year {
-    margin: 0 auto 2.2em;
-    width: fit-content;
-    max-width: 100%;
-  }
-
-  .year h3 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.1em 0.75em;
-    margin: 0 0 0.4em 30px;
-    font-size: 1em;
-  }
-
-  .year-number {
-    font-size: 1.25em;
-    font-variant-numeric: lining-nums;
-  }
-
-  .year-sum .part {
+  .meta .part {
     white-space: nowrap;
   }
 
-  .year-sum {
-    font-weight: 400;
-    font-size: 0.85em;
+  .meta {
+    margin: 0;
+    font-size: 0.88em;
     color: var(--ink-muted);
     font-variant-numeric: lining-nums tabular-nums;
   }
 
-  @media (max-width: 40rem) {
-    .year {
-      width: auto;
+  .strava {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--route);
+    color: #fff;
+    box-shadow: 0 2px 8px color-mix(in oklab, var(--route) 40%, transparent);
+    pointer-events: auto;
+    transition: transform 0.2s var(--ease-out);
+  }
+
+  .strava:hover {
+    color: #fff;
+    transform: scale(1.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .polaroid {
+      background: #f1ede2;
+    }
+  }
+
+  /* ---------- Arriving ---------- */
+
+  /* With motion welcome (the class is set before first paint), a card waits undrawn until it is seen. */
+  :global(.motion) .card:not(.play) .casing,
+  :global(.motion) .card:not(.play) .line {
+    stroke-dashoffset: 1;
+  }
+
+  :global(.motion) .card:not(.play) .slot {
+    opacity: 0;
+    transform: translate(-50%, -62%) scale(0.9) rotate(var(--r));
+  }
+
+  .play .casing,
+  .play .line {
+    transition: stroke-dashoffset 2.4s cubic-bezier(0.45, 0, 0.25, 1);
+  }
+
+  .play .slot:not(.zoomed) {
+    transition-delay: calc(1.3s + var(--i) * 0.28s);
+  }
+
+  .play .marker {
+    animation: ride 2.6s linear forwards;
+  }
+
+  .play .start {
+    animation: flash 2.8s ease-out 0.2s forwards;
+  }
+
+  @keyframes ride {
+    0% { opacity: 0; }
+    6% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes flash {
+    0% { opacity: 0; }
+    12% { opacity: 1; }
+    75% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ---------- Narrower screens ---------- */
+
+  @media (max-width: 56rem) {
+    .places {
+      padding-inline: var(--gutter);
     }
 
-    .year h3 {
-      margin-left: 0;
+    .place .card {
+      margin-inline: calc(-1 * var(--gutter));
     }
+
+    .place .overlay {
+      padding-inline: var(--gutter);
+    }
+
+    .place .start {
+      left: var(--gutter);
+    }
+
+    .place.odd,
+    .place.even {
+      margin-inline: auto;
+    }
+
+    .odd .start {
+      left: 1.2rem;
+      right: auto;
+    }
+
+    .place .sticker {
+      top: 60px;
+      left: auto;
+      right: -8px;
+      width: 50px;
+      height: 50px;
+      transform: rotate(10deg);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .card {
+      aspect-ratio: 9 / 10;
+    }
+
+    /* A phone's map spans the screen: it fades top and foot, and only a little at the sides. */
+    .ground {
+      mask-image:
+        linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+        linear-gradient(to bottom, transparent, #000 9%, #000 76%, transparent 98%);
+    }
+
+    .route.wide {
+      display: none;
+    }
+
+    .route.tall {
+      display: block;
+    }
+
+    .slot {
+      left: calc(var(--xm) * 100%);
+      top: calc(var(--ym) * 100%);
+      width: 30%;
+      transform: translate(-50%, -50%) rotate(var(--rm));
+    }
+
+    :global(.motion) .card:not(.play) .slot {
+      transform: translate(-50%, -62%) scale(0.9) rotate(var(--rm));
+    }
+
+    .slot.wide-only {
+      display: none;
+    }
+
+  }
+
+  /* ---------- The ending ---------- */
+
+  .ending {
+    margin: 0.5rem 0 1rem;
+    padding-inline: 1rem;
+  }
+
+  .end {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .narrow-end {
+    display: none;
+  }
+
+  .end .reveal {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .end .dot {
+    fill: var(--route);
+    stroke: var(--paper);
+    stroke-width: 3;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .end .ring {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 2;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .end .hand {
+    font-family: var(--font-hand);
+    font-size: 34px;
+    fill: color-mix(in oklab, var(--route) 82%, var(--ink));
+  }
+
+  .narrow-end .hand {
+    font-size: 30px;
+  }
+
+  :global(.motion) .ending:not(.play) .reveal {
+    stroke-dashoffset: 1;
+  }
+
+  :global(.motion) .ending:not(.play) .dot {
+    transform: scale(0);
+  }
+
+  :global(.motion) .ending:not(.play) .hand {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .ending.play .reveal {
+    transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.25, 1);
+  }
+
+  .ending.play .dot {
+    transition: transform 0.45s var(--ease-out) 1.6s;
+  }
+
+  .ending.play .ring {
+    animation: arrive 1.5s ease-out 1.9s 1;
+  }
+
+  /* Written out, left to right, as if by hand. */
+  .ending.play .hand {
+    transition: clip-path 1.3s cubic-bezier(0.3, 0, 0.4, 1) 2.1s;
+  }
+
+  @keyframes arrive {
+    0% { opacity: 0.7; transform: scale(1); }
+    100% { opacity: 0; transform: scale(3.4); }
+  }
+
+  @media (max-width: 40rem) {
+    .wide-end {
+      display: none;
+    }
+
+    .narrow-end {
+      display: block;
+    }
+
+    .ending {
+      padding-inline: 0;
+    }
+  }
+
+  /* ---------- We keep movin' ---------- */
+
+  .moving {
+    position: relative;
+    padding-top: 3rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The strip and the ending are laid out only as they come near, so a first visit doesn't fetch
+     the handwriting they're annotated in (50 KB) before it is needed. */
+  .moving,
+  .ending {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 440px;
+  }
+
+  .ending {
+    contain-intrinsic-size: auto 260px;
   }
 
   .tooltip {
     position: absolute;
     left: 0;
     top: 0;
+    z-index: 2;
     margin: 0;
     padding: 0.3em 0.7em;
     border-radius: var(--radius);
@@ -577,61 +1244,5 @@ const titleFor = (a: (typeof activities)[number]) => chapterOf(a.id)?.title ?? a
     white-space: nowrap;
     pointer-events: none;
     font-variant-numeric: lining-nums;
-    z-index: 2;
-  }
-
-  /* ---------- Bests ---------- */
-
-  .bests dl {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1.5em 2em;
-    margin: 0;
-  }
-
-  .bests dt {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.05em;
-    color: var(--ink-muted);
-  }
-
-  .bests dd {
-    margin: 0;
-  }
-
-  .best-value {
-    font-size: 1.7em;
-    font-weight: 600;
-    line-height: 1.2;
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-
-  .best-when {
-    color: var(--ink-muted);
-    font-size: 0.9em;
-  }
-
-  .follow {
-    margin-top: 3.5em;
-    text-align: center;
-  }
-
-  .follow a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45em;
-    padding: 0.5em 1.1em;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    text-decoration: none;
-  }
-
-  .follow a:hover {
-    border-color: var(--route);
-    color: var(--route);
-  }
-
-  .follow :global(.icon) {
-    color: var(--route);
   }
 </style>

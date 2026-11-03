@@ -1,8 +1,5 @@
 ---
 featured: true
-year: 2020
-status: active
-stack: ["Nix", "home-manager"]
 title: "dotfiles"
 github: "https://github.com/rounakdatta/dotfiles"
 logo: "../../assets/images/projects/dotfiles_logo.jpg"

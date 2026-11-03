@@ -7,97 +7,79 @@
   ],
   "milestones": [
     {
-      "year": 2022,
-      "month": 6,
+      "month": "2022-07",
       "text": "Bought my first\nhybrid bike!",
       "position": "below"
     },
     {
-      "year": 2022,
-      "month": 7,
+      "date": "2022-08-20",
       "text": "Signed up\non Strava",
       "position": "above"
     },
     {
-      "year": 2022,
-      "month": 10,
+      "date": "2022-11-26",
       "text": "First 50K ride",
       "position": "above"
     },
     {
-      "year": 2023,
-      "month": 4,
+      "date": "2023-05-04",
       "text": "Bangalore ORR\nround-about birthday ride",
       "position": "below"
     },
     {
-      "year": 2023,
-      "month": 7,
+      "date": "2023-08-13",
       "text": "First 5K run",
       "position": "above"
     },
     {
-      "year": 2023,
-      "month": 9,
+      "date": "2023-10-31",
       "text": "First 10K run",
       "position": "below"
     },
     {
-      "year": 2023,
-      "month": 10,
+      "date": "2023-11-22",
       "text": "First Half Marathon",
       "position": "above"
     },
     {
-      "year": 2023,
-      "month": 11,
+      "week": "2023-12-04",
       "text": "First Devils Circuit",
       "position": "below"
     },
     {
-      "year": 2024,
-      "month": 0,
+      "dates": ["2024-01-21", "2024-01-28"],
       "text": "Kolkata Police HM +\nApollo Sreebhumi HM",
-      "position": "above",
-      "align": "left"
+      "position": "above"
     },
     {
-      "year": 2024,
-      "month": 1,
+      "date": "2024-02-18",
       "text": "Jarakabande 30K",
       "position": "below"
     },
     {
-      "year": 2024,
-      "month": 5,
+      "date": "2024-06-01",
       "text": "First 100K ride",
       "position": "below"
     },
     {
-      "year": 2024,
-      "month": 8,
+      "date": "2024-09-08",
       "text": "Ladakh HM",
       "position": "above"
     },
     {
-      "year": 2024,
-      "month": 9,
+      "date": "2024-10-27",
       "text": "Spice Coast Kochi HM",
       "position": "below"
     },
     {
-      "year": 2024,
-      "month": 11,
+      "dates": ["2024-12-08", "2024-12-15"],
       "text": "SKF Goa + Tata Kolkata",
-      "position": "above",
-      "align": "right"
+      "position": "above"
     },
     {
-      "year": 2025,
-      "month": 0,
+      "date": "2025-01-12",
       "text": "Apollo Sreebhumi HM",
-      "position": "above",
-      "align": "left"
+      "position": "above"
     }
   ]
 }

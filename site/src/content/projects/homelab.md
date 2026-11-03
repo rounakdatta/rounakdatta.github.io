@@ -1,8 +1,5 @@
 ---
 featured: true
-year: 2022
-status: active
-stack: ["Kubernetes (k3s)", "Helm", "Tailscale"]
 title: "homelab.setup"
 github: "https://github.com/rounakdatta/homelab.setup"
 logo: "../../assets/images/projects/homelab_logo.png"

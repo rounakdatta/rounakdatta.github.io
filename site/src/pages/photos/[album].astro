@@ -23,10 +23,7 @@ const description = [subtitle, `${photos.length} photos${date ? ` from ${monthOf
   <header class="head">
     <p class="label crumb"><a href="/photos/">Photos</a></p>
     <h1>{title}</h1>
-    <p class="meta">
-      {subtitle && <span class="subtitle">{subtitle}</span>}
-      <span>{date && `${monthOfYear(date)} · `}{photos.length} photos</span>
-    </p>
+    {subtitle && <p class="meta"><span class="subtitle">{subtitle}</span></p>}
   </header>
 
   <ul class="grid wide" data-gallery>
@@ -40,7 +37,6 @@ const description = [subtitle, `${photos.length} photos${date ? ` from ${monthOf
     ))}
   </ul>
 
-  <p class="back"><a href="/photos/">All photos</a></p>
   <PhotoViewer />
 </BaseLayout>
 
@@ -106,9 +102,5 @@ const description = [subtitle, `${photos.length} photos${date ? ` from ${monthOf
 
   figcaption {
     text-align: left;
-  }
-
-  .back {
-    margin-top: 2em;
   }
 </style>

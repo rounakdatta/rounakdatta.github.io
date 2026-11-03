@@ -2,60 +2,45 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import art from '../assets/images/excusez_moi.png';
-import { publishedNotes } from '../lib/notes';
-
-const recent = (await publishedNotes()).slice(0, 3);
 ---
 
 <BaseLayout title="Page not found" description="There is no page at this address." noindex>
   <div class="lost">
-    <Image src={art} alt="A cartoon of Rounak looking up from his phone, asking “Excusez-moi..?”" width={220} densities={[1, 2, 3]} format="webp" priority class="art" />
-    <div>
-      <h1>Nothing lives here</h1>
-      <!-- The browser fills in the address; without it the sentence still reads. -->
-      <p>There is no page at <code id="missing">this address</code>. It may have moved when the site was rebuilt.</p>
-      <p><a href="/">Start from the beginning</a>, or try one of the latest notes:</p>
-      <ul>
-        {recent.map((note) => <li><a href={`/notes/${note.id}/`}>{note.data.title}</a></li>)}
-      </ul>
-    </div>
+    <h1>404</h1>
+    <Image src={art} alt="A cartoon of Rounak looking up from his phone, asking “Excusez-moi..?”" width={260} densities={[1, 2, 3]} format="webp" priority class="art" />
+    <a class="home" href="/">Take me home</a>
   </div>
 </BaseLayout>
-
-<script is:inline>
-  document.getElementById('missing').textContent = decodeURIComponent(location.pathname);
-</script>
 
 <style>
   .lost {
     display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 2em;
-  }
-
-  .art {
-    width: 220px;
-    height: auto;
+    justify-items: center;
+    gap: 1.2em;
+    text-align: center;
   }
 
   h1 {
-    margin-bottom: 0.4em;
+    margin: 0;
+    font-size: 5em;
+    line-height: 1;
+    color: var(--ink-muted);
+    opacity: 0.35;
   }
 
-  code {
-    overflow-wrap: anywhere;
+  .art {
+    width: 240px;
+    height: auto;
   }
 
-  @media (max-width: 34rem) {
-    .lost {
-      grid-template-columns: 1fr;
-      gap: 1em;
-    }
+  .home {
+    padding: 0.45em 1.4em;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    text-decoration: none;
+  }
 
-    .art {
-      width: 180px;
-      justify-self: center;
-    }
+  .home:hover {
+    border-color: var(--accent);
   }
 </style>

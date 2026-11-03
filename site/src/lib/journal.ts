@@ -3,7 +3,7 @@
 import type { ImageMetadata } from 'astro';
 import chapterList from '../data/fitness/chapters.json' with { type: 'json' };
 import milestoneData from '../data/fitness/milestones.json' with { type: 'json' };
-import { activities, sportOf, type Activity } from './fitness';
+import { parseMilestones } from './calendar';
 
 interface Track {
   id: number;
@@ -26,7 +26,17 @@ interface Track {
   route: [number, number][][];
   /** [metres along, metres above the sea] */
   profile: [number, number][];
-  plate?: { width: number; height: number; d: string; start: [number, number]; end: [number, number] };
+  /** The route projected onto its map, landscape (wide screens) and portrait (phones). */
+  plate?: Plate;
+  plateTall?: Plate;
+}
+
+export interface Plate {
+  width: number;
+  height: number;
+  d: string;
+  start: [number, number];
+  end: [number, number];
 }
 
 export interface Chapter extends Track {
@@ -37,7 +47,7 @@ export interface Chapter extends Track {
   tagline: string;
   place: string;
   photos: ImageMetadata[];
-  plates?: { light: ImageMetadata; dark: ImageMetadata };
+  plates?: { light: ImageMetadata; dark: ImageMetadata; tallLight: ImageMetadata; tallDark: ImageMetadata };
   /** One link per activity: a trek has a link for each day. */
   stravaUrls: string[];
   /** Every date the chapter spans. */
@@ -59,6 +69,7 @@ export const chapters: Chapter[] = chapterList
     const track = tracks[`../data/fitness/tracks/${c.slug}.json`];
     if (!track) return [];
     const [light, dark] = [imagesOf(c.slug, 'plate-light')[0], imagesOf(c.slug, 'plate-dark')[0]];
+    const [tallLight, tallDark] = [imagesOf(c.slug, 'plate-tall-light')[0], imagesOf(c.slug, 'plate-tall-dark')[0]];
     const ids = track.ids ?? [track.id];
     const days: string[] = [];
     for (let d = new Date(`${track.date}T00:00:00Z`); d <= new Date(`${track.endDate ?? track.date}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + 1))
@@ -73,7 +84,7 @@ export const chapters: Chapter[] = chapterList
         tagline: c.tagline ?? '',
         place: ('place' in c && c.place) || track.place || '',
         photos: imagesOf(c.slug, 'photo-'),
-        plates: light && dark ? { light, dark } : undefined,
+        plates: light && dark && tallLight && tallDark ? { light, dark, tallLight, tallDark } : undefined,
         stravaUrls: ids.map((id) => `https://www.strava.com/activities/${id}`),
         days,
       },
@@ -81,48 +92,5 @@ export const chapters: Chapter[] = chapterList
   })
   .sort((a, b) => b.date.localeCompare(a.date));
 
-/** Every day a chapter covers rings in the calendar: a six-day trek rings six days. */
-export const chapterOnDate = new Map(chapters.flatMap((c) => c.days.map((day) => [day, c] as const)));
-
-/** The chapter an activity belongs to, if any. */
-export const chapterOf = (id?: number) => chapters.find((c) => id !== undefined && c.ids?.includes(id));
-
-export interface Milestone {
-  year: number;
-  month: number;
-  text: string;
-  position: 'above' | 'below';
-}
-export const milestones = milestoneData.milestones as Milestone[];
+export const milestones = parseMilestones(milestoneData.milestones);
 export const yearNotes = milestoneData.yearHighlights as { year: number; text: string }[];
-
-export interface Best {
-  label: string;
-  value: string;
-  activity?: Activity;
-  when: string;
-  href?: string;
-}
-
-const linkFor = (a: Activity) => {
-  const chapter = chapterOf(a.id);
-  return chapter ? `/fitness/${chapter.slug}/` : a.id ? `https://www.strava.com/activities/${a.id}` : undefined;
-};
-
-const top = (list: Activity[], by: (a: Activity) => number) => list.reduce<Activity | undefined>((best, a) => (!best || by(a) > by(best) ? a : best), undefined);
-
-/** The days worth singling out: marked because they are exceptional, and there are only four. */
-export function bestsOf(list: Activity[]): { run?: Activity; ride?: Activity; climb?: Activity; month?: { key: string; metres: number } } {
-  const months = new Map<string, number>();
-  for (const a of list) if (sportOf(a.type) !== 'other') months.set(a.date.slice(0, 7), (months.get(a.date.slice(0, 7)) ?? 0) + a.distance);
-  const month = [...months].reduce<[string, number] | undefined>((best, m) => (!best || m[1] > best[1] ? m : best), undefined);
-  return {
-    run: top(list.filter((a) => sportOf(a.type) === 'run'), (a) => a.distance),
-    ride: top(list.filter((a) => sportOf(a.type) === 'ride'), (a) => a.distance),
-    climb: top(list, (a) => a.elevation ?? 0),
-    month: month && { key: month[0], metres: month[1] },
-  };
-}
-
-export const bests = bestsOf(activities);
-export { linkFor };
