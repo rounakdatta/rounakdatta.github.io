@@ -21,8 +21,10 @@ import { chromium } from 'playwright';
 import sharp from 'sharp';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const WIDTH = 1200;
-const HEIGHT = 800;
+const SHAPES = {
+  plate: { width: 1200, height: 800, padding: { top: 90, bottom: 170, left: 120, right: 120 }, file: 'plate' },
+  plateTall: { width: 900, height: 1000, padding: { top: 120, bottom: 190, left: 80, right: 80 }, file: 'plate-tall' },
+};
 // `npm run plates` draws every chapter; `-- --missing` only those without plates yet; `-- <slug>` one.
 const only = process.argv[2] === '--missing' ? undefined : process.argv[2];
 const missingOnly = process.argv[2] === '--missing';
@@ -31,16 +33,16 @@ const missingOnly = process.argv[2] === '--missing';
 
 const PALETTES = {
   light: {
-    paper: '#fffff8', water: '#dbe4e2', waterLine: '#c9d6d4', green: '#f3f4e6', residential: '#fbfaf1',
-    building: '#f1eee3', minor: '#ece8dc', major: '#e3dece', motorway: '#d9d3c1', rail: '#ddd8ca',
-    boundary: '#cfcabb', label: '#8a877c', labelStrong: '#5f5c54', waterLabel: '#7b9095', halo: '#fffff8',
-    shadow: 'rgba(70, 55, 30, 0.36)', highlight: 'rgba(255, 255, 248, 0.3)',
+    paper: '#fdfcf3', water: '#cfe0e1', waterLine: '#b5cdcf', green: '#e8eedb', residential: '#f8f6ea',
+    building: '#ece8da', minor: '#e5dfd0', major: '#dad3c0', motorway: '#cfc6af', rail: '#d6d0c0',
+    boundary: '#c9c3b2', label: '#86837a', labelStrong: '#5a5750', waterLabel: '#6f8a90', halo: '#fdfcf3',
+    shadow: 'rgba(70, 55, 30, 0.45)', highlight: 'rgba(255, 255, 248, 0.4)', relief: 0.38,
   },
   dark: {
-    paper: '#151412', water: '#1b2326', waterLine: '#223035', green: '#181b16', residential: '#171614',
-    building: '#1d1c19', minor: '#26241f', major: '#2e2b26', motorway: '#36332c', rail: '#2c2a25',
-    boundary: '#3a372f', label: '#8a857a', labelStrong: '#b3ad9f', waterLabel: '#6f858a', halo: '#151412',
-    shadow: 'rgba(0, 0, 0, 0.6)', highlight: 'rgba(255, 250, 230, 0.06)',
+    paper: '#171614', water: '#172429', waterLine: '#1f363d', green: '#19201a', residential: '#191816',
+    building: '#201f1b', minor: '#2a2823', major: '#332f29', motorway: '#3b372f', rail: '#2f2c27',
+    boundary: '#3d3a32', label: '#8d887c', labelStrong: '#b8b2a4', waterLabel: '#6f8a90', halo: '#171614',
+    shadow: 'rgba(0, 0, 0, 0.72)', highlight: 'rgba(255, 250, 230, 0.09)', relief: 0.42,
   },
 };
 
@@ -103,7 +105,7 @@ function paperStyle(base, p) {
         type: 'hillshade',
         source: 'terrain',
         paint: {
-          'hillshade-exaggeration': 0.28,
+          'hillshade-exaggeration': p.relief,
           'hillshade-shadow-color': p.shadow,
           'hillshade-highlight-color': p.highlight,
           'hillshade-accent-color': p.shadow,
@@ -136,11 +138,14 @@ function paperStyle(base, p) {
 
 const dist = join(ROOT, 'node_modules/maplibre-gl/dist');
 const PAGE = `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/maplibre-gl.css">
-<style>html,body{margin:0;background:#888}#map{width:${WIDTH}px;height:${HEIGHT}px}</style></head>
+<style>html,body{margin:0;background:#888}</style></head>
 <body><div id="map"></div><script type="module">
 import * as maplibregl from '/maplibre-gl.mjs';
-window.render = (style, bounds) => new Promise((resolve) => {
-  const map = new maplibregl.Map({ container: 'map', style, bounds, fitBoundsOptions: { padding: { top: 96, bottom: 96, left: 120, right: 120 }, maxZoom: 15 },
+window.render = (style, bounds, padding, width, height) => new Promise((resolve) => {
+  const box = document.getElementById('map');
+  box.style.width = width + 'px';
+  box.style.height = height + 'px';
+  const map = new maplibregl.Map({ container: 'map', style, bounds, fitBoundsOptions: { padding, maxZoom: 15 },
     attributionControl: false, interactive: false, fadeDuration: 0, preserveDrawingBuffer: true, pixelRatio: 2 });
   window.map = map;
   map.once('idle', () => resolve(true));
@@ -167,7 +172,7 @@ const browser = await chromium.launch({
   // Software WebGL: no GPU needed, and the same pixels on any machine.
   args: ['--no-sandbox', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist'],
 });
-const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT }, deviceScaleFactor: 2 });
+const page = await browser.newPage({ viewport: { width: 1200, height: 1000 }, deviceScaleFactor: 2 });
 page.on('pageerror', (e) => console.warn('  page error:', e.message));
 
 const baseStyle = await (await fetch('https://tiles.openfreemap.org/styles/positron')).json();
@@ -178,7 +183,7 @@ for (const chapter of chapters) {
   if (only && chapter.slug !== only) continue;
   const trackFile = join(ROOT, `src/data/fitness/tracks/${chapter.slug}.json`);
   const track = JSON.parse(await readFile(trackFile, 'utf8'));
-  if (missingOnly && track.plate) continue;
+  if (missingOnly && track.plate && track.plateTall) continue;
   // An indoor session has no ground to draw.
   if (!track.route.length) continue;
   const points = track.route.flat();
@@ -188,26 +193,27 @@ for (const chapter of chapters) {
   const dir = join(ROOT, `src/assets/fitness/${chapter.slug}`);
   await mkdir(dir, { recursive: true });
 
-  let projected;
-  for (const theme of ['light', 'dark']) {
-    await page.goto(base);
-    await page.evaluate(([style, b]) => window.render(style, b), [styles[theme], bounds]);
-    // Where the route falls on this picture, in its own pixels (identical for both themes).
-    projected ??= await page.evaluate((segments) => segments.map((segment) => segment.map(([lat, lng]) => {
-      const p = window.map.project([lng, lat]);
-      return [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10];
-    })), track.route);
-    const png = await page.locator('#map canvas').screenshot();
-    await sharp(png).jpeg({ quality: 86, mozjpeg: true, chromaSubsampling: '4:4:4' }).toFile(join(dir, `plate-${theme}.jpg`));
+  for (const [key, shape] of Object.entries(SHAPES)) {
+    let projected;
+    for (const theme of ['light', 'dark']) {
+      await page.goto(base);
+      await page.evaluate(([style, b, padding, w, h]) => window.render(style, b, padding, w, h), [styles[theme], bounds, shape.padding, shape.width, shape.height]);
+      // Where the route falls on this picture, in its own pixels (identical for both themes).
+      projected ??= await page.evaluate((segments) => segments.map((segment) => segment.map(([lat, lng]) => {
+        const p = window.map.project([lng, lat]);
+        return [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10];
+      })), track.route);
+      const png = await page.locator('#map canvas').screenshot();
+      await sharp(png).jpeg({ quality: 86, mozjpeg: true, chromaSubsampling: '4:4:4' }).toFile(join(dir, `${shape.file}-${theme}.jpg`));
+    }
+    track[key] = {
+      width: shape.width,
+      height: shape.height,
+      d: projected.map((segment) => `M${segment.map(([x, y]) => `${x} ${y}`).join('L')}`).join(''),
+      start: projected[0][0],
+      end: projected.at(-1).at(-1),
+    };
   }
-
-  track.plate = {
-    width: WIDTH,
-    height: HEIGHT,
-    d: projected.map((segment) => `M${segment.map(([x, y]) => `${x} ${y}`).join('L')}`).join(''),
-    start: projected[0][0],
-    end: projected.at(-1).at(-1),
-  };
   await writeFile(trackFile, `${JSON.stringify(track)}\n`);
   console.log(`${chapter.slug}: plates drawn`);
 }

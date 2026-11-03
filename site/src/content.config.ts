@@ -25,10 +25,6 @@ const projects = defineCollection({
       title: z.string(),
       /** One line: what it is, in plain words. */
       description: z.string().optional(),
-      year: z.number().optional(),
-      status: z.enum(['active', 'maintained', 'finished', 'retired']).optional(),
-      role: z.string().optional(),
-      stack: z.array(z.string()).default([]),
       url: z.url().optional(),
       github: z.url().optional(),
       logo: image().optional(),

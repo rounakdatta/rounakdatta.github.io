@@ -3,8 +3,6 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PhotoLink from '../../components/PhotoLink.astro';
 import PhotoViewer from '../../components/PhotoViewer.astro';
-import Icon from '../../components/Icon.astro';
-import { monthOfYear } from '../../lib/dates';
 
 const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -19,17 +17,13 @@ const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order 
     <section class="album" aria-labelledby={`album-${album.id}`}>
       <header class="album-head">
         <h2 id={`album-${album.id}`}><a href={`/photos/${album.id}/`}>{album.data.title}</a></h2>
-        <p class="album-meta">
-          {album.data.subtitle && <span class="subtitle">{album.data.subtitle}</span>}
-          <span>{album.data.date && `${monthOfYear(album.data.date)} · `}{album.data.photos.length} photos</span>
-        </p>
+        {album.data.subtitle && <p class="album-meta"><span class="subtitle">{album.data.subtitle}</span></p>}
       </header>
       <ul class="strip full" data-gallery tabindex="0" aria-label={`${album.data.title}, scroll for more`}>
         {album.data.photos.map((photo, i) => (
           <li><PhotoLink photo={photo} heights={[240, 340]} priority={a === 0 && i < 2} /></li>
         ))}
       </ul>
-      <p class="album-link"><a href={`/photos/${album.id}/`}>The whole album <Icon name="arrow-right" /></a></p>
     </section>
   ))}
 
@@ -121,11 +115,6 @@ const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order 
 
   .strip:focus-visible {
     outline-offset: 4px;
-  }
-
-  .album-link {
-    margin: 0.4em 0 0;
-    font-size: 0.95em;
   }
 
   @media (max-width: 34rem) {

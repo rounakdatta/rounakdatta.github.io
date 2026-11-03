@@ -4,6 +4,8 @@ import { excerptOf, readingMinutes, isPublished, proseOf } from '../src/lib/text
 import { totalsOf, km, sportOf, activities, type Activity } from '../src/lib/fitness';
 import { fitRoute, type LatLng } from '../src/lib/routes';
 import { shortDate, spokenDate, dateRange } from '../src/lib/dates';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 test.describe('summaries', () => {
   test('a note that opens with an epigraph is summarised from its first real paragraph', () => {
@@ -133,16 +135,75 @@ test.describe('the activity calendar', () => {
     expect(day.summary).toBe('5 km run, 71.1 km ride');
   });
 
-  test('crowded together, no two notes are left sitting on each other', async () => {
-    const { stackLabels } = await load();
-    const notes = [100, 120, 140, 400].map((x) => ({ x, w: 80 }));
-    const placed = stackLabels(notes, (n) => n.x, (n) => n.w);
-    for (const a of placed)
-      for (const b of placed)
-        if (a !== b && a.tier === b.tier) expect(Math.abs(a.item.x - b.item.x)).toBeGreaterThanOrEqual(80);
-    // The contrast that proves it did something: the crowded three needed three tiers, the loner one.
-    expect(new Set(placed.filter((p) => p.item.x < 200).map((p) => p.tier)).size).toBe(3);
-    expect(placed.find((p) => p.item.x === 400)!.tier).toBe(0);
+  test('crowded together, notes slide apart just enough, and a note on its own stays put', async () => {
+    const { dodge } = await load();
+    const notes = [{ want: 100, width: 80 }, { want: 110, width: 80 }, { want: 400, width: 80 }];
+    const [a, b, c] = dodge(notes, 10);
+    // The two that wanted nearly the same place end up exactly a note's width and a gap apart…
+    expect(b - a).toBeCloseTo(90);
+    // …around the middle of where they wanted to be, so neither is pushed further than it must be.
+    expect((a + b) / 2).toBeCloseTo(105);
+    // The contrast that proves it did something only where needed: the loner never moved.
+    expect(c).toBe(400);
+  });
+
+  test('a day sits in the column of its week, weeks starting on Monday', async () => {
+    const { placeOf } = await load();
+    // 1 Jan 2022 was a Saturday: the first column, sixth row. Monday 3 Jan began the second column.
+    expect(placeOf('2022-01-01')).toEqual({ year: 2022, week: 0, weekday: 5 });
+    expect(placeOf('2022-01-03')).toEqual({ year: 2022, week: 1, weekday: 0 });
+    expect(placeOf('2024-01-21')).toEqual({ year: 2024, week: 2, weekday: 6 });
+    expect(placeOf('2024-01-28')).toEqual({ year: 2024, week: 3, weekday: 6 });
+  });
+});
+
+test('a note pinned badly stops the build instead of drawing somewhere wrong', async () => {
+  const { parseMilestones } = await import('../src/lib/calendar');
+  const good = { text: 'Ladakh HM', position: 'above', date: '2024-09-08' };
+  expect(parseMilestones([good])[0]).toMatchObject({ days: ['2024-09-08'], position: 'above' });
+  // A side that isn't one, a day that doesn't exist, two pins at once, no pin at all.
+  for (const bad of [
+    { ...good, position: 'Below' },
+    { ...good, date: '2023-02-30' },
+    { ...good, week: '2024-09-02' },
+    { text: 'Ladakh HM', position: 'above' },
+    { text: 'Bought a bike', position: 'below', month: '2022-13' },
+  ])
+    expect(() => parseMilestones([bad]), JSON.stringify(bad)).toThrow(/milestones\.json/);
+});
+
+test.describe('the notes in the calendar, against the log', () => {
+  // The notes are Rounak's words; the days they're pinned to were read off Strava. These hold them
+  // there: a sync that shifted a day, or a typo in a date, fails here before it misleads anyone.
+  const notes = () => (JSON.parse(readFileSync(join(import.meta.dirname, '..', 'src', 'data', 'fitness', 'milestones.json'), 'utf8')).milestones as { text: string; date?: string; dates?: string[] }[]);
+  const daysOf = (n: { date?: string; dates?: string[] }) => n.dates ?? (n.date ? [n.date] : []);
+  const note = (text: string) => notes().find((n) => n.text === text)!;
+  const log = [...activities].sort((a, b) => a.date.localeCompare(b.date));
+  const run = (a: Activity) => /Run$/.test(a.type);
+  const ride = (a: Activity) => /Ride$/.test(a.type) && a.type !== 'EBikeRide';
+  const firstDay = (f: (a: Activity) => boolean) => log.find(f)?.date;
+
+  test('each first is the first such day in the log', () => {
+    expect(note('Signed up\non Strava').date).toBe(log[0].date);
+    // The very first run was a 5 km race (4.92 km on the watch).
+    expect(note('First 5K run').date).toBe(firstDay(run));
+    expect(log.find(run)!.distance).toBeGreaterThan(4_800);
+    expect(note('First 10K run').date).toBe(firstDay((a) => run(a) && a.distance >= 10_000));
+    expect(note('First Half Marathon').date).toBe(firstDay((a) => run(a) && a.distance >= 21_097));
+    expect(note('First 50K ride').date).toBe(firstDay((a) => ride(a) && a.distance >= 50_000));
+    expect(note('First 100K ride').date).toBe(firstDay((a) => ride(a) && a.distance >= 100_000));
+  });
+
+  test('every day a note names is a day something happened, and every race is as long as its name', () => {
+    for (const n of notes()) {
+      for (const day of daysOf(n)) {
+        const longest = Math.max(0, ...log.filter((a) => a.date === day).map((a) => a.distance));
+        expect(longest, `${n.text.replace('\n', ' ')} on ${day}`).toBeGreaterThan(0);
+        // A half marathon is 21.1 km; a 30K trail measured a little short on the watch.
+        if (/\bHM\b|Half Marathon/.test(n.text)) expect(longest, `${n.text} on ${day}`).toBeGreaterThan(21_000);
+        if (/30K/.test(n.text)) expect(longest, `${n.text} on ${day}`).toBeGreaterThan(29_000);
+      }
+    }
   });
 });
 
@@ -261,5 +322,56 @@ test.describe('compact route paths', () => {
     const { compactPath } = await import('../src/lib/routes');
     const compact = compactPath('M0 0L5 0.2L10 0M50 50L55 50.1L60 50', 1);
     expect(compact).toBe('M0 0L10 0M50 50L60 50');
+  });
+});
+
+test.describe('polaroids on a map card', () => {
+  const frame = { width: 1200, height: 800 };
+  const size = { width: 276, height: 240 };
+  const centroid = (slots: { x: number; y: number }[]) => [
+    slots.reduce((t, s) => t + s.x, 0) / slots.length,
+    slots.reduce((t, s) => t + s.y, 0) / slots.length,
+  ];
+
+  test('the photos sit together in the middle of the map, however many there are', async () => {
+    const { placePolaroids } = await import('../src/lib/polaroids');
+    for (let count = 1; count <= 6; count++) {
+      const [x, y] = centroid(placePolaroids([], count, { frame, size }));
+      // Rounak: "it'll be a great idea if the images are always nicely centered".
+      expect(Math.abs(x - 0.5), `${count} photos, across`).toBeLessThanOrEqual(0.02);
+      expect(Math.abs(y - 0.46), `${count} photos, down`).toBeLessThanOrEqual(0.02);
+    }
+  });
+
+  test('they move off centre only as far as it takes to uncover the route', async () => {
+    const { placePolaroids, along, coverage } = await import('../src/lib/polaroids');
+    // A route running down the left of the middle.
+    const line = along([[[480, 60], [500, 740]]], 6);
+    const slots = placePolaroids(line, 3, { frame, size });
+    const [x] = centroid(slots);
+    const centred = placePolaroids([], 3, { frame, size });
+    const at = (ss: typeof slots) => ss.map((s) => [s.x * frame.width, s.y * frame.height] as [number, number]);
+    // The contrast that proves it did something: less of the line hidden than by the plain centred group…
+    expect(coverage(line, at(slots), size)).toBeLessThan(coverage(line, at(centred), size));
+    // …while still close to the middle.
+    expect(Math.abs(x - 0.5)).toBeLessThanOrEqual(0.09);
+  });
+
+  test('every polaroid stays on the map, clear of its fading edge', async () => {
+    const { placePolaroids, along } = await import('../src/lib/polaroids');
+    const wobble = along([Array.from({ length: 60 }, (_, i) => [140 + i * 16, 380 + 90 * Math.sin(i / 6)] as [number, number])], 6);
+    for (let count = 1; count <= 6; count++)
+      for (const { x, y } of placePolaroids(wobble, count, { frame, size })) {
+        expect(x * frame.width - size.width / 2).toBeGreaterThanOrEqual(0);
+        expect(x * frame.width + size.width / 2).toBeLessThanOrEqual(frame.width);
+        expect(y * frame.height - size.height / 2).toBeGreaterThanOrEqual(0);
+        expect(y * frame.height + size.height / 2).toBeLessThanOrEqual(frame.height);
+      }
+  });
+
+  test('two builds lay the same group', async () => {
+    const { placePolaroids, along } = await import('../src/lib/polaroids');
+    const line = along([[[100, 100], [1100, 700]]], 6);
+    expect(placePolaroids(line, 5, { frame, size })).toEqual(placePolaroids(line, 5, { frame, size }));
   });
 });

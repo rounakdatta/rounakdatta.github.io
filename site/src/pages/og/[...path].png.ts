@@ -7,7 +7,6 @@ import { fullDate, monthOfYear } from '../../lib/dates';
 import { activities, totalsOf, km } from '../../lib/fitness';
 import { chapters } from '../../lib/journal';
 import { fitRoute } from '../../lib/routes';
-import { sportOf, kmTenths } from '../../lib/fitness';
 
 /** Astro keeps the file an imported image came from; the preview needs the original pixels. */
 const fileOf = (image: { fsPath?: string } | undefined) => image?.fsPath;
@@ -68,16 +67,6 @@ export const getStaticPaths = (async () => {
       route: fitRoute(longest.route, 400, 400, 24).d,
     },
   });
-  for (const c of chapters)
-    cards.push({
-      path: `fitness/${c.slug}`,
-      card: {
-        kicker: 'The Fitness Project',
-        title: c.title,
-        footnote: [c.distance > 0 ? `${kmTenths(c.distance)} km ${c.type === 'Hike' ? 'hike' : sportOf(c.type)}` : '', c.place].filter(Boolean).join(' · ') || 'The Fitness Project',
-        route: c.route.length ? fitRoute(c.route, 400, 400, 24).d : undefined,
-      },
-    });
 
   return cards.map(({ path, card }) => ({ params: { path }, props: { card } }));
 }) satisfies GetStaticPaths;

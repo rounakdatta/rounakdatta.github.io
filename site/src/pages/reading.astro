@@ -20,8 +20,7 @@ const goodreads = 'https://www.goodreads.com/user/show/23254685-rounak-datta';
   <h1>The Reading Project</h1>
 
   {shelves.length === 0 ? (
-    // Not empty forever, just not written yet: say where the list lives in the meantime.
-    <p class="lede">The reading list is still being written up. Until then, it lives on <a href={goodreads}>Goodreads</a>.</p>
+    <p class="lede">On <a href={goodreads}>Goodreads</a>, for now.</p>
   ) : (
     shelves.map((s) => (
       <section aria-labelledby={`shelf-${s.title.toLowerCase().replace(/\s+/g, '-')}`}>

@@ -11,7 +11,6 @@ const special = all.filter((p) => p.data.internalUrl);
 const repos = await Promise.all(
   all.filter((p) => !p.data.internalUrl).map(async (project) => ({ project, Content: (await render(project)).Content })),
 );
-const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Finished', retired: 'Retired' } as const;
 ---
 
 <BaseLayout title="Projects" description="Software Rounak Datta builds and keeps building: a self-hosted homelab, Nix dotfiles, and the fitness journal on this site.">
@@ -29,15 +28,13 @@ const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Fin
 
   <ul class="repos">
     {repos.map(({ project, Content }) => {
-      const { title, logo, year, status, stack, github, url } = project.data;
-      const facts = [year && `Since ${year}`, status && statusLabel[status], stack.join(', ')].filter(Boolean);
+      const { title, logo, github, url } = project.data;
       return (
         <li class="repo">
           {logo && <Image src={logo} alt="" width={112} height={112} layout="fixed" fit="contain" class="logo" />}
           <div class="repo-text">
             <h2>{title}{project.data.featured && <span class="featured-badge">Featured</span>}</h2>
             <div class="prose repo-body"><Content /></div>
-            {facts.length > 0 && <p class="facts">{facts.join(' · ')}</p>}
             <p class="links">
               {github && <a href={github}>Code <Icon name="arrow-up-right" /></a>}
               {url && <a href={url}>Website <Icon name="arrow-up-right" /></a>}
@@ -145,12 +142,6 @@ const statusLabel = { active: 'Active', maintained: 'Maintained', finished: 'Fin
 
   .repo-body :global(p) {
     margin-bottom: 0.6em;
-  }
-
-  .facts {
-    margin: 0 0 0.3em;
-    font-size: 0.88em;
-    color: var(--ink-muted);
   }
 
   .links {
