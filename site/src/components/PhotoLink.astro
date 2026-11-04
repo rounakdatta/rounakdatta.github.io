@@ -10,10 +10,12 @@ interface Props {
   priority?: boolean;
   /** AVIF quality: a gallery that is nothing but photos can afford more than a note's illustration. */
   quality?: number;
+  /** The sizes to make, for a page that shows its photos larger than a note does. */
+  widths?: number[];
   class?: string;
 }
 
-const { photo, sizes, priority = false, quality = 60, class: className } = Astro.props;
+const { photo, sizes, priority = false, quality = 60, widths = [400, 800, 1200].filter((w) => w <= photo.src.width), class: className } = Astro.props;
 const full = await fullSize(photo);
 ---
 
@@ -28,7 +30,7 @@ const full = await fullSize(photo);
   <Image
     src={photo.src}
     alt={altOf(photo)}
-    widths={[400, 800, 1200].filter((w) => w <= photo.src.width)}
+    widths={widths}
     sizes={sizes ?? '100vw'}
     format="avif"
     quality={quality}

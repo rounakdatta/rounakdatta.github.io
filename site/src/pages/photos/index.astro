@@ -9,8 +9,9 @@ import { altOf, type Photo } from '../../lib/photos';
 const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
 
 // Every photo is a print on black: one rectangle for the whole album, with an even black border,
-// and black filling whatever a photo's own shape leaves (above and below a landscape). The prints
-// are cut to the shape most of the album's photos share, so those get a border even all round.
+// and black filling whatever a photo's own shape leaves (above and below a wider photo, either side
+// of a narrower one). The prints are cut to the shape most of the album's photos share, so those
+// get a border even all round.
 // A print is at most 640px tall on a wide screen, and 84% of a phone's width.
 const TALLEST = 640;
 const PHONE_VW = 84;
@@ -32,10 +33,18 @@ function commonShape(photos: Photo[]) {
 /** The print that holds a photo of this shape with the same border on all four sides. */
 const printFor = (shape: number) => 1 / ((1 - 2 * BORDER) / shape + 2 * BORDER);
 
+/** How much of its print's width a photo takes once fitted whole into it. */
+const fitOf = (photo: Photo, shape: number) => (1 - 2 * BORDER) * Math.min(1, aspectOf(photo) / shape);
+
 /** How wide a photo is drawn once fitted whole into its print, for the browser to pick a size. */
-const sizesOf = (photo: Photo, shape: number) => {
-  const fit = (1 - 2 * BORDER) * Math.min(1, aspectOf(photo) / shape);
-  return `(max-width: 40rem) ${Math.round(PHONE_VW * fit)}vw, ${Math.round(TALLEST * printFor(shape) * fit)}px`;
+const sizesOf = (photo: Photo, shape: number) =>
+  `(max-width: 40rem) ${Math.round(PHONE_VW * fitOf(photo, shape))}vw, ${Math.round(TALLEST * printFor(shape) * fitOf(photo, shape))}px`;
+
+/** The sizes to make: up to the first that stays sharp on a 2x screen at the largest print, and no wider than the photo. */
+const widthsOf = (photo: Photo, shape: number) => {
+  const needed = 2 * TALLEST * printFor(shape) * fitOf(photo, shape);
+  const largest = Math.min([400, 800, 1200, 1600, 2000].find((w) => w >= needed) ?? 2000, photo.src.width);
+  return [400, 800, 1200, 1600].filter((w) => w < largest).concat(largest);
 };
 ---
 
@@ -56,7 +65,7 @@ const sizesOf = (photo: Photo, shape: number) => {
             <ul data-gallery>
               {album.data.photos.map((photo, i) => (
                 <li class="frame" style={`--a: ${(photo.src.width / photo.src.height).toFixed(4)}`}>
-                  <PhotoLink photo={photo} sizes={sizesOf(photo, shape)} priority={a === 0 && i < 2} quality={72} />
+                  <PhotoLink photo={photo} sizes={sizesOf(photo, shape)} widths={widthsOf(photo, shape)} priority={a === 0 && i < 2} quality={72} />
                   {/* Read once: with no alt text of its own, the photo already says its caption. */}
                   {photo.caption && <p class="caption" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>}
                 </li>
