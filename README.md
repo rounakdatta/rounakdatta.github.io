@@ -20,7 +20,7 @@ npm test           # against the build: CHROME_PATH=… if Playwright has no bro
 | an album | `site/src/content/photos/<slug>.md` | `photos: [{ src, caption, alt }]`, paths relative to the file. |
 | a project | `site/src/content/projects/<slug>.md` | `title`, a one-line `description`, `github`/`url`, a `logo`. |
 | a book | `site/src/content/books.yaml` | The Reading page lists them by shelf once there are any. |
-| a fitness chapter | `site/src/data/fitness/chapters.json` | A Strava activity `id` (or `ids` for a trek walked over days), a `slug`, `title` and `tagline`. Optional: `place` (otherwise looked up from the route), `photos` (otherwise the activity's own), and `publicStart` for a race or trailhead, so the route is drawn whole. Then run the two commands below. |
+| a fitness chapter | `site/src/data/fitness/chapters.json` | A Strava activity `id` (or `ids` for a trek walked over days), a `slug`, `title` and `tagline`. Optional: `place` (otherwise looked up from the route), `photos` (otherwise the activity's own), and `publicStart` to draw a route whole even though it starts at one of your regular places (routes are drawn whole anyway, except an end at home: see `site/scripts/privacy.mjs`). Then run the two commands below. |
 | a note in the calendar | `site/src/data/fitness/milestones.json` | `text` (`\n` breaks a line), `position` (`above` or `below` the days), and when, as exactly as it is known: a `date`, `dates` for one note about two days, a `week` (any day in it), or a `month` (`"2022-07"`). Every day named is ringed; a date that isn't real stops the build. |
 
 ## The fitness journal

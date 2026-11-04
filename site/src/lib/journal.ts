@@ -22,7 +22,7 @@ interface Track {
   maxHeartrate?: number;
   /** Where, looked up from the route when chapters.json does not say. */
   place?: string;
-  /** The route as segments: anything near its start or finish is left out (see scripts/privacy.mjs). */
+  /** The route as recorded, within 3 m, in one segment per activity; an end at home is left out (see scripts/privacy.mjs). */
   route: [number, number][][];
   /** [metres along, metres above the sea] */
   profile: [number, number][];

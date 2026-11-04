@@ -1,6 +1,33 @@
 {
- "lastUpdated": "2026-10-31",
+ "lastUpdated": "2026-11-04",
  "activities": [
+  {
+   "id": 20838406142,
+   "date": "2026-11-02",
+   "name": "Evening Walk",
+   "type": "Walk",
+   "distance": 3218,
+   "movingTime": 2581,
+   "elevation": 4
+  },
+  {
+   "id": 20837836762,
+   "date": "2026-11-02",
+   "name": "Night Walk",
+   "type": "Walk",
+   "distance": 6462,
+   "movingTime": 5201,
+   "elevation": 19
+  },
+  {
+   "id": 20811886412,
+   "date": "2026-11-01",
+   "name": "Morning Run",
+   "type": "Run",
+   "distance": 11154,
+   "movingTime": 4737,
+   "elevation": 64
+  },
   {
    "id": 20787075638,
    "date": "2026-10-30",
