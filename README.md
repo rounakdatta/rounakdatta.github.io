@@ -17,7 +17,7 @@ npm test           # against the build: CHROME_PATH=… if Playwright has no bro
 | a note | `site/src/content/notes/<slug>.md` (or `.mdx`) | `title`, `date`, optional `description` (the link preview) and `tags`. `draft: true` keeps it off the site entirely. |
 | a photo in a note | `site/src/assets/images/…`, then `![what it shows](../../assets/images/x.jpg "caption")` | Alone in a paragraph it becomes a captioned figure; it is resized and served as AVIF. |
 | a margin note | a markdown footnote, `[^1]` | Sits beside its line on a wide screen and opens in place on a phone. In MDX, `<Sidenote>…</Sidenote>` does the same. |
-| an album | `site/src/content/photos/<slug>.md` | `photos: [{ src, caption, alt }]`, paths relative to the file. |
+| an album | `site/src/content/photos/<slug>.md` | A `title` and `photos: [{ src, caption, alt }]`, paths relative to the file. Every album hangs on the one Photos page, as a strip that drifts sideways. |
 | a project | `site/src/content/projects/<slug>.md` | `title`, a one-line `description`, `github`/`url`, a `logo`. |
 | a book | `site/src/content/books.yaml` | The Reading page lists them by shelf once there are any. |
 | a fitness chapter | `site/src/data/fitness/chapters.json` | A Strava activity `id` (or `ids` for a trek walked over days), a `slug`, `title` and `tagline`. Optional: `place` (otherwise looked up from the route), `photos` (otherwise the activity's own), and `publicStart` to draw a route whole even though it starts at one of your regular places (routes are drawn whole anyway, except an end at home: see `site/scripts/privacy.mjs`). Then run the two commands below. |

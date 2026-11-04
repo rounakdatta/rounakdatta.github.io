@@ -11,8 +11,9 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     mdx({ rehypePlugins: [rehypeFigure, rehypeSidenotes] }),
-    // /about/ only redirects home, so it is not a page worth listing.
-    sitemap({ filter: (page) => !page.endsWith('/about/') }),
+    // /about/ only redirects home, and an album's old address only leads to it on /photos/: neither
+    // is a page worth listing.
+    sitemap({ filter: (page) => !/\/(about|photos\/[^/]+)\/$/.test(page) }),
   ],
 
   // Fonts are downloaded at build time and served from this site: no request to
