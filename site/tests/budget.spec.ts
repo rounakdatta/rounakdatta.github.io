@@ -12,7 +12,9 @@ const BUDGETS: [RegExp, { firstView: number; whole: number }][] = [
   // text font, and the first three maps: Chrome fetches lazy images ~1,250px ahead, and a map is
   // ~47 KB at the size a phone draws it. The handwriting waits until the calendar comes near.
   [/^\/fitness\/$/, { firstView: 420 * KB, whole: 4 * MB }],
-  [/^\/photos\//, { firstView: 400 * KB, whole: 3 * MB }],
+  // Two albums meet a phone's first view: the first album's opening prints load at once, and Chrome's
+  // lazy reach takes in the next album's first two. A print is ≤125 KB at the size a phone draws it.
+  [/^\/photos\//, { firstView: 550 * KB, whole: 3 * MB }],
   // A note may open with a photo across the column: one AVIF of 150–170 KB, plus the fonts.
   [/^\/notes\/.+/, { firstView: 400 * KB, whole: 3 * MB }],
   [/./, { firstView: 250 * KB, whole: 1 * MB }],
