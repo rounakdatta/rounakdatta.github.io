@@ -39,3 +39,18 @@ export function excerptOf(markdown: string, limit = 180): string {
   if (sentenceEnd > limit * 0.5) return cut.slice(0, sentenceEnd + 1);
   return `${text.slice(0, text.lastIndexOf(' ', limit))}…`;
 }
+
+export type Linked = string | { text: string; href: string };
+
+/** A line with `[words](https://…)` in it, as words and links: a caption may carry a link, nothing more. */
+export function linkedParts(line: string): Linked[] {
+  const parts: Linked[] = [];
+  let last = 0;
+  for (const match of line.matchAll(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g)) {
+    if (match.index > last) parts.push(line.slice(last, match.index));
+    parts.push({ text: match[1], href: match[2] });
+    last = match.index + match[0].length;
+  }
+  if (last < line.length) parts.push(line.slice(last));
+  return parts;
+}

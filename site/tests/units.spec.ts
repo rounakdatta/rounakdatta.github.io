@@ -1,6 +1,6 @@
 // The pure parts of the site, tested without a browser: words, numbers, dates and shapes.
 import { test, expect } from '@playwright/test';
-import { excerptOf, readingMinutes, isPublished, proseOf } from '../src/lib/text';
+import { excerptOf, readingMinutes, isPublished, proseOf, linkedParts } from '../src/lib/text';
 import { totalsOf, km, sportOf, activities, type Activity } from '../src/lib/fitness';
 import { fitRoute, type LatLng } from '../src/lib/routes';
 import { shortDate, spokenDate, dateRange } from '../src/lib/dates';
@@ -35,6 +35,16 @@ test.describe('summaries', () => {
     expect(isPublished({ draft: false })).toBe(true);
     expect(isPublished({})).toBe(true);
   });
+});
+
+test('a caption can carry a link, and nothing else in it becomes one', () => {
+  expect(linkedParts('Six offline days in the Annapurnas, with [TVT](https://theverticaltribe.com/)')).toEqual([
+    'Six offline days in the Annapurnas, with ',
+    { text: 'TVT', href: 'https://theverticaltribe.com/' },
+  ]);
+  expect(linkedParts('Lyric & friends')).toEqual(['Lyric & friends']);
+  // Only a web address is a link: brackets around anything else are just brackets.
+  expect(linkedParts('a [note](javascript:alert(1)) here')).toEqual(['a [note](javascript:alert(1)) here']);
 });
 
 test.describe('fitness numbers', () => {
@@ -240,20 +250,52 @@ test.describe('route privacy', () => {
   // A ride that leaves home, comes back past it in the middle, and ends there.
   const home: [number, number] = [12.95, 77.7];
   const north = (km: number): [number, number] => [home[0] + km / 111, home[1]];
+  const kmNorth = (p: [number, number]) => (p[0] - home[0]) * 111;
   const route = [0, 0.2, 0.5, 1, 2, 3, 2, 1, 0.3, 0.1, 0.4, 1, 2, 1, 0.5, 0.2, 0].map(north);
 
-  test('every point near the start or the finish is dropped, wherever on the route it falls', async () => {
-    const { trimNear } = await import('../scripts/privacy.mjs');
-    const segments = trimNear(route, 800);
-    const near = (p: [number, number]) => Math.abs(p[0] - home[0]) * 111 < 0.8;
-    expect(segments.flat().some(near)).toBe(false);
-    // The pass by home in the middle splits the route instead of drawing a line through home.
-    expect(segments.length).toBe(2);
+  test('an end at home loses only the stretch until the route first leaves the radius', async () => {
+    const { trimEnds } = await import('../scripts/privacy.mjs');
+    const kept = trimEnds(route, 800).map(kmNorth);
+    // Starts and finishes beyond 800 m of the door…
+    expect(kept[0]).toBeGreaterThan(0.8);
+    expect(kept.at(-1)).toBeGreaterThan(0.8);
+    // …and the pass by home in the middle is drawn through, not cut out: the line stays whole.
+    expect(kept.some((km) => km < 0.8)).toBe(true);
+    expect(kept.length).toBe(route.length - 6);
   });
 
-  test('a route that never leaves the neighbourhood is not drawn at all', async () => {
-    const { trimNear } = await import('../scripts/privacy.mjs');
-    expect(trimNear([0, 0.1, 0.3, 0.1, 0].map(north), 800)).toEqual([]);
+  test('only an end at home is cut: the other end, and a route from anywhere else, stay whole', async () => {
+    const { trimEnds } = await import('../scripts/privacy.mjs');
+    expect(trimEnds(route, 800, { start: true, finish: false }).at(-1)).toEqual(route.at(-1));
+    expect(trimEnds(route, 800, { start: false, finish: false })).toEqual(route);
+  });
+
+  test('the regular places are the ones many activities begin or end at, not somewhere visited once', async () => {
+    const { regularPlaces, atRegularPlace } = await import('../scripts/privacy.mjs');
+    const race: [number, number] = [13.0, 77.6];
+    const ends = [...Array.from({ length: 12 }, (_, i): [number, number] => [home[0] + i / 1e5, home[1]]), race, race];
+    const places = regularPlaces(ends);
+    expect(atRegularPlace(home, places)).toBe(true);
+    expect(atRegularPlace(race, places)).toBe(false);
+  });
+
+  test('a route is drawn within 3 m of every point recorded, with far fewer points', async () => {
+    const { simplify } = await import('../scripts/privacy.mjs');
+    // A switchback trail: a zigzag of 40 m legs, recorded every metre or so.
+    const recorded: [number, number][] = [];
+    for (let i = 0; i <= 800; i++) {
+      const leg = Math.floor(i / 40);
+      const along = i % 40;
+      recorded.push([home[0] + (leg * 10) / 111_000, home[1] + ((leg % 2 ? 40 - along : along) / 108_600)]);
+    }
+    const drawn = simplify(recorded, 3);
+    expect(drawn.length).toBeLessThan(recorded.length / 10);
+    // Every corner of the zigzag survives: the drawn line still has a point near each one.
+    const metres = ([a, b]: [number, number], [c, d]: [number, number]) => Math.hypot((a - c) * 111_000, (b - d) * 108_600);
+    for (let leg = 0; leg <= 20; leg++) {
+      const corner = recorded[Math.min(leg * 40, recorded.length - 1)];
+      expect(Math.min(...drawn.map((p) => metres(p, corner)))).toBeLessThan(12);
+    }
   });
 });
 
@@ -262,19 +304,6 @@ test('a span of days is said once, whichever months and years it crosses', () =>
   expect(dateRange(d('2026-10-25'), d('2026-10-30'))).toBe('25–30 Oct 2026');
   expect(dateRange(d('2026-10-30'), d('2026-11-02'))).toBe('30 Oct – 2 Nov 2026');
   expect(dateRange(d('2025-12-30'), d('2026-01-02'))).toBe('30 Dec 2025 – 2 Jan 2026');
-});
-
-test('crumbs left by trimming are dropped, but never the whole route', async () => {
-  const { dropSpecks } = await import('../scripts/privacy.mjs');
-  const east = (fromKm: number, toKm: number): [number, number][] =>
-    Array.from({ length: 11 }, (_, i) => [12.95, 77.7 + (fromKm + ((toKm - fromKm) * i) / 10) / 108.6]);
-  const ride = east(0, 15);
-  const crumb = east(20, 20.05);
-  const piece = east(30, 33);
-  expect(dropSpecks([ride, crumb, piece])).toEqual([ride, piece]);
-  // A route whose only piece is short keeps it.
-  expect(dropSpecks([crumb])).toEqual([crumb]);
-  expect(dropSpecks([crumb, east(40, 40.5)]).length).toBe(1);
 });
 
 test('a chapter spanning several days includes every outing of its kind on those days', async () => {

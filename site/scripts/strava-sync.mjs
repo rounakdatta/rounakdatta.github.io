@@ -2,14 +2,15 @@
 // Pull the fitness journal's data from Strava: `npm run strava` (or `make strava`).
 //
 //   src/data/strava-activities.json     every activity: date, kind, distance, time, climb
-//   src/data/fitness/tracks/<slug>.json  for each new chapter in chapters.json: its route (minus
-//                                        anything near where it began or ended), its elevation
-//                                        profile and its numbers
+//   src/data/fitness/tracks/<slug>.json  for each new chapter in chapters.json: its route (drawn
+//                                        whole, except an end at home: see scripts/privacy.mjs),
+//                                        its elevation profile and its numbers
 //   src/assets/fitness/<slug>/*.jpg      each chapter's photos, downloaded once
 //
 // Chapters themselves (which days, their titles, taglines and photos) are chosen by hand in
-// src/data/fitness/chapters.json; this only fills in what Strava knows. A chapter that starts
-// somewhere public (a race, a trailhead) can say `"publicStart": true` to be drawn whole.
+// src/data/fitness/chapters.json; this only fills in what Strava knows. A chapter that starts at
+// a regular place that is public all the same (a club's usual start) can say
+// `"publicStart": true` to be drawn whole.
 //
 // Credentials, in order of preference:
 //   STRAVA_CLIENT_ID + STRAVA_CLIENT_SECRET + STRAVA_REFRESH_TOKEN  (CI: a fresh token every run)
@@ -21,7 +22,7 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { trimNear, privacyRadius, dropSpecks } from './privacy.mjs';
+import { regularPlaces, atRegularPlace, privacyRadius, trimEnds, simplify } from './privacy.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exists = (path) => access(path).then(() => true, () => false);
@@ -53,11 +54,21 @@ async function token() {
 
 const bearer = await token();
 
+// STRAVA_CACHE=<dir> keeps every response while the sync itself is being worked on, so running
+// it again costs nothing against Strava's 100 requests per 15 minutes. Point it outside the
+// repo: the routes in it are whole, doors included.
 async function strava(path) {
+  const cached = process.env.STRAVA_CACHE && join(process.env.STRAVA_CACHE, `${encodeURIComponent(path)}.json`);
+  if (cached && (await exists(cached))) return JSON.parse(await readFile(cached, 'utf8'));
   const res = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${bearer}` } });
   if (res.status === 429) throw new Error('Strava rate limit reached (100 requests per 15 minutes); try again later.');
   if (!res.ok) throw new Error(`${path}: ${res.status} ${await res.text()}`);
-  return res.json();
+  const body = await res.json();
+  if (cached) {
+    await mkdir(process.env.STRAVA_CACHE, { recursive: true });
+    await writeFile(cached, JSON.stringify(body));
+  }
+  return body;
 }
 
 /** Google's encoded polyline format, which Strava uses for routes. */
@@ -83,9 +94,6 @@ function decodePolyline(encoded) {
   }
   return points;
 }
-
-/** Keep every nth point so a route stays a few hundred points, enough to draw smoothly. */
-const thin = (points, max) => (points.length <= max ? points : points.filter((_, i) => i % Math.ceil(points.length / max) === 0 || i === points.length - 1));
 
 const round = (n, places) => Math.round(n * 10 ** places) / 10 ** places;
 
@@ -119,13 +127,17 @@ const lastUpdated = changed || !previous ? new Date().toISOString().slice(0, 10)
 await writeFile(logFile, `${JSON.stringify({ lastUpdated, activities: log }, null, 1)}\n`);
 console.log(`${log.length} activities, ${log.at(-1)?.date} to ${log[0]?.date}${changed ? '' : ' (nothing new)'}`);
 
+// The places activities keep starting and ending at (home, work), from the whole history,
+// private ones included: they decide which ends of a chapter's route are hidden. Kept in memory.
+const places = regularPlaces(activities.flatMap((a) => [a.start_latlng, a.end_latlng]).filter((p) => p?.length === 2));
+
 // ---------- Each chapter ----------
 
 const chapters = JSON.parse(await readFile(join(ROOT, 'src/data/fitness/chapters.json'), 'utf8'));
 await mkdir(join(ROOT, 'src/data/fitness/tracks'), { recursive: true });
 
-// A chapter is fetched once. Its route is trimmed with a radius chosen then and kept nowhere, so
-// fetching it again would trim it differently, and redraw (and recommit) its map for nothing.
+// A chapter is fetched once. An end at home is cut with a radius chosen then and kept nowhere, so
+// fetching it again would cut it differently, and redraw (and recommit) its map for nothing.
 // `npm run strava -- --refresh` fetches every chapter again anyway.
 const refresh = process.argv.includes('--refresh');
 
@@ -157,15 +169,21 @@ for (const chapter of chapters) {
     parts.push({ id, detail, streams });
   }
 
-  // About 600 points in all, shared between the segments by length, enough to draw smoothly.
-  // A race or a public trailhead starts nowhere private; anything else might start at a door.
-  // An indoor session (HYROX, a gym) has no route at all, and its chapter simply has no map.
+  // The whole recording, within 3 m of every point it took: only an end at a regular place is
+  // cut, back to where the route first leaves the radius. An indoor session (HYROX, a gym) has no
+  // route at all, and its chapter simply has no map.
+  const hidden = new Set();
   const segments = parts.flatMap(({ detail, streams }) => {
     const raw = streams.latlng?.data ?? decodePolyline(detail.map?.polyline ?? detail.map?.summary_polyline ?? '');
-    return dropSpecks(trimNear(raw, chapter.publicStart ? 0 : privacyRadius()));
+    if (raw.length < 2) return [];
+    const start = !chapter.publicStart && atRegularPlace(raw[0], places);
+    const finish = !chapter.publicStart && atRegularPlace(raw.at(-1), places);
+    if (start) hidden.add('start');
+    if (finish) hidden.add('finish');
+    const kept = trimEnds(raw, privacyRadius(), { start, finish });
+    return kept.length > 1 ? [kept] : [];
   });
-  const total = segments.reduce((n, seg) => n + seg.length, 0);
-  const route = segments.map((segment) => thin(segment, Math.max(2, Math.ceil((600 * segment.length) / total))).map(([lat, lng]) => [round(lat, 5), round(lng, 5)]));
+  const route = segments.map((segment) => simplify(segment, 3).map(([lat, lng]) => [round(lat, 5), round(lng, 5)]));
 
   // Height against distance across every part, a hundred and fifty samples in all. An indoor
   // session has a barometer but no distance, so its heights would draw nothing true: none at all.
@@ -225,5 +243,5 @@ for (const chapter of chapters) {
     await sharp(Buffer.from(await res.arrayBuffer())).rotate().resize(2000, 2000, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 84, mozjpeg: true }).toFile(file);
     fetched++;
   }
-  console.log(`${chapter.slug}: ${parts.length > 1 ? `${parts.length} activities, ` : ''}${route.flat().length} points in ${route.length} part${route.length === 1 ? '' : 's'}, ${profile.length} heights, ${fetched} new photos${track.place ? `, ${track.place}` : ''}`);
+  console.log(`${chapter.slug}: ${parts.length > 1 ? `${parts.length} activities, ` : ''}${route.flat().length} points in ${route.length} part${route.length === 1 ? '' : 's'}${hidden.size ? `, ${[...hidden].join(' and ')} hidden at home` : ''}, ${profile.length} heights, ${fetched} new photos${track.place ? `, ${track.place}` : ''}`);
 }

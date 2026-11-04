@@ -10,6 +10,7 @@ import { compactPath } from '../../lib/routes';
 import { placePolaroids, pointsOf, along, coverage, type Point } from '../../lib/polaroids';
 import { chapters, milestones, yearNotes, type Chapter } from '../../lib/journal';
 import { monthOfYear, isoDate } from '../../lib/dates';
+import { linkedParts } from '../../lib/text';
 
 const all = totalsOf(activities);
 const days = daysOf(activities);
@@ -176,7 +177,7 @@ const sketches = [
           <p class="when"><time datetime={c.date.slice(0, 7)}>{when}</time></p>
           <span class="sport"><Icon name={sportIcon(c.type)} size="2.6rem" /></span>
           <h3 id={`t-${c.slug}`} class="place-title">{c.title}</h3>
-          {c.tagline && <p class="tagline">{c.tagline}</p>}
+          {c.tagline && <p class="tagline">{linkedParts(c.tagline).map((part) => (typeof part === 'string' ? part : <a href={part.href}>{part.text}</a>))}</p>}
         </header>
 
         <div class="card" data-hidden={hidden}>
