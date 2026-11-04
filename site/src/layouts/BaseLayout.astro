@@ -94,10 +94,12 @@ const isCurrent = (href: string) =>
 
     <footer class="site-footer">
       <p><s aria-hidden="true">©</s><span class="visually-hidden">No copyright.</span> Human ideated, Claude coded</p>
+      {/* Like the home page's own links, these open in a new tab: whoever follows one keeps the site. */}
       <ul>
-        {ELSEWHERE.map(({ href, label }) => <li><a href={href}>{label}</a></li>)}
-        <li><a href="/rss.xml">RSS</a></li>
+        {ELSEWHERE.map(({ href, label }) => <li><a href={href} target="_blank" rel="noopener" aria-describedby="new-tab">{label}</a></li>)}
+        <li><a href="/rss.xml" target="_blank" rel="noopener" aria-describedby="new-tab">RSS</a></li>
       </ul>
+      <span id="new-tab" hidden>Opens in a new tab</span>
     </footer>
   </body>
 </html>

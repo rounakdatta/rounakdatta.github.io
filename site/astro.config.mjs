@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeFigure from './src/lib/rehype-figure.mjs';
 import rehypeSidenotes from './src/lib/rehype-sidenotes.mjs';
+import rehypeNewTab from './src/lib/rehype-new-tab.mjs';
 
 export default defineConfig({
   site: 'https://rounak.taptappers.club',
@@ -61,7 +62,7 @@ export default defineConfig({
   },
 
   markdown: {
-    processor: unified({ rehypePlugins: [rehypeFigure, rehypeSidenotes] }),
+    processor: unified({ rehypePlugins: [rehypeFigure, rehypeSidenotes, rehypeNewTab] }),
     // Both themes are written onto every token; global.css picks the one matching the reader's.
     // defaultColor: false, or Shiki writes the light colour inline and night mode can't override it.
     shikiConfig: { themes: { light: 'github-light', dark: 'github-dark-dimmed' }, defaultColor: false, wrap: true },
