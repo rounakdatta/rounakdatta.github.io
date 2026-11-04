@@ -260,7 +260,7 @@ test.describe('route privacy', () => {
     expect(kept[0]).toBeGreaterThan(0.8);
     expect(kept.at(-1)).toBeGreaterThan(0.8);
     // …and the pass by home in the middle is drawn through, not cut out: the line stays whole.
-    expect(kept.some((km) => km < 0.8)).toBe(true);
+    expect(kept.some((km: number) => km < 0.8)).toBe(true);
     expect(kept.length).toBe(route.length - 6);
   });
 
@@ -294,7 +294,7 @@ test.describe('route privacy', () => {
     const metres = ([a, b]: [number, number], [c, d]: [number, number]) => Math.hypot((a - c) * 111_000, (b - d) * 108_600);
     for (let leg = 0; leg <= 20; leg++) {
       const corner = recorded[Math.min(leg * 40, recorded.length - 1)];
-      expect(Math.min(...drawn.map((p) => metres(p, corner)))).toBeLessThan(12);
+      expect(Math.min(...drawn.map((p: [number, number]) => metres(p, corner)))).toBeLessThan(12);
     }
   });
 });
