@@ -8,10 +8,12 @@ interface Props {
   /** How wide the photo is shown (an HTML sizes attribute). */
   sizes?: string;
   priority?: boolean;
+  /** AVIF quality: a gallery that is nothing but photos can afford more than a note's illustration. */
+  quality?: number;
   class?: string;
 }
 
-const { photo, sizes, priority = false, class: className } = Astro.props;
+const { photo, sizes, priority = false, quality = 60, class: className } = Astro.props;
 const full = await fullSize(photo);
 ---
 
@@ -29,7 +31,7 @@ const full = await fullSize(photo);
     widths={[400, 800, 1200].filter((w) => w <= photo.src.width)}
     sizes={sizes ?? '100vw'}
     format="avif"
-    quality={60}
+    quality={quality}
     loading={priority ? 'eager' : 'lazy'}
     fetchpriority={priority ? 'high' : undefined}
     layout="none"
