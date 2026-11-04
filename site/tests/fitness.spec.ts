@@ -60,7 +60,17 @@ async function pointAt(page: Page, x: number, y: number, expected: (tip: string 
     nudge = nudge ? 0 : 0.5;
     await page.mouse.move(point.x + nudge, point.y);
     const tip = page.locator('.moving .tooltip');
-    expected((await tip.isVisible()) ? await tip.textContent() : null);
+    const text = (await tip.isVisible()) ? await tip.textContent() : null;
+    try {
+      expected(text);
+    } catch (error) {
+      // Say what the pointer was really over, so a failure explains itself.
+      const under = await page.evaluate(([x, y]) => {
+        const el = document.elementFromPoint(x, y);
+        return el ? `<${el.tagName.toLowerCase()} class="${el.getAttribute('class') ?? ''}">` : 'nothing';
+      }, [point.x + nudge, point.y]);
+      throw new Error(`${(error as Error).message}\npointer at ${Math.round(point.x)},${Math.round(point.y)} over ${under}, scrolled to ${await page.evaluate(() => Math.round(scrollY))}`);
+    }
   }).toPass({ timeout: 10_000 });
 }
 
