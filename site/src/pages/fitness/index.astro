@@ -81,8 +81,7 @@ const cards = await Promise.all(
         shown.map(async (src, k) => ({ ...(await thumbnail(src)), wide: wideSlots[k], tall: tallSlots[k] })),
       ),
       hidden: Math.round(hidden * 100),
-      month: new Date(`${c.date}T00:00:00Z`).toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' }),
-      year: c.date.slice(0, 4),
+      when: new Date(`${c.date}T00:00:00Z`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
       start: twelveHour(c.startTime),
       meta: [c.place, c.distance > 0 && `${kmTenths(c.distance)} km`, c.days.length > 1 ? `${c.days.length} days` : duration(c.movingTime)].filter(Boolean) as string[],
     };
@@ -171,16 +170,14 @@ const sketches = [
   <section class="places full" aria-labelledby="places">
     <h2 id="places" class="section-title">Places we go</h2>
 
-    {cards.map(({ c, first, side, plates, wide, tall, photos, hidden, month, year, start, meta }) => (
+    {cards.map(({ c, first, side, plates, wide, tall, photos, hidden, when, start, meta }) => (
       <article class:list={['place', side]} id={c.slug} aria-labelledby={`t-${c.slug}`}>
         <header class="place-head">
+          <p class="when"><time datetime={c.date.slice(0, 7)}>{when}</time></p>
           <span class="sport"><Icon name={sportIcon(c.type)} size="2.6rem" /></span>
-          <div>
-            <h3 id={`t-${c.slug}`} class="place-title">{c.title}</h3>
-            {c.tagline && <p class="tagline">{c.tagline}</p>}
-          </div>
+          <h3 id={`t-${c.slug}`} class="place-title">{c.title}</h3>
+          {c.tagline && <p class="tagline">{c.tagline}</p>}
         </header>
-        <p class="sticker" aria-hidden="true"><span class="sticker-month">{month}</span><span class="sticker-year">{year}</span></p>
 
         <div class="card" data-hidden={hidden}>
           <div class="ground">
@@ -270,40 +267,6 @@ const sketches = [
     <script type="application/json" id="calendar-days" set:html={JSON.stringify(tooltipDays)} />
   </section>
 
-  <!-- The page opened on two arcs, running and cycling, side by side. It closes with them meeting. -->
-  <div class="ending full">
-    <svg class="end wide-end" viewBox="0 0 1000 210">
-      <mask id="end-reveal-w" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="210">
-        <path class="reveal" d="M 92 72 C 380 30, 600 50, 742 104" pathLength="1" />
-        <path class="reveal" d="M 92 150 C 380 196, 600 172, 742 112" pathLength="1" />
-      </mask>
-      <path class="figure-icon" transform="translate(42, 46) scale(0.14)" d={RUNNER} />
-      <path class="figure-icon" transform="translate(38, 124) scale(0.14)" d={RIDER} />
-      <g mask="url(#end-reveal-w)">
-        <path class="arc" d="M 92 72 C 380 30, 600 50, 742 104" />
-        <path class="arc" d="M 92 150 C 380 196, 600 172, 742 112" />
-      </g>
-      <circle class="ring" cx="750" cy="108" r="8" />
-      <circle class="dot" cx="750" cy="108" r="8" />
-      <g transform="rotate(-4 780 116)"><text class="hand" x="780" y="118">to be continued…</text></g>
-    </svg>
-    <svg class="end narrow-end" viewBox="0 0 500 250">
-      <mask id="end-reveal-n" maskUnits="userSpaceOnUse" x="0" y="0" width="500" height="250">
-        <path class="reveal" d="M 70 62 C 220 30, 330 50, 402 100" pathLength="1" />
-        <path class="reveal" d="M 70 140 C 220 176, 330 156, 402 108" pathLength="1" />
-      </mask>
-      <path class="figure-icon" transform="translate(26, 40) scale(0.13)" d={RUNNER} />
-      <path class="figure-icon" transform="translate(22, 118) scale(0.13)" d={RIDER} />
-      <g mask="url(#end-reveal-n)">
-        <path class="arc" d="M 70 62 C 220 30, 330 50, 402 100" />
-        <path class="arc" d="M 70 140 C 220 176, 330 156, 402 108" />
-      </g>
-      <circle class="ring" cx="410" cy="104" r="7" />
-      <circle class="dot" cx="410" cy="104" r="7" />
-      <g transform="rotate(-4 250 214)"><text class="hand" x="250" y="214" text-anchor="middle">to be continued…</text></g>
-    </svg>
-  </div>
-
   <!-- Inline, so a card never waits on a download to appear. -->
   <script is:inline data-from={all.first} data-today={today}>
     (() => {
@@ -324,7 +287,7 @@ const sketches = [
             seen.unobserve(entry.target);
           }
         }, { threshold: 0.35 });
-        document.querySelectorAll('.card, .ending').forEach((el) => seen.observe(el));
+        document.querySelectorAll('.card').forEach((el) => seen.observe(el));
       } else {
         root.classList.remove('motion');
       }
@@ -334,6 +297,9 @@ const sketches = [
         for (const slot of card.querySelectorAll('.slot.zoomed')) {
           slot.classList.remove('zoomed');
           slot.querySelector('.polaroid').setAttribute('aria-pressed', 'false');
+          slot.classList.add('closing');
+          clearTimeout(slot.landing);
+          slot.landing = setTimeout(() => slot.classList.remove('closing'), 500);
         }
       };
       document.addEventListener('click', (event) => {
@@ -345,12 +311,19 @@ const sketches = [
         const wasUp = slot.classList.contains('zoomed');
         putBack(card);
         if (wasUp) return;
+        // A photo still dropping in lands at once, to be picked up from where it lies.
+        for (const animation of slot.getAnimations()) if (animation.animationName) animation.finish();
+        clearTimeout(slot.landing);
+        slot.classList.remove('closing');
         slot.classList.add('zoomed');
         button.setAttribute('aria-pressed', 'true');
-        // Bigger on screen, so ask for the bigger print.
-        const img = button.querySelector('img');
-        if (img.dataset.zoomSizes) img.sizes = img.dataset.zoomSizes;
       });
+      // The sharper print is asked for as a hand reaches for a photo, so it is there once it is up.
+      const sharpen = (event) => {
+        const img = event.target.closest?.('.polaroid')?.querySelector('img');
+        if (img?.dataset.zoomSizes && img.sizes !== img.dataset.zoomSizes) img.sizes = img.dataset.zoomSizes;
+      };
+      for (const type of ['pointerover', 'pointerdown', 'focusin']) document.addEventListener(type, sharpen);
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') document.querySelectorAll('.card').forEach(putBack);
       });
@@ -703,71 +676,45 @@ const sketches = [
     margin-right: 15%;
   }
 
+  /* A dateline over the title, as a journal entry has: the icon stands beside the title alone. */
   .place-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.6rem;
+    align-items: start;
     margin-bottom: 0.75rem;
     padding-left: 0.2rem;
   }
 
+  .when {
+    grid-column: 2;
+    margin: 0 0 0.15em;
+    font-size: 0.86em;
+    font-variant-caps: all-small-caps;
+    font-variant-numeric: oldstyle-nums;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+
   .sport {
+    grid-row: 2 / span 2;
     color: var(--route);
     line-height: 0;
   }
 
   .place-title {
+    grid-column: 2;
     margin: 0;
     font-size: 1.2em;
     line-height: 1.25;
   }
 
   .tagline {
+    grid-column: 2;
     margin: 0.1em 0 0;
     font-size: 0.92em;
     font-style: italic;
     color: var(--ink-muted);
-  }
-
-  .sticker {
-    position: absolute;
-    top: 80px;
-    z-index: 40;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    margin: 0;
-    border-radius: 50%;
-    background: var(--route);
-    color: #fff;
-    line-height: 1.1;
-    box-shadow: 0 4px 16px color-mix(in oklab, var(--route) 40%, transparent);
-  }
-
-  .odd .sticker {
-    left: -40px;
-    transform: rotate(-12deg);
-  }
-
-  .even .sticker {
-    right: -40px;
-    transform: rotate(12deg);
-  }
-
-  .sticker-month {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
-
-  .sticker-year {
-    font-size: 0.64rem;
-    opacity: 0.9;
-    font-variant-numeric: lining-nums;
   }
 
   /* ---------- The card: map, route, photos ---------- */
@@ -852,7 +799,7 @@ const sketches = [
     filter: drop-shadow(0 0 4px color-mix(in oklab, var(--route) 70%, transparent));
   }
 
-  /* The start time flashes in the corner away from the date sticker. */
+  /* The start time flashes in a top corner of the map as the route begins. */
   .start {
     position: absolute;
     top: 1.1rem;
@@ -874,6 +821,7 @@ const sketches = [
     right: 1.2rem;
   }
 
+  /* A size container, so a photo can measure its way to the middle of the map in cqw and cqh. */
   .polaroids {
     position: absolute;
     inset: 0;
@@ -881,20 +829,24 @@ const sketches = [
     margin: 0;
     padding: 0;
     list-style: none;
+    container-type: size;
   }
 
+  /* A photo moves by transform alone, so picking it up and putting it back stay smooth. */
   .slot {
+    --px: var(--x);
+    --py: var(--y);
     position: absolute;
-    left: calc(var(--x) * 100%);
-    top: calc(var(--y) * 100%);
+    left: calc(var(--px) * 100%);
+    top: calc(var(--py) * 100%);
     z-index: calc(1 + var(--i));
     width: 23%;
-    transform: translate(-50%, -50%) rotate(var(--r));
+    translate: -50% -50%;
+    rotate: var(--r);
     transition:
-      left 0.5s var(--ease-out),
-      top 0.5s var(--ease-out),
-      transform 0.5s var(--ease-out),
-      opacity 0.45s ease;
+      translate 0.45s var(--ease-out),
+      rotate 0.45s var(--ease-out),
+      scale 0.45s var(--ease-out);
   }
 
   .polaroid {
@@ -920,11 +872,22 @@ const sketches = [
     background: #eee;
   }
 
+  /* Picked up: to the middle of the map, straightened, held up close. */
   .slot.zoomed {
-    left: 50%;
-    top: 50%;
     z-index: 60;
-    transform: translate(-50%, -50%) scale(2.4) rotate(0deg);
+    translate: calc((0.5 - var(--px)) * 100cqw - 50%) calc((0.5 - var(--py)) * 100cqh - 50%);
+    rotate: 0deg;
+    scale: 2.4;
+  }
+
+  /* Put back, it stays above the others until it has landed among them. */
+  .slot.closing {
+    z-index: 50;
+  }
+
+  /* Asked for less motion, a photo is simply up, or down. */
+  :global(:root:not(.motion)) .slot {
+    transition: none;
   }
 
   .slot.zoomed .polaroid {
@@ -996,7 +959,6 @@ const sketches = [
 
   :global(.motion) .card:not(.play) .slot {
     opacity: 0;
-    transform: translate(-50%, -62%) scale(0.9) rotate(var(--r));
   }
 
   .play .casing,
@@ -1004,8 +966,18 @@ const sketches = [
     transition: stroke-dashoffset 2.4s cubic-bezier(0.45, 0, 0.25, 1);
   }
 
-  .play .slot:not(.zoomed) {
-    transition-delay: calc(1.3s + var(--i) * 0.28s);
+  /* The photos drop onto the map one by one. An animation, not a transition: a transition's delay
+     would hold up every later move too, and a photo put back would hang in the air for seconds. */
+  .play .slot {
+    animation: drop 0.5s var(--ease-out) calc(1.3s + var(--i) * 0.28s) backwards;
+  }
+
+  @keyframes drop {
+    from {
+      opacity: 0;
+      translate: -50% -62%;
+      scale: 0.9;
+    }
   }
 
   .play .marker {
@@ -1058,15 +1030,6 @@ const sketches = [
       left: 1.2rem;
       right: auto;
     }
-
-    .place .sticker {
-      top: 60px;
-      left: auto;
-      right: -8px;
-      width: 50px;
-      height: 50px;
-      transform: rotate(10deg);
-    }
   }
 
   @media (max-width: 40rem) {
@@ -1090,124 +1053,16 @@ const sketches = [
     }
 
     .slot {
-      left: calc(var(--xm) * 100%);
-      top: calc(var(--ym) * 100%);
+      --px: var(--xm);
+      --py: var(--ym);
       width: 30%;
-      transform: translate(-50%, -50%) rotate(var(--rm));
-    }
-
-    :global(.motion) .card:not(.play) .slot {
-      transform: translate(-50%, -62%) scale(0.9) rotate(var(--rm));
+      rotate: var(--rm);
     }
 
     .slot.wide-only {
       display: none;
     }
 
-  }
-
-  /* ---------- The ending ---------- */
-
-  .ending {
-    margin: 0.5rem 0 1rem;
-    padding-inline: 1rem;
-  }
-
-  .end {
-    display: block;
-    width: 100%;
-    max-width: 1000px;
-    height: auto;
-    margin-inline: auto;
-    overflow: visible;
-  }
-
-  .narrow-end {
-    display: none;
-  }
-
-  .end .reveal {
-    fill: none;
-    stroke: #fff;
-    stroke-width: 14;
-    stroke-linecap: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 0;
-  }
-
-  .end .dot {
-    fill: var(--route);
-    stroke: var(--paper);
-    stroke-width: 3;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  .end .ring {
-    fill: none;
-    stroke: var(--route);
-    stroke-width: 2;
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  .end .hand {
-    font-family: var(--font-hand);
-    font-size: 34px;
-    fill: color-mix(in oklab, var(--route) 82%, var(--ink));
-  }
-
-  .narrow-end .hand {
-    font-size: 30px;
-  }
-
-  :global(.motion) .ending:not(.play) .reveal {
-    stroke-dashoffset: 1;
-  }
-
-  :global(.motion) .ending:not(.play) .dot {
-    transform: scale(0);
-  }
-
-  :global(.motion) .ending:not(.play) .hand {
-    clip-path: inset(0 100% 0 0);
-  }
-
-  .ending.play .reveal {
-    transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.25, 1);
-  }
-
-  .ending.play .dot {
-    transition: transform 0.45s var(--ease-out) 1.6s;
-  }
-
-  .ending.play .ring {
-    animation: arrive 1.5s ease-out 1.9s 1;
-  }
-
-  /* Written out, left to right, as if by hand. */
-  .ending.play .hand {
-    transition: clip-path 1.3s cubic-bezier(0.3, 0, 0.4, 1) 2.1s;
-  }
-
-  @keyframes arrive {
-    0% { opacity: 0.7; transform: scale(1); }
-    100% { opacity: 0; transform: scale(3.4); }
-  }
-
-  @media (max-width: 40rem) {
-    .wide-end {
-      display: none;
-    }
-
-    .narrow-end {
-      display: block;
-    }
-
-    .ending {
-      padding-inline: 0;
-    }
   }
 
   /* ---------- We keep movin' ---------- */
@@ -1218,16 +1073,11 @@ const sketches = [
     border-top: 1px solid var(--rule);
   }
 
-  /* The strip and the ending are laid out only as they come near, so a first visit doesn't fetch
-     the handwriting they're annotated in (50 KB) before it is needed. */
-  .moving,
-  .ending {
+  /* The strip is laid out only as it comes near, so a first visit doesn't fetch the handwriting
+     it's annotated in (50 KB) before it is needed. */
+  .moving {
     content-visibility: auto;
     contain-intrinsic-size: auto 440px;
-  }
-
-  .ending {
-    contain-intrinsic-size: auto 260px;
   }
 
   .tooltip {
