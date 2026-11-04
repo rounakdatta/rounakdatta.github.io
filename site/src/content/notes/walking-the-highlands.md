@@ -55,6 +55,6 @@ I think I kept you wondering whether I was travelling solo. I indeed was, and af
 I think I also kept you wondering whether I was successful in finishing my West Highland Way route. I wasn’t! Of the total 154 kms, I only did ~half of it, that too occasionally going off the official route. Only the first day went as planned, the remainder was a mix of taking the public transport and walking. The last day’s walk in Fort William was particularly enjoyable, I had the company of [non-stop Scottish rains](https://birlinn.co.uk/product/the-little-book-of-scottish-rain/), [Ben and David](https://www.acquired.fm/episodes/epic-systems-mychart) all throughout. The last stretch of walk along the Caol Beach was the cherry on top - it had one of the most beautiful pathways I’ve ever walked on.
 
 
-![Four Strava activities from 6 to 9 June 2025: Milngavie to Rowardennan (46 km), Crianlarich to Tyndrum (8 km), an afternoon hike from Glencoe (9 km) and Fort William to Banavie (7 km), each with its route map and photos](../../assets/images/walking_the_highlands/32c50e9a-03fc-4eec-b2d2-31e4537312e5_3344x3605.jpg)
+![Four Strava activities from 6 to 9 June 2025: Milngavie to Rowardennan (46 km), Crianlarich to Tyndrum (8 km), an afternoon hike from Glencoe (9 km) and Fort William to Banavie (7 km), each with its route map and photos](../../assets/images/walking_the_highlands/four-days-on-strava.jpg)
 
 Dear Highlands, I arrived a stranger and left lovestruck. Until we meet again…
