@@ -9,11 +9,10 @@ import { altOf, type Photo } from '../../lib/photos';
 
 const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
 
-// Every photo hangs in the same frame, square on a wide screen and 4:5 on a phone, shown whole,
-// floating on a mount of its own colours, blurred; the same wash glows on the page around it.
+// Every photo hangs in the same frame, square on a wide screen and 4:5 on a phone, shown whole
+// and melting into the page at its edges, as the fitness maps do, over a faint bloom of its own
+// colours.
 const CARD = 600;
-// The mount around the photo, as a share of the frame's width on each side.
-const MOUNT = 0.065;
 const PHONE = { vw: 82, aspect: 4 / 5 };
 
 /** The photo's colours as a wash: a tiny, softened, richer copy, scaled up wherever it is shown. */
@@ -27,10 +26,9 @@ async function glowOf(photo: Photo) {
 /** How wide a photo is drawn once fitted whole into its frame, for the browser to pick a size. */
 const sizesOf = (photo: Photo) => {
   const aspect = photo.src.width / photo.src.height;
-  const inner = 1 - 2 * MOUNT;
-  const wide = inner * Math.min(1, aspect);
+  const wide = Math.min(1, aspect);
   // The frame is 42vw wide until it reaches 600px (at about 1430px across), as the CSS has it.
-  return `(max-width: 40rem) ${Math.round(PHONE.vw * inner * Math.min(1, aspect / PHONE.aspect))}vw, (max-width: 1430px) ${Math.round(42 * wide)}vw, ${Math.round(CARD * wide)}px`;
+  return `(max-width: 40rem) ${Math.round(PHONE.vw * Math.min(1, aspect / PHONE.aspect))}vw, (max-width: 1430px) ${Math.round(42 * wide)}vw, ${Math.round(CARD * wide)}px`;
 };
 
 const shown = await Promise.all(
@@ -193,41 +191,37 @@ const shown = await Promise.all(
     width: var(--card);
   }
 
-  /* The light a photo throws on the page around it, kept inside the strip so nothing cuts it off. */
+  /* A faint bloom of the photo's own colours behind it, kept inside the strip so nothing cuts it. */
   .frame::before {
     content: '';
     position: absolute;
     z-index: -1;
-    inset: -7% -12% 8%;
+    inset: -6% -10% 8%;
     background: var(--glow) center / cover;
-    opacity: 0.75;
+    opacity: 0.4;
     mask-image: radial-gradient(closest-side, #000 20%, transparent);
   }
 
-  /* The frame: a mount of the photo's own colours, deepened a little so the photo sits forward.
-     It is a size container, so the photo knows its final size before a byte of it arrives. */
+  /* The frame: one size for every photo. A size container, so the photo knows its final size
+     before a byte of it arrives and nothing jumps as it loads. */
   .frame :global(.photo-link) {
     container-type: size;
     display: grid;
     place-items: center;
     aspect-ratio: var(--card-aspect);
-    padding: 6.5%;
-    border-radius: 18px;
-    overflow: hidden;
-    background:
-      linear-gradient(rgb(0 0 0 / 0.24), rgb(0 0 0 / 0.24)),
-      var(--glow, var(--paper-raised)) center / cover;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 34px 56px -34px rgb(0 0 0 / 0.6);
   }
 
-  /* Whole, as large as the mount allows: the full width for a landscape, the full height for a portrait. */
+  /* Whole and as large as the frame allows, its edges melting into the page as the maps' do, a
+     little more at the foot, where the caption sits on bare paper. */
   .frame :global(img) {
     display: block;
     width: min(100cqw, 100cqh * var(--a));
     height: auto;
     aspect-ratio: var(--a);
-    border-radius: 6px;
-    box-shadow: 0 18px 34px -16px rgb(0 0 0 / 0.55);
+    mask-image:
+      linear-gradient(to right, transparent, #000 13%, #000 87%, transparent),
+      linear-gradient(to bottom, transparent, #000 11%, #000 84%, transparent);
+    mask-composite: intersect;
   }
 
   .caption {
@@ -282,7 +276,7 @@ const shown = await Promise.all(
 
   @media (prefers-color-scheme: dark) {
     .frame::before {
-      opacity: 0.5;
+      opacity: 0.32;
     }
   }
 
@@ -298,8 +292,10 @@ const shown = await Promise.all(
       --lift: 3rem;
     }
 
-    .frame :global(.photo-link) {
-      border-radius: 14px;
+    .frame :global(img) {
+      mask-image:
+        linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+        linear-gradient(to bottom, transparent, #000 8%, #000 86%, transparent);
     }
   }
 </style>

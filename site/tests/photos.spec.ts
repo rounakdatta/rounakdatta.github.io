@@ -32,6 +32,39 @@ test('every photo hangs whole, in a frame the same size as every other', async (
   expect(frames[0].frame.width).toBeGreaterThan(500);
 });
 
+test.describe('held still to be looked at', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('each photo melts into the page at its edges, as the maps do, and stays itself in the middle', async ({ page }) => {
+    const sharp = (await import('sharp')).default;
+    await page.goto('/photos/');
+    const img = page.locator('.strip').first().locator('img').first();
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+    const box = (await img.boundingBox())!;
+    // The photo's own edges, without the bloom of its colours behind it (that is checked below).
+    const bloom = await page.addStyleTag({ content: '.frame::before { visibility: hidden !important; }' });
+    const { data, info } = await sharp(await page.screenshot({ clip: box })).raw().toBuffer({ resolveWithObject: true });
+    await bloom.evaluate((style) => (style as Element).remove());
+    const pixel = (fx: number, fy: number) => {
+      const i = (Math.floor(fy * (info.height - 1)) * info.width + Math.floor(fx * (info.width - 1))) * info.channels;
+      return [data[i], data[i + 1], data[i + 2]];
+    };
+    const paper = await page.evaluate(() => getComputedStyle(document.body).backgroundColor.match(/\d+/g)!.slice(0, 3).map(Number));
+    const from = (rgb: number[]) => Math.hypot(...rgb.map((v, k) => v - paper[k]));
+    // At its very edges the photo has become the page (all but a breath of its own colours)…
+    for (const [x, y] of [[0, 0.5], [1, 0.5], [0.5, 0], [0.5, 1]]) expect(from(pixel(x, y)), `edge at ${x},${y}`).toBeLessThan(30);
+    // …and in the middle it is wholly itself.
+    expect(from(pixel(0.5, 0.5))).toBeGreaterThan(60);
+    // The bloom behind it is a breath of colour, not a second picture: halfway to the next photo
+    // the page is almost its own colour again.
+    const gap = (await page.locator('.strip').first().locator('.frame').nth(1).boundingBox())!;
+    const between = { x: (box.x + box.width + gap.x) / 2, y: box.y + box.height / 2 };
+    const around = await sharp(await page.screenshot({ clip: { x: between.x, y: between.y, width: 1, height: 1 } })).raw().toBuffer();
+    expect(from([around[0], around[1], around[2]])).toBeLessThan(20);
+  });
+});
+
 test('the strip drifts slowly by itself, holds still while it is looked at, and carries on after', async ({ page }) => {
   await page.goto('/photos/');
   const strip = page.locator('.strip').first();
