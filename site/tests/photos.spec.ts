@@ -28,40 +28,57 @@ test('every photo hangs whole, in a frame the same size as every other', async (
     expect(Math.abs(shown.ratio - natural) / natural).toBeLessThan(0.02);
     for (const side of [shown.left, shown.right, shown.top, shown.bottom]) expect(side).toBeGreaterThanOrEqual(-0.5);
   }
-  // Big enough to look at properly on a laptop.
-  expect(frames[0].frame.width).toBeGreaterThan(500);
+  // The album's usual photo, a phone's 3:4, sits with the same black border on all four sides.
+  const usual = frames.filter(({ natural }) => Math.abs(natural - 0.75) < 0.01);
+  expect(usual.length).toBeGreaterThan(3);
+  for (const { shown } of usual) {
+    const sides = [shown.left, shown.right, shown.top, shown.bottom];
+    expect(Math.max(...sides) - Math.min(...sides)).toBeLessThan(1.5);
+  }
+  // A print's shape: cut so the album's usual photo (a phone's 3:4) has an even border all round.
+  expect(frames[0].frame.width / frames[0].frame.height).toBeGreaterThan(0.74);
+  expect(frames[0].frame.width / frames[0].frame.height).toBeLessThan(0.8);
+  expect(frames[0].frame.width).toBeGreaterThan(450);
 });
 
 test.describe('held still to be looked at', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('each photo melts into the page at its edges, as the maps do, and stays itself in the middle', async ({ page }) => {
+  test('each photo is a print on black: an even black border, and black wherever its shape leaves room', async ({ page }) => {
     const sharp = (await import('sharp')).default;
     await page.goto('/photos/');
-    const img = page.locator('.strip').first().locator('img').first();
-    await img.scrollIntoViewIfNeeded();
-    await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
-    const box = (await img.boundingBox())!;
-    // The photo's own edges, without the bloom of its colours behind it (that is checked below).
-    const bloom = await page.addStyleTag({ content: '.frame::before { visibility: hidden !important; }' });
-    const { data, info } = await sharp(await page.screenshot({ clip: box })).raw().toBuffer({ resolveWithObject: true });
-    await bloom.evaluate((style) => (style as Element).remove());
-    const pixel = (fx: number, fy: number) => {
-      const i = (Math.floor(fy * (info.height - 1)) * info.width + Math.floor(fx * (info.width - 1))) * info.channels;
-      return [data[i], data[i + 1], data[i + 2]];
-    };
-    const paper = await page.evaluate(() => getComputedStyle(document.body).backgroundColor.match(/\d+/g)!.slice(0, 3).map(Number));
-    const from = (rgb: number[]) => Math.hypot(...rgb.map((v, k) => v - paper[k]));
-    // At its very edges the photo has become the page (all but a breath of its own colours)…
-    for (const [x, y] of [[0, 0.5], [1, 0.5], [0.5, 0], [0.5, 1]]) expect(from(pixel(x, y)), `edge at ${x},${y}`).toBeLessThan(30);
-    // …and in the middle it is wholly itself.
-    expect(from(pixel(0.5, 0.5))).toBeGreaterThan(60);
-    // The bloom behind it is a breath of colour, not a second picture: halfway to the next photo
-    // the page is almost its own colour again.
-    const gap = (await page.locator('.strip').first().locator('.frame').nth(1).boundingBox())!;
-    const between = { x: (box.x + box.width + gap.x) / 2, y: box.y + box.height / 2 };
-    const around = await sharp(await page.screenshot({ clip: { x: between.x, y: between.y, width: 1, height: 1 } })).raw().toBuffer();
-    expect(from([around[0], around[1], around[2]])).toBeLessThan(20);
+    const frames = page.locator('.strip').first().locator('.photo-link');
+    // A portrait and a landscape: the portrait fills its print up to the border, the landscape sits on black.
+    const shapes = await frames.evaluateAll((links) => links.map((a) => Number(getComputedStyle(a.closest('.frame')!).getPropertyValue('--a'))));
+    const portrait = shapes.findIndex((a) => a < 1);
+    const landscape = shapes.findIndex((a) => a > 1.2);
+    for (const k of [portrait, landscape]) {
+      const frame = frames.nth(k);
+      await frame.scrollIntoViewIfNeeded();
+      await expect.poll(() => frame.locator('img').evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+      const box = (await frame.boundingBox())!;
+      const { data, info } = await sharp(await page.screenshot({ clip: box })).raw().toBuffer({ resolveWithObject: true });
+      // A small patch around a point: how bright it is at most, and how much it varies. Black
+      // padding is dark and perfectly even; a photo, even a dark one, never is.
+      const patch = (fx: number, fy: number) => {
+        const cx = Math.floor(fx * (info.width - 1));
+        const cy = Math.floor(fy * (info.height - 1));
+        const values: number[] = [];
+        for (let y = Math.max(0, cy - 3); y <= Math.min(info.height - 1, cy + 3); y++)
+          for (let x = Math.max(0, cx - 3); x <= Math.min(info.width - 1, cx + 3); x++) {
+            const i = (y * info.width + x) * info.channels;
+            values.push(data[i] + data[i + 1] + data[i + 2]);
+          }
+        return { brightest: Math.max(...values), spread: Math.max(...values) - Math.min(...values) };
+      };
+      const black = (at: { brightest: number; spread: number }) => at.brightest < 60 && at.spread < 15;
+      // The border: black at the very edge of the print, all round.
+      for (const [x, y] of [[0.5, 0.01], [0.5, 0.99], [0.01, 0.5], [0.99, 0.5]]) expect(black(patch(x, y)), `print ${k}, edge at ${x},${y}`).toBe(true);
+      // The photo itself in the middle.
+      expect(black(patch(0.5, 0.5)), `print ${k}, middle`).toBe(false);
+      // A landscape leaves black above and below it, inside the same rectangle.
+      if (k === landscape) for (const y of [0.12, 0.88]) expect(black(patch(0.5, y)), `print ${k}, band at ${y}`).toBe(true);
+    }
   });
 });
 

@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import sharp from 'sharp';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PhotoLink from '../../components/PhotoLink.astro';
 import PhotoViewer from '../../components/PhotoViewer.astro';
@@ -9,31 +8,35 @@ import { altOf, type Photo } from '../../lib/photos';
 
 const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
 
-// Every photo hangs in the same frame, square on a wide screen and 4:5 on a phone, shown whole
-// and melting into the page at its edges, as the fitness maps do, over a faint bloom of its own
-// colours.
-const CARD = 600;
-const PHONE = { vw: 82, aspect: 4 / 5 };
+// Every photo is a print on black: one rectangle for the whole album, with an even black border,
+// and black filling whatever a photo's own shape leaves (above and below a landscape). The prints
+// are cut to the shape most of the album's photos share, so those get a border even all round.
+// A print is at most 640px tall on a wide screen, and 84% of a phone's width.
+const TALLEST = 640;
+const PHONE_VW = 84;
+// The black border on each side, as a share of the print's width.
+const BORDER = 0.035;
 
-/** The photo's colours as a wash: a tiny, softened, richer copy, scaled up wherever it is shown. */
-async function glowOf(photo: Photo) {
-  const file = (photo.src as unknown as { fsPath?: string }).fsPath;
-  if (!file) return '';
-  const tiny = await sharp(file).rotate().resize(10, 10, { fit: 'cover' }).blur(1.2).modulate({ saturation: 1.55 }).webp({ quality: 80 }).toBuffer();
-  return `data:image/webp;base64,${tiny.toString('base64')}`;
+const aspectOf = (photo: Photo) => photo.src.width / photo.src.height;
+
+/** The shape most of an album's photos share (phone photos are mostly 3:4). */
+function commonShape(photos: Photo[]) {
+  const counts = new Map<number, number>();
+  for (const photo of photos) {
+    const shape = Math.round(aspectOf(photo) * 100) / 100;
+    counts.set(shape, (counts.get(shape) ?? 0) + 1);
+  }
+  return [...counts].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0][0];
 }
 
-/** How wide a photo is drawn once fitted whole into its frame, for the browser to pick a size. */
-const sizesOf = (photo: Photo) => {
-  const aspect = photo.src.width / photo.src.height;
-  const wide = Math.min(1, aspect);
-  // The frame is 42vw wide until it reaches 600px (at about 1430px across), as the CSS has it.
-  return `(max-width: 40rem) ${Math.round(PHONE.vw * Math.min(1, aspect / PHONE.aspect))}vw, (max-width: 1430px) ${Math.round(42 * wide)}vw, ${Math.round(CARD * wide)}px`;
-};
+/** The print that holds a photo of this shape with the same border on all four sides. */
+const printFor = (shape: number) => 1 / ((1 - 2 * BORDER) / shape + 2 * BORDER);
 
-const shown = await Promise.all(
-  albums.map(async (album) => ({ album, photos: await Promise.all(album.data.photos.map(async (photo) => ({ photo, glow: await glowOf(photo) }))) })),
-);
+/** How wide a photo is drawn once fitted whole into its print, for the browser to pick a size. */
+const sizesOf = (photo: Photo, shape: number) => {
+  const fit = (1 - 2 * BORDER) * Math.min(1, aspectOf(photo) / shape);
+  return `(max-width: 40rem) ${Math.round(PHONE_VW * fit)}vw, ${Math.round(TALLEST * printFor(shape) * fit)}px`;
+};
 ---
 
 <BaseLayout title="Photos" description="Photographs by Rounak Datta: trips, weddings, mountains and cities.">
@@ -42,16 +45,18 @@ const shown = await Promise.all(
     <p class="lede">WDYM one needs Instagram to have a colourful life?</p>
   </header>
 
-  {shown.map(({ album, photos }, a) => (
+  {albums.map((album, a) => {
+    const shape = commonShape(album.data.photos);
+    return (
     <section class="album" aria-labelledby={`album-${album.id}`}>
       <h2 id={`album-${album.id}`}>{album.data.title}</h2>
-      <div class="gallery full">
+      <div class="gallery full" style={`--card-aspect: ${printFor(shape).toFixed(4)}`}>
         <div class="strip" tabindex="0" role="group" aria-labelledby={`album-${album.id}`}>
           <div class="track">
             <ul data-gallery>
-              {photos.map(({ photo, glow }, i) => (
-                <li class="frame" style={`--a: ${(photo.src.width / photo.src.height).toFixed(4)};${glow ? ` --glow: url("${glow}")` : ''}`}>
-                  <PhotoLink photo={photo} sizes={sizesOf(photo)} priority={a === 0 && i < 2} />
+              {album.data.photos.map((photo, i) => (
+                <li class="frame" style={`--a: ${(photo.src.width / photo.src.height).toFixed(4)}`}>
+                  <PhotoLink photo={photo} sizes={sizesOf(photo, shape)} priority={a === 0 && i < 2} quality={72} />
                   {/* Read once: with no alt text of its own, the photo already says its caption. */}
                   {photo.caption && <p class="caption" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>}
                 </li>
@@ -63,7 +68,8 @@ const shown = await Promise.all(
         <button type="button" class="nudge on" aria-label="Later photos" hidden><Icon name="arrow-right" /></button>
       </div>
     </section>
-  ))}
+    );
+  })}
 
   <PhotoViewer />
 </BaseLayout>
@@ -134,10 +140,9 @@ const shown = await Promise.all(
   /* ---------- The gallery ---------- */
 
   .gallery {
-    /* As big as the screen allows: never wider than 600px, never taller than most of the window. */
-    --card: clamp(300px, min(42vw, 70vh), 600px);
-    --card-aspect: 1;
-    --card-h: var(--card);
+    /* As big as the screen allows: a print never taller than 640px, or than most of the window. */
+    --card-h: clamp(380px, 68vh, 640px);
+    --card: calc(var(--card-h) * var(--card-aspect));
     --gap: clamp(1.75rem, 3.6vw, 3.25rem);
     --fade: min(6vw, 5rem);
     --lift: 4.5rem;
@@ -168,7 +173,7 @@ const shown = await Promise.all(
     outline-offset: -2px;
   }
 
-  /* It starts in line with the text; room above and below for the glow. */
+  /* It starts in line with the text; room above and below for each print's shadow. */
   .track {
     display: flex;
     gap: var(--gap);
@@ -186,42 +191,31 @@ const shown = await Promise.all(
 
   .frame {
     position: relative;
-    isolation: isolate;
     flex: none;
     width: var(--card);
   }
 
-  /* A faint bloom of the photo's own colours behind it, kept inside the strip so nothing cuts it. */
-  .frame::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: -6% -10% 8%;
-    background: var(--glow) center / cover;
-    opacity: 0.4;
-    mask-image: radial-gradient(closest-side, #000 20%, transparent);
-  }
-
-  /* The frame: one size for every photo. A size container, so the photo knows its final size
-     before a byte of it arrives and nothing jumps as it loads. */
+  /* The print: one rectangle for every photo, black, with an even border, and square corners as
+     a print has. A size container, so the photo knows its final size before a byte of it arrives
+     and nothing jumps as it loads. */
   .frame :global(.photo-link) {
     container-type: size;
     display: grid;
     place-items: center;
     aspect-ratio: var(--card-aspect);
+    padding: 3.5%;
+    border-radius: 2px;
+    background: #0b0b0b;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 26px 44px -26px rgb(0 0 0 / 0.65);
   }
 
-  /* Whole and as large as the frame allows, its edges melting into the page as the maps' do, a
-     little more at the foot, where the caption sits on bare paper. */
+  /* Whole and as large as the print allows: the full height for a portrait, the full width for a
+     landscape, black above and below it. */
   .frame :global(img) {
     display: block;
     width: min(100cqw, 100cqh * var(--a));
     height: auto;
     aspect-ratio: var(--a);
-    mask-image:
-      linear-gradient(to right, transparent, #000 13%, #000 87%, transparent),
-      linear-gradient(to bottom, transparent, #000 11%, #000 84%, transparent);
-    mask-composite: intersect;
   }
 
   .caption {
@@ -274,9 +268,10 @@ const shown = await Promise.all(
     }
   }
 
+  /* At night the page is nearly black too: a hairline keeps each print's edge. */
   @media (prefers-color-scheme: dark) {
-    .frame::before {
-      opacity: 0.32;
+    .frame :global(.photo-link) {
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), 0 26px 44px -26px rgb(0 0 0 / 0.8);
     }
   }
 
@@ -284,18 +279,11 @@ const shown = await Promise.all(
   @media (max-width: 40rem) {
     /* As wide as a phone allows, and never taller than it either: on its side, a frame still fits. */
     .gallery {
-      --card: min(82vw, 64svh);
-      --card-aspect: 4 / 5;
-      --card-h: calc(var(--card) * 5 / 4);
+      --card: min(84vw, 60svh);
+      --card-h: calc(var(--card) / var(--card-aspect));
       --gap: 1.1rem;
       --fade: 10px;
       --lift: 3rem;
-    }
-
-    .frame :global(img) {
-      mask-image:
-        linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
-        linear-gradient(to bottom, transparent, #000 8%, #000 86%, transparent);
     }
   }
 </style>
