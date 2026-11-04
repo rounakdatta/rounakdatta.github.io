@@ -42,8 +42,6 @@ const photoAlbums = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      subtitle: z.string().optional(),
-      date: z.coerce.date().optional(),
       order: z.number().default(0),
       photos: z.array(
         z.object({

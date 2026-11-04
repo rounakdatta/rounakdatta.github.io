@@ -33,6 +33,9 @@
       dataSource: slides,
       index,
       bgOpacity: 1,
+      // Focus goes back to the photo only for a keyboard, which opened it with Enter (a click with
+      // no detail). Handed back after a mouse, it would look like keyboard focus to what's around it.
+      returnFocus: event.detail === 0,
       showHideAnimationType: 'fade',
       closeTitle: 'Close',
       zoomTitle: 'Zoom',

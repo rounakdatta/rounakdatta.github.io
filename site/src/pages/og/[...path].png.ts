@@ -43,20 +43,10 @@ export const getStaticPaths = (async () => {
     card: async () => ({
       kicker: 'Rounak Datta',
       title: 'Photos',
-      footnote: `${albums.length} ${albums.length === 1 ? 'album' : 'albums'}`,
+      footnote: albums.map((album) => album.data.title).join(' · '),
       photo: albums[0] ? await photoForCard(fileOf(albums[0].data.photos[0].src as never)!) : undefined,
     }),
   });
-  for (const album of albums)
-    cards.push({
-      path: `photos/${album.id}`,
-      card: async () => ({
-        kicker: 'Photos',
-        title: album.data.title,
-        footnote: `${album.data.date ? `${monthOfYear(album.data.date)} · ` : ''}${album.data.photos.length} photos`,
-        photo: await photoForCard(fileOf(album.data.photos[0].src as never)!),
-      }),
-    });
   const longest = chapters.filter((c) => c.route.length).reduce((a, b) => (b.distance > a.distance ? b : a));
   cards.push({
     path: 'fitness',

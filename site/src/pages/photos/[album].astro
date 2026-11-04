@@ -1,106 +1,23 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PhotoLink from '../../components/PhotoLink.astro';
-import PhotoViewer from '../../components/PhotoViewer.astro';
-import { monthOfYear } from '../../lib/dates';
+// An album once had a page of its own. Every album now hangs on /photos/, so its old address
+// leads to it there rather than to nothing.
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const albums = await getCollection('photoAlbums');
-  return albums.map((album) => ({ params: { album: album.id }, props: { album } }));
+  return (await getCollection('photoAlbums')).map((album) => ({ params: { album: album.id } }));
 }
 
-interface Props {
-  album: CollectionEntry<'photoAlbums'>;
-}
-
-const { album } = Astro.props;
-const { title, subtitle, date, photos } = album.data;
-const description = [subtitle, `${photos.length} photos${date ? ` from ${monthOfYear(date)}` : ''}`].filter(Boolean).join('. ');
+const target = `/photos/#album-${Astro.params.album}`;
 ---
 
-<BaseLayout title={title} description={`${description}, by Rounak Datta.`}>
-  <header class="head">
-    <p class="label crumb"><a href="/photos/">Photos</a></p>
-    <h1>{title}</h1>
-    {subtitle && <p class="meta"><span class="subtitle">{subtitle}</span></p>}
-  </header>
-
-  <ul class="grid wide" data-gallery>
-    {photos.map((photo, i) => (
-      <li>
-        <figure>
-          <PhotoLink photo={photo} sizes="(max-width: 34rem) 100vw, (max-width: 60rem) 50vw, 23rem" priority={i < 2} />
-          {photo.caption && <figcaption>{photo.caption}</figcaption>}
-        </figure>
-      </li>
-    ))}
-  </ul>
-
-  <PhotoViewer />
-</BaseLayout>
-
-<style>
-  .head {
-    margin-bottom: 1.8em;
-  }
-
-  .crumb {
-    margin-bottom: 0.2em;
-  }
-
-  .crumb a {
-    color: inherit;
-  }
-
-  h1 {
-    margin-bottom: 0.2em;
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 0.8em;
-    margin: 0;
-    color: var(--ink-muted);
-  }
-
-  .subtitle {
-    font-style: italic;
-  }
-
-  /* Columns that keep every photo's own shape, filled top to bottom. */
-  .grid {
-    columns: 3 18rem;
-    column-gap: 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .grid li {
-    break-inside: avoid;
-    margin-bottom: 1.25rem;
-  }
-
-  .grid figure {
-    margin: 0;
-  }
-
-  .grid :global(.photo-link) {
-    display: block;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--paper-raised);
-  }
-
-  .grid :global(img) {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  figcaption {
-    text-align: left;
-  }
-</style>
+<html lang="en">
+  <head>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>Photos</title>
+  </head>
+  <body>
+    <p>This album is now on <a href={target}>the photos page</a>.</p>
+  </body>
+</html>

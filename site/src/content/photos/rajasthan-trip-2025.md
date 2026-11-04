@@ -1,6 +1,5 @@
 ---
-title: "Rajasthan Extra Time 2025"
-subtitle: "Weddings, vibes & more"
+title: "Rajasthan, India"
 order: 0
 photos:
   - src: "../../assets/images/rajasthan_2025/IMG_20251201_173831.jpg"
