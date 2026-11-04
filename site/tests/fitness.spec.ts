@@ -37,13 +37,31 @@ async function stripGeometry(page: Page) {
 
 /** Scroll the strip until a point of the drawing is in the middle of the screen, and say where it is. */
 async function onScreen(page: Page, x: number, y: number) {
-  return page.evaluate(([x, y]) => {
+  return page.evaluate(async ([x, y]) => {
     const svg = document.querySelector('svg.days') as SVGSVGElement;
     const strip = document.querySelector('.strip')!;
     const at = () => new DOMPoint(x, y).matrixTransform(svg.getScreenCTM()!);
     strip.scrollLeft += at().x - strip.getBoundingClientRect().width / 2;
+    await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
     return { x: at().x, y: at().y };
   }, [x, y]);
+}
+
+/**
+ * Point at a spot of the drawing and wait until the tooltip says what `expected` wants. Finding the
+ * spot, pointing and reading are retried together: on a busy machine the page can still be settling
+ * when the pointer arrives. A spot on the wrong day reads wrong every time, so a retry hides nothing.
+ */
+async function pointAt(page: Page, x: number, y: number, expected: (tip: string | null) => void) {
+  let nudge = 0;
+  await expect(async () => {
+    const point = await onScreen(page, x, y);
+    // A hair to one side or the other, so every try is a fresh move.
+    nudge = nudge ? 0 : 0.5;
+    await page.mouse.move(point.x + nudge, point.y);
+    const tip = page.locator('.moving .tooltip');
+    expected((await tip.isVisible()) ? await tip.textContent() : null);
+  }).toPass({ timeout: 10_000 });
 }
 
 test.describe('held still', () => {
@@ -61,13 +79,11 @@ test.describe('held still', () => {
       const sq = squareOf(date.toISOString().slice(0, 10));
       return [g.left[sq.year] + sq.week * g.step + g.cell / 2, g.top + sq.row * g.step + g.cell / 2] as const;
     };
-    const future = await onScreen(page, ...at(next));
-    await page.mouse.move(future.x, future.y);
-    await expect(page.locator('.moving .tooltip')).toBeHidden();
-    // And the contrast that proves the hover landed: the last day synced shows its tooltip.
-    const past = await onScreen(page, ...at(lastUpdated));
-    await page.mouse.move(past.x, past.y);
-    await expect(page.locator('.moving .tooltip')).toBeVisible();
+    const spoken = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    // The last day synced names itself: the contrast that proves pointing works at all…
+    await pointAt(page, ...at(lastUpdated), (tip) => expect(tip).toContain(spoken.format(lastUpdated).replace(',', '')));
+    // …so when the next day says nothing, it is because it hasn't happened.
+    await pointAt(page, ...at(next), (tip) => expect(tip).toBeNull());
   });
 
   test("every note's arrow comes in along its own week, and every day it names is ringed", async ({ page }) => {
@@ -135,14 +151,13 @@ test.describe('held still', () => {
         const p = new DOMPoint(b.x + b.width / 2, b.y + b.height / 2).matrixTransform(r.getScreenCTM()!).matrixTransform(r.ownerSVGElement!.getScreenCTM()!.inverse());
         return [p.x, p.y] as const;
       });
-      const point = await onScreen(page, ...centre);
-      await page.mouse.move(point.x, point.y);
-      const text = (await page.locator('.moving .tooltip').textContent())!;
-      const day = days.find((d) => text.startsWith(spoken.format(new Date(`${d}T00:00:00Z`)).replace(',', '')));
-      expect(day, `ring ${i} says "${text}"`).toBeTruthy();
-      // The day's own distance, as the log has it: the ring is on the race, not beside it.
-      const longest = Math.max(...activities.filter((a) => a.date === day).map((a) => a.distance));
-      expect(text).toContain(`${Math.floor(longest / 100) / 10} km`);
+      await pointAt(page, ...centre, (tip) => {
+        const day = days.find((d) => tip?.startsWith(spoken.format(new Date(`${d}T00:00:00Z`)).replace(',', '')));
+        expect(day, `ring ${i} says "${tip}"`).toBeTruthy();
+        // The day's own distance, as the log has it: the ring is on the race, not beside it.
+        const longest = Math.max(...activities.filter((a) => a.date === day).map((a) => a.distance));
+        expect(tip).toContain(`${Math.floor(longest / 100) / 10} km`);
+      });
     }
   });
 
