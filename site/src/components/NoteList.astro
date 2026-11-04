@@ -1,5 +1,5 @@
 ---
-import { tagSlug, type Note } from '../lib/notes';
+import type { Note } from '../lib/notes';
 import { dayInYear } from '../lib/dates';
 
 interface Props {
@@ -25,7 +25,6 @@ for (const note of notes) {
           <time datetime={note.data.date.toISOString().slice(0, 10)}>{dayInYear(note.data.date)}</time>
           <div>
             <a href={`/notes/${note.id}/`} class="title">{note.data.title}</a>
-            {note.data.tags.map((tag) => <a class="tag" href={`/notes/tags/${tagSlug(tag)}/`}>{tag}</a>)}
           </div>
         </li>
       ))}
@@ -75,18 +74,6 @@ for (const note of notes) {
 
   .title:hover {
     text-decoration-color: currentColor;
-  }
-
-  .tag {
-    margin-left: 0.6em;
-    font-size: 0.8em;
-    color: var(--ink-muted);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .tag:hover {
-    color: var(--accent);
   }
 
   /* A phone puts the year above its notes, and each date above its title. */
