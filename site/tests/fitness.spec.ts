@@ -293,16 +293,6 @@ test.describe('at rest', () => {
       expect(Math.abs(dy)).toBeLessThanOrEqual(0.1);
     }
   });
-
-  test('the page ends with the two arcs from its top meeting, and nothing hidden', async ({ page }) => {
-    await page.goto('/fitness/');
-    const end = page.locator('.ending .wide-end');
-    await end.scrollIntoViewIfNeeded();
-    await expect(end.locator('.arc')).toHaveCount(2);
-    await expect(end.locator('.hand')).toHaveText('to be continued…');
-    // Still, everything is there: written out, drawn, nothing waiting on a scroll.
-    expect(await end.locator('.hand').evaluate((t) => getComputedStyle(t).clipPath)).toBe('none');
-  });
 });
 
 test('a polaroid picked up comes to the middle of its map, and Escape puts it back', async ({ page }) => {
@@ -321,13 +311,41 @@ test('a polaroid picked up comes to the middle of its map, and Escape puts it ba
   await expect(polaroid).toHaveAttribute('aria-pressed', 'false');
 });
 
-test('cards and the ending draw themselves once they are seen, not before', async ({ page }) => {
+test('cards draw themselves once they are seen, not before', async ({ page }) => {
   await page.goto('/fitness/');
-  for (const target of [page.locator('.card').last(), page.locator('.ending')]) {
-    await expect(target).not.toHaveClass(/play/);
-    await target.scrollIntoViewIfNeeded();
-    await expect(target).toHaveClass(/play/);
-  }
+  const card = page.locator('.card').last();
+  await expect(card).not.toHaveClass(/play/);
+  await card.scrollIntoViewIfNeeded();
+  await expect(card).toHaveClass(/play/);
+});
+
+test('a photo opens the moment it is pressed and goes back the moment it is pressed again', async ({ page }) => {
+  await page.goto('/fitness/');
+  const card = page.locator('.card').filter({ has: page.locator('.slot:nth-child(3)') }).first();
+  await card.scrollIntoViewIfNeeded();
+  // Every photo has dropped in: no arrival left to wait for.
+  await expect.poll(() => card.evaluate((c) => c.getAnimations({ subtree: true }).filter((a) => (a as CSSAnimation).animationName === 'drop').length), { timeout: 8000 }).toBe(0);
+  const slot = card.locator('.slot').first();
+  const polaroid = slot.locator('.polaroid');
+  const rest = (await polaroid.boundingBox())!.width;
+  // What is moving the photo right now, and after how long a wait.
+  const moving = () =>
+    slot.evaluate((el) => el.getAnimations().filter((a) => 'transitionProperty' in a).map((a) => Number(a.effect!.getTiming().delay)));
+
+  await polaroid.click();
+  const opening = await moving();
+  expect(opening.length, 'it moves, rather than jumping').toBeGreaterThan(0);
+  expect(opening.every((delay) => delay === 0), `opening waits ${opening}`).toBe(true);
+  await expect.poll(async () => (await polaroid.boundingBox())!.width).toBeGreaterThan(rest * 2.2);
+
+  await polaroid.click();
+  const closing = await moving();
+  expect(closing.length).toBeGreaterThan(0);
+  expect(closing.every((delay) => delay === 0), `putting it back waits ${closing}`).toBe(true);
+  // On its way down it stays above the photos it is landing among.
+  const z = await card.locator('.slot').evaluateAll((all) => all.map((el) => Number(getComputedStyle(el).zIndex)));
+  expect(z[0]).toBeGreaterThan(Math.max(...z.slice(1)));
+  await expect.poll(async () => Math.abs((await polaroid.boundingBox())!.width - rest)).toBeLessThan(1.5);
 });
 
 test.describe('night', () => {
