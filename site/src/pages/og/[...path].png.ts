@@ -13,7 +13,8 @@ const fileOf = (image: { fsPath?: string } | undefined) => image?.fsPath;
 
 export const getStaticPaths = (async () => {
   const notes = await publishedNotes();
-  const albums = await getCollection('photoAlbums');
+  // The albums of prints, in the page's order; the polaroids of Rounak are one set, not an album.
+  const albums = (await getCollection('photoAlbums', (album) => album.data.set === 'by-me')).sort((a, b) => a.data.order - b.data.order);
   const moving = totalsOf(activities);
   const cards: { path: string; card: Card | (() => Promise<Card>) }[] = [];
 

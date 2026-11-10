@@ -1,0 +1,169 @@
+---
+// Photos as polaroids on a table: a square window cut from each photo, a white frame with room
+// below for its caption, every one leaning a little its own way. Pressed, a photo grows out of
+// its polaroid to fill the screen, whole; put away, it shrinks back into it and settles.
+import PhotoLink from './PhotoLink.astro';
+import { altOf, polaroidSizes, polaroidWidths, POLAROID_QUALITY, type Photo } from '../lib/photos';
+import { tiltOf } from '../lib/polaroids';
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<ul class="wall" data-gallery data-zoom>
+  {photos.map((photo, i) => (
+    <li class="polaroid" style={`--tilt: ${tiltOf(i)}deg`}>
+      {/* Lazy, even the first: the page may open on the prints instead, and then these cost nothing.
+          When they are what it opens on, the head asks for the first ones early (photos/index.astro). */}
+      <PhotoLink photo={photo} cropped sizes={polaroidSizes(photo)} widths={polaroidWidths(photo)} quality={POLAROID_QUALITY} />
+      {/* Read once: with no alt text of its own, the photo already says its caption. */}
+      <p class="note" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>
+    </li>
+  ))}
+</ul>
+
+<script>
+  // A photo still on its way shows the dark of instant film not yet developed, then develops.
+  // One already here (cached, or quicker than this script) is simply there.
+  for (const img of document.querySelectorAll<HTMLImageElement>('.polaroid img')) {
+    if (img.complete) continue;
+    img.classList.add('developing');
+    const done = () => img.classList.remove('developing');
+    img.addEventListener('load', done, { once: true });
+    img.addEventListener('error', done, { once: true });
+  }
+</script>
+
+<style>
+  .wall {
+    --frame: light-dark(#fff, #e9e5d9);
+    /* The frame is pale by day and by night, so its caption has a colour of its own: the site's
+       muted ink as it is by day. */
+    --caption: #696760;
+    --film: #3a352f;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.6rem 1.15rem;
+    margin: 0;
+    /* Room for the corners a lean pushes out, and for a lift on hover. */
+    padding: 0.4rem 0 1rem;
+    list-style: none;
+  }
+
+  @media (min-width: 40rem) {
+    .wall {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.4rem 2.1rem;
+    }
+  }
+
+  /* The frame. A Polaroid's border is about a twentieth of its width at the sides and top, and
+     deep at the bottom where it gets written on. A row's frames share one height: a longer line
+     makes the whole row's bottoms deeper, not one card taller than its neighbours. */
+  .polaroid {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+    margin: 0;
+    padding: 5.5% 5.5% 0;
+    border-radius: 2px;
+    background: var(--frame);
+    box-shadow:
+      0 1px 2px light-dark(rgb(60 48 24 / 0.1), rgb(0 0 0 / 0.5)),
+      0 10px 24px -12px light-dark(rgb(60 48 24 / 0.38), rgb(0 0 0 / 0.85));
+    rotate: var(--tilt);
+    transition:
+      rotate 0.5s var(--ease-out),
+      translate 0.5s var(--ease-out),
+      scale 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+
+  /* The whole polaroid is the link, frame and caption included: the link's own area is stretched
+     over it, so a press anywhere on the card opens the photo. */
+  /* The window shows the dark of instant film until its photo arrives. It is the link's colour,
+     not the photo's: a photo still on its way is see-through, and its own background with it. */
+  .polaroid :global(.photo-link) {
+    display: block;
+    background: var(--film);
+    cursor: zoom-in;
+  }
+
+  .polaroid :global(.photo-link)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .polaroid :global(.photo-link:focus-visible) {
+    outline: none;
+  }
+
+  .polaroid :global(.photo-link:focus-visible)::after {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+
+  .polaroid :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: opacity 0.6s ease-out;
+  }
+
+  /* Undeveloped at once (there is nothing to fade out yet), developing slowly once it arrives. */
+  .polaroid :global(img.developing) {
+    opacity: 0;
+    transition: none;
+  }
+
+  .note {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    min-height: 19cqi;
+    margin: 0;
+    padding: 0.25em 0.2em 0.4em;
+    /* The site's own type, in italic as the prints' captions are. */
+    font-size: clamp(1rem, 7.6cqi, 1.15rem);
+    font-style: italic;
+    line-height: 1.2;
+    color: var(--caption);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* Looked at with a mouse, a polaroid straightens and comes up off the table. */
+  @media (hover: hover) and (pointer: fine) {
+    .polaroid:hover {
+      z-index: 1;
+      rotate: 0deg;
+      translate: 0 -6px;
+      scale: 1.035;
+      box-shadow:
+        0 2px 4px light-dark(rgb(60 48 24 / 0.1), rgb(0 0 0 / 0.5)),
+        0 22px 36px -16px light-dark(rgb(60 48 24 / 0.42), rgb(0 0 0 / 0.9));
+    }
+  }
+
+  /* Pressed, it gives a little under the finger. */
+  .polaroid:active {
+    scale: 0.985;
+  }
+
+  /* While its photo is open full-screen it lies straight, so the photo shrinks back exactly into
+     it; once put away it settles back to its own lean. */
+  .polaroid:global(.held) {
+    rotate: 0deg;
+    translate: 0;
+    scale: 1;
+  }
+</style>

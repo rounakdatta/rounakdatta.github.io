@@ -1,12 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PhotoLink from '../../components/PhotoLink.astro';
 import PhotoViewer from '../../components/PhotoViewer.astro';
+import Polaroids from '../../components/Polaroids.astro';
 import Icon from '../../components/Icon.astro';
-import { altOf, type Photo } from '../../lib/photos';
+import { altOf, polaroidSizes, polaroidWidths, POLAROID_QUALITY, type Photo } from '../../lib/photos';
 
-const albums = (await getCollection('photoAlbums')).sort((a, b) => a.data.order - b.data.order);
+const all = await getCollection('photoAlbums');
+const albums = all.filter((album) => album.data.set === 'by-me').sort((a, b) => a.data.order - b.data.order);
+const ofMe = all.filter((album) => album.data.set === 'of-me').flatMap((album) => album.data.photos);
+
+
+// Two sets of photos share the page, and the reader picks one: photos of me, as polaroids lying
+// in daylight, or photos by me, as prints hanging in a darkroom. Of me comes first.
+const SETS = [
+  { id: 'of-me', label: 'of me' },
+  { id: 'by-me', label: 'by me' },
+] as const;
 
 // Every photo is a print on black: one rectangle for the whole album, with an even black border,
 // and black filling whatever a photo's own shape leaves (above and below a wider photo, either side
@@ -46,39 +58,110 @@ const widthsOf = (photo: Photo, shape: number) => {
   const largest = Math.min([400, 800, 1200, 1600, 2000].find((w) => w >= needed) ?? 2000, photo.src.width);
   return [400, 800, 1200, 1600].filter((w) => w < largest).concat(largest);
 };
+
+const PRINT_QUALITY = 72;
+
+// The page asks for its first photos from the head, before it has been read, but only those of the
+// set it opens on: every photo is lazy otherwise, so the other set costs nothing. These are the
+// same sizes the photos themselves ask for, so the photo finds its file already on its way.
+const asked = async (photo: Photo, widths: number[], sizes: string, quality: number) => ({
+  srcset: (await getImage({ src: photo.src, widths, sizes, format: 'avif', quality, layout: 'none' })).srcSet.attribute,
+  sizes,
+});
+const first = {
+  // The first row of polaroids, and the first of the next on a phone.
+  'of-me': await Promise.all(ofMe.slice(0, 3).map((photo) => asked(photo, polaroidWidths(photo), polaroidSizes(photo), POLAROID_QUALITY))),
+  // Each album's first print, and the next coming in at the edge: the first album's, unless the
+  // address is another album's.
+  albums: Object.fromEntries(
+    await Promise.all(
+      albums.map(async ({ id, data: { photos } }) => [
+        id,
+        await Promise.all(photos.slice(0, 2).map((photo) => asked(photo, widthsOf(photo, commonShape(photos)), sizesOf(photo, commonShape(photos)), PRINT_QUALITY))),
+      ]),
+    ),
+  ),
+  firstAlbum: albums[0]?.id,
+};
 ---
 
-<BaseLayout title="Photos" description="Photographs by Rounak Datta: trips, weddings, mountains and cities.">
+<BaseLayout title="Photos" description="Photographs of and by Rounak Datta: trips, weddings, mountains and cities.">
+  <!-- Which set shows is settled before the first paint, so the page never flashes the other one's
+       light, and neither does the browser's own bar. An old album address belongs to the prints. -->
+  <script slot="head" define:vars={{ first }}>
+    const h = location.hash;
+    // An address that names a set decides; one that names a place on the page (the skip link's
+    // #content) keeps the set this tab last chose; no address at all is the polaroids.
+    const named = h === '#by-me' || h.startsWith('#album-');
+    let kept = null;
+    try {
+      kept = sessionStorage.getItem('photos');
+    } catch {}
+    const set = named ? 'by-me' : h && kept === 'by-me' ? 'by-me' : 'of-me';
+    document.documentElement.dataset.photos = set;
+    const ask = (attributes) => document.head.append(Object.assign(document.createElement('link'), { rel: 'preload', ...attributes }));
+    // The very first photo ahead of everything else.
+    const album = h.startsWith('#album-') && first.albums[h.slice(7)] ? h.slice(7) : first.firstAlbum;
+    (set === 'of-me' ? first['of-me'] : (first.albums[album] ?? [])).forEach(({ srcset, sizes }, k) =>
+      ask({ as: 'image', imageSrcset: srcset, imageSizes: sizes, ...(k ? {} : { fetchPriority: 'high' }) }));
+    if (set === 'by-me') {
+      const bars = [...document.querySelectorAll('meta[name="theme-color"]')];
+      const night = bars.find((bar) => bar.media.includes('dark'))?.content;
+      for (const bar of bars) {
+        bar.dataset.day = bar.content;
+        if (night) bar.content = night;
+      }
+    }
+  </script>
+
   <header class="head">
-    <h1>Photos</h1>
+    <div class="title">
+      <h1 id="photos-title">Photos</h1>
+      {/* A choice only once there is JavaScript to make it: the script gives these their tab roles. */}
+      <div class="sets">
+        {SETS.map(({ id, label }) => (
+          <button type="button" class="set" id={`tab-${id}`} data-set={id}>{label}</button>
+        ))}
+      </div>
+    </div>
     <p class="lede">WDYM one needs Instagram to have a colourful life?</p>
   </header>
 
-  {albums.map((album, a) => {
-    const shape = commonShape(album.data.photos);
-    return (
-    <section class="album" aria-labelledby={`album-${album.id}`}>
-      <h2 id={`album-${album.id}`}>{album.data.title}</h2>
-      <div class="gallery full" style={`--card-aspect: ${printFor(shape).toFixed(4)}`}>
-        <div class="strip" tabindex="0" role="group" aria-labelledby={`album-${album.id}`}>
-          <div class="track">
-            <ul data-gallery>
-              {album.data.photos.map((photo, i) => (
-                <li class="frame" style={`--a: ${(photo.src.width / photo.src.height).toFixed(4)}`}>
-                  <PhotoLink photo={photo} sizes={sizesOf(photo, shape)} widths={widthsOf(photo, shape)} priority={a === 0 && i < 2} quality={72} />
-                  {/* Read once: with no alt text of its own, the photo already says its caption. */}
-                  {photo.caption && <p class="caption" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <button type="button" class="nudge back" aria-label="Earlier photos" hidden><Icon name="arrow-left" /></button>
-        <button type="button" class="nudge on" aria-label="Later photos" hidden><Icon name="arrow-right" /></button>
-      </div>
+  <div class="panels full">
+    <section class="panel" id="panel-of-me" data-set="of-me" aria-labelledby="set-of-me">
+      <h2 class="set-title" id="set-of-me">Of me</h2>
+      <Polaroids photos={ofMe} />
     </section>
-    );
-  })}
+
+    <section class="panel" id="panel-by-me" data-set="by-me" aria-labelledby="set-by-me">
+      <h2 class="set-title" id="set-by-me">By me</h2>
+      {albums.map((album) => {
+        const shape = commonShape(album.data.photos);
+        return (
+        <section class="album" aria-labelledby={`album-${album.id}`}>
+          <h3 id={`album-${album.id}`}>{album.data.title}</h3>
+          <div class="gallery full" style={`--card-aspect: ${printFor(shape).toFixed(4)}`}>
+            <div class="strip" tabindex="0" role="group" aria-labelledby={`album-${album.id}`}>
+              <div class="track">
+                <ul data-gallery>
+                  {album.data.photos.map((photo) => (
+                    <li class="frame" style={`--a: ${(photo.src.width / photo.src.height).toFixed(4)}`}>
+                      <PhotoLink photo={photo} sizes={sizesOf(photo, shape)} widths={widthsOf(photo, shape)} quality={PRINT_QUALITY} />
+                      {/* Read once: with no alt text of its own, the photo already says its caption. */}
+                      {photo.caption && <p class="caption" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <button type="button" class="nudge back" aria-label="Earlier photos" hidden><Icon name="arrow-left" /></button>
+            <button type="button" class="nudge on" aria-label="Later photos" hidden><Icon name="arrow-right" /></button>
+          </div>
+        </section>
+        );
+      })}
+    </section>
+  </div>
 
   <PhotoViewer />
 </BaseLayout>
@@ -86,44 +169,416 @@ const widthsOf = (photo: Photo, shape: number) => {
 <script>
   import { drift } from '../../scripts/drift';
 
-  for (const gallery of document.querySelectorAll<HTMLElement>('.gallery')) {
-    const strip = gallery.querySelector<HTMLElement>('.strip')!;
-    const [back, on] = gallery.querySelectorAll<HTMLButtonElement>('.nudge');
-    // Slowly enough to look at each photo as it passes; never while one is open full-screen.
-    const motion = drift(strip, { speed: 20, held: () => !!document.querySelector('.pswp') });
+  type Set = 'of-me' | 'by-me';
+  const root = document.documentElement;
+  const sets = [...document.querySelectorAll<HTMLButtonElement>('.set')];
+  const panelOf = (set: Set) => document.getElementById(`panel-${set}`)!;
+  const other = (set: Set): Set => (set === 'of-me' ? 'by-me' : 'of-me');
+  const showing = () => root.dataset.photos as Set;
+  const fromHash = (): Set => (location.hash === '#by-me' || location.hash.startsWith('#album-') ? 'by-me' : 'of-me');
+  // Where the pointer last was, anywhere on the page: a move that reports the same place is the page
+  // moving under a still pointer (as Safari reports a scroll), not a hand. (Not movementX: a pen
+  // hovering may not fill it in.) Read by a choice before this, on the document, updates it.
+  let lastAt = '';
+  document.addEventListener('pointermove', (event) => (lastAt = `${event.clientX},${event.clientY}`), { passive: true });
 
-    // A mouse can't easily scroll sideways, so it gets an arrow at each end, a photo at a time.
-    // Drifting, the strip comes round, so there is always somewhere to go either way.
-    const step = () => {
-      const frames = strip.querySelectorAll<HTMLElement>('.frame');
-      return frames.length > 1 ? frames[1].offsetLeft - frames[0].offsetLeft : strip.clientWidth * 0.7;
-    };
-    const update = () => {
-      back.hidden = !motion.moving && strip.scrollLeft < 8;
-      on.hidden = !motion.moving && strip.scrollLeft + strip.clientWidth > strip.scrollWidth - 8;
-    };
-    const go = (direction: number) => {
-      motion.hold(4000);
-      const { start, length } = motion.span();
-      if (motion.moving && length) {
-        if (direction < 0 && strip.scrollLeft - step() < start) strip.scrollLeft += length;
-        // Only from where the copy shows exactly what the original does, so nothing blinks.
-        if (direction > 0 && strip.scrollLeft >= start + length) strip.scrollLeft -= length;
-      }
-      strip.scrollBy({ left: direction * step(), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-    };
-    back.addEventListener('click', () => go(-1));
-    on.addEventListener('click', () => go(1));
-    strip.addEventListener('scroll', update, { passive: true });
-    new ResizeObserver(update).observe(strip);
+  // The browser's own colour (its address bar, on a phone) follows the page into the darkroom and
+  // out: the site's night colour, and back to each one's own. The head may already have darkened
+  // them, keeping what they were.
+  const bars = [...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')];
+  const day = bars.map((bar) => bar.dataset.day ?? bar.content);
+  const night = day[bars.findIndex((bar) => bar.media.includes('dark'))];
+
+  // A choice only with JavaScript to make it, so only now is it announced as one.
+  const list = document.querySelector<HTMLElement>('.sets')!;
+  list.setAttribute('role', 'tablist');
+  list.setAttribute('aria-labelledby', 'photos-title');
+  list.setAttribute('aria-orientation', 'vertical');
+  for (const tab of sets) {
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-controls', `panel-${tab.dataset.set}`);
+    const panel = panelOf(tab.dataset.set as Set);
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', tab.id);
   }
+
+  // The prints only start drifting once someone is looking at them.
+  let hung = false;
+  const hang = () => {
+    if (hung) return;
+    hung = true;
+    for (const gallery of document.querySelectorAll<HTMLElement>('.gallery')) {
+      const strip = gallery.querySelector<HTMLElement>('.strip')!;
+      const [back, on] = gallery.querySelectorAll<HTMLButtonElement>('.nudge');
+      // Slowly enough to look at each photo as it passes; never while one is open full-screen.
+      const motion = drift(strip, { speed: 20, held: () => !!document.querySelector('.pswp') });
+
+      // A mouse can't easily scroll sideways, so it gets an arrow at each end, a photo at a time.
+      // Drifting, the strip comes round, so there is always somewhere to go either way.
+      const step = () => {
+        const frames = strip.querySelectorAll<HTMLElement>('.frame');
+        return frames.length > 1 ? frames[1].offsetLeft - frames[0].offsetLeft : strip.clientWidth * 0.7;
+      };
+      const update = () => {
+        back.hidden = !motion.moving && strip.scrollLeft < 8;
+        on.hidden = !motion.moving && strip.scrollLeft + strip.clientWidth > strip.scrollWidth - 8;
+      };
+      const go = (direction: number) => {
+        motion.hold(4000);
+        const { start, length } = motion.span();
+        if (motion.moving && length) {
+          if (direction < 0 && strip.scrollLeft - step() < start) strip.scrollLeft += length;
+          // Only from where the copy shows exactly what the original does, so nothing blinks.
+          if (direction > 0 && strip.scrollLeft >= start + length) strip.scrollLeft -= length;
+        }
+        strip.scrollBy({ left: direction * step(), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      };
+      back.addEventListener('click', () => go(-1));
+      on.addEventListener('click', () => go(1));
+      strip.addEventListener('scroll', update, { passive: true });
+      new ResizeObserver(update).observe(strip);
+    }
+  };
+
+  /** Put the page into one set's light, with its photos. */
+  const show = (set: Set) => {
+    root.dataset.photos = set;
+    for (const tab of sets) {
+      const on = tab.dataset.set === set;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+    }
+    bars.forEach((bar, k) => (bar.content = set === 'by-me' && night ? night : day[k]));
+    if (set === 'by-me') hang();
+    // Kept for a reload on a place in the page (the skip link's #content), which names no set.
+    try {
+      sessionStorage.setItem('photos', set);
+    } catch {
+      // Storage refused: such a reload opens on the polaroids, that's all.
+    }
+  };
+
+  /** Someone chose a set: it fades in, and the address keeps it for a reload or a shared link. */
+  const choose = (set: Set, { focus = false } = {}) => {
+    if (focus) sets.find((tab) => tab.dataset.set === set)?.focus();
+    if (showing() === set) return;
+    // From the first choice on, the sets cross-fade; the page itself never fades in on arrival.
+    root.dataset.switched = '';
+    show(set);
+    // An address that already says this set (an album's, say) is left as it is.
+    if (fromHash() !== set) history.replaceState(history.state, '', set === 'by-me' ? '#by-me' : location.pathname + location.search);
+  };
+
+  // The photos that would show first in the other set start loading the moment a hand comes near
+  // the choice, so they are there when it is made. A mouse near the title counts; a finger only on the other choice itself, because a finger on the
+  // title is as likely to be starting a scroll, and the prints are 0.7 MB.
+  const warmed = new Set<Set>();
+  const warm = () => {
+    const set = other(showing());
+    if (warmed.has(set)) return;
+    warmed.add(set);
+    const panel = panelOf(set);
+    const first =
+      set === 'of-me'
+        ? [...panel.querySelectorAll<HTMLImageElement>('.polaroid img')].slice(0, 6)
+        : [...panel.querySelectorAll<HTMLElement>('.track')].flatMap((track) => [...track.querySelectorAll<HTMLImageElement>('img')].slice(0, 3));
+    for (const img of first) img.loading = 'eager';
+  };
+  const title = document.querySelector<HTMLElement>('.title')!;
+  title.addEventListener('pointerenter', (event) => event.pointerType !== 'touch' && warm());
+  // The keyboard's own focus; a finger's tap focuses the word it taps too, and that is no reach.
+  list.addEventListener('focusin', (event) => (event.target as Element).matches(':focus-visible') && warm());
+  for (const tab of sets) tab.addEventListener('touchstart', () => tab.dataset.set !== showing() && warm(), { passive: true });
+
+  for (const tab of sets) {
+    const set = tab.dataset.set as Set;
+    // A pointer that comes to rest on a set chooses it: one that stays within a few pixels for a
+    // moment. One passing over it on its way somewhere else, however slowly, keeps moving, and
+    // every move starts the moment again.
+    let resting = 0;
+    let from = [0, 0];
+    tab.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch' || showing() === set || `${event.clientX},${event.clientY}` === lastAt) return;
+      // The page's very first pointer event has nothing to compare with: then the movement it reports decides.
+      if (!lastAt && !event.movementX && !event.movementY) return;
+      if (resting && Math.hypot(event.clientX - from[0], event.clientY - from[1]) < 8) return;
+      clearTimeout(resting);
+      from = [event.clientX, event.clientY];
+      resting = window.setTimeout(() => {
+        resting = 0;
+        choose(set);
+      }, 110);
+    });
+    tab.addEventListener('pointerleave', () => {
+      clearTimeout(resting);
+      resting = 0;
+    });
+    tab.addEventListener('click', () => {
+      clearTimeout(resting);
+      resting = 0;
+      choose(set);
+    });
+    // The keyboard moves along the choice and chooses as it goes, as tabs do.
+    tab.addEventListener('keydown', (event) => {
+      const by = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+      const to = event.key === 'Home' ? sets[0] : event.key === 'End' ? sets.at(-1) : by ? sets[(sets.indexOf(tab) + by + sets.length) % sets.length] : null;
+      if (!to) return;
+      event.preventDefault();
+      choose(to.dataset.set as Set, { focus: true });
+    });
+  }
+
+  // A link to the other set, or to an album, followed from within the page; or Back to an address
+  // that had one. Any other address (the skip link's #content) is a place on the page, not a set.
+  window.addEventListener('hashchange', () => {
+    const hash = location.hash;
+    if (hash && hash !== '#by-me' && !hash.startsWith('#album-')) return;
+    choose(fromHash());
+    if (hash.startsWith('#album-')) document.getElementById(hash.slice(1))?.scrollIntoView();
+  });
+
+  show(showing());
 </script>
 
 <style>
+  /* ---------- Two lights ---------- */
+
+  /* The colours are typed, so the page can fade from one light to the other rather than flip. */
+  @property --paper {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #fffff8;
+  }
+  @property --paper-raised {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #f6f4ea;
+  }
+  @property --ink {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #2a2926;
+  }
+  @property --ink-muted {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #696760;
+  }
+  @property --rule {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #e4e1d4;
+  }
+  @property --accent {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #ad4310;
+  }
+
+  :global(:root[data-photos]) {
+    --dusk: 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      --paper var(--dusk),
+      --paper-raised var(--dusk),
+      --ink var(--dusk),
+      --ink-muted var(--dusk),
+      --rule var(--dusk),
+      --accent var(--dusk);
+  }
+
+  /* The polaroids lie in the page's own light, day or night. The prints hang in a darkroom: the
+     site's own night colours, whatever the reader's. */
+  :global(:root[data-photos='by-me']) {
+    color-scheme: dark;
+  }
+
+  /* ---------- The choice ---------- */
+
+  .head {
+    margin-bottom: clamp(1.4rem, 4vw, 2.4rem);
+  }
+
+  /* "Photos", and beside it the two ways to finish the sentence, one above the other: "of me", "by
+     me". The one chosen is in focus and "Photos" sits level with it; the other is out of focus. */
+  .title {
+    /* One line of the title: the distance "Photos" travels between the two. */
+    --line: 1.22em;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    column-gap: 0.28em;
+    margin-bottom: 0.5rem;
+    font-size: var(--step-h1);
+    line-height: var(--line);
+  }
+
+  .title h1 {
+    grid-area: 1 / 1;
+    margin: 0;
+    font-size: 1em;
+    line-height: inherit;
+    transition: translate 0.55s var(--ease-out);
+  }
+
+  .sets {
+    grid-area: 1 / 2 / span 2;
+    display: grid;
+    justify-items: start;
+  }
+
+  .set {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    font-style: italic;
+    font-weight: 400;
+    line-height: inherit;
+    letter-spacing: -0.005em;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      filter 0.4s var(--ease-out),
+      opacity 0.4s var(--ease-out);
+  }
+
+  /* A finger needs more than a line of type to aim at: each choice reaches out into the space
+     beside it, and away from the other one, never into it. */
+  .set::before {
+    content: '';
+    position: absolute;
+    inset: -0.3em -0.6em 0 -0.25em;
+  }
+
+  .set + .set::before {
+    inset: 0 -0.6em -0.3em -0.25em;
+  }
+
+  .set:focus-visible {
+    outline-offset: 2px;
+  }
+
+  /* Out of focus, as a lens leaves what it isn't looking at, but still there to be read. */
+  :global(:root:not([data-photos='by-me'])) .set[data-set='by-me'],
+  :global(:root[data-photos='by-me']) .set[data-set='of-me'] {
+    filter: blur(0.04em);
+    opacity: 0.55;
+  }
+
+  /* The one already chosen has nothing more to do when pressed. */
+  :global(:root:not([data-photos='by-me'])) .set[data-set='of-me'],
+  :global(:root[data-photos='by-me']) .set[data-set='by-me'] {
+    cursor: default;
+  }
+
+  :global(:root[data-photos='by-me']) .title h1 {
+    translate: 0 var(--line);
+  }
+
   .lede {
     color: var(--ink-muted);
     font-style: italic;
   }
+
+  /* ---------- The two sets, in one place ---------- */
+
+  .panels,
+  .panel {
+    grid-column: full;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-content: start;
+  }
+
+  .panel > .set-title,
+  .panel > :global(.wall) {
+    grid-column: content;
+  }
+
+  /* The page's colours are settled once, at its root, and fade there. The polaroids' own frames
+     and shadows follow the reader's day or night instead, so they don't turn colour as they fade
+     out into the darkroom. */
+  .panel[data-set='of-me'] {
+    color-scheme: light dark;
+  }
+
+  .set-title {
+    margin: 0 0 1rem;
+    font-size: 1.3em;
+  }
+
+  /* Without JavaScript there is no choosing: both sets show, one after the other, each under its
+     own heading. With it, the choice above names them, and only the chosen one is there. */
+  :global(:root[data-photos]) .set-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  :global(:root:not([data-photos])) .title .sets {
+    display: none;
+  }
+
+  :global(:root[data-photos]) .panel {
+    grid-row: 1;
+  }
+
+  :global(:root[data-photos='of-me']) .panel[data-set='by-me'],
+  :global(:root[data-photos='by-me']) .panel[data-set='of-me'] {
+    display: none;
+  }
+
+  /* Once someone has chosen, one set gives way to the other: the one leaving fades out quickly and
+     is taken away, and only then does the one arriving come up. Overlapping, two layouts this
+     different made a muddy double exposure for a moment; one after the other, it is the light
+     changing and then the photos appearing in it. */
+  :global(:root[data-switched]) .panel {
+    transition:
+      opacity 0.2s ease-in,
+      display 0.2s allow-discrete;
+  }
+
+  :global(:root[data-switched][data-photos='of-me']) .panel[data-set='by-me'],
+  :global(:root[data-switched][data-photos='by-me']) .panel[data-set='of-me'] {
+    opacity: 0;
+  }
+
+  :global(:root[data-switched][data-photos='of-me']) .panel[data-set='of-me'],
+  :global(:root[data-switched][data-photos='by-me']) .panel[data-set='by-me'] {
+    transition: opacity 0.5s var(--ease-out) 0.2s;
+  }
+
+  @starting-style {
+    :global(:root[data-switched][data-photos='of-me']) .panel[data-set='of-me'],
+    :global(:root[data-switched][data-photos='by-me']) .panel[data-set='by-me'] {
+      opacity: 0;
+    }
+  }
+
+  /* Less motion: "Photos" and the focus simply change places. The light and the photos still fade
+     rather than flash, because a fade is a change of colour, not a movement. */
+  @media (prefers-reduced-motion: reduce) {
+    .title h1,
+    .set {
+      transition: none !important;
+    }
+
+    :global(:root[data-photos]) {
+      transition-duration: 0.4s !important;
+    }
+
+    :global(:root[data-switched]) .panel {
+      transition-duration: 0.2s !important;
+    }
+  }
+
+  /* ---------- The prints ---------- */
 
   /* Sections hold a full-width gallery, so they are grids that pass the page's columns through. */
   .album {
@@ -131,6 +586,10 @@ const widthsOf = (photo: Photo, shape: number) => {
     display: grid;
     grid-template-columns: subgrid;
     margin-top: 1.9em;
+  }
+
+  .album:first-of-type {
+    margin-top: 0.4em;
   }
 
   .album > * {
@@ -141,12 +600,10 @@ const widthsOf = (photo: Photo, shape: number) => {
     grid-column: full;
   }
 
-  .album h2 {
+  .album h3 {
     margin: 0;
     font-size: 1.3em;
   }
-
-  /* ---------- The gallery ---------- */
 
   .gallery {
     /* As big as the screen allows: a print never taller than 640px, or than most of the window. */
@@ -277,7 +734,11 @@ const widthsOf = (photo: Photo, shape: number) => {
     }
   }
 
-  /* At night the page is nearly black too: a hairline keeps each print's edge. */
+  /* In the darkroom (and at night) the page is nearly black too: a hairline keeps each print's edge. */
+  :global(:root[data-photos]) .frame :global(.photo-link) {
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), 0 26px 44px -26px rgb(0 0 0 / 0.8);
+  }
+
   @media (prefers-color-scheme: dark) {
     .frame :global(.photo-link) {
       box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), 0 26px 44px -26px rgb(0 0 0 / 0.8);

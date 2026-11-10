@@ -404,3 +404,16 @@ test.describe('polaroids on a map card', () => {
     expect(placePolaroids(line, 5, { frame, size })).toEqual(placePolaroids(line, 5, { frame, size }));
   });
 });
+
+test('polaroids lean a little, never upright, and never three in a row the same way', async () => {
+  const { tiltOf } = await import('../src/lib/polaroids');
+  const leans = Array.from({ length: 240 }, (_, i) => tiltOf(i));
+  for (const lean of leans) {
+    expect(Math.abs(lean)).toBeGreaterThanOrEqual(0.6);
+    expect(Math.abs(lean)).toBeLessThanOrEqual(2.2);
+  }
+  for (let i = 2; i < leans.length; i++) {
+    const signs = new Set([Math.sign(leans[i - 2]), Math.sign(leans[i - 1]), Math.sign(leans[i])]);
+    expect(signs.size, `polaroids ${i - 2} to ${i}`).toBe(2);
+  }
+});

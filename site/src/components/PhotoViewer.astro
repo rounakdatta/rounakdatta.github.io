@@ -3,21 +3,51 @@
 // full-size image, so without JavaScript it still opens; with it, PhotoSwipe takes over:
 // pinch and pan that stop at the photo's edge, swipe between photos, swipe down to close,
 // arrows and Escape, and focus returned to the photo you came from.
-// The viewer (about 20 KB) is only downloaded the first time someone opens a photo.
+// The viewer (about 20 KB) is fetched the moment a hand comes near a photo, so it is here by the
+// time the photo is pressed.
+// A gallery marked data-zoom grows each photo out of its place on the page and shrinks it back
+// there (the polaroids); the others fade in and out (the drifting prints, which move underneath).
 ---
 
 <script>
-  type Slide = { src: string; srcset?: string; width: number; height: number; alt: string; caption: string };
+  type Slide = {
+    src: string;
+    srcset?: string;
+    width: number;
+    height: number;
+    alt: string;
+    caption: string;
+    element?: HTMLElement;
+    msrc?: string;
+    thumbCropped?: boolean;
+  };
 
-  const slidesOf = (gallery: Element): Slide[] =>
-    [...gallery.querySelectorAll<HTMLAnchorElement>('a[data-pswp-width]')].map((a) => ({
-      src: a.href,
-      srcset: a.dataset.pswpSrcset,
-      width: Number(a.dataset.pswpWidth),
-      height: Number(a.dataset.pswpHeight),
-      alt: a.querySelector('img')?.alt ?? '',
-      caption: a.dataset.caption ?? '',
-    }));
+  const PHOTO = '[data-gallery] a[data-pswp-width]';
+
+  const slidesOf = (gallery: Element, zoom: boolean): Slide[] =>
+    [...gallery.querySelectorAll<HTMLAnchorElement>('a[data-pswp-width]')].map((a) => {
+      const img = a.querySelector('img');
+      return {
+        src: a.href,
+        srcset: a.dataset.pswpSrcset,
+        width: Number(a.dataset.pswpWidth),
+        height: Number(a.dataset.pswpHeight),
+        alt: img?.alt ?? '',
+        caption: a.dataset.caption ?? '',
+        // Growing out of the page needs to know where from, and what to show while the full photo loads.
+        ...(zoom && { element: a, msrc: img?.currentSrc || undefined, thumbCropped: a.hasAttribute('data-pswp-cropped') }),
+      };
+    });
+
+  let viewer: Promise<[typeof import('photoswipe'), unknown]> | undefined;
+  const load = () => (viewer ??= Promise.all([import('photoswipe'), import('photoswipe/style.css')]));
+  const near = (event: Event) => (event.target as Element).closest?.(PHOTO) && load();
+  document.addEventListener('pointerover', near, { passive: true });
+  document.addEventListener('touchstart', near, { passive: true });
+  document.addEventListener('focusin', near);
+
+  /** A rotation's angle, in radians, from a computed `rotate` value like "1.5deg". */
+  const angleOf = (el: Element | null) => (parseFloat(el ? getComputedStyle(el).rotate : '') || 0) * (Math.PI / 180);
 
   document.addEventListener('click', async (event) => {
     const link = (event.target as Element).closest?.<HTMLAnchorElement>('a[data-pswp-width]');
@@ -25,9 +55,10 @@
     if (!link || !gallery || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
     event.preventDefault();
 
-    const slides = slidesOf(gallery);
+    const zoom = gallery.hasAttribute('data-zoom');
+    const slides = slidesOf(gallery, zoom);
     const index = [...gallery.querySelectorAll('a[data-pswp-width]')].indexOf(link);
-    const [{ default: PhotoSwipe }] = await Promise.all([import('photoswipe'), import('photoswipe/style.css')]);
+    const [{ default: PhotoSwipe }] = await load();
 
     const pswp = new PhotoSwipe({
       dataSource: slides,
@@ -36,7 +67,7 @@
       // Focus goes back to the photo only for a keyboard, which opened it with Enter (a click with
       // no detail). Handed back after a mouse, it would look like keyboard focus to what's around it.
       returnFocus: event.detail === 0,
-      showHideAnimationType: 'fade',
+      showHideAnimationType: zoom ? 'zoom' : 'fade',
       closeTitle: 'Close',
       zoomTitle: 'Zoom',
       arrowPrevTitle: 'Previous photo',
@@ -48,6 +79,57 @@
       doubleTapAction: false,
       paddingFn: (viewport) => (viewport.x < 700 ? { top: 0, bottom: 64, left: 0, right: 0 } : { top: 32, bottom: 88, left: 64, right: 64 }),
     });
+
+    if (zoom) {
+      // The card a photo belongs to lies straight while the photo is open, so it shrinks back into
+      // exactly its window; once put away, the card leans again.
+      // Swiped to a photo whose polaroid isn't wholly on the screen, the page brings that polaroid
+      // into view behind the viewer, so putting the photo away puts it back where it is seen to go,
+      // instead of flying it off the edge of the screen. Only once the viewer is fully open: then it
+      // hides the page entirely, and follows the page's scrolling. While it opens (the first change
+      // comes then) the photo is growing out of the polaroid where it is, which must not move.
+      let held: HTMLElement | null = null;
+      const hold = () => {
+        held?.classList.remove('held');
+        held = (slides[pswp.currIndex].element?.closest('.polaroid') as HTMLElement) ?? null;
+        held?.classList.add('held');
+        const at = held?.getBoundingClientRect();
+        if (pswp.opener.isOpen && held && at && (at.top < 0 || at.bottom > innerHeight)) held.scrollIntoView({ block: 'center', behavior: 'instant' });
+      };
+      pswp.on('change', hold);
+      pswp.on('destroy', () => held?.classList.remove('held'));
+
+      // A polaroid leans, and a leaning box measures larger than the photo in it. The window is
+      // square, so its own size is the measured size over (cos + sin) of the lean, about the same
+      // centre; the full photo is then laid over it as the window's cover crop lays it.
+      pswp.addFilter('thumbBounds', (bounds, data) => {
+        const img = data.element?.querySelector('img');
+        // Typed as always answering; PhotoSwipe in fact falls back to a fade when there is no answer.
+        if (!img || !data.thumbCropped || !data.width || !data.height) return bounds!;
+        const box = img.getBoundingClientRect();
+        const lean = Math.abs(angleOf(img.closest('.polaroid')));
+        const side = box.width / (Math.cos(lean) + Math.sin(lean));
+        const fill = Math.max(side / data.width, side / data.height);
+        const offsetX = (side - data.width * fill) / 2;
+        const offsetY = (side - data.height * fill) / 2;
+        const left = box.left + box.width / 2 - side / 2;
+        const top = box.top + box.height / 2 - side / 2;
+        // Somewhere it can't be seen to go, it simply fades.
+        if (top + side < 0 || top > innerHeight) return undefined!;
+        return { x: left + offsetX, y: top + offsetY, w: data.width * fill, innerRect: { w: side, h: side, x: offsetX, y: offsetY } };
+      });
+      // The window a photo grows from and shrinks to, as PhotoSwipe finally takes it (this runs after
+      // every other say in it), told on the viewer so it can be checked against the polaroid.
+      pswp.addFilter(
+        'thumbBounds',
+        (bounds) => {
+          if (!bounds) pswp.element?.removeAttribute('data-from');
+          else pswp.element?.setAttribute('data-from', [bounds.x - (bounds.innerRect?.x ?? 0), bounds.y - (bounds.innerRect?.y ?? 0), bounds.innerRect?.w ?? bounds.w].map(Math.round).join(' '));
+          return bounds;
+        },
+        200,
+      );
+    }
 
     pswp.on('uiRegister', () => {
       pswp.ui?.registerElement({

@@ -1,5 +1,7 @@
 ---
 // One photo in a gallery: the picture at the size it is shown, linked to its full-size version.
+// The site prefetches every link a pointer rests on; never this one, which is a photo of up to
+// 2,400px that the viewer replaces with the size the screen needs anyway.
 import { Image } from 'astro:assets';
 import { fullSize, altOf, type Photo } from '../lib/photos';
 
@@ -12,10 +14,12 @@ interface Props {
   quality?: number;
   /** The sizes to make, for a page that shows its photos larger than a note does. */
   widths?: number[];
+  /** Shown cut to a shape of its own (object-fit: cover), so the viewer grows it out of the crop. */
+  cropped?: boolean;
   class?: string;
 }
 
-const { photo, sizes, priority = false, quality = 60, widths = [400, 800, 1200].filter((w) => w <= photo.src.width), class: className } = Astro.props;
+const { photo, sizes, priority = false, quality = 60, widths = [400, 800, 1200].filter((w) => w <= photo.src.width), cropped = false, class: className } = Astro.props;
 const full = await fullSize(photo);
 ---
 
@@ -26,6 +30,8 @@ const full = await fullSize(photo);
   data-pswp-height={full.height}
   data-pswp-srcset={full.srcset}
   data-caption={photo.caption}
+  data-pswp-cropped={cropped ? '' : undefined}
+  data-astro-prefetch="false"
 >
   <Image
     src={photo.src}

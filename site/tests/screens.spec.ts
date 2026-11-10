@@ -2,7 +2,8 @@
 import { test, expect } from '@playwright/test';
 import { builtPages, readWholePage, SCREENS } from './site';
 
-const pages = builtPages().map(([path]) => path);
+// The photos page opens on its polaroids; its prints are only drawn once chosen, so they get their own visit.
+const pages = [...builtPages().map(([path]) => path), '/photos/#by-me'];
 
 for (const screen of SCREENS) {
   test.describe(screen.name, () => {

@@ -42,6 +42,8 @@ const photoAlbums = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** Photos Rounak took ('by-me': prints, an album each) or photos of him ('of-me': polaroids, one set). */
+      set: z.enum(['by-me', 'of-me']).default('by-me'),
       order: z.number().default(0),
       photos: z.array(
         z.object({

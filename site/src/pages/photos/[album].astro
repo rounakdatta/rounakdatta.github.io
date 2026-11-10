@@ -4,7 +4,8 @@
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  return (await getCollection('photoAlbums')).map((album) => ({ params: { album: album.id } }));
+  // Only the albums of photos Rounak took ever had pages; the polaroids of him never did.
+  return (await getCollection('photoAlbums', (album) => album.data.set === 'by-me')).map((album) => ({ params: { album: album.id } }));
 }
 
 const target = `/photos/#album-${Astro.params.album}`;
