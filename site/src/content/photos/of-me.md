@@ -33,7 +33,7 @@ photos:
     caption: "cubbon.run wholelotta.fun"
     alt: "Two runners grin at the camera on a park path under tall trees, one throwing a peace sign"
   - src: "../../assets/images/of_me/devils_circuit.jpg"
-    caption: "devil's circuit"
+    caption: "devils circuit"
     alt: "Rounak and a friend grin for a selfie in black Devils Circuit shirts, a crowd of racers behind them"
     focus: "30% 50%"
   - src: "../../assets/images/of_me/blr_hikes.jpg"
