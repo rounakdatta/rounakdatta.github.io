@@ -125,7 +125,8 @@
         (bounds) => {
           if (!bounds) pswp.element?.removeAttribute('data-from');
           else pswp.element?.setAttribute('data-from', [bounds.x - (bounds.innerRect?.x ?? 0), bounds.y - (bounds.innerRect?.y ?? 0), bounds.innerRect?.w ?? bounds.w].map(Math.round).join(' '));
-          return bounds;
+          // Typed as always answering, like the filter before it; no answer is passed on as it came.
+          return bounds!;
         },
         200,
       );
