@@ -1,16 +1,10 @@
-// The photos page holds two sets, and the reader picks one: photos of Rounak, as polaroids lying in
-// the page's own light, or photos by him, as prints hanging in a darkroom.
+// The photos page holds two sets, and the reader picks one: photos of Rounak, as polaroids in black
+// and white until looked at, or photos by him, as prints.
 import { test, expect, type Page } from '@playwright/test';
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
 const showing = (page: Page) => page.evaluate(() => document.documentElement.dataset.photos);
-/** How bright the page is: the mean of its background's channels, 0 (black) to 255 (white). */
-const brightness = (page: Page) =>
-  page.evaluate(() => {
-    const [r, g, b] = getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g)!.map(Number);
-    return (r + g + b) / 3;
-  });
 /**
  * Move the mouse and wait until the page has had the move. With the page's clock in the test's
  * hands, time must not move on before the page has seen where the pointer went: a loaded machine
@@ -143,7 +137,7 @@ test("the first photos of the set the page opens on are asked for first, and onl
   }
 });
 
-test('resting the pointer on "by me" turns the page into a darkroom and hangs the prints; a pointer only passing over it, however slowly, does not', async ({ page }) => {
+test('resting the pointer on "by me" hangs the prints in place of the polaroids; a pointer only passing over it, however slowly, does not', async ({ page }) => {
   // The page's own timers run on a clock the test moves, so a busy machine can't make a pass look like
   // a rest. Installed, a clock still runs in real time; it only stands still once paused.
   await page.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
@@ -151,7 +145,6 @@ test('resting the pointer on "by me" turns the page into a darkroom and hangs th
   await page.clock.pauseAt(new Date('2026-01-01T01:00:00Z'));
   const box = (await page.locator('#tab-by-me').boundingBox())!;
   const y = Math.round(box.y + box.height / 2);
-  expect(await brightness(page)).toBeGreaterThan(200);
 
   // Passing slowly across it, 6 px every 40 ms (150 px a second), on the way somewhere else.
   for (let x = Math.round(box.x - 30); x < box.x + box.width + 30; x += 6) {
@@ -168,7 +161,6 @@ test('resting the pointer on "by me" turns the page into a darkroom and hangs th
   expect(await showing(page)).toBe('of-me');
   await page.clock.runFor(150);
   expect(await showing(page)).toBe('by-me');
-  await expect.poll(() => brightness(page), { timeout: 3000 }).toBeLessThan(30);
   await expect(page.locator('#panel-by-me .strip').first()).toBeVisible();
   await expect(page.locator('#panel-of-me')).toBeHidden();
   await expect(page.locator('#tab-by-me')).toHaveAttribute('aria-selected', 'true');
@@ -179,7 +171,7 @@ test('resting the pointer on "by me" turns the page into a darkroom and hangs th
   await moveSeen(page, Math.round(of.x + of.width / 2), Math.round(of.y + of.height / 2));
   await page.clock.runFor(200);
   expect(await showing(page)).toBe('of-me');
-  await expect.poll(() => brightness(page), { timeout: 3000 }).toBeGreaterThan(200);
+  await expect(page.locator('#panel-of-me .polaroid').first()).toBeVisible();
   await expect(page).toHaveURL(/\/photos\/$/);
 });
 
@@ -219,7 +211,7 @@ test('after the keyboard turns back to the polaroids, a pointer resting on "by m
   await expect.poll(() => showing(page), { timeout: 2000 }).toBe('by-me');
 });
 
-test('the skip link takes a keyboard past the header and leaves the darkroom as it was', async ({ page }) => {
+test('the skip link takes a keyboard past the header and leaves the prints as they were', async ({ page }) => {
   await page.goto('/photos/#by-me');
   await page.keyboard.press('Tab');
   await expect(page.locator('.skip-link')).toBeFocused();
@@ -228,44 +220,49 @@ test('the skip link takes a keyboard past the header and leaves the darkroom as 
   await page.waitForTimeout(300);
   expect(await showing(page)).toBe('by-me');
   await expect(page.locator('#panel-by-me')).toBeVisible();
-  // And a reload on that place in the page is still in the darkroom.
+  // And a reload on that place in the page is still among the prints.
   await page.reload();
   expect(await showing(page)).toBe('by-me');
 });
 
-test('the light fades into the darkroom over a moment, frame by frame, rather than flipping', async ({ page }) => {
-  await page.goto('/photos/');
-  const shades = await page.evaluate(
-    () =>
-      new Promise<number[]>((done) => {
-        const out: number[] = [];
-        const start = performance.now();
-        const tick = () => {
-          const [r, g, b] = getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g)!.map(Number);
-          out.push((r + g + b) / 3);
-          if (performance.now() - start < 1400) requestAnimationFrame(tick);
-          else done(out);
-        };
-        document.getElementById('tab-by-me')!.click();
-        requestAnimationFrame(tick);
-      }),
-  );
-  const [first, last] = [shades[0], shades.at(-1)!];
-  expect(first).toBeGreaterThan(200);
-  expect(last).toBeLessThan(30);
-  // It passed through the shades in between, and only ever got darker on the way.
-  expect(shades.filter((v) => v < first - 15 && v > last + 15).length).toBeGreaterThan(1);
-  for (let i = 1; i < shades.length; i++) expect(shades[i]).toBeLessThanOrEqual(shades[i - 1] + 0.5);
-});
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`read in ${colorScheme} mode`, () => {
+    test.use({ colorScheme });
 
-test("the browser's own colour follows the page into the darkroom and back out", async ({ page }) => {
+    test("both sets are in the reader's own light: choosing the prints doesn't change the page's colours", async ({ page }) => {
+      await page.goto('/photos/');
+      const colours = () => page.evaluate(() => [document.body, document.querySelector('.site-header a')!].map((el) => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color].join()));
+      const before = await colours();
+      await page.locator('#tab-by-me').click();
+      await expect(page.locator('#panel-by-me .strip').first()).toBeVisible();
+      await page.waitForTimeout(900);
+      expect(await colours()).toEqual(before);
+    });
+  });
+}
+
+test('the polaroids are black and white until looked at, and a photo opens in colour', async ({ page }) => {
   await page.goto('/photos/');
-  const colours = () => page.locator('meta[name="theme-color"]').evaluateAll((metas) => metas.map((m) => (m as HTMLMetaElement).content));
-  const day = await colours();
-  await page.locator('#tab-by-me').click();
-  await expect.poll(colours).toEqual(day.map(() => '#151412'));
-  await page.locator('#tab-of-me').click();
-  await expect.poll(colours).toEqual(day);
+  const filterOf = (n: number) => page.locator('#panel-of-me .polaroid img').nth(n).evaluate((img) => getComputedStyle(img).filter);
+  for (const n of [0, 1, 2]) expect(await filterOf(n)).toBe('grayscale(1)');
+  // A pointer resting on one brings its colour, that one's only.
+  await page.locator('#panel-of-me .polaroid').first().hover();
+  await expect.poll(() => filterOf(0)).toBe('none');
+  expect(await filterOf(1)).toBe('grayscale(1)');
+  // So does the keyboard's focus, and leaving takes it away again.
+  await page.mouse.move(2, 2);
+  await expect.poll(() => filterOf(0)).toBe('grayscale(1)');
+  await page.locator('#tab-of-me').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#panel-of-me .polaroid a').first()).toBeFocused();
+  await expect.poll(() => filterOf(0)).toBe('none');
+  // Opened, the photo is in colour, and so is its polaroid underneath, to take it back.
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.pswp')).toBeVisible();
+  const viewer = await page.locator('.pswp img').evaluateAll((imgs) => imgs.filter((i) => i.getBoundingClientRect().width > 0).map((i) => getComputedStyle(i).filter));
+  expect(viewer.length).toBeGreaterThan(0);
+  expect(viewer.every((f) => f === 'none')).toBe(true);
+  expect(await filterOf(0)).toBe('none');
 });
 
 test('a keyboard moves along the choice with the arrow keys, and a screen reader hears which one is chosen', async ({ page }) => {
@@ -365,26 +362,24 @@ test("an old album's address lands among the prints, at that album", async ({ pa
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  test('a tap chooses, and the address keeps the choice: a reload opens in the darkroom, with no daylight on the way in', async ({ page }) => {
+  test('a tap chooses, and the address keeps the choice: a reload opens on the prints, with no polaroids on the way in', async ({ page }) => {
     await page.goto('/photos/');
     await page.locator('#tab-by-me').tap();
     await expect.poll(() => showing(page)).toBe('by-me');
     await expect(page).toHaveURL(/#by-me$/);
 
-    // What the page has decided by the time it has a body to paint: already the darkroom.
+    // What the page has decided by the time it has a body to paint: already the prints.
     await page.addInitScript(() => {
       // Watched from the document itself: when this runs, not even <html> has been parsed yet.
       new MutationObserver((_, observer) => {
         if (!document.body) return;
         (window as unknown as { atBody?: string }).atBody = document.documentElement.dataset.photos;
-        (window as unknown as { barAtBody?: string[] }).barAtBody = [...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')].map((m) => m.content);
         observer.disconnect();
       }).observe(document, { childList: true, subtree: true });
     });
     await page.reload();
     expect(await page.evaluate(() => (window as unknown as { atBody?: string }).atBody)).toBe('by-me');
-    expect(await page.evaluate(() => (window as unknown as { barAtBody?: string[] }).barAtBody)).toEqual(['#151412', '#151412']);
-    expect(await brightness(page)).toBeLessThan(30);
+    await expect(page.locator('#panel-of-me')).toBeHidden();
   });
 
   test('a photo put away after swiping to another goes back into its own polaroid, brought into view', async ({ page }) => {
@@ -488,18 +483,17 @@ test.describe('on the narrowest phone', () => {
 test.describe('for someone who asked for less motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('"Photos" simply changes places, while the light still fades rather than flashing', async ({ page }) => {
+  test('"Photos" simply changes places', async ({ page }) => {
     await page.goto('/photos/');
-    const steps = await page.evaluate(
+    const moves = await page.evaluate(
       () =>
-        new Promise<{ moved: string; shade: number }[]>((done) => {
-          const out: { moved: string; shade: number }[] = [];
+        new Promise<string[]>((done) => {
+          const out: string[] = [];
           const h1 = document.querySelector('.title h1')!;
           const start = performance.now();
           const tick = () => {
-            const [r, g, b] = getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g)!.map(Number);
-            out.push({ moved: getComputedStyle(h1).translate, shade: (r + g + b) / 3 });
-            if (performance.now() - start < 900) requestAnimationFrame(tick);
+            out.push(getComputedStyle(h1).translate);
+            if (performance.now() - start < 700) requestAnimationFrame(tick);
             else done(out);
           };
           document.getElementById('tab-by-me')!.click();
@@ -507,11 +501,8 @@ test.describe('for someone who asked for less motion', () => {
         }),
     );
     // From the first frame "Photos" is where it ends up: it never travels.
-    expect(new Set(steps.map(({ moved }) => moved)).size).toBe(1);
-    expect(steps[0].moved).not.toBe('none');
-    // The colour passes through the shades between.
-    const [first, last] = [steps[0].shade, steps.at(-1)!.shade];
-    expect(steps.filter(({ shade }) => shade < first - 15 && shade > last + 15).length).toBeGreaterThan(0);
+    expect(new Set(moves).size).toBe(1);
+    expect(moves[0]).not.toBe('none');
   });
 });
 

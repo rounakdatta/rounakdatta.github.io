@@ -1,7 +1,8 @@
 ---
-// Photos as polaroids on a table: a square window cut from each photo, a white frame with room
-// below for its caption, every one leaning a little its own way. Pressed, a photo grows out of
-// its polaroid to fill the screen, whole; put away, it shrinks back into it and settles.
+// Photos as polaroids on a table: a square window cut from each photo, in black and white, a white
+// frame with room below for its caption, every one leaning a little its own way. Looked at, a
+// polaroid comes up in colour. Pressed, its photo grows out of it to fill the screen, whole and in
+// colour; put away, it shrinks back into it, settles, and goes back to black and white.
 import PhotoLink from './PhotoLink.astro';
 import { altOf, polaroidSizes, polaroidWidths, POLAROID_QUALITY, type Photo } from '../lib/photos';
 import { tiltOf } from '../lib/polaroids';
@@ -110,13 +111,24 @@ const { photos } = Astro.props;
     border-radius: 3px;
   }
 
+  /* Black and white until looked at (after shraddha-kulkarni.com/photos). */
   .polaroid :global(img) {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
-    transition: opacity 0.6s ease-out;
+    filter: grayscale(1);
+    transition:
+      opacity 0.6s ease-out,
+      filter 0.6s ease;
+  }
+
+  /* In colour while a pointer rests on it, while it has the keyboard's focus, and while its photo is
+     open full-screen, so the photo shrinks back into the same colours. */
+  .polaroid:has(:global(.photo-link:focus-visible)) :global(img),
+  .polaroid:global(.held) :global(img) {
+    filter: none;
   }
 
   /* Undeveloped at once (there is nothing to fade out yet), developing slowly once it arrives. */
@@ -151,6 +163,10 @@ const { photos } = Astro.props;
       box-shadow:
         0 2px 4px light-dark(rgb(60 48 24 / 0.1), rgb(0 0 0 / 0.5)),
         0 22px 36px -16px light-dark(rgb(60 48 24 / 0.42), rgb(0 0 0 / 0.9));
+    }
+
+    .polaroid:hover :global(img) {
+      filter: none;
     }
   }
 
