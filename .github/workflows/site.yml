@@ -4,7 +4,7 @@
 # Quick both ways. Until Nov 2026 one job did everything, one step after another, for a pull
 # request and again for main: ten minutes each, most of it the tests in turn and a browser
 # download.
-# - A pull request is checked in parallel: the types on one machine, and the tests split six ways,
+# - A pull request is checked in parallel: the types on one machine, and the tests split eight ways,
 #   each part on a machine of its own with a build of its own (half a minute from the image cache),
 #   in the Chrome the runner already has. About two minutes.
 # - main deploys what its pull request tested: a build, and up. About a minute and a half. It does
@@ -49,7 +49,7 @@ jobs:
       # Every part reports, so one run shows every failure.
       fail-fast: false
       matrix:
-        part: [1, 2, 3, 4, 5, 6]
+        part: [1, 2, 3, 4, 5, 6, 7, 8]
     defaults:
       run:
         working-directory: site
@@ -81,7 +81,7 @@ jobs:
           path: site/node_modules/.astro
           key: ${{ steps.images.outputs.cache-primary-key }}
 
-      - run: npx playwright test --shard=${{ matrix.part }}/6
+      - run: npx playwright test --shard=${{ matrix.part }}/8
 
   build:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
