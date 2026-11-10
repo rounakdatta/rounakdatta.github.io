@@ -53,15 +53,20 @@ for (const path of pages) {
         await page.goto(path);
         await readWholePage(page);
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
-        // Compare the same screen a beat apart: anything that moved, scrolled or faded shows up as a difference.
-        for (let y = 0; y < height; y += 900) {
+        // Compare the same screen a beat apart: anything that moved, scrolled or faded shows up as a
+        // difference. Every screen is photographed, then, after a beat, every screen again: each is
+        // compared with itself at least 1.2 s later, for one wait a page rather than one a screen
+        // (a long note took half a minute).
+        const screens = Array.from({ length: Math.ceil(height / 900) }, (_, k) => k * 900);
+        const look = async (y: number) => {
           await page.evaluate((top) => window.scrollTo(0, top), y);
-          await page.waitForTimeout(400);
-          const before = await page.screenshot();
-          await page.waitForTimeout(1200);
-          const after = await page.screenshot();
-          expect(before.equals(after), `something moved at ${y}px down`).toBe(true);
-        }
+          await page.waitForTimeout(250);
+          return page.screenshot();
+        };
+        const before: Buffer[] = [];
+        for (const y of screens) before.push(await look(y));
+        await page.waitForTimeout(1200);
+        for (const [k, y] of screens.entries()) expect((await look(y)).equals(before[k]), `something moved at ${y}px down`).toBe(true);
         const running = await page.evaluate(() =>
           document.getAnimations().filter((a) => a.playState === 'running').length);
         expect(running, 'animations still running').toBe(0);
