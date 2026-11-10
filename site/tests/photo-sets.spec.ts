@@ -67,22 +67,23 @@ test('the page opens on photos of me: polaroids, each a square window in a pale 
   expect(new Set(cards.map(({ lean }) => lean)).size).toBeGreaterThan(cards.length / 2);
 });
 
-test("the polaroids are captioned in the site's own type, the same as the prints, and no other font is loaded for them", async ({ page }) => {
+test("the polaroids are captioned in the site's own monospace, and no font beyond the site's own is loaded for them", async ({ page }) => {
   await page.goto('/photos/');
   await page.waitForLoadState('networkidle');
-  const [polaroid, print, body] = await Promise.all([
-    page.locator('#panel-of-me .note').first().evaluate((el) => getComputedStyle(el).fontFamily),
-    page.locator('#panel-by-me .caption').first().evaluate((el) => getComputedStyle(el).fontFamily),
-    page.evaluate(() => getComputedStyle(document.body).fontFamily),
+  const families = (list: string) => list.split(',').map((f) => f.replace(/["']/g, '').trim());
+  const [polaroid, mono, serif] = await page.evaluate(() => [
+    getComputedStyle(document.querySelector('#panel-of-me .note')!).fontFamily,
+    getComputedStyle(document.documentElement).getPropertyValue('--font-mono'),
+    getComputedStyle(document.body).fontFamily,
   ]);
-  expect(polaroid).toBe(print);
-  expect(polaroid).toBe(body);
-  // Every font the page has loaded is the site's own serif, in its weights and styles (or the local
-  // stand-in measured to match it while it arrives, named after it).
-  const serif = body.split(',')[0].replace(/["']/g, '').trim();
+  // Set like a label, in the monospace the site sets its code in, not a typeface of its own.
+  expect(families(polaroid)).toEqual(families(mono));
+  // Every font the page has loaded is the site's serif or its monospace (or the local stand-in
+  // measured to match one while it arrives, named after it).
+  const own = [families(serif)[0], families(mono)[0]];
   const loaded = await page.evaluate(() => [...document.fonts].filter((f) => f.status !== 'unloaded').map((f) => f.family.replace(/["']/g, '')));
   expect(loaded.length).toBeGreaterThan(0);
-  expect(loaded.filter((family) => !family.startsWith(serif))).toEqual([]);
+  expect(loaded.filter((family) => !own.some((name) => family.startsWith(name)))).toEqual([]);
 });
 
 test('the prints cost nothing until a hand comes near the choice, and are on their way once it does', async ({ page }) => {
@@ -329,6 +330,29 @@ test('pressed anywhere on it, a polaroid opens its whole photo, and put away it 
   await expect.poll(() => leanOf(page, 1)).toBeCloseTo(lean, 1);
 });
 
+test("a polaroid framed off-centre grows its photo out of exactly the part it shows", async ({ page }) => {
+  await page.goto('/photos/');
+  // The polaroids that say where their window sits, and one that doesn't.
+  const framed = page.locator('#panel-of-me .polaroid img[style*="object-position: 100% 50%"]').first();
+  await expect(framed).toHaveCount(1);
+  const open = async (img: typeof framed) => {
+    await img.evaluate((i) => i.scrollIntoView({ block: 'center' }));
+    await img.locator('xpath=..').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.pswp')).toBeVisible();
+    const [left, top, side, x, y, w] = (await page.locator('.pswp').getAttribute('data-from'))!.split(' ').map(Number);
+    await putAway(page);
+    return { left, top, side, x, y, w };
+  };
+  // Framed at its right edge: the whole photo is laid so its right edge is the window's.
+  const right = await open(framed);
+  expect(right.w).toBeGreaterThan(right.side + 10);
+  expect(Math.abs(right.x + right.w - (right.left + right.side))).toBeLessThan(2);
+  // Unframed: laid with the window in its middle.
+  const middle = await open(page.locator('#panel-of-me .polaroid img:not([style])').first());
+  expect(Math.abs(middle.x + middle.w / 2 - (middle.left + middle.side / 2))).toBeLessThan(2);
+});
+
 test('a photo still on its way develops out of dark film rather than popping in', async ({ page }) => {
   // Every polaroid is held back until the window has been looked at.
   let release = () => {};
@@ -389,9 +413,10 @@ test.describe('on a phone', () => {
     // Back from the first comes round to the last, far down the page. The viewer takes no keys until
     // the photo has finished growing, so the key is pressed again until it has been taken, never twice.
     const counter = page.locator('.pswp__counter');
+    const count = await page.locator('#panel-of-me .polaroid').count();
     await expect(async () => {
-      if ((await counter.textContent()) === '1 / 12') await page.keyboard.press('ArrowLeft');
-      await expect(counter).toHaveText('12 / 12', { timeout: 300 });
+      if ((await counter.textContent()) === `1 / ${count}`) await page.keyboard.press('ArrowLeft');
+      await expect(counter).toHaveText(`${count} / ${count}`, { timeout: 300 });
     }).toPass();
     await page.waitForTimeout(600);
     await page.keyboard.press('Escape');
@@ -431,13 +456,14 @@ test.describe('on a phone', () => {
     expect(await page.evaluate(() => scrollY)).toBe(0);
   });
 
-  test('two polaroids to a row, with captions big enough to read', async ({ page }) => {
+  test('two polaroids to a row, with captions small but still easy to read', async ({ page }) => {
     await page.goto('/photos/');
     const cards = await page.locator('#panel-of-me .polaroid').evaluateAll((els) =>
       els.map((el) => ({ top: (el as HTMLElement).offsetTop, size: parseFloat(getComputedStyle(el.querySelector('.note')!).fontSize) })));
     expect(cards[0].top).toBe(cards[1].top);
     expect(cards[2].top).toBeGreaterThan(cards[1].top);
-    for (const { size } of cards) expect(size).toBeGreaterThanOrEqual(16);
+    // A monospace with a tall x-height reads at 11px; Rounak found 16px of Garamond too big.
+    for (const { size } of cards) expect(size).toBeGreaterThanOrEqual(11);
   });
 });
 

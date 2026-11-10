@@ -5,6 +5,8 @@ export interface Photo {
   src: ImageMetadata;
   caption?: string;
   alt?: string;
+  /** Where a polaroid's square window sits on the photo (CSS object-position). */
+  focus?: string;
 }
 
 /** The full-screen version: big enough for a laptop at 2×, never bigger than the original. */
@@ -26,11 +28,17 @@ export const altOf = (photo: Photo) => photo.alt ?? photo.caption ?? '';
 
 // ---------- Polaroids ----------
 
-/** AVIF quality for a polaroid: small, so a little more than a note's illustration. */
-export const POLAROID_QUALITY = 70;
+/**
+ * AVIF quality for a polaroid: small, and black and white until looked at, so a little more than a
+ * note's illustration and less than a print. 70 made the first view of 32 polaroids 620 KB on a phone.
+ */
+export const POLAROID_QUALITY = 64;
 
-/** The sizes a polaroid's photo is made in: a tall photo on a phone needs only 300. */
-export const polaroidWidths = (photo: Photo) => [300, 400, 600, 800].filter((w) => w <= photo.src.width);
+/**
+ * The sizes a polaroid's photo is made in: a tall photo on a phone needs only 300, and a wide one
+ * about 450, which without a 500 it took from the 600.
+ */
+export const polaroidWidths = (photo: Photo) => [300, 400, 500, 600, 800].filter((w) => w <= photo.src.width);
 
 /**
  * How wide a polaroid's photo is drawn, for the browser to pick a size: exactly, because a phone at
