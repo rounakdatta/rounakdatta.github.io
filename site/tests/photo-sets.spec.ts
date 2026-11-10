@@ -86,6 +86,23 @@ test("the polaroids are captioned in the site's own monospace, and no font beyon
   expect(loaded.filter((family) => !own.some((name) => family.startsWith(name)))).toEqual([]);
 });
 
+test("under the polaroids, one quiet line credits where the idea came from, in a new tab", async ({ page }) => {
+  await page.goto('/photos/');
+  const credit = page.locator('#panel-of-me .credit');
+  await expect(credit).toHaveText('inspired by @shraddhaha’s camera roll');
+  const link = credit.locator('a');
+  await expect(link).toHaveAttribute('href', 'https://shraddha-kulkarni.com/photos');
+  await expect(link).toHaveAttribute('target', '_blank');
+  // Below the wall, and smaller than any caption on it.
+  const [creditTop, wallBottom] = [(await credit.boundingBox())!.y, await page.locator('#panel-of-me .wall').evaluate((w) => w.getBoundingClientRect().bottom + scrollY)];
+  expect(creditTop + (await page.evaluate(() => scrollY))).toBeGreaterThan(wallBottom);
+  const size = (el: string) => page.locator(el).first().evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
+  expect(await size('#panel-of-me .credit')).toBeLessThan(await size('#panel-of-me .note'));
+  // Only with the polaroids: it isn't the prints' to say.
+  await page.locator('#tab-by-me').click();
+  await expect(credit).toBeHidden();
+});
+
 test('the prints cost nothing until a hand comes near the choice, and are on their way once it does', async ({ page }) => {
   const fetched = new Set<string>();
   page.on('request', (request) => request.resourceType() === 'image' && fetched.add(new URL(request.url()).pathname));

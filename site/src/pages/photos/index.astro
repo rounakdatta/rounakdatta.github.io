@@ -122,6 +122,8 @@ const first = {
     <section class="panel" id="panel-of-me" data-set="of-me" aria-labelledby="set-of-me">
       <h2 class="set-title" id="set-of-me">Of me</h2>
       <Polaroids photos={ofMe} />
+      {/* Where the idea came from, said once, quietly, the way a gallery wall credits a show. */}
+      <p class="credit">inspired by <a href="https://shraddha-kulkarni.com/photos" target="_blank" rel="noopener" aria-describedby="new-tab">@shraddhaha’s camera roll</a></p>
     </section>
 
     <section class="panel" id="panel-by-me" data-set="by-me" aria-labelledby="set-by-me">
@@ -421,8 +423,29 @@ const first = {
   }
 
   .panel > .set-title,
-  .panel > :global(.wall) {
+  .panel > :global(.wall),
+  .panel > .credit {
     grid-column: content;
+  }
+
+  /* Smaller and quieter than any caption on the wall, and set in theirs: a label, not a heading. */
+  .credit {
+    margin: 2.6rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-muted);
+    text-align: center;
+  }
+
+  .credit a {
+    color: inherit;
+    text-decoration-color: color-mix(in oklab, var(--ink-muted) 45%, transparent);
+  }
+
+  .credit a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
 
   .set-title {
