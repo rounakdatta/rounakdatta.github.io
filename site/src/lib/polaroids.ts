@@ -119,3 +119,15 @@ export function placePolaroids(route: Point[], count: number, { frame, size, cen
 export const FIXED_PATTERN: [number, number][] = [
   [-0.85, -0.45], [0.55, -0.4], [-0.25, 0.05], [0.75, 0.15], [-0.75, 0.45], [0.45, 0.5], [0.15, -0.5],
 ];
+
+/**
+ * How far a polaroid on the photos page leans, in degrees, by its place on the wall: never
+ * upright, never more than 2.2 degrees, and never three in a row leaning the same way (a
+ * golden-ratio walk spreads the leans out). The same place always leans the same way, so the
+ * wall looks the same on every visit.
+ */
+export function tiltOf(index: number): number {
+  const f = (index * 0.6180339887 + 0.37) % 1;
+  const lean = 0.6 + Math.abs(f - 0.5) * 3.2;
+  return Math.round((f < 0.5 ? -lean : lean) * 10) / 10;
+}

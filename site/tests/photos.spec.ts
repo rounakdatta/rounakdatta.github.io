@@ -3,6 +3,9 @@ import { test, expect, type Page } from '@playwright/test';
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
+/** The photos Rounak took hang as prints in the darkroom, the second of the page's two sets. */
+const PRINTS = '/photos/#by-me';
+
 /** Where the strip really is: its scroll, and the sub-pixel glide on top. */
 const position = (page: Page) => () =>
   page.locator('.strip').first().evaluate((s) => s.scrollLeft - new DOMMatrix(getComputedStyle(s.firstElementChild!).transform).m41);
@@ -15,7 +18,7 @@ const usualShape = (shapes: number[]) => {
 };
 
 test('every photo hangs whole, in a frame the same size as every other in its album', async ({ page }) => {
-  await page.goto('/photos/');
+  await page.goto(PRINTS);
   const strips = await page.locator('.strip').all();
   expect(strips.length).toBeGreaterThan(0);
   for (const strip of strips) {
@@ -56,7 +59,7 @@ test.describe('held still to be looked at', () => {
 
   test('each photo is a print on black: an even black border, and black wherever its shape leaves room', async ({ page }) => {
     const sharp = (await import('sharp')).default;
-    await page.goto('/photos/');
+    await page.goto(PRINTS);
     let others = 0;
     for (const strip of await page.locator('.strip').all()) {
       const frames = strip.locator('.photo-link');
@@ -105,7 +108,7 @@ test.describe('held still to be looked at', () => {
 });
 
 test('the strip drifts slowly by itself, holds still while it is looked at, and carries on after', async ({ page }) => {
-  await page.goto('/photos/');
+  await page.goto(PRINTS);
   const strip = page.locator('.strip').first();
   await strip.scrollIntoViewIfNeeded();
   await page.mouse.move(2, 2);
@@ -135,7 +138,7 @@ test('the strip drifts slowly by itself, holds still while it is looked at, and 
 });
 
 test('a photo open full-screen holds the strip still behind it, and the strip carries on once it is put away', async ({ page }) => {
-  await page.goto('/photos/');
+  await page.goto(PRINTS);
   const first = page.locator('.strip').first().locator('li').first();
   const caption = await first.locator('.caption').textContent();
   // As a hand does: the pointer arrives on the photo (which holds the strip), then clicks.
@@ -161,7 +164,7 @@ test('a photo open full-screen holds the strip still behind it, and the strip ca
 });
 
 test('a mouse gets arrows that move exactly a photo at a time, either way, even where the album comes round', async ({ page }) => {
-  await page.goto('/photos/');
+  await page.goto(PRINTS);
   const gallery = page.locator('.gallery').first();
   const strip = gallery.locator('.strip');
   await gallery.hover();
@@ -193,7 +196,7 @@ test('a mouse gets arrows that move exactly a photo at a time, either way, even 
 });
 
 test('the copy that brings the album round costs nothing until it is near', async ({ page }) => {
-  await page.goto('/photos/');
+  await page.goto(PRINTS);
   const copy = page.locator('.strip').first().locator('ul[data-gallery]').nth(1);
   // No addresses yet: nothing is fetched for photos far off past the end.
   expect(await copy.locator('img').evaluateAll((imgs) => imgs.filter((img) => img.getAttribute('src') || img.getAttribute('srcset')).length)).toBe(0);
@@ -215,7 +218,7 @@ test.describe('for someone who asked for less motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
   test('the strip stays where it is, and has no copy', async ({ page }) => {
-    await page.goto('/photos/');
+    await page.goto(PRINTS);
     await page.locator('.strip').first().scrollIntoViewIfNeeded();
     await page.mouse.move(2, 2);
     const before = await page.locator('.strip').first().evaluate((s) => s.scrollLeft);
@@ -229,7 +232,7 @@ test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
   test('one big frame at a time, the next coming in at the edge, and no arrows', async ({ page }) => {
-    await page.goto('/photos/');
+    await page.goto(PRINTS);
     for (const strip of await page.locator('.strip').all()) {
       const frame = (await strip.locator('.photo-link').first().boundingBox())!;
       expect(frame.width).toBeGreaterThan(390 * 0.75);
@@ -243,7 +246,7 @@ test.describe('on a phone on its side', () => {
   test.use({ viewport: { width: 640, height: 360 }, hasTouch: true, isMobile: true });
 
   test('a frame still fits on the screen', async ({ page }) => {
-    await page.goto('/photos/');
+    await page.goto(PRINTS);
     for (const strip of await page.locator('.strip').all())
       expect((await strip.locator('.photo-link').first().boundingBox())!.height).toBeLessThan(360);
   });
@@ -253,7 +256,7 @@ test.describe('on a sharp screen, held still', () => {
   test.use({ deviceScaleFactor: 2, reducedMotion: 'reduce' });
 
   test('every album opens on a print with enough pixels to stay crisp at twice the density', async ({ page }) => {
-    await page.goto('/photos/');
+    await page.goto(PRINTS);
     for (const strip of await page.locator('.strip').all()) {
       const img = strip.locator('img').first();
       await img.scrollIntoViewIfNeeded();

@@ -12,9 +12,12 @@ const BUDGETS: [RegExp, { firstView: number; whole: number }][] = [
   // text font, and the first three maps: Chrome fetches lazy images ~1,250px ahead, and a map is
   // ~47 KB at the size a phone draws it. The handwriting waits until the calendar comes near.
   [/^\/fitness\/$/, { firstView: 420 * KB, whole: 4 * MB }],
-  // Two albums meet a phone's first view: the first album's opening prints load at once, and Chrome's
-  // lazy reach takes in the next album's first two. A print is ≤125 KB at the size a phone draws it.
-  [/^\/photos\//, { firstView: 550 * KB, whole: 3 * MB }],
+  // The page opens on the polaroids: a phone's first view is the opening rows (a polaroid is ≤45 KB
+  // at the size a phone draws it). The prints of the other set cost nothing here.
+  [/^\/photos\/$/, { firstView: 450 * KB, whole: 1 * MB }],
+  // Opened on the prints instead, two albums meet a phone's first view: the first album's opening
+  // prints, and Chrome's lazy reach takes in the next album's first two. A print is ≤125 KB on a phone.
+  [/^\/photos\/#by-me$/, { firstView: 550 * KB, whole: 3 * MB }],
   // A note may open with a photo across the column: one AVIF of 150–170 KB, plus the fonts.
   [/^\/notes\/.+/, { firstView: 400 * KB, whole: 3 * MB }],
   [/./, { firstView: 250 * KB, whole: 1 * MB }],
@@ -32,7 +35,8 @@ test.use({
   userAgent: devices['Pixel 7'].userAgent,
 });
 
-for (const [path] of builtPages()) {
+// The photos page opens on one of two sets, each paid for in its own way.
+for (const path of [...builtPages().map(([path]) => path), '/photos/#by-me']) {
   const budget = BUDGETS.find(([pattern]) => pattern.test(path))![1];
 
   test(`${path} stays within its weight budget on a phone`, async ({ page }) => {
