@@ -13,8 +13,8 @@ const albums = all.filter((album) => album.data.set === 'by-me').sort((a, b) => 
 const ofMe = all.filter((album) => album.data.set === 'of-me').flatMap((album) => album.data.photos);
 
 
-// Two sets of photos share the page, and the reader picks one: photos of me, as polaroids lying
-// in daylight, or photos by me, as prints hanging in a darkroom. Of me comes first.
+// Two sets of photos share the page, and the reader picks one: photos of me, as polaroids, or
+// photos by me, as prints. Of me comes first.
 const SETS = [
   { id: 'of-me', label: 'of me' },
   { id: 'by-me', label: 'by me' },
@@ -104,14 +104,6 @@ const first = {
     const album = h.startsWith('#album-') && first.albums[h.slice(7)] ? h.slice(7) : first.firstAlbum;
     (set === 'of-me' ? first['of-me'] : (first.albums[album] ?? [])).forEach(({ srcset, sizes }, k) =>
       ask({ as: 'image', imageSrcset: srcset, imageSizes: sizes, ...(k ? {} : { fetchPriority: 'high' }) }));
-    if (set === 'by-me') {
-      const bars = [...document.querySelectorAll('meta[name="theme-color"]')];
-      const night = bars.find((bar) => bar.media.includes('dark'))?.content;
-      for (const bar of bars) {
-        bar.dataset.day = bar.content;
-        if (night) bar.content = night;
-      }
-    }
   </script>
 
   <header class="head">
@@ -124,7 +116,6 @@ const first = {
         ))}
       </div>
     </div>
-    <p class="lede">WDYM one needs Instagram to have a colourful life?</p>
   </header>
 
   <div class="panels full">
@@ -181,13 +172,6 @@ const first = {
   // hovering may not fill it in.) Read by a choice before this, on the document, updates it.
   let lastAt = '';
   document.addEventListener('pointermove', (event) => (lastAt = `${event.clientX},${event.clientY}`), { passive: true });
-
-  // The browser's own colour (its address bar, on a phone) follows the page into the darkroom and
-  // out: the site's night colour, and back to each one's own. The head may already have darkened
-  // them, keeping what they were.
-  const bars = [...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')];
-  const day = bars.map((bar) => bar.dataset.day ?? bar.content);
-  const night = day[bars.findIndex((bar) => bar.media.includes('dark'))];
 
   // A choice only with JavaScript to make it, so only now is it announced as one.
   const list = document.querySelector<HTMLElement>('.sets')!;
@@ -248,7 +232,6 @@ const first = {
       tab.setAttribute('aria-selected', String(on));
       tab.tabIndex = on ? 0 : -1;
     }
-    bars.forEach((bar, k) => (bar.content = set === 'by-me' && night ? night : day[k]));
     if (set === 'by-me') hang();
     // Kept for a reload on a place in the page (the skip link's #content), which names no set.
     try {
@@ -341,57 +324,6 @@ const first = {
 </script>
 
 <style>
-  /* ---------- Two lights ---------- */
-
-  /* The colours are typed, so the page can fade from one light to the other rather than flip. */
-  @property --paper {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #fffff8;
-  }
-  @property --paper-raised {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #f6f4ea;
-  }
-  @property --ink {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #2a2926;
-  }
-  @property --ink-muted {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #696760;
-  }
-  @property --rule {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #e4e1d4;
-  }
-  @property --accent {
-    syntax: '<color>';
-    inherits: true;
-    initial-value: #ad4310;
-  }
-
-  :global(:root[data-photos]) {
-    --dusk: 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-    transition:
-      --paper var(--dusk),
-      --paper-raised var(--dusk),
-      --ink var(--dusk),
-      --ink-muted var(--dusk),
-      --rule var(--dusk),
-      --accent var(--dusk);
-  }
-
-  /* The polaroids lie in the page's own light, day or night. The prints hang in a darkroom: the
-     site's own night colours, whatever the reader's. */
-  :global(:root[data-photos='by-me']) {
-    color-scheme: dark;
-  }
-
   /* ---------- The choice ---------- */
 
   .head {
@@ -478,11 +410,6 @@ const first = {
     translate: 0 var(--line);
   }
 
-  .lede {
-    color: var(--ink-muted);
-    font-style: italic;
-  }
-
   /* ---------- The two sets, in one place ---------- */
 
   .panels,
@@ -496,13 +423,6 @@ const first = {
   .panel > .set-title,
   .panel > :global(.wall) {
     grid-column: content;
-  }
-
-  /* The page's colours are settled once, at its root, and fade there. The polaroids' own frames
-     and shadows follow the reader's day or night instead, so they don't turn colour as they fade
-     out into the darkroom. */
-  .panel[data-set='of-me'] {
-    color-scheme: light dark;
   }
 
   .set-title {
@@ -561,16 +481,12 @@ const first = {
     }
   }
 
-  /* Less motion: "Photos" and the focus simply change places. The light and the photos still fade
-     rather than flash, because a fade is a change of colour, not a movement. */
+  /* Less motion: "Photos" and the focus simply change places. The photos still fade rather than
+     flash, because a fade is a change of colour, not a movement. */
   @media (prefers-reduced-motion: reduce) {
     .title h1,
     .set {
       transition: none !important;
-    }
-
-    :global(:root[data-photos]) {
-      transition-duration: 0.4s !important;
     }
 
     :global(:root[data-switched]) .panel {
@@ -734,11 +650,7 @@ const first = {
     }
   }
 
-  /* In the darkroom (and at night) the page is nearly black too: a hairline keeps each print's edge. */
-  :global(:root[data-photos]) .frame :global(.photo-link) {
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), 0 26px 44px -26px rgb(0 0 0 / 0.8);
-  }
-
+  /* At night the page is nearly black too: a hairline keeps each print's edge. */
   @media (prefers-color-scheme: dark) {
     .frame :global(.photo-link) {
       box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), 0 26px 44px -26px rgb(0 0 0 / 0.8);
