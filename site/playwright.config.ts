@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Locally there is no Playwright-downloaded browser; CHROME_PATH points at the
-// system Chrome instead. CI installs Playwright's own Chromium and leaves it unset.
+// No Playwright-downloaded browser anywhere: locally CHROME_PATH points at the system Chrome, and
+// CI uses the Google Chrome its runner comes with (downloading Chromium cost 90 s a run).
 const executablePath = process.env.CHROME_PATH;
 
 // Chrome starts fetching lazy images sooner on a connection it believes is slow (about 1,250px
@@ -23,9 +23,9 @@ export default defineConfig({
     launchOptions: executablePath
       ? { executablePath, args: [...args, '--no-sandbox', '--disable-dev-shm-usage'] }
       : { args },
-    // On CI, the full Chromium rather than Playwright's default headless shell, which ignores the
-    // forced connection type and lazy-loads as if on an unknown network (17 trek photos, not 10).
-    ...(executablePath ? {} : { channel: 'chromium' }),
+    // On CI, the runner's full Chrome rather than Playwright's default headless shell, which ignores
+    // the forced connection type and lazy-loads as if on an unknown network (17 trek photos, not 10).
+    ...(executablePath ? {} : { channel: 'chrome' }),
   },
   // Tests run against the production build, served the way Pages serves it.
   webServer: {

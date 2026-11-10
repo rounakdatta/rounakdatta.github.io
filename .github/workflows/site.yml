@@ -1,5 +1,15 @@
 # Builds, checks and deploys the site. Pages serves the artifact this uploads;
 # nothing built is ever committed (until Nov 2026 the build lived in docs/).
+#
+# Quick both ways. Until Nov 2026 one job did everything, one step after another, for a pull
+# request and again for main: ten minutes each, most of it the tests in turn and a browser
+# download.
+# - A pull request is checked in parallel: the types on one machine, and the tests split six ways,
+#   each part on a machine of its own with a build of its own (half a minute from the image cache),
+#   in the Chrome the runner already has. About two minutes.
+# - main deploys what its pull request tested: a build, and up. About a minute and a half. It does
+#   not test again: merged from a branch that was up to date, it is the very tree that was tested.
+#   A push straight to main is deployed untested.
 name: Site
 
 on:
@@ -16,24 +26,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  check:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: site
     steps:
       - uses: actions/checkout@v7
-
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run check
 
+  test:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      # Every part reports, so one run shows every failure.
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3, 4, 5, 6]
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
       - run: npm ci
 
-      # Astro keeps every optimised image here; restoring it means a build
-      # only re-encodes the photos that changed.
+      # Astro keeps every optimised image here; restoring it means a build only re-encodes the
+      # photos that changed.
       - id: images
         uses: actions/cache/restore@v6
         with:
@@ -41,26 +71,54 @@ jobs:
           key: astro-${{ hashFiles('site/src/**/*.jpg', 'site/src/**/*.jpeg', 'site/src/**/*.png', 'site/src/**/*.webp') }}
           restore-keys: astro-
 
-      - run: npm run check
       - run: npm run build
 
-      # Saved as soon as the build has them: a failing test later must not throw away ten minutes
-      # of encoding (the one-step cache action only saves when the whole job succeeds).
+      # Saved as soon as the build has them, by one part only (they encoded the same photos): a
+      # failing test later must not throw away the encoding.
+      - if: matrix.part == 1 && steps.images.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: site/node_modules/.astro
+          key: ${{ steps.images.outputs.cache-primary-key }}
+
+      - run: npx playwright test --shard=${{ matrix.part }}/6
+
+  build:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+
+      - id: images
+        uses: actions/cache/restore@v6
+        with:
+          path: site/node_modules/.astro
+          key: astro-${{ hashFiles('site/src/**/*.jpg', 'site/src/**/*.jpeg', 'site/src/**/*.png', 'site/src/**/*.webp') }}
+          restore-keys: astro-
+
+      - run: npm run build
+
+      # main's cache is the one every pull request starts from (a pull request's own is its own).
       - if: steps.images.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
         with:
           path: site/node_modules/.astro
           key: ${{ steps.images.outputs.cache-primary-key }}
 
-      - run: npx playwright install --with-deps chromium
-      - run: npm test
-
       - uses: actions/upload-pages-artifact@v5
         with:
           path: site/dist
 
   deploy:
-    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
