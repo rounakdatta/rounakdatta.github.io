@@ -12,10 +12,11 @@ const BUDGETS: [RegExp, { firstView: number; whole: number }][] = [
   // text font, and the first three maps: Chrome fetches lazy images ~1,250px ahead, and a map is
   // ~47 KB at the size a phone draws it. The handwriting waits until the calendar comes near.
   [/^\/fitness\/$/, { firstView: 420 * KB, whole: 4 * MB }],
-  // The page opens on the polaroids: a phone's first view is the first 14 or so of the 32 (Chrome's
-  // lazy reach on 4G), about 25 KB each at the size a phone draws them, and the fonts. 476 KB when
-  // the wall became Rounak's own photos (Nov 2026). The prints of the other set cost nothing here.
-  [/^\/photos\/$/, { firstView: 500 * KB, whole: 1.5 * MB }],
+  // The page opens on the polaroids: a phone's first view is the first 14 to 18 of the 32 (Chrome's
+  // lazy reach on 4G), 25-50 KB each at the size a phone draws them, and the fonts: 507 KB once the
+  // Lyric photo moved up into it (Nov 2026). As much as the prints alone were allowed. The prints of
+  // the other set cost nothing here.
+  [/^\/photos\/$/, { firstView: 550 * KB, whole: 1.5 * MB }],
   // Opened on the prints instead, two albums meet a phone's first view: the first album's opening
   // prints, and Chrome's lazy reach takes in the next album's first two. A print is ≤125 KB on a phone.
   [/^\/photos\/#by-me$/, { firstView: 550 * KB, whole: 3 * MB }],
