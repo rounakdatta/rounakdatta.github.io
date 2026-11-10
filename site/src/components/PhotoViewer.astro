@@ -101,7 +101,8 @@
 
       // A polaroid leans, and a leaning box measures larger than the photo in it. The window is
       // square, so its own size is the measured size over (cos + sin) of the lean, about the same
-      // centre; the full photo is then laid over it as the window's cover crop lays it.
+      // centre; the full photo is then laid over it as the window's cover crop lays it: from the
+      // middle, or wherever the polaroid's object-position puts the window on the photo.
       pswp.addFilter('thumbBounds', (bounds, data) => {
         const img = data.element?.querySelector('img');
         // Typed as always answering; PhotoSwipe in fact falls back to a fade when there is no answer.
@@ -110,8 +111,9 @@
         const lean = Math.abs(angleOf(img.closest('.polaroid')));
         const side = box.width / (Math.cos(lean) + Math.sin(lean));
         const fill = Math.max(side / data.width, side / data.height);
-        const offsetX = (side - data.width * fill) / 2;
-        const offsetY = (side - data.height * fill) / 2;
+        const [atX, atY] = getComputedStyle(img).objectPosition.split(' ').map((part) => (part.endsWith('%') ? parseFloat(part) / 100 : 0.5));
+        const offsetX = (side - data.width * fill) * atX;
+        const offsetY = (side - data.height * fill) * atY;
         const left = box.left + box.width / 2 - side / 2;
         const top = box.top + box.height / 2 - side / 2;
         // Somewhere it can't be seen to go, it simply fades.
@@ -124,7 +126,8 @@
         'thumbBounds',
         (bounds) => {
           if (!bounds) pswp.element?.removeAttribute('data-from');
-          else pswp.element?.setAttribute('data-from', [bounds.x - (bounds.innerRect?.x ?? 0), bounds.y - (bounds.innerRect?.y ?? 0), bounds.innerRect?.w ?? bounds.w].map(Math.round).join(' '));
+          // The window (left, top, side), then the whole photo laid under it (left, top, width).
+          else pswp.element?.setAttribute('data-from', [bounds.x - (bounds.innerRect?.x ?? 0), bounds.y - (bounds.innerRect?.y ?? 0), bounds.innerRect?.w ?? bounds.w, bounds.x, bounds.y, bounds.w].map(Math.round).join(' '));
           // Typed as always answering, like the filter before it; no answer is passed on as it came.
           return bounds!;
         },

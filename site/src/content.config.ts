@@ -51,6 +51,11 @@ const photoAlbums = defineCollection({
           caption: z.string().optional(),
           /** What the photo shows, for someone who can't see it. A caption is not alt text. */
           alt: z.string().optional(),
+          /**
+           * Where a polaroid's square window sits on its photo, as CSS object-position: '100% 50%'
+           * keeps the right of a wide photo, '50% 0%' the top of a tall one. The middle unless said.
+           */
+          focus: z.string().optional(),
         }),
       ),
     }),

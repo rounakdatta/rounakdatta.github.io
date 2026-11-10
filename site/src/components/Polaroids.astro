@@ -12,6 +12,11 @@ interface Props {
 }
 
 const { photos } = Astro.props;
+
+// A caption may be one long word, a file name or a hashtag, wider than a polaroid on a narrow
+// phone: it may break after _ . / and before an @ (a handle keeps its @), and between joined-up
+// words (Run·For·Thindi), rather than spill off its polaroid and widen the page.
+const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A-Z])/);
 ---
 
 <ul class="wall" data-gallery data-zoom>
@@ -19,9 +24,9 @@ const { photos } = Astro.props;
     <li class="polaroid" style={`--tilt: ${tiltOf(i)}deg`}>
       {/* Lazy, even the first: the page may open on the prints instead, and then these cost nothing.
           When they are what it opens on, the head asks for the first ones early (photos/index.astro). */}
-      <PhotoLink photo={photo} cropped sizes={polaroidSizes(photo)} widths={polaroidWidths(photo)} quality={POLAROID_QUALITY} />
+      <PhotoLink photo={photo} cropped focus={photo.focus} sizes={polaroidSizes(photo)} widths={polaroidWidths(photo)} quality={POLAROID_QUALITY} />
       {/* Read once: with no alt text of its own, the photo already says its caption. */}
-      <p class="note" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{photo.caption}</p>
+      <p class="note" aria-hidden={altOf(photo) === photo.caption ? 'true' : undefined}>{breakable(photo.caption ?? '').map((part, k) => <>{k > 0 && <wbr />}{part}</>)}</p>
     </li>
   ))}
 </ul>
@@ -143,14 +148,20 @@ const { photos } = Astro.props;
     place-items: center;
     min-height: 19cqi;
     margin: 0;
-    padding: 0.25em 0.2em 0.4em;
-    /* The site's own type, in italic as the prints' captions are. */
-    font-size: clamp(1rem, 7.6cqi, 1.15rem);
-    font-style: italic;
-    line-height: 1.2;
+    padding: 0.3em 0.4em 0.5em;
+    /* Set like a label on the print, in the site's own monospace, small and quiet, in the case the
+       caption was written in: the captions read like file names and handles (winning_hackathons.jpg,
+       @NextTechLab), and Garamond's swashy italic made them look like a storybook. */
+    font-family: var(--font-mono);
+    font-size: clamp(0.7rem, 5.4cqi, 0.82rem);
+    font-variant-numeric: normal;
+    letter-spacing: 0.01em;
+    line-height: 1.45;
     color: var(--caption);
     text-align: center;
     text-wrap: balance;
+    /* Anything else too long for the polaroid breaks where it must. */
+    overflow-wrap: anywhere;
   }
 
   /* Looked at with a mouse, a polaroid straightens and comes up off the table. */
