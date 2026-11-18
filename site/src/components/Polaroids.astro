@@ -71,8 +71,14 @@ const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A
     // listening for it below the page's body. A tap between two polaroids puts back the one up.
     wall.addEventListener('click', (event) => mouse.matches || pickUp((event.target as Element).closest('.polaroid') ?? undefined));
     // Only the keyboard focuses a photo. Focused by a press, it would come up with the next key
-    // pressed for anything else (to scroll on, say), as if the keyboard had brought it up.
-    wall.addEventListener('mousedown', (event) => (event.target as Element).matches('img') && event.preventDefault());
+    // pressed for anything else (to scroll on, say), as if the keyboard had brought it up. Pressed,
+    // it lets go of what had the focus, as pressing anything that can't take it does: else the arrow
+    // keys would still go to the choice above, and turn the page to the prints.
+    wall.addEventListener('mousedown', (event) => {
+      if (event.button || !(event.target as Element).matches('img')) return;
+      event.preventDefault();
+      (document.activeElement as HTMLElement | null)?.blur();
+    });
   }
   // A tap anywhere off the wall is a touch lifted there without having scrolled the page (one that
   // scrolls ends in pointercancel instead): not a click, which an iPhone doesn't send for a tap on
@@ -135,9 +141,10 @@ const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A
     background: var(--film);
   }
 
-  /* The keyboard's focus is drawn round the whole polaroid. */
+  /* The keyboard's focus is drawn round the whole polaroid; the photo keeps its square corners. */
   .polaroid :global(img:focus-visible) {
     outline: none;
+    border-radius: 0;
   }
 
   .polaroid:has(:global(img:focus-visible))::after {
@@ -194,6 +201,10 @@ const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A
     text-wrap: balance;
     /* Anything else too long for the polaroid breaks where it must. */
     overflow-wrap: anywhere;
+    /* Part of the print, as it was while the card was a link: no text cursor, nothing to select. */
+    cursor: default;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   /* Looked at with a mouse, a polaroid straightens and comes up off the table. */

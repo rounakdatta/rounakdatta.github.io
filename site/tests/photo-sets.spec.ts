@@ -1,5 +1,7 @@
 // The photos page holds two sets, and the reader picks one: photos of Rounak, as polaroids in black
 // and white until looked at, or photos by him, as prints.
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { test, expect, type Locator, type Page } from '@playwright/test';
 
 test.use({ viewport: { width: 1440, height: 900 } });
@@ -383,11 +385,51 @@ test('with a mouse, a click adds nothing to what resting on a polaroid brings, a
   expect(cursors).not.toContain('zoom-in');
 });
 
-test('a polaroid framed off-centre still shows the part of its photo it was framed on', async ({ page }) => {
+test("a press on a photo takes the focus from whatever had it, and doesn't keep it", async ({ page }) => {
+  await page.goto('/photos/');
+  const cards = page.locator('#panel-of-me .polaroid');
+  // Pressed after the choice above (which a press leaves focused), the arrow keys scroll the page on:
+  // they don't switch to the prints, as they would with the choice still focused.
+  await page.locator('#tab-of-me').click();
+  await cards.nth(1).locator('img').click();
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+  expect(await showing(page)).toBe('of-me');
+  // Pressed after the keyboard brought another up, that one goes back.
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.locator('#tab-of-me').focus();
+  await page.keyboard.press('Tab');
+  expect(await lookOf(cards.nth(0))).toMatchObject({ ring: 'solid', photo: 'none' });
+  await cards.nth(2).locator('img').click();
+  await page.mouse.move(2, 2);
+  expect(await lookOf(cards.nth(0))).toMatchObject({ ring: 'none', photo: 'grayscale(1)' });
+});
+
+test('with the focus, a photo keeps its square corners', async ({ page }) => {
+  await page.goto('/photos/');
+  await page.locator('#tab-of-me').focus();
+  await page.keyboard.press('Tab');
+  const photo = page.locator('#panel-of-me .polaroid img').first();
+  await expect(photo).toBeFocused();
+  expect(await photo.evaluate((img) => getComputedStyle(img).borderRadius)).toBe('0px');
+});
+
+test('a caption is part of the print, as it was under the link: no text cursor, and a double click selects nothing', async ({ page }) => {
+  await page.goto('/photos/');
+  const note = page.locator('#panel-of-me .polaroid .note').first();
+  expect(await note.evaluate((el) => getComputedStyle(el).cursor)).toBe('default');
+  await note.dblclick();
+  expect(await page.evaluate(() => getSelection()?.toString() ?? '')).toBe('');
+});
+
+test('every polaroid shows the part of its photo it was framed on', async ({ page }) => {
+  // In of-me.md's order: where each photo says its window sits, or the middle.
+  const data = readFileSync(join(import.meta.dirname, '..', 'src', 'content', 'photos', 'of-me.md'), 'utf8');
+  const framed = data.split(/\n\s*- src:/).slice(1).map((entry) => entry.match(/focus:\s*"([^"]+)"/)?.[1] ?? '50% 50%');
+  expect(framed.filter((at) => at !== '50% 50%').length).toBeGreaterThan(5);
   await page.goto('/photos/');
   const positions = await page.locator('#panel-of-me .polaroid img').evaluateAll((imgs) => imgs.map((img) => getComputedStyle(img).objectPosition));
-  expect(positions).toContain('100% 50%');
-  expect(positions).toContain('50% 50%');
+  expect(positions).toEqual(framed);
 });
 
 test('a photo still on its way develops out of dark film rather than popping in', async ({ page }) => {
@@ -446,13 +488,15 @@ test.describe('on a phone', () => {
   // A phone has no pointer to rest on a polaroid, and the tap that opened its photo was the only way to
   // see it in colour: so a tap brings it up instead.
   test('a tap brings a polaroid up just as a mouse resting on one does on a desktop, and as smoothly', async ({ page, browser }) => {
-    /** From now on, note every property of a polaroid that starts to move. */
+    /** From now on, note every property of the second polaroid (and its photo) that starts to move.
+     * Only that one: another photo still arriving fades in on one page and not on the other. */
     const watch = async (target: Page) => {
       await settled(target);
       await target.evaluate(() => {
+        const card = document.querySelectorAll('#panel-of-me .polaroid')[1];
         const moved = new Set<string>();
         (window as unknown as { moved: Set<string> }).moved = moved;
-        document.addEventListener('transitionrun', (event) => (event.target as Element).closest('.polaroid') && moved.add(event.propertyName));
+        document.addEventListener('transitionrun', (event) => card.contains(event.target as Node) && moved.add(event.propertyName));
       });
     };
     const moved = (target: Page) => target.evaluate(() => [...(window as unknown as { moved: Set<string> }).moved].sort());
