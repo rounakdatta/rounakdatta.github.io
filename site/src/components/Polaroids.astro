@@ -70,14 +70,16 @@ const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A
     // Heard on the wall, not the page: Safari on an iPhone sends a tap's click only to something
     // listening for it below the page's body. A tap between two polaroids puts back the one up.
     wall.addEventListener('click', (event) => mouse.matches || pickUp((event.target as Element).closest('.polaroid') ?? undefined));
-    // Only the keyboard focuses a photo. Focused by a press, it would come up with the next key
-    // pressed for anything else (to scroll on, say), as if the keyboard had brought it up. Pressed,
-    // it lets go of what had the focus, as pressing anything that can't take it does: else the arrow
-    // keys would still go to the choice above, and turn the page to the prints.
+    // Only the keyboard focuses a photo. Focused by a press (a right one too, to save or copy it),
+    // it would come up with the next key pressed for anything else (to scroll on, say), as if the
+    // keyboard had brought it up. Pressed, it lets go of what had the focus, as pressing anything
+    // that can't take it does: else the arrow keys would still go to the choice above, and turn the
+    // page to the prints. Not a middle press, which keeps its autoscroll; and not a screen reader's,
+    // which focuses the photo itself before pressing it.
     wall.addEventListener('mousedown', (event) => {
-      if (event.button || !(event.target as Element).matches('img')) return;
+      if (event.button === 1 || !(event.target as Element).matches('img')) return;
       event.preventDefault();
-      (document.activeElement as HTMLElement | null)?.blur();
+      if (document.activeElement !== event.target) (document.activeElement as HTMLElement | null)?.blur();
     });
   }
   // A tap anywhere off the wall is a touch lifted there without having scrolled the page (one that
