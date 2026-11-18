@@ -1,6 +1,6 @@
 ---
 title: "Nepal"
-order: 7
+order: 8
 photos:
   - src: "../../assets/images/nepal_2026/IMG_20261022_073805.jpg"
     caption: "Walls that talk"

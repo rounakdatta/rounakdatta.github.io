@@ -1,6 +1,6 @@
 ---
 title: "San Francisco"
-order: 6
+order: 7
 photos:
   - src: "../../assets/images/san_francisco_2026/IMG_20260815_124523.jpg"
     alt: "A cable car climbs a San Francisco street, a passenger hanging off its side, under white clouds and blue sky"
@@ -10,6 +10,8 @@ photos:
     alt: "A gull stands on a pier railing, the Bay Bridge stretched across the water behind"
   - src: "../../assets/images/san_francisco_2026/IMG-20260816-WA0035.jpg"
     alt: "Street lamps glow through thick night fog along a quiet street lined with parked cars"
+  - src: "../../assets/images/san_francisco_2026/IMG_20260817_133859.jpg"
+    alt: "The Golden Gate Bridge's red south tower and span stretch across the strait to the Marin hills, an old brick fort and the shore road below"
   - src: "../../assets/images/san_francisco_2026/IMG_20260818_151906.jpg"
     alt: "An old man plays a hammered dulcimer on a Chinatown sidewalk as shoppers pass by"
   - src: "../../assets/images/san_francisco_2026/IMG_20260818_152957.jpg"
@@ -18,10 +20,16 @@ photos:
     alt: "WORK HARD painted above a barred grey door, beside a mural of a bridge at sunset"
   - src: "../../assets/images/san_francisco_2026/IMG_1280.jpg"
     alt: "Sutro Tower silhouetted against a streaked evening sky as the sun sets behind the hill"
+  - src: "../../assets/images/san_francisco_2026/IMG_1327.jpg"
+    alt: "San Francisco at night from Twin Peaks, Market Street a bright line of light running into downtown under a deep blue sky"
   - src: "../../assets/images/san_francisco_2026/IMG_20260823_182511.jpg"
     alt: "A fluffy white Samoyed trots on its lead behind a runner along the waterfront"
+  - src: "../../assets/images/san_francisco_2026/IMG_20260826_131444.jpg"
+    alt: "A grey Victorian house with a pointed corner turret on a sunny street corner, traffic lights and street signs in front"
   - src: "../../assets/images/san_francisco_2026/IMG_20260828_185836.jpg"
     alt: "Two walkers head along a rippled sand path through the dunes, into the low sun"
+  - src: "../../assets/images/san_francisco_2026/IMG_20260830_203510.jpg"
+    alt: "Broadway's neon at night in North Beach, the tall Condor sign glowing beside a pink-lit building"
   - src: "../../assets/images/san_francisco_2026/IMG_20260901_184804.jpg"
     alt: "The Golden Gate Bridge glimpsed at sunset through the dark trunks of cypress trees"
 ---
