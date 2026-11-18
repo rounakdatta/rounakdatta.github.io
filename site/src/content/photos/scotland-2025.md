@@ -8,6 +8,8 @@ photos:
     alt: "A narrow path runs down a grassy hillside toward Loch Lomond and its wooded islands, under a big sky of white cloud"
   - src: "../../assets/images/scotland_2025/IMG_20250607_091542.jpg"
     alt: "Loch Lomond lies mirror-still under low morning cloud, a lone orange kayak crossing in the middle distance"
+  - src: "../../assets/images/scotland_2025/IMG_20250608_104917.jpg"
+    alt: "A cone-shaped Highland mountain under heavy grey cloud, a dark band of pines and an open green glen below"
   - src: "../../assets/images/scotland_2025/IMG_20250608_114209.jpg"
     alt: "A rainbow banner reading Everything will be OK hangs on a pebble-dashed wall above an empty wooden bench"
   - src: "../../assets/images/scotland_2025/IMG_20250608_142131.jpg"
@@ -22,4 +24,8 @@ photos:
     alt: "A black steam locomotive pulls maroon carriages across a white truss swing bridge, steam drifting into a grey sky"
   - src: "../../assets/images/scotland_2025/IMG_20250610_140101.jpg"
     alt: "Stone steps climb a narrow Edinburgh close between tall old buildings toward wooden doors, a church spire rising in the gap above"
+  - src: "../../assets/images/scotland_2025/IMG_20250610_165809.jpg"
+    alt: "The Duke of Wellington's statue rears on horseback against blue sky and white cloud beside the Balmoral Hotel's clock tower in Edinburgh"
+  - src: "../../assets/images/scotland_2025/IMG_20250611_164450.jpg"
+    alt: "A woman in a denim jacket walks her small white terrier along the Leith waterfront, beside the bright red hull of a huge moored ferry"
 ---

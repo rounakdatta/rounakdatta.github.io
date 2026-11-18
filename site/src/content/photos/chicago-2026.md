@@ -1,15 +1,19 @@
 ---
 title: "Chicago"
-order: 5
+order: 6
 photos:
   - src: "../../assets/images/chicago_2026/IMG_20260806_133640.jpg"
     alt: "Weathered wooden stairs climb straight up to an elevated train platform between city buildings"
   - src: "../../assets/images/chicago_2026/IMG_20260806_172520.jpg"
     alt: "Under the elevated tracks, a column of peeling, rusted paint stands before a row of riveted steel supports"
+  - src: "../../assets/images/chicago_2026/IMG_20260806_172950.jpg"
+    alt: "The footway across an oxblood-red riveted steel truss bridge, a brick loft building and glass towers beyond"
   - src: "../../assets/images/chicago_2026/IMG_20260806_174925.jpg"
     alt: "An older couple walk arm in arm across a crosswalk, seen from behind"
   - src: "../../assets/images/chicago_2026/IMG_20260806_180358.jpg"
     alt: "The rusted skeleton of a bicycle, stripped of its parts, still chained to a lamppost beside yellow bollards"
+  - src: "../../assets/images/chicago_2026/IMG_20260806_181003.jpg"
+    alt: "Chicago's skyline across the lake from Ohio Street Beach, a man and a small child standing at the water's edge in the late sun"
   - src: "../../assets/images/chicago_2026/IMG_20260806_182857.jpg"
     alt: "Sunbeams break through dark clouds over Chicago's skyline, light glittering on the harbour water below"
   - src: "../../assets/images/chicago_2026/IMG_20260806_192352.jpg"
@@ -18,6 +22,8 @@ photos:
     alt: "Cermak-Chinatown station at dusk, its red and green sign under a pink and blue sky"
   - src: "../../assets/images/chicago_2026/IMG_20260807_141338.jpg"
     alt: "An elevated train platform, bright blue edge lines running either side of a lamppost toward the distance under big white clouds"
+  - src: "../../assets/images/chicago_2026/IMG_20260809_184018.jpg"
+    alt: "The Second City's marquee reads You look funny, try improv! above a canopy of bulbs, against a blue sky"
   - src: "../../assets/images/chicago_2026/IMG_20260809_231105.jpg"
     alt: "The red Wrigley Field marquee glowing at night above an empty street"
 ---
