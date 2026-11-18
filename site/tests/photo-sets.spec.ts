@@ -1,6 +1,6 @@
 // The photos page holds two sets, and the reader picks one: photos of Rounak, as polaroids in black
 // and white until looked at, or photos by him, as prints.
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -29,14 +29,27 @@ const moveSeen = async (page: Page, x: number, y: number) => {
   await seen;
 };
 
-/** Put the open photo away with Escape, pressed again until taken: the viewer takes no keys while it opens. */
-const putAway = (page: Page) =>
-  expect(async () => {
-    if (await page.locator('.pswp').count()) await page.keyboard.press('Escape');
-    await expect(page.locator('.pswp')).toHaveCount(0, { timeout: 400 });
-  }).toPass();
 const leanOf = (page: Page, nth: number) =>
   page.locator('#panel-of-me .polaroid').nth(nth).evaluate((el) => parseFloat(getComputedStyle(el).rotate) || 0);
+/** Once the polaroids have stopped moving: two frames on, so the last pointer move or tap has been
+ * handled (Chrome hands them to the page with the next frame), then until nothing is moving. */
+const settled = async (page: Page) => {
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+  await expect.poll(() => page.locator('#panel-of-me .wall').evaluate((wall) => wall.getAnimations({ subtree: true }).length)).toBe(0);
+};
+/** How a polaroid lies once it has settled: its lean, lift, size, shadow, stacking and focus ring, and its photo's colour. */
+const lookOf = async (card: Locator) => {
+  await settled(card.page());
+  return card.evaluate((el) => {
+    const s = getComputedStyle(el);
+    return { rotate: s.rotate, translate: s.translate, scale: s.scale, shadow: s.boxShadow, z: s.zIndex, ring: getComputedStyle(el, '::after').outlineStyle, photo: getComputedStyle(el.querySelector('img')!).filter };
+  });
+};
+/** Which polaroids are up, once they have settled. */
+const upOf = async (page: Page) => {
+  await settled(page);
+  return page.locator('#panel-of-me .polaroid').evaluateAll((els) => els.flatMap((el, i) => (getComputedStyle(el).scale === '1.035' && getComputedStyle(el.querySelector('img')!).filter === 'none' ? [i] : [])));
+};
 
 test('the page opens on photos of me: polaroids, each a square window in a pale frame, leaning a little', async ({ page }) => {
   await page.goto('/photos/');
@@ -119,13 +132,16 @@ test('the prints cost nothing until a hand comes near the choice, and are on the
   expect(await showing(page)).toBe('of-me');
 });
 
-test("resting on a photo doesn't fetch its full-size original before anyone opens it", async ({ page }) => {
+test("resting on a print doesn't fetch its full-size original before anyone opens it", async ({ page }) => {
   const fetched: string[] = [];
   page.on('request', (request) => fetched.push(new URL(request.url()).pathname));
-  await page.goto('/photos/');
+  await page.goto('/photos/#by-me');
   await page.waitForLoadState('networkidle');
-  const href = new URL((await page.locator('.polaroid a').first().getAttribute('href'))!, page.url()).pathname;
-  await page.locator('.polaroid').first().hover();
+  const print = page.locator('#panel-by-me .photo-link').first();
+  const href = new URL((await print.getAttribute('href'))!, page.url()).pathname;
+  // Moved onto as a hand does: the strip drifts, so it is never still enough for a hover().
+  const box = (await print.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.waitForTimeout(800);
   expect(fetched).not.toContain(href);
 });
@@ -259,7 +275,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('the polaroids are black and white until looked at, and a photo opens in colour', async ({ page }) => {
+test("the polaroids are black and white until looked at: a mouse resting on one, or the keyboard's focus", async ({ page }) => {
   await page.goto('/photos/');
   const filterOf = (n: number) => page.locator('#panel-of-me .polaroid img').nth(n).evaluate((img) => getComputedStyle(img).filter);
   for (const n of [0, 1, 2]) expect(await filterOf(n)).toBe('grayscale(1)');
@@ -272,15 +288,14 @@ test('the polaroids are black and white until looked at, and a photo opens in co
   await expect.poll(() => filterOf(0)).toBe('grayscale(1)');
   await page.locator('#tab-of-me').focus();
   await page.keyboard.press('Tab');
-  await expect(page.locator('#panel-of-me .polaroid a').first()).toBeFocused();
+  await expect(page.locator('#panel-of-me .polaroid img').first()).toBeFocused();
   await expect.poll(() => filterOf(0)).toBe('none');
-  // Opened, the photo is in colour, and so is its polaroid underneath, to take it back.
-  await page.keyboard.press('Enter');
-  await expect(page.locator('.pswp')).toBeVisible();
-  const viewer = await page.locator('.pswp img').evaluateAll((imgs) => imgs.filter((i) => i.getBoundingClientRect().width > 0).map((i) => getComputedStyle(i).filter));
-  expect(viewer.length).toBeGreaterThan(0);
-  expect(viewer.every((f) => f === 'none')).toBe(true);
-  expect(await filterOf(0)).toBe('none');
+  // The focus is drawn round the whole polaroid.
+  expect(await page.locator('#panel-of-me .polaroid').first().evaluate((el) => getComputedStyle(el, '::after').outlineStyle)).toBe('solid');
+  // Moving on to the next, it goes back.
+  await page.keyboard.press('Tab');
+  await expect.poll(() => filterOf(0)).toBe('grayscale(1)');
+  await expect.poll(() => filterOf(1)).toBe('none');
 });
 
 test('a keyboard moves along the choice with the arrow keys, and a screen reader hears which one is chosen', async ({ page }) => {
@@ -301,73 +316,78 @@ test('a keyboard moves along the choice with the arrow keys, and a screen reader
   await expect(page.getByRole('tablist', { name: 'Photos' })).toBeVisible();
 });
 
-test('pressed anywhere on it, a polaroid opens its whole photo, and put away it settles back to its lean', async ({ page }) => {
+// A polaroid used to open its photo full-screen, growing out of the card. Rounak didn't want the
+// enlargement: looked at, it comes up in colour, and that is all there is to it.
+test('pressed any way at all, a polaroid opens nothing: no full-screen photo, no other page, nothing bigger fetched', async ({ page, context }) => {
+  await page.goto('/photos/');
+  await page.waitForLoadState('networkidle');
+  const fetched: string[] = [];
+  page.on('request', (request) => fetched.push(new URL(request.url()).pathname));
+  const opened: string[] = [];
+  context.on('page', (other) => opened.push(other.url()));
+  const nothingOpened = async (how: string) => {
+    await page.waitForTimeout(400);
+    await expect(page.locator('.pswp'), how).toHaveCount(0);
+    expect(page.url(), how).toMatch(/\/photos\/$/);
+    expect(opened, how).toEqual([]);
+  };
+  const card = page.locator('#panel-of-me .polaroid').nth(1);
+  const photo = card.locator('img');
+  const box = (await card.boundingBox())!;
+  await page.mouse.click(box.x + box.width / 2, box.y + box.width / 2);
+  await nothingOpened('a click on the photo');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height - 10);
+  await nothingOpened('a click on the caption');
+  await photo.click({ modifiers: ['ControlOrMeta'] });
+  await nothingOpened('a click for a new tab');
+  await photo.click({ modifiers: ['Shift'] });
+  await nothingOpened('a click for a new window');
+  await photo.click({ button: 'middle' });
+  await nothingOpened('a middle click');
+  await photo.dblclick();
+  await nothingOpened('a double click');
+  await page.locator('#tab-of-me').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#panel-of-me .polaroid img').first()).toBeFocused();
+  await page.keyboard.press('Enter');
+  await nothingOpened('Enter');
+  await page.keyboard.press(' ');
+  await nothingOpened('Space');
+  // Not the viewer, and no photo bigger than the page draws it. (The keyboard on the choice warms
+  // the prints' first sizes, as it should: those are drawn sizes too.)
+  const drawn = await page.locator('img').evaluateAll((imgs) =>
+    imgs.flatMap((img) => (img as HTMLImageElement).srcset.split(',').filter(Boolean).map((part) => new URL(part.trim().split(/\s+/)[0], location.href).pathname)));
+  expect(fetched.filter((path) => /photoswipe/.test(path))).toEqual([]);
+  expect(fetched.filter((path) => /\.(avif|webp|jpe?g|png)$/.test(path) && !drawn.includes(path))).toEqual([]);
+});
+
+test('with a mouse, a click adds nothing to what resting on a polaroid brings, and leaves nothing behind', async ({ page }) => {
   await page.goto('/photos/');
   const card = page.locator('#panel-of-me .polaroid').nth(1);
   const lean = await leanOf(page, 1);
-  expect(Math.abs(lean)).toBeGreaterThan(0.5);
-  const link = card.locator('a');
-  const shape = Number(await link.getAttribute('data-pswp-width')) / Number(await link.getAttribute('data-pswp-height'));
-  const full = (await link.getAttribute('data-pswp-srcset'))!.split(',').map((part) => part.trim().split(/\s+/)[0]);
-
-  // Pressed on the frame below the photo, where the caption is.
-  const box = (await card.boundingBox())!;
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height - 10);
-  await expect(page.locator('.pswp')).toBeVisible();
-  await putAway(page);
+  await card.hover();
+  const resting = await lookOf(card);
+  expect(resting).toMatchObject({ rotate: '0deg', scale: '1.035', photo: 'none' });
+  await card.click();
+  expect(await lookOf(card)).toEqual(resting);
+  // Away again, it settles back into its lean, in black and white: the click kept nothing up.
   await page.mouse.move(2, 2);
-  await expect.poll(() => leanOf(page, 1)).toBeCloseTo(lean, 1);
-
-  // Opened from the keyboard, so no hover lifts it first: the photo grows out of the window of its
-  // polaroid, untilted, the same middle and the same size.
-  const before = await card.locator('img').evaluate((img) => {
-    const r = img.getBoundingClientRect();
-    return [r.left + r.width / 2, r.top + r.height / 2, (img as HTMLImageElement).offsetWidth];
-  });
-  await link.focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('.pswp')).toBeVisible();
-  const from = (await page.locator('.pswp').getAttribute('data-from'))!.split(' ').map(Number);
-  expect(Math.abs(from[0] + from[2] / 2 - before[0])).toBeLessThan(2);
-  expect(Math.abs(from[1] + from[2] / 2 - before[1])).toBeLessThan(2);
-  expect(Math.abs(from[2] - before[2])).toBeLessThan(2);
-  // Whole: the photo that opens has the photo's own shape, not the square cut from it.
-  const opened = () =>
-    page.locator('.pswp img').evaluateAll((imgs, urls) => {
-      const img = imgs.find((i) => urls.some((u) => (i as HTMLImageElement).currentSrc.endsWith(u)) && i.getBoundingClientRect().width > 0);
-      const r = img?.getBoundingClientRect();
-      return r ? r.width / r.height : 0;
-    }, full);
-  await expect.poll(async () => Math.abs((await opened()) - shape)).toBeLessThan(0.02);
-  // Its polaroid lies straight under it, ready to take it back.
-  await expect.poll(() => leanOf(page, 1)).toBe(0);
-
-  await putAway(page);
-  await page.mouse.move(2, 2);
-  await expect.poll(() => leanOf(page, 1)).toBeCloseTo(lean, 1);
+  const away = await lookOf(card);
+  expect(parseFloat(away.rotate)).toBeCloseTo(lean, 1);
+  expect(away).toMatchObject({ photo: 'grayscale(1)', ring: 'none' });
+  // Nor left it focused, to come up with the next key pressed for something else (here, scrolling on).
+  await page.keyboard.press('ArrowDown');
+  expect(await lookOf(card)).toEqual(away);
+  // Nothing on it promises a bigger view.
+  const cursors = await card.evaluate((el) => [el, el.querySelector('img')!, el.querySelector('.note')!].map((part) => getComputedStyle(part).cursor));
+  expect(cursors).not.toContain('zoom-in');
 });
 
-test("a polaroid framed off-centre grows its photo out of exactly the part it shows", async ({ page }) => {
+test('a polaroid framed off-centre still shows the part of its photo it was framed on', async ({ page }) => {
   await page.goto('/photos/');
-  // The polaroids that say where their window sits, and one that doesn't.
-  const framed = page.locator('#panel-of-me .polaroid img[style*="object-position: 100% 50%"]').first();
-  await expect(framed).toHaveCount(1);
-  const open = async (img: typeof framed) => {
-    await img.evaluate((i) => i.scrollIntoView({ block: 'center' }));
-    await img.locator('xpath=..').focus();
-    await page.keyboard.press('Enter');
-    await expect(page.locator('.pswp')).toBeVisible();
-    const [left, top, side, x, y, w] = (await page.locator('.pswp').getAttribute('data-from'))!.split(' ').map(Number);
-    await putAway(page);
-    return { left, top, side, x, y, w };
-  };
-  // Framed at its right edge: the whole photo is laid so its right edge is the window's.
-  const right = await open(framed);
-  expect(right.w).toBeGreaterThan(right.side + 10);
-  expect(Math.abs(right.x + right.w - (right.left + right.side))).toBeLessThan(2);
-  // Unframed: laid with the window in its middle.
-  const middle = await open(page.locator('#panel-of-me .polaroid img:not([style])').first());
-  expect(Math.abs(middle.x + middle.w / 2 - (middle.left + middle.side / 2))).toBeLessThan(2);
+  const positions = await page.locator('#panel-of-me .polaroid img').evaluateAll((imgs) => imgs.map((img) => getComputedStyle(img).objectPosition));
+  expect(positions).toContain('100% 50%');
+  expect(positions).toContain('50% 50%');
 });
 
 test('a photo still on its way develops out of dark film rather than popping in', async ({ page }) => {
@@ -423,22 +443,85 @@ test.describe('on a phone', () => {
     await expect(page.locator('#panel-of-me')).toBeHidden();
   });
 
-  test('a photo put away after swiping to another goes back into its own polaroid, brought into view', async ({ page }) => {
+  // A phone has no pointer to rest on a polaroid, and the tap that opened its photo was the only way to
+  // see it in colour: so a tap brings it up instead.
+  test('a tap brings a polaroid up just as a mouse resting on one does on a desktop, and as smoothly', async ({ page, browser }) => {
+    /** From now on, note every property of a polaroid that starts to move. */
+    const watch = async (target: Page) => {
+      await settled(target);
+      await target.evaluate(() => {
+        const moved = new Set<string>();
+        (window as unknown as { moved: Set<string> }).moved = moved;
+        document.addEventListener('transitionrun', (event) => (event.target as Element).closest('.polaroid') && moved.add(event.propertyName));
+      });
+    };
+    const moved = (target: Page) => target.evaluate(() => [...(window as unknown as { moved: Set<string> }).moved].sort());
+
     await page.goto('/photos/');
-    await page.locator('#panel-of-me .polaroid').first().tap();
-    await expect(page.locator('.pswp')).toBeVisible();
-    // Back from the first comes round to the last, far down the page. The viewer takes no keys until
-    // the photo has finished growing, so the key is pressed again until it has been taken, never twice.
-    const counter = page.locator('.pswp__counter');
-    const count = await page.locator('#panel-of-me .polaroid').count();
-    await expect(async () => {
-      if ((await counter.textContent()) === `1 / ${count}`) await page.keyboard.press('ArrowLeft');
-      await expect(counter).toHaveText(`${count} / ${count}`, { timeout: 300 });
-    }).toPass();
-    await page.waitForTimeout(600);
+    const card = page.locator('#panel-of-me .polaroid').nth(1);
+    await watch(page);
+    await card.tap();
+    const tapped = await lookOf(card);
+
+    // A desktop in every respect: a context made here would otherwise take this phone's touch.
+    const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 }, hasTouch: false, isMobile: false, baseURL: new URL(page.url()).origin });
+    const other = await desktop.newPage();
+    await other.goto('/photos/');
+    const there = other.locator('#panel-of-me .polaroid').nth(1);
+    await watch(other);
+    await there.hover();
+    const hovered = await lookOf(there);
+    const hoverMoved = await moved(other);
+    await desktop.close();
+
+    expect(hovered).toMatchObject({ rotate: '0deg', translate: '0px -6px', scale: '1.035', z: '1', photo: 'none' });
+    expect(tapped).toEqual(hovered);
+    // Eased there the same way, not jumped.
+    expect(hoverMoved).toEqual(expect.arrayContaining(['box-shadow', 'filter', 'rotate', 'scale', 'translate']));
+    expect(await moved(page)).toEqual(hoverMoved);
+  });
+
+  test('one at a time: tapped again it goes back, and so it does for a tap on another, anywhere else, or Escape', async ({ page }) => {
+    await page.goto('/photos/');
+    const cards = page.locator('#panel-of-me .polaroid');
+    await cards.nth(0).tap();
+    expect(await upOf(page)).toEqual([0]);
+    await cards.nth(0).tap();
+    expect(await upOf(page)).toEqual([]);
+    await cards.nth(0).tap();
+    await cards.nth(1).tap();
+    expect(await upOf(page)).toEqual([1]);
+    // Anywhere else: the gap between two polaroids, and off the wall altogether.
+    const [a, b] = [(await cards.nth(0).boundingBox())!, (await cards.nth(1).boundingBox())!];
+    await page.touchscreen.tap((a.x + a.width + b.x) / 2, a.y + a.height / 2);
+    expect(await upOf(page)).toEqual([]);
+    await cards.nth(2).tap();
+    expect(await upOf(page)).toEqual([2]);
+    const title = (await page.locator('.title h1').boundingBox())!;
+    await page.touchscreen.tap(title.x + 10, title.y + title.height / 2);
+    expect(await upOf(page)).toEqual([]);
+    await cards.nth(2).tap();
     await page.keyboard.press('Escape');
+    expect(await upOf(page)).toEqual([]);
+    // Never anything bigger.
     await expect(page.locator('.pswp')).toHaveCount(0);
-    await expect(page.locator('#panel-of-me .polaroid').last()).toBeInViewport({ ratio: 0.9 });
+    await expect(page).toHaveURL(/\/photos\/$/);
+  });
+
+  test('a finger scrolling over the polaroids brings none up, and leaves one already up as it is', async ({ page }) => {
+    await page.goto('/photos/');
+    const cards = page.locator('#panel-of-me .polaroid');
+    await cards.nth(0).tap();
+    expect(await upOf(page)).toEqual([0]);
+    // A finger drawn up the screen from another polaroid, as the browser takes it: it scrolls.
+    const box = (await cards.nth(3).boundingBox())!;
+    const [x, y] = [Math.round(box.x + box.width / 2), Math.round(box.y + box.height / 2)];
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+    for (let k = 1; k <= 12; k++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - k * 25 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
+    expect(await upOf(page)).toEqual([0]);
   });
 
   test('a finger starting a scroll on the title costs nothing; one pressing "by me" starts its prints on their way', async ({ page }) => {
@@ -460,7 +543,7 @@ test.describe('on a phone', () => {
     expect(await showing(page)).toBe('of-me');
   });
 
-  test('opening a polaroid only partly on the screen leaves the page where it is under it', async ({ page }) => {
+  test('a polaroid only partly on the screen comes up where it is, and the page stays put under it', async ({ page }) => {
     await page.goto('/photos/');
     // The first polaroid whose bottom is below the screen's edge.
     const cut = await page.locator('#panel-of-me .polaroid').evaluateAll((els) => els.findIndex((el) => el.getBoundingClientRect().bottom > innerHeight && el.getBoundingClientRect().top < innerHeight));
@@ -468,8 +551,7 @@ test.describe('on a phone', () => {
     const card = page.locator('#panel-of-me .polaroid').nth(cut);
     const box = (await card.boundingBox())!;
     await page.touchscreen.tap(box.x + box.width / 2, box.y + 20);
-    await expect(page.locator('.pswp')).toBeVisible();
-    await page.waitForTimeout(800);
+    expect(await upOf(page)).toEqual([cut]);
     expect(await page.evaluate(() => scrollY)).toBe(0);
   });
 
@@ -562,5 +644,13 @@ test.describe('without JavaScript', () => {
     const of = (await page.locator('#panel-of-me').boundingBox())!;
     const by = (await page.locator('#panel-by-me').boundingBox())!;
     expect(by.y).toBeGreaterThanOrEqual(of.y + of.height - 1);
+  });
+
+  test('a polaroid is no link to a bigger photo: pressed, it goes nowhere', async ({ page }) => {
+    await page.goto('/photos/');
+    await expect(page.locator('#panel-of-me .polaroid a')).toHaveCount(0);
+    await page.locator('#panel-of-me .polaroid img').first().click();
+    await page.waitForTimeout(400);
+    await expect(page).toHaveURL(/\/photos\/$/);
   });
 });
