@@ -1,0 +1,27 @@
+---
+title: "New York"
+order: 4
+photos:
+  - src: "../../assets/images/new_york_2026/IMG_20260714_120826.jpg"
+    alt: "A long marble corridor in the New York Public Library under a carved coffered ceiling and a glowing lantern, people walking toward a bright window"
+  - src: "../../assets/images/new_york_2026/IMG_20260714_195346.jpg"
+    alt: "People lie on the grass of Sheep Meadow in golden evening light, Midtown towers rising above the trees"
+  - src: "../../assets/images/new_york_2026/IMG_20260717_104054.jpg"
+    alt: "Yellow black-eyed Susans in bloom on the High Line, city buildings blurred behind"
+  - src: "../../assets/images/new_york_2026/IMG_20260717_173834.jpg"
+    alt: "A white-haired woman in a pink shirt and red heels waits at a crossing with her black basket bicycle"
+  - src: "../../assets/images/new_york_2026/IMG_20260717_185048.jpg"
+    alt: "Looking straight up a stone tower of the Brooklyn Bridge, its gothic arches and cables against a deep blue sky"
+  - src: "../../assets/images/new_york_2026/IMG_20260719_112026.jpg"
+    alt: "A coin-operated binocular viewer on a beach path looks back at the camera like a face"
+  - src: "../../assets/images/new_york_2026/IMG_20260721_185116.jpg"
+    alt: "Steam billows from a street stack across a Midtown crosswalk between tall office buildings"
+  - src: "../../assets/images/new_york_2026/IMG_20260721_211716.jpg"
+    alt: "A riveted blue steel column on a subway platform as a train streaks past in a blur, someone waiting just behind it"
+  - src: "../../assets/images/new_york_2026/IMG_20260723_141527.jpg"
+    alt: "A creek lined with moored boats runs toward the city's towers"
+  - src: "../../assets/images/new_york_2026/IMG_20260726_152926.jpg"
+    alt: "Two women walk away along a blue mat laid across white beach sand, toward crowds and umbrellas"
+  - src: "../../assets/images/new_york_2026/IMG_20260727_195614.jpg"
+    alt: "Rays of evening sun fan through clouds over waves breaking on a long beach, a gull flying overhead"
+---

@@ -95,8 +95,10 @@ test.describe('held still to be looked at', () => {
         const black = (at: { brightest: number; spread: number }) => at.brightest < 60 && at.spread < 15;
         // The border: black at the very edge of the print, all round.
         for (const [x, y] of [[0.5, 0.01], [0.5, 0.99], [0.01, 0.5], [0.99, 0.5]]) expect(black(patch(x, y)), `print ${k}, edge at ${x},${y}`).toBe(true);
-        // The photo itself in the middle.
-        expect(black(patch(0.5, 0.5)), `print ${k}, middle`).toBe(false);
+        // The photo itself, around the middle: a photo can be black at its very centre (the dark
+        // screen in the UAE's library atrium), but not all the way round it.
+        const middle = [0.4, 0.5, 0.6].flatMap((x) => [0.4, 0.5, 0.6].map((y) => black(patch(x, y))));
+        expect(middle.every(Boolean), `print ${k}, middle`).toBe(false);
         // A wider photo leaves black above and below it, a narrower one either side, inside the same rectangle.
         const bands = shapes[k] > shape ? [[0.5, 0.12], [0.5, 0.88]] : [[0.12, 0.5], [0.88, 0.5]];
         if (k === other) for (const [x, y] of bands) expect(black(patch(x, y)), `print ${k}, band at ${x},${y}`).toBe(true);
@@ -140,13 +142,16 @@ test('the strip drifts slowly by itself, holds still while it is looked at, and 
 test('a photo open full-screen holds the strip still behind it, and the strip carries on once it is put away', async ({ page }) => {
   await page.goto(PRINTS);
   const first = page.locator('.strip').first().locator('li').first();
-  const caption = await first.locator('.caption').textContent();
+  // Not every print has a caption yet.
+  const caption = (await first.locator('.caption').count()) ? await first.locator('.caption').textContent() : '';
   // As a hand does: the pointer arrives on the photo (which holds the strip), then clicks.
   const box = (await first.locator('.photo-link').boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await first.locator('.photo-link').click();
   await expect(page.locator('.pswp')).toBeVisible();
-  await expect(page.locator('.pswp')).toContainText(caption!);
+  // The print's own caption, or none at all.
+  if (caption) await expect(page.locator('.pswp')).toContainText(caption);
+  else await expect(page.locator('.pswp__caption')).toBeHidden();
   // Focus moves into the viewer, so a keyboard can put it away at once.
   await expect(page.locator('.pswp')).toBeFocused();
   // Long past the pointer's own hold: only the open photo is holding it now.

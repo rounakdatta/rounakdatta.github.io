@@ -1,0 +1,25 @@
+---
+title: "Scotland"
+order: 1
+photos:
+  - src: "../../assets/images/scotland_2025/IMG_20250606_113240.jpg"
+    alt: "A weathered wooden fingerpost reading West Highland Way, against a grey, cloudy sky above green fields"
+  - src: "../../assets/images/scotland_2025/IMG_20250606_134432.jpg"
+    alt: "A narrow path runs down a grassy hillside toward Loch Lomond and its wooded islands, under a big sky of white cloud"
+  - src: "../../assets/images/scotland_2025/IMG_20250607_091542.jpg"
+    alt: "Loch Lomond lies mirror-still under low morning cloud, a lone orange kayak crossing in the middle distance"
+  - src: "../../assets/images/scotland_2025/IMG_20250608_114209.jpg"
+    alt: "A rainbow banner reading Everything will be OK hangs on a pebble-dashed wall above an empty wooden bench"
+  - src: "../../assets/images/scotland_2025/IMG_20250608_142131.jpg"
+    alt: "A small yellow sailboat moored on grey loch water below forested green hills"
+  - src: "../../assets/images/scotland_2025/IMG_20250609_143538.jpg"
+    alt: "A white ewe and her black lamb stand side by side on a lawn, both staring straight at the camera"
+  - src: "../../assets/images/scotland_2025/IMG_20250609_150507.jpg"
+    alt: "A yellow grit salt bin on a rocky shore, with a misty loch and hills behind"
+  - src: "../../assets/images/scotland_2025/IMG_20250609_152121.jpg"
+    alt: "The rusting wreck of a fishing boat, its hull covered in bright graffiti, beached under a grey sky"
+  - src: "../../assets/images/scotland_2025/IMG_20250609_154358.jpg"
+    alt: "A black steam locomotive pulls maroon carriages across a white truss swing bridge, steam drifting into a grey sky"
+  - src: "../../assets/images/scotland_2025/IMG_20250610_140101.jpg"
+    alt: "Stone steps climb a narrow Edinburgh close between tall old buildings toward wooden doors, a church spire rising in the gap above"
+---

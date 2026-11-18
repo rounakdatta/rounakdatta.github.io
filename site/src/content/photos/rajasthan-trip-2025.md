@@ -1,6 +1,6 @@
 ---
 title: "Rajasthan, India"
-order: 1
+order: 2
 photos:
   - src: "../../assets/images/rajasthan_2025/IMG_20251201_173831.jpg"
     caption: "Easing into the evening"

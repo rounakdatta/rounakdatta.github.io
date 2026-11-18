@@ -1,0 +1,27 @@
+---
+title: "London"
+order: 0
+photos:
+  - src: "../../assets/images/london_2025/IMG_20250513_185558.jpg"
+    alt: "A line of cyclists sweeps past great oaks in Richmond Park in evening light, two long shadows stretched across the grass in front"
+  - src: "../../assets/images/london_2025/IMG_20250514_162811.jpg"
+    alt: "Seen from high above, a train curves along the tracks beside a tall Victorian brick warehouse"
+  - src: "../../assets/images/london_2025/IMG_20250514_224744.jpg"
+    alt: "An Underground roundel on its post leans into the frame beside Big Ben's clock tower, under a blue sky"
+  - src: "../../assets/images/london_2025/IMG_20250515_120337.jpg"
+    alt: "A glass tower of old leather-bound books rises behind a white pillar in the British Library"
+  - src: "../../assets/images/london_2025/IMG_20250516_190234.jpg"
+    alt: "A turquoise narrowboat glides along a leafy stretch of Regent's Canal, seen from a bridge above"
+  - src: "../../assets/images/london_2025/IMG_20250516_204002.jpg"
+    alt: "People sit in a row on top of Primrose Hill at dusk watching the skyline, above a plaque engraved with that same skyline"
+  - src: "../../assets/images/london_2025/IMG_20250526_205415.jpg"
+    alt: "A white mute swan swims head-on toward the camera across near-black canal water"
+  - src: "../../assets/images/london_2025/IMG_20250527_084824.jpg"
+    alt: "The white-tiled Greenwich foot tunnel recedes to a vanishing point, NO CYCLING painted on its floor"
+  - src: "../../assets/images/london_2025/IMG_20250528_181623.jpg"
+    alt: "A red rose in bloom in a garden, in front of a giant grey naval gun barrel"
+  - src: "../../assets/images/london_2025/IMG_20250619_205031.jpg"
+    alt: "A fluffy calico cat strolls toward the camera with its tail up, a wheelie bin numbered 115 behind it"
+  - src: "../../assets/images/london_2025/IMG_20250619_214152.jpg"
+    alt: "The words we will meet again, handwritten across a grey wall beneath a band of red brick"
+---
