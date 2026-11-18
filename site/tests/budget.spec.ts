@@ -17,9 +17,10 @@ const BUDGETS: [RegExp, { firstView: number; whole: number }][] = [
   // Lyric photo moved up into it (Nov 2026). As much as the prints alone were allowed. The prints of
   // the other set cost nothing here.
   [/^\/photos\/$/, { firstView: 550 * KB, whole: 1.5 * MB }],
-  // Opened on the prints instead, two albums meet a phone's first view: the first album's opening
-  // prints, and Chrome's lazy reach takes in the next album's first two. A print is ≤125 KB on a phone.
-  [/^\/photos\/#by-me$/, { firstView: 550 * KB, whole: 3 * MB }],
+  // Opened on the prints instead, Chrome's lazy reach takes in the first four albums' opening two
+  // prints each (an album is about 590px tall on a phone): 1,075 KB with the fonts once the trips
+  // of 2025-26 hung in visiting order (Nov 2026). Most prints are ~100 KB on a phone, a busy one 265 KB.
+  [/^\/photos\/#by-me$/, { firstView: 1200 * KB, whole: 3 * MB }],
   // A note may open with a photo across the column: one AVIF of 150–170 KB, plus the fonts.
   [/^\/notes\/.+/, { firstView: 400 * KB, whole: 3 * MB }],
   [/./, { firstView: 250 * KB, whole: 1 * MB }],
