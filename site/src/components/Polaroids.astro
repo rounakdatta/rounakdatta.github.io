@@ -66,7 +66,7 @@ const breakable = (text: string) => text.split(/(?<=[_./])|(?=@)|(?<=[a-z])(?=[A
     up = card === up ? undefined : card;
     up?.classList.add('up');
   };
-  for (const wall of document.querySelectorAll('.wall')) {
+  for (const wall of document.querySelectorAll<HTMLElement>('.wall')) {
     // Heard on the wall, not the page: Safari on an iPhone sends a tap's click only to something
     // listening for it below the page's body. A tap between two polaroids puts back the one up.
     wall.addEventListener('click', (event) => mouse.matches || pickUp((event.target as Element).closest('.polaroid') ?? undefined));
