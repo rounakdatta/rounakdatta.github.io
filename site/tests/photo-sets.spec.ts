@@ -405,6 +405,27 @@ test("a press on a photo takes the focus from whatever had it, and doesn't keep 
   expect(await lookOf(cards.nth(0))).toMatchObject({ ring: 'none', photo: 'grayscale(1)' });
 });
 
+test('a right press on a photo, to save or copy it, leaves no focus behind to light it up with the next key', async ({ page }) => {
+  await page.goto('/photos/');
+  const card = page.locator('#panel-of-me .polaroid').nth(3);
+  await card.locator('img').click({ button: 'right' });
+  await page.mouse.move(2, 2);
+  await page.keyboard.press('ArrowDown');
+  expect(await lookOf(card)).toMatchObject({ ring: 'none', photo: 'grayscale(1)' });
+});
+
+test("a screen reader's press on a photo leaves the focus on it", async ({ page }) => {
+  await page.goto('/photos/');
+  const photo = page.locator('#panel-of-me .polaroid img').nth(1);
+  // As Chrome presses for a screen reader (or Android's TalkBack and Switch Access): it focuses the
+  // photo first, then sends it a press.
+  await photo.evaluate((img) => {
+    (img as HTMLElement).focus();
+    img.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0 }));
+  });
+  await expect(photo).toBeFocused();
+});
+
 test('with the focus, a photo keeps its square corners', async ({ page }) => {
   await page.goto('/photos/');
   await page.locator('#tab-of-me').focus();
